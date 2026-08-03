@@ -39,15 +39,18 @@ PAIRS = [
     ("machine01_rx_bond0", []),
     ("machine01_rx_bond0", ["machine01_tx_bond0"]),
     ("averageRttWithGoogleDns", []),
-    ("averageRttWithGoogleDns", ["minRttWithGoogleDns", "maxRttWithGoogleDns"]),
+    ("averageRttWithGoogleDns", ["minRttwithGoogleDns", "maxrttWithGoogleDns"]),
     ("jitterWithGoogleDns", []),
-    ("jitterWithGoogleDns", ["averageRttWithGoogleDns", "minRttWithGoogleDns", "maxRttWithGoogleDns"]),
+    ("jitterWithGoogleDns", ["averageRttWithGoogleDns", "minRttwithGoogleDns", "maxrttWithGoogleDns"]),
 ]
 
-MODELS = ("ridge", "lightgbm", "lstm", "dlinear")
+MODELS = ("ridge", "lightgbm", "dlinear")  # lstm optional; slow for full matrix
 HORIZONS = (1, 8)
 CONTEXT = 32
 SEED = 0
+INCLUDE_LSTM = False
+if INCLUDE_LSTM:
+    MODELS = MODELS + ("lstm",)
 
 
 def _flat(name: str) -> bool:

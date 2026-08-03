@@ -17,13 +17,13 @@ Pilot-derived signals informing candidates:
 | Field | Content |
 |-------|---------|
 | Problem | Independent forecasts violate known sum/aggregate constraints used in capacity planning |
-| Algorithm | Bottom-up / top-down / OLS / WLS / MinT-style reconciliation with nonnegative projection where needed |
-| Implementation status | **Not started** |
+| Algorithm | Bottom-up / top-down / OLS / WLS / MinT-shrink reconciliation with nonnegative projection where needed |
+| Implementation status | **Implemented** (`models/hybrid/reconciliation.py`); design in `docs/HIERARCHICAL_FORECASTING_DESIGN.md`; expanded development runner `scripts/run_hierarchy_dev.py` |
 | Expected novelty | Systems-facing coherent multi-level telemetry forecasting on TimeTrack hierarchies |
 | Closest baseline | Independent local/global models without reconciliation |
-| Evidence so far | Audit proofs of hierarchy; no forecasting evidence yet |
-| Weaknesses | CPU aggregation needs careful core weighting; NIC bond≈sum is approximate |
-| Decision | **retain** (priority) |
+| Evidence so far | Expanded development screen (558 runs; 3 outer folds; persistence/ridge/lightgbm; h∈{1,8}): **memory_um** WLS/MinT/BU top MAE ~0.95–0.96× independent with exact coherence; **cpu_core_weighted** MinT/WLS/BU ~0.94–0.95×; **bond0_acamas** near-parity + exact coherence; **disk_ud** BU/WLS/MinT materially worsen top MAE (top_down preserves accuracy while restoring coherence) |
+| Weaknesses | CPU uses core-weighted contributions not raw mean; bond0 approximate; disk hierarchy accuracy-sensitive; dlinear hierarchy add-on not in main screen (slow) |
+| Decision | **retain** — value beyond arithmetic consistency on memory/CPU (and bond0); revise disk policy toward top_down / selective reconciliation |
 
 ---
 
@@ -33,7 +33,7 @@ Pilot-derived signals informing candidates:
 |-------|---------|
 | Problem | Pilot suggests no universal winner across metrics/horizons |
 | Algorithm | Validation-only router or constrained mixture using target, horizon, volatility, ACF, regime |
-| Implementation status | **Not started** |
+| Implementation status | Ensemble weight utilities ready (`models/ensembles/strategies.py`); router not started |
 | Expected novelty | Operational routing for heterogeneous infra metrics under matched budgets |
 | Closest baseline | Best fixed model per target-horizon; simple ensemble |
 | Evidence so far | Pilot winner heterogeneity only (ineligible for claims) |
@@ -47,13 +47,13 @@ Pilot-derived signals informing candidates:
 | Field | Content |
 |-------|---------|
 | Problem | Pure local wastes shared structure; pure global ignores machine idiosyncrasy; LOMO needs transfer |
-| Algorithm | Shared backbone + machine embedding + lightweight residual/calibration head |
-| Implementation status | **Not started** |
+| Algorithm | Shared backbone + one-hot/embedding + residual/calibration head |
+| Implementation status | **Implemented** (`global_pooled`, `global_onehot`, `global_embed`, `global_residual`); LOMO runner + tests |
 | Expected novelty | Residual adaptation for CI/CD cluster machines under LOMO |
 | Closest baseline | Local; pooled global; global+one-hot |
-| Evidence so far | Mapping + weak cross-machine CPU corr |
-| Weaknesses | Embedding useless for truly unseen machine without features |
-| Decision | **retain** |
+| Evidence so far | LOMO (dev): local persistence beats all global variants on CU/UM; UM calibration 0→1024 helps but remains worse than local; CU small-cal harmful |
+| Weaknesses | Embedding useless for truly unseen machine without features; scale / MASE issues on CU |
+| Decision | **revise** — keep infrastructure; do not claim LOMO accuracy win; re-evaluate in-distribution global vs local |
 
 ---
 
