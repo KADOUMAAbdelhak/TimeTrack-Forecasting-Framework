@@ -318,58 +318,146 @@ class DLinearForecaster(BaseForecaster):
 
     name = "dlinear"
 
-    def __init__(self, kernel_size: int = 25, epochs: int = 30, batch_size: int = 256, lr: float = 1e-3, **kwargs):
+    def __init__(
+        self,
+        kernel_size: int = 25,
+        epochs: int = 30,
+        batch_size: int = 256,
+        lr: float = 1e-3,
+        patience: int = 5,
+        timeout_sec: float | None = 180.0,
+        max_batches_per_epoch: int | None = None,
+        num_threads: int = 1,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.kernel_size = kernel_size
         self.epochs = epochs
         self.batch_size = batch_size
         self.lr = lr
+        self.patience = patience
+        self.timeout_sec = timeout_sec
+        self.max_batches_per_epoch = max_batches_per_epoch
+        self.num_threads = num_threads
+        self.runtime_meta_: dict[str, Any] = {}
 
     def fit(self, X, y, X_val=None, y_val=None):
+        import time as _time
+
         torch, nn = _torch()
+        try:
+            torch.set_num_threads(max(1, int(self.num_threads)))
+        except Exception:
+            pass
         torch.manual_seed(self.seed)
 
-        X_arr = _prepare_seq(X)
-        y_arr = np.asarray(y, dtype=np.float32)
+        t_prep0 = _time.perf_counter()
+        X_arr = np.ascontiguousarray(_prepare_seq(X))
+        y_arr = np.ascontiguousarray(np.asarray(y, dtype=np.float32))
         if y_arr.ndim == 1:
             y_arr = y_arr[:, None]
-        series = X_arr[:, :, 0]
+        series = np.ascontiguousarray(X_arr[:, :, 0])
         context = series.shape[1]
+        prep_s = _time.perf_counter() - t_prep0
+
+        Xv = None
+        yv = None
+        if X_val is not None and y_val is not None and len(X_val):
+            Xv = np.ascontiguousarray(_prepare_seq(X_val)[:, :, 0])
+            yv = np.ascontiguousarray(np.asarray(y_val, dtype=np.float32))
+            if yv.ndim == 1:
+                yv = yv[:, None]
 
         def _fit():
+            t0 = _time.perf_counter()
             self.net_ = _make_dlinear_net(context, self.horizon, self.kernel_size)
+            init_s = _time.perf_counter() - t0
             opt = torch.optim.Adam(self.net_.parameters(), lr=self.lr)
             loss_fn = nn.MSELoss()
-            Xt = torch.tensor(series)
-            yt = torch.tensor(y_arr)
-            for _ in range(self.epochs):
+            Xt = torch.tensor(series, dtype=torch.float32)
+            yt = torch.tensor(y_arr, dtype=torch.float32)
+            best_state = None
+            best_val = float("inf")
+            bad = 0
+            epochs_ran = 0
+            timed_out = False
+            epoch_times = []
+            for ep in range(self.epochs):
+                if self.timeout_sec is not None and (_time.perf_counter() - t0) > self.timeout_sec:
+                    timed_out = True
+                    break
+                ep0 = _time.perf_counter()
                 self.net_.train()
                 perm = torch.randperm(len(Xt))
+                n_batches = 0
                 for i in range(0, len(Xt), self.batch_size):
+                    if self.max_batches_per_epoch is not None and n_batches >= self.max_batches_per_epoch:
+                        break
+                    if self.timeout_sec is not None and (_time.perf_counter() - t0) > self.timeout_sec:
+                        timed_out = True
+                        break
                     sl = perm[i : i + self.batch_size]
                     opt.zero_grad()
                     pred = self.net_(Xt[sl])
                     loss = loss_fn(pred, yt[sl])
                     loss.backward()
                     opt.step()
+                    n_batches += 1
+                epochs_ran += 1
+                epoch_times.append(_time.perf_counter() - ep0)
+                if timed_out:
+                    break
+                if Xv is not None:
+                    self.net_.eval()
+                    with torch.no_grad():
+                        pv = self.net_(torch.tensor(Xv, dtype=torch.float32))
+                        vloss = float(loss_fn(pv, torch.tensor(yv, dtype=torch.float32)).item())
+                    if vloss < best_val - 1e-9:
+                        best_val = vloss
+                        best_state = {k: v.detach().cpu().clone() for k, v in self.net_.state_dict().items()}
+                        bad = 0
+                    else:
+                        bad += 1
+                        if bad >= self.patience:
+                            break
+            if best_state is not None:
+                self.net_.load_state_dict(best_state)
             self.metadata.n_parameters = int(sum(p.numel() for p in self.net_.parameters()))
+            self.runtime_meta_ = {
+                "prep_sec": prep_s,
+                "init_sec": init_s,
+                "epochs_ran": epochs_ran,
+                "epoch_sec_mean": float(np.mean(epoch_times)) if epoch_times else float("nan"),
+                "timed_out": timed_out,
+                "early_stopped": best_state is not None and epochs_ran < self.epochs and not timed_out,
+                "n_train": int(len(Xt)),
+                "timeout_sec": self.timeout_sec,
+                "num_threads": self.num_threads,
+            }
+            self.metadata.config["runtime"] = dict(self.runtime_meta_)
             return self
 
         return self._timed_fit(_fit)
 
     def predict(self, X):
         torch, _ = _torch()
-        X_arr = _prepare_seq(X)[:, :, 0]
+        X_arr = np.ascontiguousarray(_prepare_seq(X)[:, :, 0])
 
         def _predict(_X):
             self.net_.eval()
             with torch.no_grad():
-                pred = self.net_(torch.tensor(X_arr)).cpu().numpy()
+                # chunk large predict to bound memory
+                outs = []
+                bs = max(256, int(self.batch_size))
+                for i in range(0, len(X_arr), bs):
+                    outs.append(self.net_(torch.tensor(X_arr[i : i + bs], dtype=torch.float32)).cpu().numpy())
+                pred = np.concatenate(outs, axis=0)
             if self.horizon == 1:
                 return pred.reshape(-1)
             return pred
 
         return self._timed_predict(_predict, X_arr)
+
 
     def save(self, path):
         """Save state_dict instead of pickling dynamic modules when needed."""

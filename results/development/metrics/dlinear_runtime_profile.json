@@ -1,0 +1,55 @@
+{
+  "window_construction_sec": 0.875183708001714,
+  "n_train": 7030,
+  "epochs5_timeout60_maxbNone": {
+    "fit_sec": 1.389798416999838,
+    "predict_sec": 0.0022265829975367524,
+    "n_pred": 8276,
+    "runtime": {
+      "prep_sec": 6.795800072723068e-05,
+      "init_sec": 0.004183750002994202,
+      "epochs_ran": 5,
+      "epoch_sec_mean": 0.013197199999558507,
+      "timed_out": false,
+      "early_stopped": false,
+      "n_train": 7030,
+      "timeout_sec": 60,
+      "num_threads": 1
+    },
+    "train_time_meta": 0.689724624997325
+  },
+  "epochs30_timeout120_maxb50": {
+    "fit_sec": 0.15092266599822324,
+    "predict_sec": 0.0021690829998988193,
+    "n_pred": 8276,
+    "runtime": {
+      "prep_sec": 4.35840011050459e-05,
+      "init_sec": 0.0002735419984674081,
+      "epochs_ran": 30,
+      "epoch_sec_mean": 0.0046630638667314395,
+      "timed_out": false,
+      "early_stopped": false,
+      "n_train": 7030,
+      "timeout_sec": 120,
+      "num_threads": 1
+    },
+    "train_time_meta": 0.14909199999965494
+  },
+  "epochs30_timeout30_maxb20": {
+    "fit_sec": 0.1108284999972966,
+    "predict_sec": 0.0021879579981032293,
+    "n_pred": 8276,
+    "runtime": {
+      "prep_sec": 4.749999789055437e-05,
+      "init_sec": 0.000104290997114731,
+      "epochs_ran": 30,
+      "epoch_sec_mean": 0.0033893429996775617,
+      "timed_out": false,
+      "early_stopped": false,
+      "n_train": 7030,
+      "timeout_sec": 30,
+      "num_threads": 1
+    },
+    "train_time_meta": 0.11051541699998779
+  }
+}
