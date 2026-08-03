@@ -1,0 +1,36 @@
+\begin{table}
+\caption{Smoke/executed main comparison by target and horizon.}
+\label{tab:main}
+\begin{tabular}{lrlrrrrr}
+\toprule
+target & horizon & best_model & best_mae & persistence_mae & improvement_pct & r2 & mase \\
+\midrule
+averageRttWithGoogleDns & 1 & ewma & 0.3062 & 0.3206 & 4.467 & 0.5851 & NaN \\
+averageRttWithGoogleDns & 8 & ewma & 0.3458 & 0.3642 & 5.062 & 0.455 & NaN \\
+cluster_UM & 1 & persistence & 1.12e+09 & 1.12e+09 & 0 & 0.3317 & 1.116 \\
+cluster_UM & 4 & ridge & 1.501e+09 & 1.619e+09 & 7.329 & 0.2793 & 1.496 \\
+cluster_UM & 8 & ridge & 1.694e+09 & 1.992e+09 & 14.98 & 0.1847 & 1.688 \\
+cluster_mean_CU & 1 & xgboost & 1.14 & 1.421 & 19.79 & 0.6378 & 1.003 \\
+cluster_mean_CU & 4 & lightgbm & 1.488 & 1.992 & 25.3 & 0.3942 & 1.309 \\
+cluster_mean_CU & 8 & lightgbm & 1.608 & 2.248 & 28.48 & 0.2998 & 1.415 \\
+jitterWithGoogleDns & 1 & dlinear & 0.3108 & 0.3528 & 11.89 & 0.1093 & NaN \\
+jitterWithGoogleDns & 8 & dlinear & 0.3122 & 0.3673 & 15.01 & 0.08583 & NaN \\
+machine01_CU & 1 & xgboost & 2.115 & 2.738 & 22.77 & 0.6489 & NaN \\
+machine01_CU & 4 & lightgbm & 3.545 & 4.181 & 15.22 & 0.3175 & NaN \\
+machine01_CU & 8 & lstm & 3.497 & 4.696 & 25.52 & -0.01254 & NaN \\
+machine01_DWT & 1 & lstm & 5.059e+06 & 6.857e+06 & 26.23 & -0.0239 & NaN \\
+machine01_DWT & 8 & lstm & 5.074e+06 & 8.371e+06 & 39.38 & -0.02395 & NaN \\
+machine01_UM & 1 & persistence & 2.853e+08 & 2.853e+08 & 0 & 0.3039 & 0.8564 \\
+machine01_UM & 8 & ridge & 4.756e+08 & 5.555e+08 & 14.39 & 0.05179 & 1.428 \\
+machine04_CU & 1 & lightgbm & 3.72 & 4.103 & 9.328 & 0.6755 & NaN \\
+machine04_CU & 8 & dlinear & 6.377 & 8.055 & 20.83 & 0.1626 & NaN \\
+machine06_CU & 1 & lightgbm & 0.06147 & 0.08451 & 27.26 & 0.2887 & NaN \\
+machine06_CU & 8 & lightgbm & 0.07128 & 0.0974 & 26.82 & 0.172 & NaN \\
+rx_bond0_acamas & 1 & lstm & 18.53 & 25.85 & 28.31 & 0.04884 & NaN \\
+rx_bond0_acamas & 8 & lstm & 18.2 & 25.66 & 29.09 & 0.0399 & NaN \\
+tx_bond0_acamas & 1 & lstm & 48.67 & 63.05 & 22.81 & 0.02384 & NaN \\
+tx_bond0_acamas & 4 & dlinear & 59.33 & 70.37 & 15.68 & 0.08445 & NaN \\
+tx_bond0_acamas & 8 & lstm & 50.25 & 69.3 & 27.49 & 0.01248 & NaN \\
+\bottomrule
+\end{tabular}
+\end{table}

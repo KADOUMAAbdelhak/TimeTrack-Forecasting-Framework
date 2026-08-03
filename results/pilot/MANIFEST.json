@@ -1,0 +1,42 @@
+{
+  "generated_utc": "2026-08-03T09:43:22.493570+00:00",
+  "python": "3.13.2",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "n_raw_runs": 352,
+  "n_aggregate_rows": 352,
+  "targets": [
+    "averageRttWithGoogleDns",
+    "cluster_UM",
+    "cluster_mean_CU",
+    "jitterWithGoogleDns",
+    "machine01_CU",
+    "machine01_DWT",
+    "machine01_UM",
+    "machine04_CU",
+    "machine06_CU",
+    "rx_bond0_acamas",
+    "tx_bond0_acamas"
+  ],
+  "models": [
+    "dlinear",
+    "drift",
+    "ewma",
+    "historical_mean",
+    "lightgbm",
+    "lstm",
+    "moving_average",
+    "persistence",
+    "ridge",
+    "xgboost"
+  ],
+  "configs_executed": [
+    "configs/smoke.yaml",
+    "configs/medium_lite.yaml"
+  ],
+  "artifacts": {
+    "all_runs": "results/metrics/all_runs.csv",
+    "leaderboard": "results/metrics/leaderboard.csv",
+    "paper": "results/paper/"
+  }
+}

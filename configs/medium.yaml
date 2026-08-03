@@ -1,0 +1,72 @@
+tier: medium
+experiment_stage: development
+scope: local
+train_frac: 0.70
+val_frac: 0.15
+targets:
+  - cluster_mean_CU
+  - machine01_CU
+  - machine04_CU
+  - machine06_CU
+  - cluster_UM
+  - machine01_UM
+  - machine01_DWT
+  - machine01_UD_diff
+  - averageRttWithGoogleDns
+  - maxrttWithGoogleDns
+  - jitterWithGoogleDns
+  - tx_bond0_acamas
+  - rx_bond0_acamas
+  - tx_bond0_bellerophon
+horizons: [1, 4, 8, 16]
+contexts: [32, 64]
+seeds: [0, 1, 2]
+models:
+  - persistence
+  - historical_mean
+  - moving_average
+  - ewma
+  - drift
+  - ridge
+  - lasso
+  - random_forest
+  - extra_trees
+  - lightgbm
+  - xgboost
+  - mlp
+  - lstm
+  - gru
+  - tcn
+  - dlinear
+exog:
+  machine01_CU: [machine01_UM]
+  machine04_CU: [machine04_UM]
+  cluster_mean_CU: [cluster_UM]
+  tx_bond0_acamas: [rx_bond0_acamas]
+  rx_bond0_acamas: [tx_bond0_acamas]
+  averageRttWithGoogleDns: [jitterWithGoogleDns]
+model_kwargs:
+  lightgbm:
+    n_estimators: 200
+  xgboost:
+    n_estimators: 200
+  random_forest:
+    n_estimators: 100
+  mlp:
+    epochs: 25
+    hidden_size: 64
+  lstm:
+    epochs: 25
+    hidden_size: 64
+  gru:
+    epochs: 25
+    hidden_size: 64
+  tcn:
+    epochs: 25
+    hidden_size: 64
+  dlinear:
+    epochs: 40
+hpo:
+  framework: optuna
+  trials_per_model: 20
+  timeout_per_trial_sec: 300

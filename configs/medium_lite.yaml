@@ -1,0 +1,48 @@
+# Faster Stage-B style pass: more targets/models, still limited horizons/seeds
+tier: medium_lite
+experiment_stage: pilot
+scope: local
+train_frac: 0.70
+val_frac: 0.15
+targets:
+  - cluster_mean_CU
+  - machine01_CU
+  - machine04_CU
+  - machine06_CU
+  - cluster_UM
+  - machine01_UM
+  - machine01_DWT
+  - averageRttWithGoogleDns
+  - jitterWithGoogleDns
+  - tx_bond0_acamas
+  - rx_bond0_acamas
+horizons: [1, 8]
+contexts: [32]
+seeds: [0, 1]
+models:
+  - persistence
+  - ewma
+  - ridge
+  - lightgbm
+  - xgboost
+  - dlinear
+  - lstm
+exog:
+  machine01_CU: [machine01_UM]
+  machine04_CU: [machine04_UM]
+  cluster_mean_CU: [cluster_UM]
+  tx_bond0_acamas: [rx_bond0_acamas]
+  averageRttWithGoogleDns: [jitterWithGoogleDns]
+model_kwargs:
+  lightgbm:
+    n_estimators: 100
+  xgboost:
+    n_estimators: 100
+  dlinear:
+    epochs: 20
+    batch_size: 512
+  lstm:
+    epochs: 15
+    hidden_size: 64
+    batch_size: 512
+    patience: 4

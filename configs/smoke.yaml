@@ -1,0 +1,34 @@
+tier: smoke
+experiment_stage: pilot
+scope: local
+train_frac: 0.70
+val_frac: 0.15
+targets:
+  - cluster_mean_CU
+  - machine01_CU
+  - cluster_UM
+  - tx_bond0_acamas
+horizons: [1, 4]
+contexts: [32]
+seeds: [0]
+models:
+  - persistence
+  - historical_mean
+  - moving_average
+  - ewma
+  - drift
+  - ridge
+  - lightgbm
+  - dlinear
+exog:
+  machine01_CU: [machine01_UM]
+  cluster_mean_CU: [cluster_UM]
+model_kwargs:
+  lightgbm:
+    n_estimators: 50
+    learning_rate: 0.1
+  ridge:
+    alpha: 1.0
+  dlinear:
+    epochs: 15
+    batch_size: 512

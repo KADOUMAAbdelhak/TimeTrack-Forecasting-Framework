@@ -1,0 +1,75 @@
+tier: publication
+# DO NOT set experiment_stage=final until protocol freeze (docs/EVALUATION_PROTOCOL_V2.md).
+experiment_stage: development
+scope: local
+train_frac: 0.70
+val_frac: 0.15
+targets:
+  - cluster_mean_CU
+  - machine01_CU
+  - machine02_CU
+  - machine03_CU
+  - machine04_CU
+  - machine05_CU
+  - machine06_CU
+  - machine07_CU
+  - cluster_UM
+  - machine01_UM
+  - machine02_UM
+  - machine04_UM
+  - machine01_DWT
+  - machine01_UD_diff
+  - averageRttWithGoogleDns
+  - maxrttWithGoogleDns
+  - jitterWithGoogleDns
+  - tx_bond0_acamas
+  - rx_bond0_acamas
+  - tx_bond0_bellerophon
+  - rx_bond0_bellerophon
+  - tx_bond0_phaedra
+horizons: [1, 2, 4, 8, 16, 32]
+contexts: [16, 32, 64, 128]
+seeds: [0, 1, 2, 3, 4]
+models:
+  - persistence
+  - seasonal_persistence
+  - historical_mean
+  - moving_average
+  - ewma
+  - drift
+  - ridge
+  - lasso
+  - elasticnet
+  - random_forest
+  - extra_trees
+  - lightgbm
+  - xgboost
+  - mlp
+  - lstm
+  - gru
+  - tcn
+  - dlinear
+exog:
+  machine01_CU: [machine01_UM]
+  machine04_CU: [machine04_UM]
+  cluster_mean_CU: [cluster_UM]
+  tx_bond0_acamas: [rx_bond0_acamas]
+  averageRttWithGoogleDns: [jitterWithGoogleDns]
+model_kwargs:
+  seasonal_persistence:
+    seasonality: 2016  # ~24h at 42.3s
+  lightgbm:
+    n_estimators: 400
+  xgboost:
+    n_estimators: 400
+  lstm:
+    epochs: 40
+    hidden_size: 128
+    patience: 6
+  dlinear:
+    epochs: 60
+hpo:
+  framework: optuna
+  trials_per_model: 40
+  timeout_per_trial_sec: 600
+  storage: results/tuning/optuna.db
