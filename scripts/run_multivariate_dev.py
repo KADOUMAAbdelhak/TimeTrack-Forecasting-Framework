@@ -44,11 +44,14 @@ PAIRS = [
     ("jitterWithGoogleDns", ["averageRttWithGoogleDns", "minRttwithGoogleDns", "maxrttWithGoogleDns"]),
 ]
 
-MODELS = ("ridge", "lightgbm", "dlinear")  # lstm optional; slow for full matrix
+MODELS = ("ridge", "lightgbm")  # dlinear/lstm optional via flags
 HORIZONS = (1, 8)
 CONTEXT = 32
 SEED = 0
+INCLUDE_DLINEAR = False
 INCLUDE_LSTM = False
+if INCLUDE_DLINEAR:
+    MODELS = MODELS + ("dlinear",)
 if INCLUDE_LSTM:
     MODELS = MODELS + ("lstm",)
 

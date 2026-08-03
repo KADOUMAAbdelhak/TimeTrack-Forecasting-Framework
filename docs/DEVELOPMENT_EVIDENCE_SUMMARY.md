@@ -76,15 +76,25 @@ Predeclared sizes: 0, 64, 256, 1024 (chronology: cal origins from train+val only
 
 ## 6. Do correlated inputs improve forecasting?
 
-**Not yet executed at scale.** Runner: `scripts/run_multivariate_dev.py` → `univariate_vs_multivariate.csv`. Pending after hierarchy commit.
+**Mostly no under matched ridge/lightgbm budgets (development).**
+
+Artifact: `results/development/tables/univariate_vs_multivariate.csv` (144 rows) + `figures/multivariate_gain_by_correlation.pdf`.
+
+- Clear gain: `machine01_tx_bond0` ← TX+RX (ridge/LGBM MAE ↓ ~0.5–0.7).
+- Elsewhere (CPU↔memory, RX←TX, RTT group, jitter←RTT): multivariate **worsens** mean MAE.
+- Do not claim causality from correlation–gain scatter; neural multivariate (DLinear/LSTM) not in this screen (flagged slow).
 
 ---
 
 ## 7. Do ensembles beat their strongest constituent?
 
-**Implementation ready; experiments pending frozen constituents.**
+**Sometimes on CPU mean; rarely elsewhere.**
 
-`models/ensembles/strategies.py`: mean, inverse-val-MAE, nonnegative weights, stacking (rejects n_val < 200).
+Artifacts: `results/development/metrics/ensemble_all_runs.csv` / `ensemble_summary.csv`.
+
+- `cluster_mean_CU`: stacking beats best constituent on all folds at h=1 (beat_rate=1.0); often at h=8.
+- `cluster_UM` / RTT: ensembles rarely beat persistence (best constituent); inverse-MAE occasionally helps UM (beat_rate=1/3).
+- Rule enforced: must beat strongest constituent, not only persistence — stacking is the only clear partial win.
 
 ---
 
@@ -100,12 +110,11 @@ Predeclared sizes: 0, 64, 256, 1024 (chronology: cal origins from train+val only
 
 ## 9. Which experiments remain before freeze?
 
-- Finish / commit expanded hierarchy_all_runs + figures + C1 decision
-- Multivariate fixed-budget ablations
-- Validation-only ensembles on frozen constituents
-- Optional dlinear hierarchy add-on (slow; INCLUDE_DLINEAR flag)
+- Optional DLinear/LSTM hierarchy + multivariate add-ons (`INCLUDE_*` flags)
 - Local vs pooled global **in-distribution** (not only LOMO) for C3 fairness
+- Target-/horizon-specific ensembles with broader frozen constituent set
 - Fix CU MASE NaNs in LOMO (train scale edge cases)
+- Still **do not** launch `publication.yaml` / manuscript
 
 ---
 
