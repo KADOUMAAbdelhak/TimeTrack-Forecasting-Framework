@@ -33,12 +33,12 @@ Pilot-derived signals informing candidates:
 |-------|---------|
 | Problem | Pilot suggests no universal winner across metrics/horizons |
 | Algorithm | Validation-only router or constrained mixture using target, horizon, volatility, ACF, regime |
-| Implementation status | Ensemble weight utilities ready (`models/ensembles/strategies.py`); router not started |
+| Implementation status | **Implemented** (`models/ensembles/router.py`, gating features, constrained mixture); evaluated in `scripts/run_router_dev.py` |
 | Expected novelty | Operational routing for heterogeneous infra metrics under matched budgets |
 | Closest baseline | Best fixed model per target-horizon; simple ensemble |
-| Evidence so far | Pilot winner heterogeneity only (ineligible for claims) |
-| Weaknesses | Risk of overfitting router to pilot terminal test — must use inner folds only |
-| Decision | **retain** |
+| Evidence so far | 1320 development rows: intermittent beat_rate>0 on some targets, but mean MAE_rel to best constituent ≈1.05–1.16 (worse on average) |
+| Weaknesses | Does not robustly beat strongest fixed constituent; regime KNN can overfit small val |
+| Decision | **revise / demote** — not primary; optional post-freeze ablation |
 
 ---
 
@@ -51,9 +51,9 @@ Pilot-derived signals informing candidates:
 | Implementation status | **Implemented** (`global_pooled`, `global_onehot`, `global_embed`, `global_residual`); LOMO runner + tests |
 | Expected novelty | Residual adaptation for CI/CD cluster machines under LOMO |
 | Closest baseline | Local; pooled global; global+one-hot |
-| Evidence so far | LOMO (dev): local persistence beats all global variants on CU/UM; UM calibration 0→1024 helps but remains worse than local; CU small-cal harmful |
-| Weaknesses | Embedding useless for truly unseen machine without features; scale / MASE issues on CU |
-| Decision | **revise** — keep infrastructure; do not claim LOMO accuracy win; re-evaluate in-distribution global vs local |
+| Evidence so far | LOMO: local persistence wins. In-distribution ridge: `global_residual≈local`; pooled/one-hot worse; embed unstable on UM. MASE CU fixed. |
+| Weaknesses | Embedding useless for truly unseen machine without features; no accuracy-win claim |
+| Decision | **supporting negative / specialization study** — not a primary FGCS contribution |
 
 ---
 
@@ -75,3 +75,5 @@ Pilot-derived signals informing candidates:
 ## Selection rule (pre-registered)
 
 Keep the candidate with the best combination of: accuracy lift on development outer folds, coherence/LOMO/calibration benefit, ablation clarity, and CPU cost. Reject others with written rationale before freeze.
+
+**Gate decision:** primary **C1**; see `docs/CONTRIBUTION_SELECTION_DECISION.md`.
