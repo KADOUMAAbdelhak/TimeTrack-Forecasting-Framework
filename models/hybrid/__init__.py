@@ -8,6 +8,7 @@ from models.hybrid.reconciliation import (
     memory_hierarchy,
     reconcile,
 )
+from models.hybrid.residual_adaptation import GlobalResidualAdaptationForecaster
 
 __all__ = [
     "coherence_error",
@@ -16,4 +17,5 @@ __all__ = [
     "machine_core_counts",
     "memory_hierarchy",
     "reconcile",
+    "GlobalResidualAdaptationForecaster",
 ]

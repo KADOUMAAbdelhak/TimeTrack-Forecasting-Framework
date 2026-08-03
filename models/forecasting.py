@@ -17,6 +17,8 @@ from models.classical import baselines as _baselines  # noqa: F401
 from models.classical import linear as _linear  # noqa: F401
 from models.machine_learning import trees as _trees  # noqa: F401
 from models.deep_learning import neural as _neural  # noqa: F401
+from models.multivariate import global_models as _global  # noqa: F401
+from models.hybrid import residual_adaptation as _residual  # noqa: F401
 from models.registry import (
     build_model as _build,
     get_model_metadata as _meta,
