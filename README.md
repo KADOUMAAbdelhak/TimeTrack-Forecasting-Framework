@@ -1,59 +1,81 @@
 # TimeTrack Forecasting Framework
 
-Publication-oriented, leakage-safe multi-metric forecasting for the TimeTrack OpenAirInterface CI/CD telemetry dataset.
+Leakage-safe, multi-metric infrastructure time-series forecasting for the
+TimeTrack OpenAirInterface CI/CD telemetry dataset, aimed at predictive
+resource management for cloud-edge and distributed systems.
 
-## What this repository contains
+**Official repository:** https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework
 
-- **Raw data** (immutable): six CSV files at the project root, hard-linked into `data/raw/`
-- **Audit & plans**: `docs/DATASET_AND_REPOSITORY_AUDIT.md`, `docs/RESEARCH_PLAN.md`, `docs/EXPERIMENT_MATRIX.md`
-- **Framework**: `timetrack/`, `models/`, `experiments/`, `configs/`, `tests/`
-- **Results**: `results/` (populated by executed runs only)
+This is **not** a reproduction of prior CPU-only TimeTrack papers. Those are
+literature baselines. Version-control and artifact rules:
+[`docs/VERSION_CONTROL_POLICY.md`](docs/VERSION_CONTROL_POLICY.md).
 
-This is **not** a reproduction of prior CPU-only TimeTrack papers. Those are literature baselines. This project expands to multi-metric forecasting under a strict chronological protocol.
+## Repository contents
 
-## Critical data facts (verified)
+- **Code:** `timetrack/`, `models/`, `experiments/`, `configs/`, `scripts/`, `tests/`
+- **Docs:** audit, research plan, experiment matrix, evaluation protocol V2, publication gates
+- **Results:** lightweight summaries under `results/pilot/` (and later `results/final/`)
+- **Raw data:** **not** distributed via Git — restore locally (see below)
 
-- Median sampling interval ≈ **42.3 s** (not 45 s)
-- Span: 2024-06-24 → 2024-07-19 with a **~4.87-day outage** (2024-06-28 → 2024-07-03)
-- Seven machines / hosts; packet **errors are all zero** in this download
+## Dataset (not in Git)
 
-See the audit document for full evidence.
+Obtain the six TimeTrack CSV files from the authorized dataset source and place
+them at the project root **or** under `data/raw/`:
 
-## Setup
+- `compute_dataset.csv`
+- `detailed_cpu_cores_dataset.csv`
+- `disk_dataset.csv`
+- `network_dataset.csv`
+- `packet-loss-dataset.csv`
+- `throughputs_dataset.csv`
+
+Verify identity:
 
 ```bash
-cd /Users/fgtek002/TimeTrack
+python scripts/tt_cli.py audit
+```
+
+Compare `dataset_fingerprint` to recorded manifests. Median sampling in this
+drop is ≈ **42.3 s** (not 45 s); see `docs/DATASET_AND_REPOSITORY_AUDIT.md`.
+
+## Environment setup
+
+```bash
+cd /Users/fgtek002/TimeTrack   # or your clone path
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Commands
+## Smoke test
 
 ```bash
-# Dataset fingerprint + segment counts
-python scripts/tt_cli.py audit
-
-# Build processed panel (parquet)
-python scripts/tt_cli.py preprocess
-
-# List models
-python scripts/tt_cli.py list-models
-
-# Unit tests
+export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 python scripts/tt_cli.py test
-# or: pytest -q tests
-
-# Smoke benchmark (fast)
 python scripts/tt_cli.py run --config configs/smoke.yaml
-
-# Medium / publication
-python scripts/tt_cli.py run --config configs/medium.yaml
-python scripts/tt_cli.py run --config configs/publication.yaml
-
-# Rebuild leaderboards
-python scripts/tt_cli.py leaderboard
 ```
+
+`configs/smoke.yaml` is **`experiment_stage: pilot`**. Outputs go under
+`results/pilot/` and are **not final evidence**.
+
+## Development benchmark
+
+```bash
+python scripts/tt_cli.py run --config configs/medium_lite.yaml
+# optional inner-fold HPO example:
+python scripts/tune_optuna.py --target cluster_mean_CU --model ridge --horizon 1 --trials 20
+```
+
+Do **not** treat pilot/development leaderboards as FGCS final results. Protocol:
+[`docs/EVALUATION_PROTOCOL_V2.md`](docs/EVALUATION_PROTOCOL_V2.md).
+
+```bash
+python scripts/tt_cli.py leaderboard --stage pilot
+python scripts/tt_cli.py leaderboard --stage final   # refuses pilot / missing finals
+```
+
+`configs/publication.yaml` must not be used for claim-making until an
+`experiment-freeze-v*` tag.
 
 ## Model API
 
@@ -63,43 +85,24 @@ from models.forecasting import build_model, fit, predict, save, load, list_avail
 model = build_model("lightgbm", horizon=4, context_length=32, seed=0)
 fit(model, X_train, y_train, X_val=X_val, y_val=y_val)
 yhat = predict(model, X_test)
-save(model, "results/models/example")
 ```
-
-## Evaluation protocol (summary)
-
-1. Primary track = **post-outage** segment only
-2. Chronological 70% / 15% / 15% train / val / test
-3. Windows never cross split boundaries or the outage gap
-4. Scalers / HPO use train / validation only
-5. Final test is untouched until Stage E reporting
-6. Stochastic models: multiple seeds; report mean±std
 
 ## Config tiers
 
-| Config | Purpose |
-|--------|---------|
-| `configs/smoke.yaml` | Dev / CI smoke |
-| `configs/medium.yaml` | Main comparative benchmark |
-| `configs/publication.yaml` | Full repeated study |
+| Config | Stage | Purpose |
+|--------|-------|---------|
+| `configs/smoke.yaml` | pilot | Fast pipeline check |
+| `configs/medium_lite.yaml` | pilot | Expanded development screen |
+| `configs/medium.yaml` | development | Broader nested-dev work |
+| `configs/publication.yaml` | blocked until freeze | Final outer-fold study |
 
-## Evaluation stages (important)
+## Critical verified data facts
 
-Existing smoke/medium_lite runs are **pilot** artifacts under `results/pilot/`.
-They inspected the terminal chronological holdout and are **not eligible** for
-final publication claims. See `docs/EVALUATION_PROTOCOL_V2.md`.
+- Median sampling ≈ **42.3 s** (not 45 s)
+- Span 2024-06-24 → 2024-07-19 with a **~4.87-day outage**
+- Seven machines; packet **errors are all zero** in this download
 
-```bash
-# Pilot leaderboards only
-python scripts/tt_cli.py leaderboard --stage pilot
+## Provenance note
 
-# Final leaderboards (refuses pilot / missing final runs)
-python scripts/tt_cli.py leaderboard --stage final
-```
-
-Do **not** run `configs/publication.yaml` as a final claim surface until the
-experiment freeze documented in Protocol V2.
-
-## Citation / provenance
-
-Dataset files dated 2025-02-13 in this workspace drop. Paper claims of 45 s sampling are **not** confirmed by the files present here.
+Dataset files in the original workspace drop are dated 2025-02-13. Paper claims
+of 45 s sampling are **not** confirmed by the files present here.

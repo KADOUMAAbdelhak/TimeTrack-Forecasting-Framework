@@ -1,18 +1,54 @@
 .venv/
+venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .DS_Store
+.idea/
+.vscode/
+.ipynb_checkpoints/
+
+# Raw dataset copies and original data drop
+data/raw/
+compute_dataset.csv
+detailed_cpu_cores_dataset.csv
+disk_dataset.csv
+network_dataset.csv
+packet-loss-dataset.csv
+throughputs_dataset.csv
+
+# Large/intermediate processed data
 data/interim/
 data/processed/
-results/pilot/models/
-results/pilot/predictions/
-results/development/models/
-results/development/predictions/
-results/final/models/
-results/final/predictions/
+*.parquet
+*.feather
+*.h5
+*.hdf5
+docs/_audit_cache/
+
+# Model checkpoints and tuning databases
+results/**/models/
+results/**/predictions/
+results/**/tuning/*.db
+results/**/tuning/*.sqlite
+results/**/tuning/*.sqlite3
 results/tuning/
 *.pt
+*.pth
+*.ckpt
 *.joblib
-.ipynb_checkpoints/
-docs/_audit_cache/
+*.pkl
+*.onnx
+
+# Logs and temporary outputs
+*.log
+results/**/logs/
+tmp/
+.cache/
+
+# Legacy relocated empty pointers / local-only blobs
+results/models/
+results/predictions/
+results/paper/
