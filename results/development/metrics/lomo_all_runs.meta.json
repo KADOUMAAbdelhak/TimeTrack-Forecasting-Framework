@@ -1,0 +1,13 @@
+{
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "unknown_entity_policy": "one_hot zeros; embed index 0 UNK; residual global-only without calibration",
+  "calibration_sizes": [
+    0,
+    64,
+    256,
+    1024
+  ],
+  "n_rows": 672
+}
