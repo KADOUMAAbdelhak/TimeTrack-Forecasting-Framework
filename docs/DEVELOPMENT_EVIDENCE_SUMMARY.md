@@ -18,7 +18,7 @@ Mean top MAE relative to independent (tree/linear screen, 558 runs):
 | bond0_acamas TX | bottom_up_nn | ~0.995 | exact |
 | disk_ud | top_down | ~1.0 | exact; BU ~3.4× worse |
 
-Neural confirmation (LSTM/DLinear, memory+CPU) is in progress to test model-agnostic gains.
+Neural confirmation (360 rows; LSTM/DLinear; 3 folds × 2 seeds): **memory_um** bottom_up_nn mean top MAE ≈0.71× independent with exact coherence; MinT/WLS also help. **cpu_core_weighted** near-parity (BU ≈ independent; WLS/MinT slightly worse). Gains are not purely linear/tree-specific for memory.
 
 ---
 

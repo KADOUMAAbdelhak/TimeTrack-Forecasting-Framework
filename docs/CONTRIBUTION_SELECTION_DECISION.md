@@ -38,7 +38,7 @@ Rationale:
 1. **MASE:** CU NaNs caused by train NaNs in `np.mean` lag diffs; fixed via finite-pair scale + `mase_valid` policy.
 2. **In-distribution global/local (ridge):** residual ≈ local; pooled/one-hot worse; embed catastrophic on UM.
 3. **DLinear:** single-series ~1–2s; unbounded multi-series grids gated; timeout/early-stop/thread caps added.
-4. **Neural hierarchy confirmation:** running / pending artifact at decision time — must not reverse C1 unless it clearly nullifies tree/linear gains.
+4. **Neural hierarchy confirmation:** completed (360 rows). Memory reconciliation gains hold for LSTM/DLinear (BU_nn ≈0.71× independent); CPU near-parity.
 5. **C2 router:** 1320 rows; constrained mixture / stacking have sporadic beat_rate>0 but worse average MAE_rel.
 6. **Peaks:** train q90/q95/MAD metrics implemented; persistence often high recall with different FA trade-offs.
 7. **Downsampling:** error generally rises from native→5min for ridge/persistence on aggregated MAE.
