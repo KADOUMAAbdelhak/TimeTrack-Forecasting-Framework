@@ -29,7 +29,7 @@ from models.hybrid.residual_adaptation import GlobalResidualAdaptationForecaster
 from models.multivariate.entity_features import TargetScaler
 from timetrack.data import build_analysis_panel, dataset_fingerprint
 from timetrack.evaluation_stage import ExperimentStage
-from timetrack.metrics import mae, mase
+from timetrack.metrics import mae, mase_result, nanmean_valid
 from timetrack.splits import build_windows, fold_to_split_spec, make_outer_chronological_folds, origins_for_split
 
 MACHINES = [f"machine0{i}" for i in range(1, 8)]
@@ -247,6 +247,7 @@ def run_lomo_once(
 
 
 def _row(method, family, held_out, horizon, fold, yt, yp, y_train, cal_n, infer_s, note=""):
+    mr = mase_result(yt, yp, y_train)
     return {
         "experiment_stage": ExperimentStage.DEVELOPMENT.value,
         "eligible_for_final_claims": False,
@@ -258,21 +259,35 @@ def _row(method, family, held_out, horizon, fold, yt, yp, y_train, cal_n, infer_
         "outer_fold": fold,
         "calibration_n": cal_n,
         "mae": mae(yt, yp),
-        "mase": mase(yt, yp, y_train),
+        "mase": mr["mase"],
+        "mase_valid": mr["mase_valid"],
+        "mase_invalid_reason": mr["mase_invalid_reason"],
+        "mase_scale": mr["mase_scale"],
+        "nmae_train_range": mr["nmae_train_range"],
+        "rmsse": mr["rmsse"],
         "infer_seconds": infer_s,
         "note": note,
     }
 
 
 def summarize(df: pd.DataFrame) -> pd.DataFrame:
-    g = df.groupby(["family", "method", "horizon"], as_index=False).agg(
-        mae_macro=("mae", "mean"),
-        mae_std=("mae", "std"),
-        mae_worst_machine=("mae", "max"),
-        mase_macro=("mase", "mean"),
-        n=("mae", "count"),
-    )
-    return g
+    rows = []
+    for keys, g in df.groupby(["family", "method", "horizon"]):
+        rows.append(
+            {
+                "family": keys[0],
+                "method": keys[1],
+                "horizon": keys[2],
+                "mae_macro": float(g["mae"].mean()),
+                "mae_std": float(g["mae"].std()),
+                "mae_worst_machine": float(g["mae"].max()),
+                "mase_macro": nanmean_valid(g["mase"].to_numpy(), g.get("mase_valid", pd.Series([True] * len(g))).to_numpy()),
+                "mase_n_valid": int(g["mase_valid"].sum()) if "mase_valid" in g else len(g),
+                "nmae_train_range_macro": float(np.nanmean(g["nmae_train_range"])) if "nmae_train_range" in g else float("nan"),
+                "n": len(g),
+            }
+        )
+    return pd.DataFrame(rows)
 
 
 def main():
