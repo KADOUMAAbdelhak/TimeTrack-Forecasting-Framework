@@ -189,3 +189,226 @@ def origins_for_split(
     if first_origin > last_origin:
         return np.asarray([], dtype=int)
     return np.arange(first_origin, last_origin + 1, dtype=int)
+
+
+@dataclass(frozen=True)
+class FoldSpec:
+    """Single chronological fold with train/val(/test) index arrays into the panel."""
+
+    fold_id: str
+    level: str  # "outer" | "inner"
+    train_idx: np.ndarray
+    val_idx: np.ndarray
+    test_idx: np.ndarray | None
+    meta: dict[str, Any]
+
+
+def _post_outage_indices(panel: pd.DataFrame) -> np.ndarray:
+    idx = np.flatnonzero((panel["segment"] == "post_outage").to_numpy())
+    if len(idx) < 100:
+        raise ValueError("post-outage segment too short")
+    # must be contiguous in panel index space for standard folds
+    if idx[-1] - idx[0] + 1 != len(idx):
+        raise ValueError("post-outage indices are not contiguous")
+    return idx
+
+
+def _fold_meta(panel: pd.DataFrame, train_idx: np.ndarray, val_idx: np.ndarray, test_idx: np.ndarray | None) -> dict[str, Any]:
+    ts = panel["timestamp"]
+
+    def _span(ix: np.ndarray) -> dict[str, Any]:
+        return {
+            "n": int(len(ix)),
+            "start": str(ts.iloc[ix[0]]),
+            "end": str(ts.iloc[ix[-1]]),
+            "i_min": int(ix.min()),
+            "i_max": int(ix.max()),
+        }
+
+    meta = {"train": _span(train_idx), "val": _span(val_idx), "outage_start": OUTAGE_START, "outage_end": OUTAGE_END}
+    if test_idx is not None and len(test_idx):
+        meta["test"] = _span(test_idx)
+    return meta
+
+
+def assert_indices_chronological_disjoint(*blocks: np.ndarray) -> None:
+    nonempty = [np.asarray(b, dtype=int) for b in blocks if b is not None and len(b)]
+    for b in nonempty:
+        if len(b) > 1 and np.any(np.diff(b) <= 0):
+            raise AssertionError("indices not strictly increasing")
+    for i, a in enumerate(nonempty):
+        for b in nonempty[i + 1 :]:
+            if set(a.tolist()).intersection(b.tolist()):
+                raise AssertionError("index blocks overlap")
+    for i in range(len(nonempty) - 1):
+        if nonempty[i].max() >= nonempty[i + 1].min():
+            raise AssertionError("index blocks are not chronological")
+
+
+def make_outer_chronological_folds(
+    panel: pd.DataFrame,
+    n_folds: int = 3,
+    val_frac_within_train: float = 0.15,
+    min_train: int = 2000,
+    min_test: int = 500,
+) -> list[FoldSpec]:
+    """
+    Expanding-window outer folds on the post-outage segment.
+
+    The full post-outage span is partitioned into (n_folds + 1) contiguous blocks:
+    initial train seed + n_folds successive test blocks.
+    Fold k uses all data before test block k as outer train span; within that span,
+    the last val_frac_within_train fraction is held out as inner-style val for
+    early stopping when nested HPO is not used.
+    """
+    if n_folds < 2:
+        raise ValueError("n_folds must be >= 2")
+    idx = _post_outage_indices(panel)
+    n = len(idx)
+    # n_folds test blocks + 1 initial train block
+    n_parts = n_folds + 1
+    part = n // n_parts
+    if part < min_test:
+        raise ValueError(f"post-outage too short for {n_folds} outer folds (part={part})")
+    folds: list[FoldSpec] = []
+    for k in range(n_folds):
+        test_start = (k + 1) * part
+        test_end = (k + 2) * part if k < n_folds - 1 else n
+        train_span = idx[:test_start]
+        test_idx = idx[test_start:test_end]
+        if len(train_span) < min_train or len(test_idx) < min_test:
+            raise ValueError(f"outer fold {k} too small: train={len(train_span)} test={len(test_idx)}")
+        n_val = max(1, int(len(train_span) * val_frac_within_train))
+        if n_val >= len(train_span):
+            raise ValueError("val_frac_within_train too large")
+        train_idx = train_span[:-n_val]
+        val_idx = train_span[-n_val:]
+        assert_indices_chronological_disjoint(train_idx, val_idx, test_idx)
+        assert_no_gap_crossing(np.arange(train_idx.min(), test_idx.max() + 1), panel)
+        fid = f"outer_{k}"
+        meta = _fold_meta(panel, train_idx, val_idx, test_idx)
+        meta.update(
+            {
+                "fold_id": fid,
+                "level": "outer",
+                "mode": "expanding",
+                "n_folds": n_folds,
+                "fold_index": k,
+                "val_frac_within_train": val_frac_within_train,
+            }
+        )
+        folds.append(FoldSpec(fid, "outer", train_idx, val_idx, test_idx, meta))
+    return folds
+
+
+def make_inner_rolling_folds(
+    panel: pd.DataFrame,
+    outer_train_idx: np.ndarray,
+    n_inner: int = 3,
+    mode: str = "expanding",
+    val_size: int | None = None,
+    val_frac: float = 0.2,
+    step: int | None = None,
+    min_train: int = 500,
+) -> list[FoldSpec]:
+    """
+    Inner folds inside an outer training span (no access to outer test indices).
+
+    mode:
+      - expanding: train grows; validation is a trailing block that rolls forward
+      - sliding: fixed-size train window that slides forward
+    """
+    if mode not in {"expanding", "sliding"}:
+        raise ValueError(mode)
+    span = np.asarray(outer_train_idx, dtype=int)
+    if span[-1] - span[0] + 1 != len(span):
+        raise ValueError("outer_train_idx must be contiguous")
+    n = len(span)
+    if val_size is None:
+        val_size = max(1, int(n * val_frac / max(n_inner, 1)))
+    if step is None:
+        step = val_size
+    folds: list[FoldSpec] = []
+    # Place n_inner validation windows ending before span end
+    for i in range(n_inner):
+        val_end = n - (n_inner - 1 - i) * step
+        val_start = val_end - val_size
+        if val_start < min_train:
+            continue
+        if mode == "expanding":
+            train_local = span[:val_start]
+        else:
+            train_start = max(0, val_start - max(min_train, val_size * 3))
+            train_local = span[train_start:val_start]
+        val_local = span[val_start:val_end]
+        if len(train_local) < min_train or len(val_local) < 1:
+            continue
+        assert_indices_chronological_disjoint(train_local, val_local)
+        assert_no_gap_crossing(np.arange(train_local.min(), val_local.max() + 1), panel)
+        fid = f"inner_{i}"
+        meta = _fold_meta(panel, train_local, val_local, None)
+        meta.update(
+            {
+                "fold_id": fid,
+                "level": "inner",
+                "mode": mode,
+                "n_inner": n_inner,
+                "fold_index": i,
+                "val_size": int(val_size),
+                "step": int(step),
+            }
+        )
+        folds.append(FoldSpec(fid, "inner", train_local, val_local, None, meta))
+    if not folds:
+        raise ValueError("no inner folds constructed; relax min_train/val_size")
+    return folds
+
+
+def nested_fold_plan(
+    panel: pd.DataFrame,
+    n_outer: int = 3,
+    n_inner: int = 3,
+    inner_mode: str = "expanding",
+    val_frac_within_train: float = 0.15,
+) -> list[dict[str, Any]]:
+    """Return a serializable nested plan: each outer fold plus its inner folds."""
+    outer = make_outer_chronological_folds(
+        panel, n_folds=n_outer, val_frac_within_train=val_frac_within_train
+    )
+    plan = []
+    for of in outer:
+        # Inner folds use the full outer train∪val span (everything before outer test)
+        outer_fit_span = np.concatenate([of.train_idx, of.val_idx])
+        inner = make_inner_rolling_folds(panel, outer_fit_span, n_inner=n_inner, mode=inner_mode)
+        # Guard: no inner index may touch outer test
+        test_set = set(int(x) for x in of.test_idx)
+        for inn in inner:
+            if test_set.intersection(int(x) for x in inn.train_idx) or test_set.intersection(
+                int(x) for x in inn.val_idx
+            ):
+                raise AssertionError("inner fold leaked into outer test")
+        plan.append(
+            {
+                "outer": {
+                    "fold_id": of.fold_id,
+                    "meta": of.meta,
+                    "n_train": len(of.train_idx),
+                    "n_val": len(of.val_idx),
+                    "n_test": len(of.test_idx),
+                },
+                "inner": [{"fold_id": i.fold_id, "meta": i.meta} for i in inner],
+            }
+        )
+    return plan
+
+
+def fold_to_split_spec(fold: FoldSpec) -> SplitSpec:
+    """Adapter so existing window builders can consume a FoldSpec."""
+    test = fold.test_idx if fold.test_idx is not None else fold.val_idx
+    return SplitSpec(
+        name=fold.fold_id,
+        train_idx=fold.train_idx,
+        val_idx=fold.val_idx,
+        test_idx=test,
+        meta=dict(fold.meta),
+    )
