@@ -52,3 +52,6 @@ tmp/
 results/models/
 results/predictions/
 results/paper/
+
+# Keep lightweight tuning metadata (json/csv/png) trackable; DBs already ignored above.
+# Pilot statistical test JSONs may be tracked when small.
