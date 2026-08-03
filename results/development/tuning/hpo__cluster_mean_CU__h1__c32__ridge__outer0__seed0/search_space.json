@@ -1,0 +1,10 @@
+{
+  "models": [
+    "lightgbm",
+    "xgboost",
+    "ridge",
+    "lstm",
+    "dlinear"
+  ],
+  "note": "see tune_optuna.SEARCH_SPACES"
+}

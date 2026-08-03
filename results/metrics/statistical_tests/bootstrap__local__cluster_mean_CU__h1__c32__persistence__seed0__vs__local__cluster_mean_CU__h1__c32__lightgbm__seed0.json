@@ -1,0 +1,14 @@
+{
+  "mae_a": 1.4210187139155661,
+  "mae_b": 1.158437567226304,
+  "diff_mae_a_minus_b": 0.262581146689262,
+  "ci95": [
+    0.20617867552815144,
+    0.3212172409199429
+  ],
+  "p_two_sided_bootstrap": 0.0,
+  "n": 4954,
+  "n_boot": 2000,
+  "run_a": "local__cluster_mean_CU__h1__c32__persistence__seed0",
+  "run_b": "local__cluster_mean_CU__h1__c32__lightgbm__seed0"
+}

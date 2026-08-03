@@ -1,0 +1,52 @@
+{
+  "best_value": 0.5328363984699895,
+  "best_params": {
+    "alpha": 1.9549524484259888
+  },
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "evaluation_role": "inner_model_selection",
+  "study_name": "hpo__cluster_mean_CU__h1__c32__ridge__outer0__seed0",
+  "target": "cluster_mean_CU",
+  "model": "ridge",
+  "horizon": 1,
+  "context": 32,
+  "seed": 0,
+  "outer_fold": 0,
+  "n_inner_folds": 3,
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "outer_meta": {
+    "train": {
+      "n": 7062,
+      "start": "2024-07-03 10:05:20.693178",
+      "end": "2024-07-06 21:01:21.697052",
+      "i_min": 8127,
+      "i_max": 15188
+    },
+    "val": {
+      "n": 1246,
+      "start": "2024-07-06 21:02:03.977292",
+      "end": "2024-07-07 11:39:24.240445",
+      "i_min": 15189,
+      "i_max": 16434
+    },
+    "outage_start": "2024-06-28 13:10:49.165290",
+    "outage_end": "2024-07-03 10:05:20.693178",
+    "test": {
+      "n": 8308,
+      "start": "2024-07-07 11:40:06.580586",
+      "end": "2024-07-11 13:15:03.592960",
+      "i_min": 16435,
+      "i_max": 24742
+    },
+    "fold_id": "outer_0",
+    "level": "outer",
+    "mode": "expanding",
+    "n_folds": 3,
+    "fold_index": 0,
+    "val_frac_within_train": 0.15
+  },
+  "trials_budget": 2,
+  "timeout_sec": 120,
+  "config_hash": "56ff6d6c47b6"
+}

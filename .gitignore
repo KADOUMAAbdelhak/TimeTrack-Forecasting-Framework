@@ -55,3 +55,7 @@ results/paper/
 
 # Keep lightweight tuning metadata (json/csv/png) trackable; DBs already ignored above.
 # Pilot statistical test JSONs may be tracked when small.
+
+# Optuna binary studies (if placed outside **/optuna/)
+**/study.db
+**/*optuna*.db
