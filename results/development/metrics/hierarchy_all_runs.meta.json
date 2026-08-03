@@ -1,0 +1,19 @@
+{
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "models": [
+    "persistence",
+    "ridge",
+    "lightgbm"
+  ],
+  "horizons": [
+    1,
+    8
+  ],
+  "n_folds": 3,
+  "n_rows": 558,
+  "bond_host": "acamas",
+  "bond_agg_rel_error": 0.00017352694631481117,
+  "note": "Expanded hierarchical development screen; do not declare a single-fold winner."
+}
