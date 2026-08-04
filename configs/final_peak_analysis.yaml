@@ -1,0 +1,50 @@
+# Frozen peak analysis for experiment-freeze-v2 predictions (separate analysis freeze).
+peak_analysis_freeze_tag: final-peak-analysis-freeze-v1
+peak_analysis_freeze_tag_commit: PENDING_UNTIL_TAG
+peak_analysis_implementation_commit: PENDING_UNTIL_COMMIT
+
+source_experiment_freeze_tag: experiment-freeze-v2
+source_experiment_freeze_tag_commit: bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7
+source_frozen_implementation_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+source_config_hash: 998ed4d20a8987d6
+dataset_fingerprint: bf06dc0e7fe6ff5e
+
+context: 32
+sampling_seconds: 42.285166
+cpu_core_total: 236
+cpu_cores_verified: [36, 48, 36, 36, 20, 36, 24]
+
+source_packs:
+  - memory_classical
+  - memory_dlinear
+  - cpu_classical
+  - cpu_dlinear
+
+hierarchies:
+  - memory_um
+  - cpu_core_weighted
+
+models: [persistence, ridge, lightgbm, dlinear]
+horizons: [1, 8, 16]
+folds: [0, 1, 2]
+methods: [independent, bottom_up, wls, mint]
+thresholds: [q90, q95]
+
+# Strict timestamp-level matching; no ±2-step tolerance; no event merging.
+peak_matching: exact_timestamp
+threshold_policy: outer_train_quantile_only
+nonnegative: false
+mint_shrink_diag: 0.1
+
+reconstruction:
+  abs_tol: 1.0e-9
+  rel_tol: 1.0e-8
+  require_match: true
+
+expected_atomic_rows: 576
+
+classification:
+  high_load_mae_tie_rel: 0.02
+  recall_tie_abs: 0.02
+  precision_tie_abs: 0.02
+  false_alarm_tie_rel: 0.05

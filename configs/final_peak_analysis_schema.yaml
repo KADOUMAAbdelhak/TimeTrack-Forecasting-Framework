@@ -1,0 +1,41 @@
+# Schema for configs/final_peak_analysis.yaml
+required_top_level_keys:
+  - peak_analysis_freeze_tag
+  - source_experiment_freeze_tag
+  - source_frozen_implementation_commit
+  - dataset_fingerprint
+  - source_packs
+  - hierarchies
+  - models
+  - horizons
+  - folds
+  - methods
+  - thresholds
+  - peak_matching
+  - threshold_policy
+  - reconstruction
+  - expected_atomic_rows
+  - cpu_core_total
+
+constraints:
+  peak_analysis_freeze_tag: final-peak-analysis-freeze-v1
+  source_experiment_freeze_tag: experiment-freeze-v2
+  peak_matching: exact_timestamp
+  threshold_policy: outer_train_quantile_only
+  thresholds_exact: [q90, q95]
+  methods_exact: [independent, bottom_up, wls, mint]
+  expected_atomic_rows: 576
+  cpu_core_total: 236
+  nonnegative: false
+
+forbidden:
+  - model_training
+  - hyperparameter_retuning
+  - regenerating_source_predictions
+  - outer_evaluation_thresholds
+  - global_dataset_thresholds
+  - method_selection_from_outer_mae
+  - plus_minus_two_step_tolerance
+  - event_merging
+  - disk_or_network_or_downsampling_inputs
+  - modifying_frozen_pack_runner
