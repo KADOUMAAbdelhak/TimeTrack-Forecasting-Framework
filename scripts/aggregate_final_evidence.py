@@ -176,20 +176,51 @@ Full detail: `results/final/EXECUTION_DEVIATIONS.md`.
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--registry", type=Path, default=ROOT / "configs" / "final_evidence_registry.yaml")
-    ap.add_argument("--reporting-config", type=Path, default=ROOT / "configs" / "final_reporting.yaml")
+    ap.add_argument("--reporting-config", type=Path, default=None)
+    ap.add_argument("--config", type=Path, default=None, help="Alias for --reporting-config (v2)")
     ap.add_argument("--output", type=Path, default=ROOT / "results" / "final" / "aggregate")
     ap.add_argument("--validate-only", action="store_true")
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--smoke-root", type=Path, default=None)
+    ap.add_argument("--require-frozen", action="store_true")
     args = ap.parse_args()
+    reporting_path = args.reporting_config or args.config or (ROOT / "configs" / "final_reporting.yaml")
 
     registry = load_yaml(args.registry)
-    reporting = load_yaml(args.reporting_config)
+    # Route robustness-aware registry/reporting to v2 aggregator
+    if int(registry.get("registry_version", 1)) >= 2 or "v2" in Path(reporting_path).name:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "aggregate_final_evidence_v2",
+            ROOT / "scripts" / "aggregate_final_evidence_v2.py",
+        )
+        mod = importlib.util.module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(mod)
+        sys.argv = [
+            "aggregate_final_evidence_v2.py",
+            "--registry",
+            str(args.registry),
+            "--config",
+            str(reporting_path),
+            "--output",
+            str(args.output),
+        ]
+        if args.validate_only:
+            sys.argv.append("--validate-only")
+        if args.smoke:
+            sys.argv.append("--smoke")
+        if args.require_frozen:
+            sys.argv.append("--require-frozen")
+        raise SystemExit(mod.main())
+
+    reporting = load_yaml(reporting_path)
     errs = validate_registry(registry) + validate_reporting_config(reporting)
     if errs:
         raise SystemExit("invalid configs:\n- " + "\n- ".join(errs))
     if args.validate_only:
-        print("OK", args.registry, args.reporting_config)
+        print("OK", args.registry, reporting_path)
         print("registry_hash", config_hash(registry), "reporting_hash", config_hash(reporting))
         return
 

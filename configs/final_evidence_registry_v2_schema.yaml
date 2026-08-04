@@ -1,0 +1,26 @@
+required_top_level:
+  - registry_version
+  - dataset_fingerprint
+  - prediction_layer
+  - statistics_layer
+  - peak_layer
+  - robustness_extension_layer
+  - robustness_statistics_layer
+  - accepted_prediction_packs
+  - accepted_analysis_packs
+  - accepted_robustness_packs
+  - required_pack_hashes
+  - exclusions
+  - pack_dirs
+
+constraints:
+  registry_version: 2
+  dataset_fingerprint: bf06dc0e7fe6ff5e
+  prediction_layer.freeze_tag: experiment-freeze-v2
+  robustness_extension_layer.freeze_tag: final-robustness-extension-freeze-v2
+  robustness_statistics_layer.freeze_tag: final-robustness-analysis-freeze-v2
+  required_pack_hashes.ewma_baselines: 8c7c971920dd0c71
+  required_pack_hashes.lightgbm_seed_robustness: 446473103b0cf235
+  required_pack_hashes.dlinear_seed_robustness: ecd66cd4bc4a7770
+  required_pack_hashes.robustness_statistics: 08859b8132f3d605
+  trains_models: false

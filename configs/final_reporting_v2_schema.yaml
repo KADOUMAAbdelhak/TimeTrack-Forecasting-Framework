@@ -1,0 +1,24 @@
+required_top_level:
+  - reporting_freeze_tag
+  - supersedes_reporting_freeze_tag
+  - evidence_registry
+  - output_root
+  - unit_separation
+  - tables
+  - figures
+
+constraints:
+  reporting_freeze_tag: final-reporting-freeze-v2
+  supersedes_reporting_freeze_tag: final-reporting-freeze-v1
+  trains_models: false
+  regenerates_predictions: false
+
+scientific_protocol_hash_excludes:
+  - reporting_freeze_tag
+  - reporting_freeze_tag_commit
+  - reporting_implementation_commit
+  - supersedes_reporting_freeze_tag
+  - archived_pre_robustness_aggregate
+  - evidence_registry
+  - output_root
+  - publication_gates_doc
