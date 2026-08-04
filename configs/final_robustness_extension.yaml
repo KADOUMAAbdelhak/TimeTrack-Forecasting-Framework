@@ -1,0 +1,209 @@
+experiment_stage: final_robustness_extension
+execution_mode: manual_packs
+default_execution: true
+eligible_for_final_claims: true
+evaluation_role: robustness_extension
+repository_url: https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git
+branch: main
+source_experiment_freeze_tag: experiment-freeze-v2
+source_experiment_freeze_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+source_experiment_freeze_tag_commit: bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7
+implementation_commit: PENDING
+freeze_commit: PENDING
+freeze_tag: final-robustness-extension-freeze-v1
+dataset_fingerprint: bf06dc0e7fe6ff5e
+dependency_lock_hash: 22dca9902706473b
+sampling_seconds: 42.285166
+context: 32
+n_outer_folds: 3
+shared_hyperparameters_path: results/final/packs/00_shared_tuning/selected_hyperparameters.yaml
+source_artifact_root: results/final/packs
+dlinear_fixed:
+  epochs: 40
+  patience: 5
+  num_threads: 1
+  max_batches_per_epoch: 200
+  timeout_sec: 180
+efficiency_protocol:
+  warmup: 1
+  repeats: 3
+  threads: 1
+ewma_alpha_grid:
+- 0.05
+- 0.1
+- 0.2
+- 0.3
+- 0.5
+- 0.7
+- 0.9
+lightgbm_cpu:
+  n_estimators: 300
+  learning_rate: 0.03
+  num_leaves: 31
+lightgbm_memory:
+  n_estimators: 100
+  learning_rate: 0.05
+  num_leaves: 15
+bootstrap_policy:
+  method: paired_moving_block
+  n_boot: 1000
+  seed: 0
+  acf_threshold: 0.1
+  lower: 8
+  upper: 256
+  nest_by:
+  - seed
+  - fold
+  - horizon
+hard_wall_clock_minutes_default: 45
+stop_launching_new_runs_minutes_default: 40
+artifact_root: results/final/robustness
+source_seed0_packs:
+- shared_tuning
+- memory_classical
+- memory_dlinear
+- cpu_classical
+- cpu_dlinear
+- disk_boundary
+packs:
+- id: ewma_baselines
+  pack_dir: 01_ewma_baselines
+  description: EWMA baseline set with per-family alpha selected on inner validation only
+  required: true
+  dependencies: []
+  hierarchies:
+  - memory_um
+  - cpu_core_weighted
+  - disk_ud
+  models:
+  - ewma
+  horizons_by_hierarchy:
+    cpu_core_weighted:
+    - 1
+    - 8
+    - 16
+    memory_um:
+    - 1
+    - 8
+    - 16
+    disk_ud:
+    - 1
+    - 8
+  outer_folds:
+  - 0
+  - 1
+  - 2
+  seeds:
+  - 0
+  reconciliation_methods_by_hierarchy:
+    cpu_core_weighted:
+    - independent
+    - bottom_up
+    - wls
+    - mint
+    memory_um:
+    - independent
+    - bottom_up
+    - wls
+    - mint
+    disk_ud:
+    - independent
+    - bottom_up
+    - top_down
+    - wls
+    - mint
+  estimated_base_fits: 192
+  estimated_runtime_minutes: 10
+  hard_wall_clock_minutes: 30
+  stop_launching_new_runs_minutes: 28
+  kind: ewma_baselines
+- id: lightgbm_seed_robustness
+  pack_dir: 02_lightgbm_seed_robustness
+  description: "LightGBM seeds 1\u20132 only; seed 0 reused from freeze-v2"
+  required: true
+  dependencies:
+  - ewma_baselines
+  hierarchies:
+  - cpu_core_weighted
+  - memory_um
+  models:
+  - lightgbm
+  horizons:
+  - 1
+  - 8
+  - 16
+  outer_folds:
+  - 0
+  - 1
+  - 2
+  seeds:
+  - 1
+  - 2
+  reuse_seed0_from:
+    cpu_core_weighted: cpu_classical
+    memory_um: memory_classical
+  reconciliation_methods:
+  - independent
+  - bottom_up
+  - wls
+  - mint
+  estimated_base_fits: 288
+  estimated_runtime_minutes: 25
+  hard_wall_clock_minutes: 30
+  stop_launching_new_runs_minutes: 28
+  kind: lightgbm_seed_robustness
+- id: dlinear_seed_robustness
+  pack_dir: 03_dlinear_seed_robustness
+  description: "DLinear seeds 1\u20132 only; seed 0 reused from freeze-v2"
+  required: true
+  dependencies:
+  - lightgbm_seed_robustness
+  hierarchies:
+  - cpu_core_weighted
+  - memory_um
+  models:
+  - dlinear
+  horizons:
+  - 1
+  - 8
+  - 16
+  outer_folds:
+  - 0
+  - 1
+  - 2
+  seeds:
+  - 1
+  - 2
+  reuse_seed0_from:
+    cpu_core_weighted: cpu_dlinear
+    memory_um: memory_dlinear
+  reconciliation_methods:
+  - independent
+  - bottom_up
+  - wls
+  - mint
+  estimated_base_fits: 288
+  estimated_runtime_minutes: 18
+  hard_wall_clock_minutes: 30
+  stop_launching_new_runs_minutes: 28
+  kind: dlinear_seed_robustness
+- id: robustness_statistics
+  pack_dir: 04_robustness_statistics
+  description: No training; baseline strength + seed robustness claims
+  required: true
+  dependencies:
+  - ewma_baselines
+  - lightgbm_seed_robustness
+  - dlinear_seed_robustness
+  estimated_base_fits: 0
+  estimated_runtime_minutes: 5
+  hard_wall_clock_minutes: 15
+  stop_launching_new_runs_minutes: 12
+  kind: robustness_statistics
+source_seed0_pack_hashes:
+  shared_tuning: 05a592966abc000f
+  memory_classical: 9cf649ccfc03df42
+  memory_dlinear: 1f4086a4aa9db087
+  cpu_classical: a584ab753b9bb268
+  cpu_dlinear: 52682fdee2c3e067
+  disk_boundary: 7b58a1dbe5e5a52e

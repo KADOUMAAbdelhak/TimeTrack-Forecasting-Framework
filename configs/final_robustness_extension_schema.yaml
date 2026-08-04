@@ -1,0 +1,53 @@
+# Schema notes for configs/final_robustness_extension.yaml
+# Validated by timetrack.robustness_extension.validate_robustness_config
+
+required_top_level:
+  - experiment_stage
+  - source_experiment_freeze_tag
+  - source_experiment_freeze_commit
+  - dataset_fingerprint
+  - context
+  - n_outer_folds
+  - ewma_alpha_grid
+  - artifact_root
+  - packs
+
+constraints:
+  source_experiment_freeze_tag: experiment-freeze-v2
+  dataset_fingerprint: bf06dc0e7fe6ff5e
+  context: 32
+  n_outer_folds: 3
+  ewma_alpha_grid: [0.05, 0.10, 0.20, 0.30, 0.50, 0.70, 0.90]
+  freeze_tag: final-robustness-extension-freeze-v1
+  must_not_alter_tags:
+    - experiment-freeze-v2
+    - final-analysis-freeze-v1
+    - final-peak-analysis-freeze-v1
+    - final-reporting-freeze-v1
+
+pack_kinds:
+  - ewma_baselines
+  - lightgbm_seed_robustness
+  - dlinear_seed_robustness
+  - robustness_statistics
+
+ewma_baselines:
+  hierarchies: [memory_um, cpu_core_weighted, disk_ud]
+  expected_base_fits: 192
+  alpha_selection: inner_validation_only
+  outer_labels_for_alpha: false
+
+lightgbm_seed_robustness:
+  new_seeds: [1, 2]
+  reuse_seed0: true
+  no_disk_lightgbm: true
+  expected_additional_base_fits: 288
+
+dlinear_seed_robustness:
+  new_seeds: [1, 2]
+  reuse_seed0: true
+  expected_additional_base_fits: 288
+
+robustness_statistics:
+  trains_models: false
+  claim_a_vs: strongest_of_persistence_ewma_ridge
