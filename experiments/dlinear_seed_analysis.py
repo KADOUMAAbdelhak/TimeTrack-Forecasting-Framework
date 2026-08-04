@@ -366,8 +366,12 @@ def analyze_dlinear_seed_robustness(cfg: dict[str, Any], pack: dict[str, Any], o
                                 "fold": fold,
                                 "horizon": horizon,
                                 "method": "independent",
-                                "threshold": qname,
-                                **pm,
+                                "threshold_name": qname,
+                                "threshold_value": pm["threshold"],
+                                "n_peak": pm["n_peak"],
+                                "peak_mae": pm["peak_mae"],
+                                "signed_bias": pm["signed_bias"],
+                                "max_underpred": pm["max_underpred"],
                                 "pred_to_target_range_ratio": range_ratio,
                             }
                         )
@@ -458,9 +462,8 @@ def analyze_dlinear_seed_robustness(cfg: dict[str, Any], pack: dict[str, Any], o
                             }
                         )
                         if method != "independent":
-                            pm90 = _peak_metrics(yt_train, yt, top, 0.90)
-                            pm95 = _peak_metrics(yt_train, yt, top, 0.95)
-                            for qname, pm in (("q90", pm90), ("q95", pm95)):
+                            for q, qname in ((0.90, "q90"), (0.95, "q95")):
+                                pm = _peak_metrics(yt_train, yt, top, q)
                                 peak_rows.append(
                                     {
                                         "hierarchy": hier,
@@ -468,8 +471,12 @@ def analyze_dlinear_seed_robustness(cfg: dict[str, Any], pack: dict[str, Any], o
                                         "fold": fold,
                                         "horizon": horizon,
                                         "method": method,
-                                        "threshold": qname,
-                                        **pm,
+                                        "threshold_name": qname,
+                                        "threshold_value": pm["threshold"],
+                                        "n_peak": pm["n_peak"],
+                                        "peak_mae": pm["peak_mae"],
+                                        "signed_bias": pm["signed_bias"],
+                                        "max_underpred": pm["max_underpred"],
                                         "pred_to_target_range_ratio": float(
                                             (np.nanmax(top) - np.nanmin(top))
                                             / max(y_range, 1e-12)
@@ -789,7 +796,7 @@ def _plot_recon_by_seed(cpu: pd.DataFrame, path: Path) -> None:
 
 
 def _plot_peak(peak_df: pd.DataFrame, path: Path) -> None:
-    sub = peak_df[(peak_df.method == "independent") & (peak_df.threshold == "q95")]
+    sub = peak_df[(peak_df.method == "independent") & (peak_df.threshold_name == "q95")]
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
     for ax, hier, title in zip(
         axes,
@@ -798,13 +805,19 @@ def _plot_peak(peak_df: pd.DataFrame, path: Path) -> None:
     ):
         g = sub[sub.hierarchy == hier]
         for seed, sg in g.groupby("seed"):
-            ax.scatter([seed] * len(sg), sg.signed_bias, label=f"seed {seed}", alpha=0.7)
+            ax.scatter(
+                [seed] * len(sg),
+                sg.signed_bias,
+                label=f"seed {int(seed)}",
+                alpha=0.7,
+            )
         ax.axhline(0, color="k", lw=0.8)
         ax.set_title(f"{title} q95 signed peak bias")
         ax.set_xlabel("Seed")
         ax.set_ylabel("mean(pred-true) on peaks")
         ax.grid(True, alpha=0.3)
-    axes[0].legend()
+        if len(g):
+            ax.legend()
     fig.tight_layout()
     fig.savefig(path)
     fig.savefig(path.with_suffix(".png"))
