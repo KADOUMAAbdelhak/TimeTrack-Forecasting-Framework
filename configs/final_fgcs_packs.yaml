@@ -15,9 +15,9 @@ branch: main
 #   freeze_commit         = same protocol logic commit (non-self-referential)
 #   freeze_tag            = experiment-freeze-v1
 #   freeze_tag_commit     = resolved at runtime via `git rev-parse experiment-freeze-v1`
-implementation_commit: PENDING_EXPERIMENT_FREEZE_V2
-freeze_commit: PENDING_EXPERIMENT_FREEZE_V2
-freeze_tag: PENDING_experiment-freeze-v2
+implementation_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+freeze_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+freeze_tag: experiment-freeze-v2
 
 dataset_fingerprint: bf06dc0e7fe6ff5e
 dependency_lock_hash: 22dca9902706473b
