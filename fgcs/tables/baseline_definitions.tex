@@ -1,23 +1,29 @@
 \begin{table}[t]
 \centering
-\caption{Forecasting baselines/models and reconciliation modes evaluated in the frozen outer protocol.}
+\begin{threeparttable}
+\caption{Forecasting models (A) and reconciliation modes (B) used before any result claim.}
 \label{tab:baselines}
 \scriptsize
-\begin{tabular}{@{}llp{4.8cm}@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}llp{3.35cm}@{}}
 \toprule
-Family & Name & Role in this study \\
+\multicolumn{3}{@{}l}{\textit{A. Forecasting models}} \\
 \midrule
-Baseline & Persistence & Last-value forecast; deterministic. \\
-Baseline & EWMA & Exponentially weighted mean; $\alpha$ selected on inner validation only. Strongest observed memory method. \\
+Family & Name & Role \\
+Baseline & Persistence & Last-value; deterministic. \\
+Baseline & EWMA & Inner-val.\ $\alpha$; strongest robust memory method. \\
 Baseline & Ridge & Strongest deterministic learned CPU baseline. \\
-Model & LightGBM & Strongest observed CPU model; seeds $0/1/2$; seed-invariant under frozen config. \\
-Model & DLinear & Neural baseline; seeds $0/1/2$; practically seed-stable on CPU. \\
+Model & LightGBM & Strongest observed CPU model; seed-invariant. \\
+Model & DLinear & Neural baseline; practically seed-stable on CPU. \\
 \midrule
-Mode & Independent & Separate forecasts per series; may violate exact sums. \\
-Mode & Bottom-up & Aggregate bottoms via summing matrix $S$ (preserves bottoms). \\
-Mode & WLS & Weighted least-squares reconciliation. \\
-Mode & MinT-shrink & MinT with shrinkage covariance (best observed CPU). \\
-Mode & Top-down & Disk boundary only; preserves independent top. \\
+\multicolumn{3}{@{}l}{\textit{B. Reconciliation modes}} \\
+\midrule
+Mode & Independent & Separate forecasts; may violate sums. \\
+Mode & Bottom-up & Aggregate bottoms via $S$. \\
+Mode & WLS & Weighted least-squares recon. \\
+Mode & MinT-shrink & MinT with shrinkage covariance. \\
+Mode & Top-down & Disk only; preserves independent top. \\
 \bottomrule
 \end{tabular}
+\end{threeparttable}
 \end{table}

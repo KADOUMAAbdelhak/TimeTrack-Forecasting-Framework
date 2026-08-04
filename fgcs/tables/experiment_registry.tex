@@ -1,22 +1,24 @@
 \begin{table}[t]
 \centering
+\begin{threeparttable}
 \caption{Experimental protocol summary for the frozen TimeTrack evaluation.}
 \label{tab:experiment}
 \scriptsize
-\begin{tabular}{@{}lp{6.2cm}@{}}
+\begin{tabular}{@{}lp{4.7cm}@{}}
 \toprule
 Item & Setting \\
 \midrule
-Dataset & TimeTrack OAI CI/CD telemetry (public Kaggle release) \\
-Sampling & Measured median interval $\approx 42.285$\,s \\
-Timeline & Post-outage primary analysis window \\
-Hierarchies & CPU core-weighted (236 cores: 36,48,36,36,20,36,24); exact memory sum; disk level sum \\
+Dataset & TimeTrack OAI CI/CD telemetry \\
+Sampling & Median interval $\approx 42.285$\,s \\
+Timeline & Post-outage primary window \\
+CPU hierarchy & Core-weighted; 236 cores \\
+Memory / disk & Exact machine$\to$cluster sums \\
 Outer folds & Nested temporal folds $0$--$2$ \\
-Horizons & CPU/memory $h\in\{1,8,16\}$; disk $h\in\{1,8\}$ \\
-Tuning & Train/inner-validation only; no outer-label tuning \\
-Statistics & Moving-block bootstrap; direct relative-effect 95\% CIs; Holm correction \\
+Horizons & CPU/mem.\ $h\in\{1,8,16\}$; disk~$h\in\{1,8\}$ \\
+Tuning & Train/inner-validation only \\
+Statistics & MBB; relative 95\% CIs; Holm \\
 Seeds & LightGBM/DLinear seeds $0/1/2$ \\
-Evidence freezes & \texttt{experiment-freeze-v2}, analysis/peak/robustness/reporting v2 tags \\
 \bottomrule
 \end{tabular}
+\end{threeparttable}
 \end{table}

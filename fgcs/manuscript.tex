@@ -12,14 +12,24 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage{placeins}
+\usepackage[section]{placeins}
 \usepackage{multirow}
 \usepackage{microtype}
+\usepackage{xurl}
+
+% Float placement compatible with cas-dc (do not use extreme fractions)
+\setcounter{topnumber}{2}
+\setcounter{dbltopnumber}{2}
+\setcounter{bottomnumber}{1}
+\setcounter{totalnumber}{3}
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\dbltopfraction}{0.90}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dblfloatpagefraction}{0.75}
 
 \begin{document}
 \let\WriteBookmarks\relax
-\def\floatpagepagefraction{1}
-\def\textpagefraction{.001}
 
 \shorttitle{Hierarchy-Aware Forecast Reconciliation for Cloud Telemetry}
 \shortauthors{A. Kadouma et al.}
@@ -318,9 +328,9 @@ Holm correction controls family-wise error within predefined comparison families
 
 \subsection{Multi-Seed and Reproducibility Protocol}
 LightGBM and DLinear use seeds $0$, $1$, and $2$.
-Evidence layers are immutable freezes culminating in
-\texttt{final-reporting-freeze-v2}; this manuscript reports only accepted final
-aggregate artifacts.
+Evidence layers are immutable freezes culminating in the reporting freeze
+tag \texttt{final-reporting-\allowbreak freeze-v2}.
+This manuscript reports only accepted final aggregate artifacts.
 
 %% =====================================================================
 \section{Results}
@@ -342,6 +352,7 @@ trading machine-level accuracy.
 DLinear {CPU} is practically seed-stable, and bottom-up/{WLS}/MinT improve its
 aggregates across seeds (bottom-up seed-mean relative effect
 $\approx -6.84\%$).
+Figure~\ref{fig:coh} shows coherence before/after reconciliation.
 Figure~\ref{fig:boot} places selected relative effects with bootstrap intervals;
 Figure~\ref{fig:trade} shows top/bottom trade-offs.
 
@@ -351,27 +362,40 @@ Figure~\ref{fig:trade} shows top/bottom trade-offs.
 \centering
 \includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_horizon.pdf}
 \caption{{CPU} aggregate {MAE} versus horizon for selected model--method pairs.
-Points summarize outer folds; units are weighted-mean percentage.}
+Points are horizon means across outer folds; shaded band for DLinear shows
+mean seed min--max across folds. Units: weighted-mean percentage. LightGBM
+curves for seeds~$0/1/2$ coincide (seed-invariant).}
 \label{fig:cpu_h}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/bootstrap_relative_effects.pdf}
-\caption{Selected bootstrap relative {MAE} effects with direct relative $95\%$
-intervals from the frozen statistical analysis. Negative values favor the
-reconciled or stronger comparator.}
-\label{fig:boot}
+\includegraphics[width=\columnwidth]{figs/coherence_before_after.pdf}
+\caption{{CPU} coherence error before and after reconciliation for Ridge and
+LightGBM. Values are $\log_{10}(\mathrm{error}+\varepsilon)$ with
+$\varepsilon=10^{-3}$; markers labeled ``exact 0'' denote numerical zero after
+reconciliation. Independent forecasts retain nonzero coherence error.}
+\label{fig:coh}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
-\caption{Top versus bottom accuracy trade-offs under reconciliation.
-Bottom-up preserves bottoms; {WLS}/MinT may improve aggregates at machine-level
-cost.}
-\label{fig:trade}
+\includegraphics[width=\columnwidth]{figs/bootstrap_relative_effects.pdf}
+\caption{Selected claim-relevant bootstrap relative {MAE} effects with mean
+direct relative $95\%$ intervals. Negative values favor the first method named
+in each row.}
+\label{fig:boot}
 \end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figs/top_bottom_tradeoff.pdf}
+\caption{Top versus bottom accuracy trade-offs under reconciliation.
+Left: {CPU} and memory. Right: disk boundary (LightGBM transferred disk stress
+excluded). Axes are percentage relative {MAE} changes; the lower-left quadrant
+is desirable (top and bottom both improve).}
+\label{fig:trade}
+\end{figure*}
 
 \subsection{Memory Results}
 \label{sec:memory}
@@ -383,19 +407,34 @@ seed-mean), but reconciled DLinear does not robustly beat {EWMA}.
 The seed-mean {WLS}-versus-{EWMA} effect is near zero/slightly positive, and
 seed~$2$ reverses ($\approx +2.06\%$), contradicting a robust win claim.
 MinT versus {EWMA} remains unsupported as a robust improvement.
-LightGBM is substantially worse than {EWMA}: about $+36.9\%$ on the mean table
-summary and about $+38.8\%$ on the paired-bootstrap summary; these are different
-aggregations, not conflicting measurements of one scalar.
+LightGBM is substantially worse than {EWMA}: the ratio of horizon-mean {MAE}s is
+about $+36.9\%$, whereas the mean of horizon-level relative {MAE} fields is about
+$+38.8\%$ (Table~\ref{tab:memory_main}); these are different aggregations, not
+conflicting measurements of one scalar.
+Figure~\ref{fig:mem_ewma} shows seed-wise relative effects versus {EWMA} for
+DLinear and LightGBM.
 Memory evidence is therefore secondary and conditional.
 
 \input{tables/memory_main_results}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/memory_reconciliation_vs_ewma.pdf}
+\caption{Memory relative {MAE} versus {EWMA} independent, grouped by model and
+method, for seeds~$0/1/2$. Unlike an earlier ambiguous plot that averaged across
+models within method labels, each series here is a single model--method pair.
+DLinear {WLS}/{MinT} remain near zero; LightGBM independent is largely worse.}
+\label{fig:mem_ewma}
+\end{figure}
 
 \subsection{Disk Failure Boundary}
 \label{sec:disk}
 Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} show that persistence
 and {EWMA} are practical disk baselines.
 Ridge independent already trails them; Ridge bottom-up further harms aggregate
-accuracy by about $+13.9\%$ relative to independent.
+accuracy by $+13.93\%$ when measured as the ratio of horizon-mean {MAE}s
+(Table~\ref{tab:disk_boundary}); the mean of horizon-level relative fields is
+$+14.83\%$ and is not used as the primary narrative statistic.
 Ridge top-down preserves the independent top ({MAE} change $0\%$ at the top)
 while materially increasing bottom macro {MAE}.
 LightGBM disk results in the freeze stack are transferred-configuration stress
@@ -406,8 +445,9 @@ evidence only and are not primary claims.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/disk_boundary.pdf}
-\caption{Disk boundary comparison emphasizing Ridge independent, bottom-up, and
-top-down behavior relative to persistence/{EWMA}.}
+\caption{Disk boundary for Ridge reconciliation modes. Horizontal lines mark
+persistence and {EWMA} practical baselines. LightGBM disk stress is omitted from
+the main figure.}
 \label{fig:disk}
 \end{figure}
 
@@ -421,8 +461,28 @@ DLinear memory peak underprediction and range compression persist across all
 seeds and are often amplified by reconciliation (P5 diagnostic).
 Thus ordinary aggregate-{MAE} gains do not imply universal peak-operational
 gains.
+Figure~\ref{fig:cpupeak} and Figure~\ref{fig:membias} summarize the peak
+diagnostics.
 
 \input{tables/peak_results}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figs/cpu_peak_results.pdf}
+\caption{{CPU} peak/high-load metrics for thresholds q90 and q95. Color encodes
+model; marker shape encodes reconciliation method (circle~independent,
+square~bottom-up, triangle~{WLS}, diamond~MinT).}
+\label{fig:cpupeak}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
+\caption{Signed DLinear memory peak bias (bytes), averaged across folds and
+horizons within each seed and method. Negative values indicate underprediction
+of peak magnitudes; reconciliation often amplifies the negative bias.}
+\label{fig:membias}
+\end{figure*}
 
 \subsection{Seed Robustness}
 \label{sec:seeds}
@@ -435,41 +495,18 @@ Reconciliation improvements for DLinear {CPU} hold across seeds~$0/1/2$.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/cpu_reconciliation_effect_by_seed.pdf}
-\caption{Reconciliation relative effects by seed for {CPU}. Error bars denote
-cross-seed/fold dispersion in the frozen robustness summaries, not
-independent-dataset confidence intervals.}
+\caption{{CPU} relative {MAE} versus independent forecasts by seed for
+LightGBM and DLinear under bottom-up, {WLS}, and MinT. LightGBM points coincide
+across seeds (seed-invariant); DLinear shows small seed variation. Values are
+means of fold$\times$horizon relative effects from the robustness freeze.}
 \label{fig:seed}
 \end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/coherence_before_after.pdf}
-\caption{{CPU} coherence error before and after reconciliation. Reconciled
-methods drive exact summing violations to numerical zero in the frozen
-evaluation.}
-\label{fig:coh}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/cpu_peak_results.pdf}
-\caption{{CPU} peak/high-load operational metrics for selected configurations.
-Ordinary aggregate {MAE} improvements do not imply universal peak-recall or
-false-alarm gains.}
-\label{fig:cpupeak}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
-\caption{Signed DLinear memory peak bias by seed and reconciliation method.
-Underprediction persists across seeds~$0/1/2$ and is often amplified after
-reconciliation.}
-\label{fig:membias}
-\end{figure}
-
 \input{tables/statistical_evidence}
-\input{tables/claim_support}
+\input{tables/method_selection}
+\input{tables/claim_summary}
+
+\FloatBarrier
 
 %% =====================================================================
 \section{Discussion}
@@ -519,15 +556,18 @@ multi-level cloud telemetry in application-profiling pipelines.
 
 \section*{Data Availability}
 The TimeTrack dataset is publicly available on Kaggle
-\cite{meliani2025timetrackkaggle}:
-\url{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}.
+\cite{meliani2025timetrackkaggle}.
+Dataset landing page:
+\begin{flushleft}
+\scriptsize\path{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}
+\end{flushleft}
 The dataset characterization is described by Meliani et al.\
 \cite{meliani2025timetrack}.
 
 \section*{Code and Artifact Availability}
 Frozen prediction, analysis, peak, robustness, and reporting artifacts are
 tracked in the project repository under immutable freeze tags culminating in
-\texttt{final-reporting-freeze-v2}.
+\texttt{final-reporting-\allowbreak freeze-v2}.
 % TODO-AUTHOR: insert public artifact repository URL before submission
 
 \section*{CRediT Author Statement}

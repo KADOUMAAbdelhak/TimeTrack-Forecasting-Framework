@@ -17,5 +17,12 @@ manuscript.pdf
 # Generated package (kept locally; not committed by default)
 dist/
 
+# Local visual audit renders
+audit/pages_before/
+audit/pages_after/
+*.pdf
+!figs/**/*.pdf
+!figs/supplementary/**/*.pdf
+
 # Editor / OS
 .DS_Store

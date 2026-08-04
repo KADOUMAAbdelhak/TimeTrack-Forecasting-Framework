@@ -1,9 +1,9 @@
 \begin{table}[t]
-\begin{threeparttable}
 \centering
-\caption{Memory outer-evaluation MAE (bytes). EWMA is the strongest observed method. Relative effects for DLinear are versus its own independent forecast or versus EWMA. LightGBM is a negative baseline relative to EWMA.}
+\begin{threeparttable}
+\caption{Memory outer-evaluation MAE (bytes). Displayed MAE uses seed-mean for stochastic models and horizon-mean otherwise. EWMA is the strongest \emph{robust} observed method across seeds; some reconciled Ridge/DLinear point estimates are numerically lower but do not robustly beat EWMA.}
 \label{tab:memory_main}
-\scriptsize
+\tiny
 \begin{tabular}{@{}llccc@{}}
 \toprule
 Model & Method & MAE ($\times 10^9$) & vs EWMA & vs Indep. \\
@@ -15,16 +15,16 @@ ridge & independent & 1.085 & +2.8\% & +0.0\% \\
 ridge & wls & 1.042 & -1.2\% & -3.9\% \\
 ridge & mint & 1.041 & -1.3\% & -4.0\% \\
 lightgbm & independent & 1.439 & +38.8\% & +0.0\% \\
-dlinear & independent & 1.074 & +1.9\% & +0.0\% \\
-dlinear & bottom-up & 1.055 & +0.3\% & -1.6\% \\
-dlinear & wls & 1.041 & -1.2\% & -3.0\% \\
-dlinear & mint & 1.040 & -1.3\% & -3.1\% \\
+dlinear & independent & 1.091 & +1.9\% & +0.0\% \\
+dlinear & bottom-up & 1.071 & +0.3\% & -1.6\% \\
+dlinear & wls & 1.056 & -1.2\% & -3.0\% \\
+dlinear & mint & 1.054 & -1.3\% & -3.1\% \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
-\item Bold: strongest observed memory method (EWMA). Reconciled DLinear improves vs its independent forecast but does not robustly beat EWMA (seed-2 WLS reversal).
-\item Mean-table LightGBM vs EWMA $\approx{+}36.9\%$; paired-bootstrap summary $\approx{+}38.8\%$ (different aggregations).
+\item ``vs EWMA''/``vs Indep.'' columns are means of horizon-level relative fields (not ratio-of-means).
+\item LightGBM vs EWMA: ratio of horizon-mean MAEs $=+36.9\%$; mean of horizon-level relative MAE $=+38.8\%$ (paired-bootstrap family uses the latter class of relative effects).
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

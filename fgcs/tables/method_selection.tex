@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\begin{threeparttable}
+\caption{Method-selection summary from the frozen outer evaluation (descriptive; not a prospective selector).}
+\label{tab:method_selection}
+\scriptsize
+\begin{tabular}{@{}ll@{}}
+\toprule
+Hierarchy & Preferred observed configuration \\
+\midrule
+CPU & LightGBM + MinT \\
+CPU (alt.) & Ridge + bottom-up \\
+Memory & EWMA independent \\
+Disk & Persistence / EWMA \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item CPU MinT: best observed accuracy+coherence. Ridge BU: bottom-preserving.
+\item Memory: strongest robust method. Disk: practical baselines; Ridge shows boundary.
+\item Unsuitable as primary: LightGBM memory; LightGBM disk stress (supplementary).
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

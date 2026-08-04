@@ -1,20 +1,25 @@
 \begin{table*}[t]
 \centering
-\caption{Comparison of closely related forecasting/reconciliation studies. Attributes are descriptive; this table does not claim priority.}
+\begin{threeparttable}
+\caption{Closest related studies versus this work. Attributes are descriptive; no priority claim is implied.}
 \label{tab:related}
 \scriptsize
-\begin{tabular}{@{}p{2.1cm}p{1.8cm}p{1.6cm}p{1.5cm}p{1.4cm}p{1.3cm}p{1.2cm}p{1.1cm}p{1.1cm}@{}}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lllllccc@{}}
 \toprule
-Study & Context & Dataset & Hierarchy & Recon. & Seeds & Stats & Peaks & Public data \\
+Study & Context & Dataset & Hierarchy & Recon. & Seeds & Peaks & Public \\
 \midrule
-Hyndman et al.\ (2011) & General HTS & Standard HTS & Tree aggregates & OLS combo & -- & -- & -- & Varies \\
-Wickramasuriya et al.\ (2019) & General HTS & Multiple empirics & Hierarchical/grouped & MinT & -- & Accuracy & -- & Varies \\
-HARMONY (2024) & Cloud scaling & Cloud traces & Multi-indicator & End-to-end DL & Partial & Decision metrics & -- & Partial \\
-FRT (2025) & Industrial/DC & Public HTS + DC & Hierarchical TS & Joint deep recon & -- & Accuracy & -- & Partial \\
-MaMiClif (2025) & Microservices & Ant Group LDC & Macro--micro graph & Collaborative & -- & Indicator acc. & -- & No \\
-Zero-Touch (2026) & Cloud--edge NAS & TimeTrack+local & Node-local & None (generation) & -- & MSE/MAE & -- & TimeTrack \\
-Kadouma et al.\ (2025) & CECC APM & Ontology design & Application profile & N/A & -- & -- & -- & Model \\
-\textbf{This work} & OAI CI telemetry & TimeTrack & Exact machine$\to$cluster & BU/WLS/MinT/TD & 3 seeds & MBB+Holm & Yes & Yes \\
+Hyndman+ (2011) & HTS & Std. & Tree & OLS & -- & -- & Varies \\
+Wickramasuriya+ (2019) & HTS & Empirics & Hier. & MinT & -- & -- & Varies \\
+HARMONY (2024) & Cloud & Traces & Multi-ind. & E2E & Part. & -- & Part. \\
+Zero-Touch (2026) & Edge & TimeTrack & Node & None & -- & -- & Yes \\
+Kadouma+ (2025) & CECC & Ontology & Profile & N/A & -- & -- & Model \\
+\textbf{This work} & OAI CI & TimeTrack & Exact sum & MinT suite & 3 & Yes & Yes \\
 \bottomrule
 \end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item HTS~=~hierarchical time series; E2E~=~end-to-end hierarchical DL; MinT suite~=~independent/BU/WLS/MinT/(disk TD); Part.~=~partial.
+\end{tablenotes}
+\end{threeparttable}
 \end{table*}

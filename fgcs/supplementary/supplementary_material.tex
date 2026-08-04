@@ -1,8 +1,7 @@
 %% Supplementary material for the TimeTrack FGCS manuscript
 \documentclass[a4paper,11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{booktabs,graphicx,hyperref,natbib}
-\usepackage{amsmath}
+\usepackage{booktabs,graphicx,hyperref,amsmath}
 
 \title{Supplementary Material:\\
 Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
@@ -13,48 +12,33 @@ Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
 \maketitle
 
 \section{Purpose}
-This supplement collects seed-by-fold grids, extended peak matrices, efficiency
-fields, and provenance pointers omitted from the main paper for page limits.
-All numerical claims in the main text are sourced from the frozen aggregate under
-\texttt{final-reporting-freeze-v2}.
+This supplement collects the full claim matrix, extended bootstrap forest,
+memory accuracy-versus-horizon plot, and pointers to seed/peak CSV grids.
+All numbers derive from \texttt{final-reporting-freeze-v2} aggregate artifacts.
 
-\section{Extended seed grids}
-Full LightGBM/DLinear seed-by-fold-by-horizon tables are provided as CSV snapshots
-in \texttt{results/main/table05\_seed\_robustness.csv}.
+\section{Full claim-support matrix}
+\input{claim_support_full}
 
-\section{Peak matrices}
-Complete peak/high-load fields are in
-\texttt{results/main/table08\_peak\_operational\_evidence.csv}.
+\section{Extended bootstrap comparisons}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/supplementary/bootstrap_relative_effects_full.pdf}
+\caption{Extended robustness relative-effect forest plot.}
+\end{figure}
 
-\section{Statistical families}
-Holm-family and bootstrap detail rows are in
+\section{Memory accuracy versus horizon}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{../figs/supplementary/memory_accuracy_vs_horizon.pdf}
+\caption{Memory MAE versus horizon for selected model--method pairs.}
+\end{figure}
+
+\section{CSV grids}
+Full seed-by-fold-by-horizon tables:
+\texttt{results/main/table05\_seed\_robustness.csv}.\\
+Peak matrices:
+\texttt{results/main/table08\_peak\_operational\_evidence.csv}.\\
+Statistical families:
 \texttt{results/main/table06\_final\_statistical\_evidence.csv}.
-
-\section{Additional figures}
-Main-paper figures not shown for space can be regenerated from the aggregate
-figure directory; package copies include coherence, memory-versus-EWMA, and
-DLinear peak-bias PDFs under \texttt{figs/}.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\textwidth]{../figs/coherence_before_after.pdf}
-\caption{CPU coherence before/after reconciliation (log-scale reduction).}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\textwidth]{../figs/memory_reconciliation_vs_ewma.pdf}
-\caption{Memory reconciliation relative effects versus EWMA.}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
-\caption{DLinear memory peak bias by seed and method.}
-\end{figure}
-
-\section{Provenance}
-See \texttt{results/provenance/MANIFEST.json} and
-\texttt{SOURCE\_ARTIFACT\_HASHES.csv}.
 
 \end{document}
