@@ -1,0 +1,8 @@
+claim_id,family,classification,seed_unstable_warning,seed_mean_rels,support_cells,n_cells,support_fraction
+M1_dlin_vs_ewma,memory_dlinear_vs_ewma,contradicted,False,"[0.01893376854109657, 0.02800444264707236, 0.05286126257528076]",0,27,0.0
+M2_dlin_bu,memory_dlinear_reconciliation,partially_supported,False,"[-0.01554285595413088, -0.0227341186675516, -0.010322940754444563]",16,27,0.5925925925925926
+M3_dlin_wls,memory_dlinear_reconciliation,supported,False,"[-0.030245053125435177, -0.03576464203040198, -0.029099148830979756]",20,27,0.7407407407407407
+M4_dlin_mint,memory_dlinear_reconciliation,supported,False,"[-0.03148285211680617, -0.037001061311018664, -0.03069306516370985]",21,27,0.7777777777777778
+M5_dlin_wls_vs_ewma,memory_dlinear_vs_ewma,contradicted,False,"[-0.012099153908090451, -0.008909139686709438, 0.020567470036980128]",14,27,0.5185185185185185
+M6_dlin_mint_vs_ewma,memory_dlinear_vs_ewma,unsupported,False,"[-0.013399502871681287, -0.010207494718089688, 0.01861662428021368]",14,27,0.5185185185185185
+mem_lgbm_vs_ewma,memory_lightgbm_vs_ewma,contradicted,False,"[0.38822376180834894, 0.38822376180834894, 0.38822376180834894]",0,27,0.0

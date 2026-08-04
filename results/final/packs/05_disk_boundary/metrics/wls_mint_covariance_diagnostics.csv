@@ -1,0 +1,19 @@
+fold,horizon,base_model,covariance_source,outer_eval_residuals_used,condition_number_raw,condition_number_after_shrink,shrink,ridge_fallback_triggered,singular_fallback,silent_identity_fallback
+0,1,lightgbm,inner_validation_residuals_only,False,55866.42547903414,53688.88014994085,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+0,1,persistence,inner_validation_residuals_only,False,40548.183172021105,38706.912092509694,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+0,1,ridge,inner_validation_residuals_only,False,35602.95716437053,34007.64213339009,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+0,8,lightgbm,inner_validation_residuals_only,False,31723.748299862207,31193.868031233287,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+0,8,persistence,inner_validation_residuals_only,False,26627.286282526,25442.401180072568,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+0,8,ridge,inner_validation_residuals_only,False,25804.01959696227,24673.20018708298,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,1,lightgbm,inner_validation_residuals_only,False,1508798.7484266036,1497333.8663208892,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,1,persistence,inner_validation_residuals_only,False,286689.21785902965,273665.3753563915,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,1,ridge,inner_validation_residuals_only,False,285061.82161951414,272219.13964464184,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,8,lightgbm,inner_validation_residuals_only,False,828325.6320167943,813906.6175137691,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,8,persistence,inner_validation_residuals_only,False,286759.4309189912,273731.7019460736,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+1,8,ridge,inner_validation_residuals_only,False,285882.4887404135,273003.0864607959,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,1,lightgbm,inner_validation_residuals_only,False,290793.6072384623,274620.1574567678,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,1,persistence,inner_validation_residuals_only,False,88684.65066209126,85065.20334898117,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,1,ridge,inner_validation_residuals_only,False,83712.48373743545,80397.69331230606,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,8,lightgbm,inner_validation_residuals_only,False,683112.190423102,653344.1186420487,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,8,persistence,inner_validation_residuals_only,False,88855.55804429646,85229.08709232992,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False
+2,8,ridge,inner_validation_residuals_only,False,83810.1910585311,80491.43675526723,0.1,False,pinv + diag_shrink + optional 1e-6/1e-8 eye (mint_shrink_reconcile),False

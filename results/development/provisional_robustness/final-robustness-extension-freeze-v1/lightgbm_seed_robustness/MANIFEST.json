@@ -1,0 +1,52 @@
+{
+  "pack_id": "lightgbm_seed_robustness",
+  "required": true,
+  "dependencies": [
+    "ewma_baselines"
+  ],
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "evaluation_role": "provisional_post_freeze_robustness",
+  "execution_commit": "087ce7a1095e146de1e48031be09823e05815512",
+  "implementation_commit": "de2093a219740f4292d3034120109176c5b5b4b8",
+  "freeze_commit": "de2093a219740f4292d3034120109176c5b5b4b8",
+  "freeze_tag": "final-robustness-extension-freeze-v1",
+  "freeze_tag_commit": "db35390b083f90dd89e034c26893a5e880785236",
+  "source_experiment_freeze_tag": "experiment-freeze-v2",
+  "source_experiment_freeze_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6",
+  "source_experiment_freeze_tag_commit": "bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7",
+  "repository_url": "https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git",
+  "git_branch": "main",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "config_hash": "195966cfb5ac9850",
+  "pack_hash": "592aad4339611d99",
+  "dependency_lock_hash": "22dca9902706473b",
+  "source_seed0_pack_hashes": {
+    "shared_tuning": "05a592966abc000f",
+    "memory_classical": "9cf649ccfc03df42",
+    "memory_dlinear": "1f4086a4aa9db087",
+    "cpu_classical": "a584ab753b9bb268",
+    "cpu_dlinear": "52682fdee2c3e067",
+    "disk_boundary": "7b58a1dbe5e5a52e"
+  },
+  "start_time": "2026-08-04T12:45:11.282271+00:00",
+  "end_time": "2026-08-04T13:07:01.550488+00:00",
+  "actual_wall_seconds": 1310.3119196250009,
+  "cpu_seconds": 1302.207249,
+  "peak_memory_bytes": 569589760,
+  "peak_memory_available": true,
+  "peak_memory_reason": null,
+  "completed_runs": 36,
+  "failed_runs": 0,
+  "status": "complete",
+  "output_dir": "/Users/fgtek002/TimeTrack/results/final/robustness/02_lightgbm_seed_robustness",
+  "rejection_reason": [
+    "execution_logic_differs_from_extension_freeze",
+    "config_hash_differs_from_extension_freeze",
+    "thread_count_differs_from_seed0_source",
+    "seed_not_only_changed_variable"
+  ],
+  "archived_at": "2026-08-04T13:14:14.264128+00:00",
+  "archived_from": "results/final/robustness/02_lightgbm_seed_robustness",
+  "superseded_by_freeze_tag": "final-robustness-extension-freeze-v2"
+}

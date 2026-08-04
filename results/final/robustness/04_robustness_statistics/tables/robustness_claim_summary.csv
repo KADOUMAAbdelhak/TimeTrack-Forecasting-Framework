@@ -1,0 +1,21 @@
+claim_id,family,classification,seed_unstable_warning,seed_mean_rels,support_cells,n_cells,support_fraction
+L1_lgbm_vs_ridge,cpu_lightgbm_vs_deterministic,supported,False,"[-0.1734096801143151, -0.1734096801143151, -0.1734096801143151]",27,27,1.0
+L2_lgbm_vs_ewma,cpu_lightgbm_vs_deterministic,supported,False,"[-0.21569179479922343, -0.21569179479922343, -0.21569179479922343]",27,27,1.0
+L3_lgbm_vs_pers,cpu_lightgbm_vs_deterministic,supported,False,"[-0.216559183852452, -0.216559183852452, -0.216559183852452]",27,27,1.0
+L4_lgbm_bu,cpu_lightgbm_reconciliation,supported,False,"[-0.08988553360824257, -0.08988553360824257, -0.08988553360824257]",27,27,1.0
+L5_lgbm_wls,cpu_lightgbm_reconciliation,supported,False,"[-0.09775623506835081, -0.09775623506835081, -0.09775623506835081]",27,27,1.0
+L6_lgbm_mint,cpu_lightgbm_reconciliation,supported,False,"[-0.10002173433277234, -0.10002173433277234, -0.10002173433277234]",27,27,1.0
+D1_dlin_vs_pers,cpu_dlinear_vs_deterministic,supported,False,"[-0.05893153593841517, -0.05641910994430791, -0.05233462635897224]",27,27,1.0
+D2_dlin_vs_ewma,cpu_dlinear_vs_deterministic,supported,False,"[-0.05788476836915582, -0.055382189822314215, -0.05130094352123423]",27,27,1.0
+D3_dlin_vs_ridge,cpu_dlinear_vs_deterministic,unsupported,False,"[-0.0071585287060176445, -0.004501690084724468, -0.0001573031934278119]",18,27,0.6666666666666666
+D4_dlin_bu,cpu_dlinear_reconciliation,supported,False,"[-0.07340530586244681, -0.07221808050004817, -0.06765854064221848]",27,27,1.0
+D5_dlin_wls,cpu_dlinear_reconciliation,supported,False,"[-0.06482026082910203, -0.06649846561065478, -0.06162176008125586]",27,27,1.0
+D6_dlin_mint,cpu_dlinear_reconciliation,supported,False,"[-0.06836237378493873, -0.06944267196908711, -0.0643241705024862]",27,27,1.0
+D7_dlin_vs_lgbm,cpu_dlinear_vs_deterministic,contradicted,False,"[0.2012549171465283, 0.20443970488966415, 0.20965582543546757]",0,27,0.0
+M1_dlin_vs_ewma,memory_dlinear_vs_ewma,contradicted,False,"[0.01893376854109657, 0.02800444264707236, 0.05286126257528076]",0,27,0.0
+M2_dlin_bu,memory_dlinear_reconciliation,partially_supported,False,"[-0.01554285595413088, -0.0227341186675516, -0.010322940754444563]",16,27,0.5925925925925926
+M3_dlin_wls,memory_dlinear_reconciliation,supported,False,"[-0.030245053125435177, -0.03576464203040198, -0.029099148830979756]",20,27,0.7407407407407407
+M4_dlin_mint,memory_dlinear_reconciliation,supported,False,"[-0.03148285211680617, -0.037001061311018664, -0.03069306516370985]",21,27,0.7777777777777778
+M5_dlin_wls_vs_ewma,memory_dlinear_vs_ewma,contradicted,False,"[-0.012099153908090451, -0.008909139686709438, 0.020567470036980128]",14,27,0.5185185185185185
+M6_dlin_mint_vs_ewma,memory_dlinear_vs_ewma,unsupported,False,"[-0.013399502871681287, -0.010207494718089688, 0.01861662428021368]",14,27,0.5185185185185185
+mem_lgbm_vs_ewma,memory_lightgbm_vs_ewma,contradicted,False,"[0.38822376180834894, 0.38822376180834894, 0.38822376180834894]",0,27,0.0

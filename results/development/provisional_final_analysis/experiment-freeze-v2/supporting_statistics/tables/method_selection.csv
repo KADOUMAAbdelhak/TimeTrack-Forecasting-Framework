@@ -1,0 +1,4 @@
+hierarchy,best_pure_accuracy,best_pure_accuracy_mae,best_accuracy_coherence,best_accuracy_coherence_mae,unsuitable,negative_findings
+cpu,lightgbm+mint,0.9311407916065129,lightgbm+mint,0.9311407916065129,forcing WLS/MinT when machine-level degradation matters,WLS/MinT may degrade individual machines vs bottom_up
+memory,dlinear+mint,1039535894.6841986,dlinear+mint,1039535894.6841986,lightgbm as accuracy leader vs persistence,memory LGBM weak vs persistence; recon does not close the gap
+disk,persistence+independent,1550152926.0888884,persistence+independent,1550152926.0888884,bottom_up for learned models; lightgbm transferred memory hparams,disk BU harmful for Ridge/LGBM; LGBM catastrophic transferred stress

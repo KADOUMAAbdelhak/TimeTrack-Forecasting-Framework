@@ -1,0 +1,12 @@
+check,seed,wins,ties,losses,mean_rel,worst_rel,worst_fold,worst_horizon,strongest_det,mean_pct,worst_pct,mean_coh_reduction,worse_than_ewma,hierarchy,n_seed_invariant,n_practically_stable,n_moderate,n_unstable,identical_hash_cells,total_cells
+A1_cpu_independent_vs_strongest_det,0.0,9.0,0.0,0.0,0.826590319885685,0.8394748653488351,0.0,16.0,ridge,,,,,,,,,,,
+A1_cpu_independent_vs_strongest_det,1.0,9.0,0.0,0.0,0.826590319885685,0.8394748653488351,0.0,16.0,ridge,,,,,,,,,,,
+A1_cpu_independent_vs_strongest_det,2.0,9.0,0.0,0.0,0.826590319885685,0.8394748653488351,0.0,16.0,ridge,,,,,,,,,,,
+B1_cpu_mint_vs_independent,0.0,9.0,0.0,0.0,0.8999782656672275,,,,,-10.002173433277243,-8.599750550226215,159.20502236221466,,,,,,,,
+B1_cpu_mint_vs_independent,1.0,9.0,0.0,0.0,0.8999782656672275,,,,,-10.002173433277243,-8.599750550226215,159.20502236221466,,,,,,,,
+B1_cpu_mint_vs_independent,2.0,9.0,0.0,0.0,0.8999782656672275,,,,,-10.002173433277243,-8.599750550226215,159.20502236221466,,,,,,,,
+memory_independent_vs_ewma,0.0,0.0,,9.0,1.3882237618083488,,,,,,,,True,,,,,,,
+memory_independent_vs_ewma,1.0,0.0,,9.0,1.3882237618083488,,,,,,,,True,,,,,,,
+memory_independent_vs_ewma,2.0,0.0,,9.0,1.3882237618083488,,,,,,,,True,,,,,,,
+seed_stability,,,,,,,,,,,,,,cpu_core_weighted,36.0,0.0,0.0,0.0,32.0,36.0
+seed_stability,,,,,,,,,,,,,,memory_um,36.0,0.0,0.0,0.0,36.0,36.0

@@ -1,0 +1,43 @@
+{
+  "pack_id": "peak_analysis",
+  "required": true,
+  "dependencies": [
+    "memory_classical",
+    "memory_dlinear",
+    "cpu_classical",
+    "cpu_dlinear"
+  ],
+  "experiment_stage": "final",
+  "eligible_for_final_claims": true,
+  "evaluation_role": "final_peak_analysis",
+  "source_experiment_freeze_tag": "experiment-freeze-v2",
+  "source_experiment_freeze_tag_commit": "bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7",
+  "source_frozen_implementation_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6",
+  "peak_analysis_freeze_tag": "final-peak-analysis-freeze-v1",
+  "peak_analysis_freeze_tag_commit": "7586be02c0a6fa8432030753b159c63a5e8caa96",
+  "peak_analysis_implementation_commit": "96e1218e151df70b052aaf0ed9826f050a7322a9",
+  "execution_commit": "d7c09ac6ba94c1b2d78e61472f3bd693e5aefbe5",
+  "freeze_tag": "experiment-freeze-v2",
+  "freeze_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6",
+  "implementation_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6",
+  "frozen_implementation_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "config_hash": "998ed4d20a8987d6",
+  "peak_config_hash": "7555d97a02c53eba",
+  "source_pack_hashes": {
+    "memory_classical": "23f54983a9093bc0",
+    "memory_dlinear": "f9aab59b953446a1",
+    "cpu_classical": "2f512f20b8ecc6ec",
+    "cpu_dlinear": "b53277ffe064c35e"
+  },
+  "start_time": "2026-08-04T12:12:38.592669+00:00",
+  "end_time": "2026-08-04T12:12:41.229261+00:00",
+  "actual_wall_seconds": 2.6366080839998176,
+  "cpu_seconds": 2.5979650000000003,
+  "atomic_rows_expected": 576,
+  "atomic_rows_completed": 576,
+  "atomic_rows_failed": 0,
+  "reconstruction_max_abs_top_mae_diff": 2.384185791015625e-07,
+  "status": "complete",
+  "output_dir": "/Users/fgtek002/TimeTrack/results/final/packs/07_peak_analysis"
+}

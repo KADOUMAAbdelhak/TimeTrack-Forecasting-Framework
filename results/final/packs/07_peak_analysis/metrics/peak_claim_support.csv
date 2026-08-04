@@ -1,0 +1,6 @@
+claim,title,support,n_atomic,n_support,n_uncertain,n_contradict,median_effect,min_effect,max_effect,fold_consistency,horizon_consistency,qualification
+P1,CPU recon reduces high-load MAE for learned models,unsupported,162,77,85,0,-0.01569559183602107,-0.2396933791779102,0.01793504205979975,inconsistent,inconsistent,Persistence excluded from positive claim.
+P2,CPU recon preserves/improves recall without FA increase,unsupported,162,33,101,28,0.0,-0.0513274336283186,0.17391304347826086,inconsistent,inconsistent,FA materiality threshold +5%.
+P3,LightGBM strongest CPU high-load among independents,supported,18,18,0,0,0.0,-0.0,-0.0,ok,ok,Within 2% of best high-load MAE counts as support.
+P4,Memory WLS/MinT reduce high-load MAE for Ridge/DLinear,unsupported,72,22,38,12,0.004330515185959318,-0.06822811136783866,0.027822944582760252,inconsistent,inconsistent,LightGBM not in claim scope.
+P5,DLinear memory peak underprediction; recon mitigates/preserves,partially_supported,72,61,0,11,-397212578.9411936,-8753190467.980186,114752679.3917706,ok,ok,Independent bias must be negative.

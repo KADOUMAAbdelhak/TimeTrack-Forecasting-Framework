@@ -1,0 +1,4 @@
+base_model,n_jobs,total_train_sec,median_train_sec,mean_train_sec,recon_overhead_note
+lightgbm,9,100.91249371400318,10.648379502002172,11.212499301555908,reconciliation reuses base preds; no retrain; overhead not separately timed
+persistence,9,0.0028607970034496,0.0002951259994006,0.00031786633371662224,reconciliation reuses base preds; no retrain; overhead not separately timed
+ridge,9,0.5694320000047806,0.0562701649996597,0.0632702222227534,reconciliation reuses base preds; no retrain; overhead not separately timed

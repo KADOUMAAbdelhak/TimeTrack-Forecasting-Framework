@@ -1,0 +1,774 @@
+ewma_memory:
+  alpha: 0.9
+  selection_reason: min_mean_inner_val_mae
+  mean_val_mae: 737691574.4509633
+  outer_labels_used_for_selection: false
+  alpha_grid_scores:
+    '0.05':
+      mean_val_mae: 1165871118.973052
+      std_val_mae: 789041206.5865564
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 452855989.7988758
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 359161678.03349435
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 355015351.9797647
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2260393049.498241
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2250656804.6049786
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 2230634347.4822283
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 860265153.603675
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 861348976.4653765
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 862508719.2908338
+        outer_test_accessed: false
+    '0.1':
+      mean_val_mae: 1033470396.8769006
+      std_val_mae: 669826316.346638
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 442174734.460151
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 358536749.3614861
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 353424555.6754464
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1964525860.9327672
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1959811376.7959569
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1940320929.175741
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 759913809.5091817
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 760842450.8621427
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 761683105.1192318
+        outer_test_accessed: false
+    '0.2':
+      mean_val_mae: 914495223.9123856
+      std_val_mae: 576555825.5498573
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 411561743.3849209
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 345137628.08529496
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 342923380.210993
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1720344917.1891932
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1714519148.2013907
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1697693696.0730333
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 665381728.284046
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 666129176.3592852
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 666765597.4233128
+        outer_test_accessed: false
+    '0.3':
+      mean_val_mae: 839707579.0222869
+      std_val_mae: 520473091.9602315
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 383911981.9855339
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 331132541.92240393
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 330902737.69267315
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1569248721.0105896
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1562091865.4599755
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1547818098.9654288
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 610175967.539175
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 610773075.6528832
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 611313220.9719201
+        outer_test_accessed: false
+    '0.5':
+      mean_val_mae: 761561829.3900285
+      std_val_mae: 460544834.98876095
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 366944215.2578685
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 309852273.83731353
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 309971585.4050078
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1408666316.5766556
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1401150726.865525
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1387283608.1758945
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 556225084.769173
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 556746199.2743167
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 557216454.3485025
+        outer_test_accessed: false
+    '0.7':
+      mean_val_mae: 738842068.1176441
+      std_val_mae: 444975635.75920683
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 365812988.747381
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 297912075.0483367
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 298047860.3757961
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1365445455.0841632
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1357376866.5945103
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1340570213.1167736
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 540932978.0203596
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 541505210.6969362
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 541974965.3745402
+        outer_test_accessed: false
+    '0.9':
+      mean_val_mae: 737691574.4509633
+      std_val_mae: 446066779.0785325
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 367304278.03386056
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 291312680.87324506
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 291551081.7914218
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 1366225099.0752966
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 1357949377.928161
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 1338384556.4346457
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 541574019.9970667
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 542221753.6060915
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 542701322.3188812
+        outer_test_accessed: false
+ewma_cpu:
+  alpha: 0.9
+  selection_reason: min_mean_inner_val_mae
+  mean_val_mae: 241.13054130115927
+  outer_labels_used_for_selection: false
+  alpha_grid_scores:
+    '0.05':
+      mean_val_mae: 272.70799778773744
+      std_val_mae: 161.9262399569455
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 118.89091093303075
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 113.50713002639178
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 111.71358143233931
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 495.6770937442475
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 495.7201826018001
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 494.32761980209574
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 207.98756438250217
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 208.19334316416038
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 208.35455400306913
+        outer_test_accessed: false
+    '0.1':
+      mean_val_mae: 269.96617634561585
+      std_val_mae: 156.73849809085635
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 126.88242926792184
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 121.6394527445648
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 118.84926935243737
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 487.58579525489745
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 487.43318428738314
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 485.94390754942896
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 200.2936281516006
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 200.47003036859314
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 200.5978901337152
+        outer_test_accessed: false
+    '0.2':
+      mean_val_mae: 262.8770886355199
+      std_val_mae: 145.9710470136548
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 131.157002212854
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 126.27589228536752
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 124.66282672279361
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 466.04002331917997
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 465.80431338723184
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 464.60680806715004
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 195.6604717038808
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 195.80706303699785
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 195.87939698422346
+        outer_test_accessed: false
+    '0.3':
+      mean_val_mae: 255.67172001246476
+      std_val_mae: 134.21839454417528
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 134.72687144845986
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 129.79723119069976
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 128.68797254437794
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 442.4147664675498
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 442.1624138305352
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 441.31831514664293
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 193.878577510311
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 194.00991108685832
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 194.04942088674827
+        outer_test_accessed: false
+    '0.5':
+      mean_val_mae: 245.69414229393442
+      std_val_mae: 116.15785106892025
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 140.03667320600596
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 135.0868694285804
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 134.35213986996806
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 406.8993796861093
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 406.8174715089275
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 405.9581995954282
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 193.95885314256878
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 194.0676696980555
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 194.0700245097658
+        outer_test_accessed: false
+    '0.7':
+      mean_val_mae: 241.54480781850103
+      std_val_mae: 104.79627727084568
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 145.78659942246944
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 139.8745577260438
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 139.03539232907397
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 386.68825582025437
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 386.7003567407146
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 385.37331312696193
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 196.75896630026762
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 196.85044721288986
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 196.83538168783397
+        outer_test_accessed: false
+    '0.9':
+      mean_val_mae: 241.13054130115927
+      std_val_mae: 97.26250152837417
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 152.41609412970132
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 145.7589473950068
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 16
+        val_mae: 144.74917259630337
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 375.7097285886188
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 375.79941762572423
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 16
+        val_mae: 374.14439229397834
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 200.48790566070613
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 200.5671042572926
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 16
+        val_mae: 200.54210916310168
+        outer_test_accessed: false
+ewma_disk:
+  alpha: 0.9
+  selection_reason: min_mean_inner_val_mae
+  mean_val_mae: 991857902.6888293
+  outer_labels_used_for_selection: false
+  alpha_grid_scores:
+    '0.05':
+      mean_val_mae: 2003939704.27475
+      std_val_mae: 1489111526.1002321
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 555481123.9922471
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 498944686.6618176
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 4045148040.332598
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 4039638274.1048007
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 1441039352.3080704
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 1443386748.2489667
+        outer_test_accessed: false
+    '0.1':
+      mean_val_mae: 1670190497.7171566
+      std_val_mae: 1277293925.3028517
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 460773453.0660479
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 385377172.4652641
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 3428594377.777836
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 3421670360.736937
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 1161374403.1393135
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 1163353219.1175425
+        outer_test_accessed: false
+    '0.2':
+      mean_val_mae: 1400076951.4572034
+      std_val_mae: 1094765549.4599116
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 391420910.858114
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 319603322.2864559
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2911707437.3221846
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2911683151.5511
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 932189977.8176531
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 933856908.9077132
+        outer_test_accessed: false
+    '0.3':
+      mean_val_mae: 1266738122.6249034
+      std_val_mae: 1005363530.7661569
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 351816875.8787494
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 290754568.9542915
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2656808467.8930426
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2660875347.9290495
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 819344501.6957458
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 820828973.3985411
+        outer_test_accessed: false
+    '0.5':
+      mean_val_mae: 1129316801.5842113
+      std_val_mae: 920578015.6946853
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 302277820.5674517
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 258358938.29890773
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2405292358.6475344
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2411551039.3992004
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 698578216.7911849
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 699842435.8009893
+        outer_test_accessed: false
+    '0.7':
+      mean_val_mae: 1040090311.3167602
+      std_val_mae: 860047384.3392515
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 265333996.97582343
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 232341627.18277627
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2232540127.740091
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2238669158.2665524
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 635253532.0635262
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 636403425.6717918
+        outer_test_accessed: false
+    '0.9':
+      mean_val_mae: 991857902.6888293
+      std_val_mae: 824899819.9856217
+      fold_horizon_scores:
+      - fold: 0
+        horizon: 1
+        val_mae: 243893697.25445014
+        outer_test_accessed: false
+      - fold: 0
+        horizon: 8
+        val_mae: 214224337.43928918
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 1
+        val_mae: 2134643554.7682211
+        outer_test_accessed: false
+      - fold: 1
+        horizon: 8
+        val_mae: 2140502535.416354
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 1
+        val_mae: 608391680.252614
+        outer_test_accessed: false
+      - fold: 2
+        horizon: 8
+        val_mae: 609491611.0020478
+        outer_test_accessed: false

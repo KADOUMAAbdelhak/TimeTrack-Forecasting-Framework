@@ -1,0 +1,203 @@
+ridge_cpu:
+  alpha: 10000.0
+  selection_reason: min_mean_inner_mae
+  vs_default_alpha_1_mean_mae: 0.9187145523335989
+  mean_mae: 0.9065265155561543
+  std_mae: 0.35194192608824637
+  fold_maes:
+  - 0.5480575330286852
+  - 1.3847922266487687
+  - 0.7867297869910093
+  fold_persistence_maes:
+  - 0.6064549343455634
+  - 1.4789591833108944
+  - 0.8155716545622695
+  rel_mae_vs_persistence: 0.9374673852979563
+ridge_memory:
+  alpha: 1.0
+  selection_reason: validation_tie_canonical_default
+  vs_default_alpha_1_mean_mae: 760536418.2747645
+  mean_mae: 760536418.2747645
+  std_mae: 403810635.6631415
+  fold_maes:
+  - 386994601.9324979
+  - 1321398796.2695172
+  - 573215856.6222786
+  fold_persistence_maes:
+  - 370774950.5897858
+  - 1376387423.3235772
+  - 548111169.3470049
+  rel_mae_vs_persistence: 0.9940467712546956
+lightgbm_cpu:
+  n_estimators: 300
+  learning_rate: 0.03
+  num_leaves: 31
+  selection_reason: min_mean_inner_mae
+  vs_default_mean_mae: 0.7284117016649478
+  mean_mae: 0.7253221873621204
+  std_mae: 0.320472262781101
+  fold_maes:
+  - 0.3913729923412396
+  - 1.1576496785382187
+  - 0.6269438912069032
+  fold_persistence_maes:
+  - 0.6064549343455634
+  - 1.4789591833108944
+  - 0.8155716545622695
+  rel_mae_vs_persistence: 0.7500783295542128
+  fold_mase:
+  - 0.3822212591774997
+  - 1.0641862094457577
+  - 0.5338012905332584
+  fold_mase_valid:
+  - true
+  - true
+  - true
+lightgbm_memory:
+  n_estimators: 100
+  learning_rate: 0.05
+  num_leaves: 15
+  selection_reason: min_mean_inner_mae
+  vs_default_mean_mae: 983153490.6973132
+  mean_mae: 927741384.3812575
+  std_mae: 448392776.3467851
+  fold_maes:
+  - 318930394.59925073
+  - 1385756797.1176171
+  - 1078536961.4269047
+  fold_persistence_maes:
+  - 370774950.5897858
+  - 1376387423.3235772
+  - 548111169.3470049
+  rel_mae_vs_persistence: 1.212589306105226
+  fold_mase:
+  - 0.3673658508018126
+  - 1.4201030601894844
+  - 1.0222967592803627
+  fold_mase_valid:
+  - true
+  - true
+  - true
+dlinear_cpu:
+  epochs: 40
+  patience: 5
+  num_threads: 1
+  max_batches_per_epoch: 200
+  timeout_sec: 180
+  enabled: true
+  eligibility_reason: passed_persistence_eligibility_gate
+  mean_mae: 0.9062630874008186
+  std_mae: 0.36540894989912004
+  fold_maes:
+  - 0.5375158654620592
+  - 1.404172447103739
+  - 0.7771009496366575
+  fold_persistence_maes:
+  - 0.6064549343455634
+  - 1.4789591833108944
+  - 0.8155716545622695
+  rel_mae_vs_persistence: 0.9371949660142854
+  fold_diagnostics:
+  - fold: 0
+    y_train_min: 1.8772486772193577
+    y_train_median: 2.521435185348511
+    y_train_max: 33.1634656084423
+    y_val_min: 1.8890873016493899
+    y_val_median: 2.3942129630703235
+    y_val_max: 30.55392738417569
+    pred_min: 0.7840870075490227
+    pred_median: 2.6205401641230726
+    pred_max: 20.527423856274773
+    finite_pred_pct: 100.0
+    mae: 0.5375158654620592
+    persistence_mae: 0.6064549343455634
+  - fold: 1
+    y_train_min: 1.851419752777013
+    y_train_median: 2.5507076716370185
+    y_train_max: 33.1634656084423
+    y_val_min: 1.8967857145132723
+    y_val_median: 2.812447090073312
+    y_val_max: 31.604044089197764
+    pred_min: -2.5874398288413567
+    pred_median: 3.0353364616293934
+    pred_max: 27.803406581680242
+    finite_pred_pct: 100.0
+    mae: 1.404172447103739
+    persistence_mae: 1.4789591833108944
+  - fold: 2
+    y_train_min: 1.851419752777013
+    y_train_median: 2.5982473544100735
+    y_train_max: 34.52176462256451
+    y_val_min: 1.7848765434478817
+    y_val_median: 2.498505291022994
+    y_val_max: 30.620784983764064
+    pred_min: 0.7128649727954675
+    pred_median: 2.6892957417941776
+    pred_max: 21.137228855607596
+    finite_pred_pct: 100.0
+    mae: 0.7771009496366575
+    persistence_mae: 0.8155716545622695
+dlinear_memory:
+  epochs: 40
+  patience: 5
+  num_threads: 1
+  max_batches_per_epoch: 200
+  timeout_sec: 180
+  enabled: true
+  eligibility_reason: passed_persistence_eligibility_gate
+  mean_mae: 756773060.7276903
+  std_mae: 420487165.0385938
+  fold_maes:
+  - 371940372.17301714
+  - 1341798670.4434867
+  - 556580139.5665673
+  fold_persistence_maes:
+  - 370774950.5897858
+  - 1376387423.3235772
+  - 548111169.3470049
+  rel_mae_vs_persistence: 0.989127935905256
+  fold_diagnostics:
+  - fold: 0
+    y_train_min: 113481224192.0
+    y_train_median: 116047517696.0
+    y_train_max: 181478932480.0
+    y_val_min: 115048919040.0
+    y_val_median: 116077381632.0
+    y_val_max: 168599498752.0
+    pred_min: 115505900003.46309
+    pred_median: 116185735413.49007
+    pred_max: 141933795161.92426
+    finite_pred_pct: 100.0
+    mae: 371940372.17301714
+    persistence_mae: 370774950.5897858
+  - fold: 1
+    y_train_min: 113481224192.0
+    y_train_median: 116437114880.0
+    y_train_max: 181478932480.0
+    y_val_min: 118848614400.0
+    y_val_median: 120525615104.0
+    y_val_max: 172579835904.0
+    pred_min: 118964692940.70428
+    pred_median: 120487948241.19049
+    pred_max: 145531080396.53064
+    finite_pred_pct: 100.0
+    mae: 1341798670.4434867
+    persistence_mae: 1376387423.3235772
+  - fold: 2
+    y_train_min: 113481224192.0
+    y_train_median: 119524771840.0
+    y_train_max: 181478932480.0
+    y_val_min: 116572610560.0
+    y_val_median: 117992192000.0
+    y_val_max: 174973829120.0
+    pred_min: 116828628254.309
+    pred_median: 118095164465.72186
+    pred_max: 145568233605.55615
+    finite_pred_pct: 100.0
+    mae: 556580139.5665673
+    persistence_mae: 548111169.3470049
+selection_notes:
+  objective: mean_inner_validation_mae_across_3_outer_fit_val_blocks
+  outer_evaluation_labels_accessed: false
+  n_outer_folds_used_for_inner_val: 3
+  tie_policy: max(1e-9 abs, 1e-4 rel); then lower complexity; then canonical default

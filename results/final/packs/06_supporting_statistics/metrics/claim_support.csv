@@ -1,0 +1,5 @@
+claim,support,n_atomic,n_support,n_uncertain,n_contradict,median_rel_effect,min_rel_effect,max_rel_effect,min_ci_low,max_ci_high,holm_reject_count,fold_direction_consistency,horizon_consistency,qualification
+A,supported,9,9,0,0,-0.21636592447249614,-0.22805418789303677,-0.20461546205531878,-0.27518614002510544,-0.16567714258558763,9,ok,ok,CPU LightGBM independent vs persistence; separate Holm family; not reconciliation.
+B,supported,81,81,0,0,-0.08632915059549583,-0.1200825828937573,-0.03691945272381015,-0.14761516207941217,-0.019184487719425925,81,ok,ok,CPU recon (ridge/lgbm/dlinear × BU/WLS/MinT); bottoms unchanged under BU.
+C,partially_supported,36,24,12,0,-0.053053697873443995,-0.06570805721242289,0.010012278938129636,-0.08115852751106595,0.022926465415236415,22,ok,ok,Memory WLS/MinT for Ridge/DLinear only; LightGBM remains negative baseline.
+D,supported,12,10,2,0,0.00733184291067988,0.0,0.2949651260001284,-0.0012438959483522117,0.4066951669746431,4,ok,ok,Disk Ridge BU degrades aggregate; Ridge TD preserves independent top (bottom may still be costly).

@@ -1,0 +1,4 @@
+gate,name,status,detail
+2,baseline_strength,pass,"persistence, EWMA, Ridge, LightGBM, DLinear present in reporting inputs"
+3,stochastic_robustness,pass,LightGBM and DLinear seeds 0/1/2 reported individually with provenance
+4,statistical_evidence,pass,"seed×fold×horizon MBB, direct relative CIs, Holm families, seed-aware claims, immutable analysis freeze provenance"

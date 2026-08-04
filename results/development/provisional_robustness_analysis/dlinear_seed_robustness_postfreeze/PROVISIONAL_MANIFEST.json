@@ -1,0 +1,13 @@
+{
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "evaluation_role": "provisional_postfreeze_robustness_analysis",
+  "rejection_reason": [
+    "derived_analysis_not_frozen",
+    "reporting_logic_added_after_extension_freeze",
+    "peak_threshold_column_fixed_after_extension_freeze"
+  ],
+  "archived_at": "2026-08-04T14:08:12.125262+00:00",
+  "archived_from": "results/final/robustness/03_dlinear_seed_robustness",
+  "note": "Raw predictions/NPZs and fit-level base_forecasts/reconciliation_results remain in final pack as accepted source."
+}

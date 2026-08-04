@@ -1,0 +1,25 @@
+base_model,horizon,reconciliation_method,classification,mean_rel_vs_ind,max_rel_vs_ind,mean_macro_change,mean_coh_after
+persistence,1,bottom_up,accuracy-neutral coherence restoration,1.0,1.0,0.0,0.0
+persistence,1,top_down,accuracy-neutral coherence restoration,1.0,1.0,1.0964371756323112e-16,2.4583194880779764e-08
+persistence,1,wls,accuracy-neutral coherence restoration,1.0000000000021414,1.0000000000296827,7.393101101926463e-11,0.0
+persistence,1,mint,accuracy-neutral coherence restoration,1.0000000000786253,1.0000000001610505,1.267036243944653e-10,0.0
+persistence,8,bottom_up,accuracy-neutral coherence restoration,1.0,1.0,0.0,0.0
+persistence,8,top_down,accuracy-neutral coherence restoration,1.0,1.0,1.470271584476568e-16,2.4604005421856734e-08
+persistence,8,wls,accuracy-neutral coherence restoration,0.9999999999954369,1.0000000000006675,2.2205742821236436e-11,0.0
+persistence,8,mint,accuracy-neutral coherence restoration,1.0000000000317513,1.0000000001165428,7.58807678605421e-11,0.0
+ridge,1,bottom_up,accuracy-costly coherence restoration,1.1599667562144433,1.2949651260001285,0.0,0.0
+ridge,1,top_down,accuracy-neutral coherence restoration,1.0,1.0,0.20423172947931753,8.129681847806653e-05
+ridge,1,wls,accuracy-costly coherence restoration,1.037959283409539,1.0924490993436073,-0.00017274930084712438,0.0
+ridge,1,mint,accuracy-neutral coherence restoration,1.0170657593281283,1.0459611438396712,0.014660576277177215,0.0
+ridge,8,bottom_up,accuracy-costly coherence restoration,1.1366864331215265,1.2244602475588722,0.0,0.0
+ridge,8,top_down,accuracy-neutral coherence restoration,1.0,1.0,0.19711203055181326,7.409388263087512e-05
+ridge,8,wls,accuracy-costly coherence restoration,1.0284137238123012,1.0593650429476114,-0.0017596510267533993,0.0
+ridge,8,mint,accuracy-neutral coherence restoration,1.0134111349726629,1.0315001261996695,0.015290593554685318,0.0
+lightgbm,1,bottom_up,unsuitable,7.227101579399189,9.0615991334025,0.0,0.0
+lightgbm,1,top_down,accuracy-neutral coherence restoration,1.0,1.0,0.04628007930518805,7.0834837862155e-05
+lightgbm,1,wls,unsuitable,3.2081028349607883,5.153692780435706,-0.16898706514133852,0.0
+lightgbm,1,mint,unsuitable,3.6872251070157778,5.969001167531352,-0.08395930172127801,0.0
+lightgbm,8,bottom_up,unsuitable,9.436542283879922,16.210982897038612,0.0,0.0
+lightgbm,8,top_down,accuracy-neutral coherence restoration,1.0,1.0,0.04593432337753958,7.82520933939102e-05
+lightgbm,8,wls,unsuitable,4.045112648727507,6.490974284494916,-0.04198476069359237,0.0
+lightgbm,8,mint,unsuitable,5.0461966039279424,7.7602740383088005,0.035295401361587646,0.0
