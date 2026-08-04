@@ -34,14 +34,15 @@ def test_packs_config_loads_and_hpo_budget():
         assert float(p["hard_wall_clock_minutes"]) <= 45
 
 
-def test_packs_validator_accepts_pending_prefreeze():
+def test_packs_validator_accepts_frozen_config():
     from timetrack.final_config import validate_packs_config
 
     cfg = load_packs_config(ROOT / "configs" / "final_fgcs_packs.yaml")
     errs = validate_packs_config(cfg, require_frozen=False)
     assert errs == [], errs
     errs_f = validate_packs_config(cfg, require_frozen=True)
-    assert errs_f
+    assert errs_f == [], errs_f
+    assert cfg["freeze_tag"] == "experiment-freeze-v1"
 
 
 def test_full_config_marked_optional():
