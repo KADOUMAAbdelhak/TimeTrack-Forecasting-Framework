@@ -1,0 +1,7 @@
+hierarchy,relation,series_count,units,folds,horizons,deterministic_models,stochastic_models,seeds,reconciliation_methods,evidence_role,claim_eligibility
+cpu_core_weighted,exact_sum_core_weighted,8,cpu_weighted_mean_pct (= wsum/236),"0,1,2","1,8,16","persistence,ewma,ridge","lightgbm,dlinear","0,1,2","independent,bottom_up,wls,mint",primary positive hierarchy,True
+memory_um,exact_sum,8,memory_bytes,"0,1,2","1,8,16","persistence,ewma,ridge","lightgbm,dlinear","0,1,2","independent,bottom_up,wls,mint",secondary conditional hierarchy,True
+disk_ud,exact_sum,8,disk_level,"0,1,2","1,8","persistence,ewma,ridge",lightgbm (transferred stress only),0 (deterministic); no multi-seed headline,"independent,bottom_up,top_down,wls,mint",boundary hierarchy,True
+peaks,operational_qualification,n/a,threshold diagnostics,"0,1,2","1,8,16","persistence,ridge","lightgbm,dlinear",0 + DLinear peak-bias across 0/1/2,"independent,bottom_up,wls,mint",operational qualification,True
+downsampling,excluded,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,excluded,False
+network,not_evaluated,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,not evaluated,False

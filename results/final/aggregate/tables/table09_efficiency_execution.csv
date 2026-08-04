@@ -1,0 +1,13 @@
+pack_id,pack_wall_time_sec,cpu_time_sec,peak_rss_bytes,training_time_sec,fit_count,seed_count,models_trained_in_this_pack
+shared_tuning,277.9170440409998,332.666525,701923328,277.9170440409998,not_recorded_by_frozen_runner,not_recorded_by_frozen_runner,False
+memory_classical,379.05838975000006,552.661645,524681216,379.05838975000006,not_recorded_by_frozen_runner,1,True
+memory_dlinear,114.68809333399986,113.280828,712130560,114.68809333399986,not_recorded_by_frozen_runner,1,True
+cpu_classical,358.3801194590005,618.674772,533905408,358.3801194590005,not_recorded_by_frozen_runner,1,True
+cpu_dlinear,109.07871016699937,108.132018,749076480,109.07871016699937,not_recorded_by_frozen_runner,1,True
+disk_boundary,221.123122125,285.514411,497074176,221.123122125,not_recorded_by_frozen_runner,1,True
+supporting_statistics,184.4321977080017,181.989665,not_recorded_by_frozen_runner,0.0,not_recorded_by_frozen_runner,1,False
+peak_analysis,2.6366080839998176,2.5979650000000003,not_recorded_by_frozen_runner,0.0,not_recorded_by_frozen_runner,1,False
+ewma_baselines,437.51598875000127,433.668147,514949120,437.51598875000127,not_recorded_by_frozen_runner,1,True
+lightgbm_seed_robustness,1636.080741666001,3671.408116,561987584,1636.080741666001,not_recorded_by_frozen_runner,3,True
+dlinear_seed_robustness,453.97454079199997,443.694115,808812544,453.97454079199997,not_recorded_by_frozen_runner,3,True
+robustness_statistics,428.0716682909988,424.354302,468189184,0.0,not_recorded_by_frozen_runner,3,False

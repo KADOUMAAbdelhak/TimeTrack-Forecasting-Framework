@@ -1,0 +1,163 @@
+{
+  "artifact": "final_evidence_aggregate",
+  "created_at": "2026-08-04T12:19:50.516346+00:00",
+  "execution_commit": "e3a9ffa48e02cfb81eaf2a20600e7a679ca96087",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "prediction_layer": {
+    "freeze_tag": "experiment-freeze-v2",
+    "freeze_tag_commit": "bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7",
+    "implementation_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6"
+  },
+  "statistics_layer": {
+    "freeze_tag": "final-analysis-freeze-v1",
+    "freeze_tag_commit": "a93997feca8c2b383a1d0838410509fd582b2447",
+    "implementation_commit": "c4f5a18e496614b070eb508c378355eb39d02631"
+  },
+  "peak_layer": {
+    "freeze_tag": "final-peak-analysis-freeze-v1",
+    "freeze_tag_commit": "7586be02c0a6fa8432030753b159c63a5e8caa96",
+    "implementation_commit": "96e1218e151df70b052aaf0ed9826f050a7322a9"
+  },
+  "reporting_freeze_tag": "final-reporting-freeze-v1",
+  "reporting_freeze_tag_commit": "502701bf905c755e52788bea061603199960ec14",
+  "reporting_implementation_commit": "c6ebcb00a6a51675d7433542f70acbf7c76b0d4a",
+  "reporting_config_hash": "a78f6110703a43b6",
+  "registry_hash": "40196c5d82a8fed8",
+  "source_pack_hashes": {
+    "shared_tuning": "a36e70b1e36d455e",
+    "memory_classical": "23f54983a9093bc0",
+    "memory_dlinear": "f9aab59b953446a1",
+    "cpu_classical": "2f512f20b8ecc6ec",
+    "cpu_dlinear": "b53277ffe064c35e",
+    "disk_boundary": "5e4b044e118361db",
+    "supporting_statistics": null,
+    "peak_analysis": null
+  },
+  "exclusions": {
+    "downsampling": {
+      "status": "scientifically_blocked",
+      "executed": false,
+      "claim_eligible": false,
+      "reason": "frozen helper did not perform actual downsampling"
+    },
+    "network_secondary": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "conformal_intervals": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "lstm_confirmation": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "adaptive_router": {
+      "status": "development_only",
+      "claim_eligible": false
+    },
+    "global_lomo": {
+      "status": "development_only",
+      "claim_eligible": false
+    }
+  },
+  "headlines": {
+    "cpu_persistence_independent_mae": 1.3213600379035697,
+    "cpu_lightgbm_independent_mae": 1.0361447195502471,
+    "cpu_lightgbm_mint_mae": 0.9311407916065129,
+    "cpu_lgbm_ind_vs_pers_rel": -0.21584981395822797,
+    "cpu_lgbm_mint_vs_pers_rel": -0.2953163673060425,
+    "cpu_lgbm_mint_vs_ind_rel": -0.10134098641096453,
+    "cpu_ridge_bu_vs_ind_rel": -0.09216416258589373,
+    "cpu_dlinear_bu_vs_ind_rel": -0.07043813343052296,
+    "best_observed_cpu": "lightgbm+mint",
+    "recommended_operational_cpu": "lightgbm+mint (accuracy/coherence); ridge+bottom_up when bottom preservation preferred",
+    "best_observed_memory": "dlinear+mint (by outer MAE)",
+    "recommended_operational_memory": "ridge/dlinear+mint or wls; persistence independent remains competitive baseline",
+    "best_observed_disk": "persistence+independent",
+    "recommended_operational_disk": "persistence independent; ridge+top_down if coherence mandatory",
+    "cpu_pers_h1": 1.3203317692824537,
+    "cpu_pers_h8": 1.3159518625014526,
+    "cpu_pers_h16": 1.3277964819268036,
+    "disk_ridge_bu_vs_ind_rel": 0.14832659466798495
+  },
+  "generated_artifact_hashes": [
+    {
+      "artifact": "figures/bootstrap_relative_effects.pdf",
+      "sha256": "292110118bc1712091b11ce9d8d0afdf6ce09aba0cbcdf7f533ad3ff1a0024dc"
+    },
+    {
+      "artifact": "figures/coherence_before_after.pdf",
+      "sha256": "3b228cad809642b25a69271a94a24d74d4d02d3ee6e7df713b5feba243459db8"
+    },
+    {
+      "artifact": "figures/cpu_accuracy_vs_horizon.pdf",
+      "sha256": "46422deae2fdc6e6766322c65c75cb65be85bb00429572de9711ac97b7970ff2"
+    },
+    {
+      "artifact": "figures/cpu_peak_results.pdf",
+      "sha256": "bdb7b7b8a22382663eff57f701d1bd72645e2bff15e38c02cf9283b40d4d9a75"
+    },
+    {
+      "artifact": "figures/disk_boundary.pdf",
+      "sha256": "475b278a9279afff9df7258b865867468141d2418be8427514c7b5015aedd9b1"
+    },
+    {
+      "artifact": "figures/memory_accuracy_vs_horizon.pdf",
+      "sha256": "9a1e6505a8149370130936d811ebed3e57f604cda5717ddcda61318080780750"
+    },
+    {
+      "artifact": "figures/memory_peak_bias.pdf",
+      "sha256": "7412e23bdd0fcfff527b4a1e3c68dc202c40de086ad9bc3cf5902a25d3d75fe0"
+    },
+    {
+      "artifact": "figures/method_selection_map.pdf",
+      "sha256": "eece5cbd5623d4ea57c7816dd9ac52e178f8999168aec001dcbee18fefcb8a34"
+    },
+    {
+      "artifact": "figures/top_bottom_tradeoff.pdf",
+      "sha256": "9954b7fac667143e2256b12b3380e4ec551f01028461cb4e519d51c20891da88"
+    },
+    {
+      "artifact": "tables/table01_experiment_hierarchy_registry.csv",
+      "sha256": "3f27ff9cdc8ad16752e6bde3c92158f65974da31e5ada38dc0c4e6ecd7ddc343"
+    },
+    {
+      "artifact": "tables/table02_cpu_main_results.csv",
+      "sha256": "93d307cf3b8d4010ad075c4cfe6caf3f8da97ec4011f5fb0faeee7c41aad9fa4"
+    },
+    {
+      "artifact": "tables/table03_memory_main_results.csv",
+      "sha256": "cc6aba996e35ab22c2ad0faa0be55b9b791b71d448cd6e5bd7e4d9088214ac2a"
+    },
+    {
+      "artifact": "tables/table04_disk_boundary_results.csv",
+      "sha256": "f8d2d0b3eb76acbc63ac60c2762ad2452496ce2a8c6eb8b15a916a2560c0e05c"
+    },
+    {
+      "artifact": "tables/table05_statistical_evidence.csv",
+      "sha256": "24eb5adbcde570f0e944ab0bd3e2a8c24d44a0478e894b72241ec8dc2c826165"
+    },
+    {
+      "artifact": "tables/table06_claim_support_matrix.csv",
+      "sha256": "8189925744244bab130d7e65b85eb031070892e82b4573040833deb7fb61436d"
+    },
+    {
+      "artifact": "tables/table07_peak_operational_results.csv",
+      "sha256": "42fb81476986c3d39df7d8f3b271783912369c4bbd7c20bf5e515bdfc8d05406"
+    },
+    {
+      "artifact": "tables/table08_efficiency_execution.csv",
+      "sha256": "f7cadffcfce91565ee0c10fd6a0f8d8ae495378d8c3335e8d063a86b2d58df8c"
+    }
+  ],
+  "source_files_unchanged": true,
+  "n_source_artifacts_hashed": 96,
+  "evidence_stage": "pre_robustness",
+  "final_decision": "superseded",
+  "superseded_by": "final-reporting-freeze-v2",
+  "claim_eligible": false,
+  "claim_eligible_for_final_submission": false,
+  "historical_record": true,
+  "archived_from": "results/final/aggregate"
+}

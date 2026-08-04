@@ -1,5 +1,15 @@
 # FGCS publication readiness
 
+> **FINAL DECISION: GO** — see [`docs/FGCS_PUBLICATION_READINESS_FINAL.md`](FGCS_PUBLICATION_READINESS_FINAL.md)
+> (reporting freeze `final-reporting-freeze-v2`).
+>
+> The body below is the **historical pre-/mid-robustness assessment** retained for
+> provenance. Also preserve:
+> `docs/FGCS_PUBLICATION_READINESS_PRE_ROBUSTNESS.md`,
+> `docs/PUBLICATION_GATE_CORRECTION.md`.
+> Pre-robustness aggregate archived at
+> `results/final/archive/pre_robustness_aggregate/`.
+
 Assessment date: 2026-08-04  
 Evidence registry: `configs/final_evidence_registry.yaml`  
 Aggregate: `results/final/aggregate/`  
