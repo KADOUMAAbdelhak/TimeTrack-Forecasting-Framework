@@ -1,0 +1,22 @@
+dlinear:
+  epochs: 40
+  max_batches_per_epoch: 200
+  num_threads: 1
+  patience: 5
+  timeout_sec: 180
+lightgbm_cpu:
+  learning_rate: 0.05
+  n_estimators: 250
+  num_leaves: 47
+lightgbm_memory:
+  learning_rate: 0.05
+  n_estimators: 100
+  num_leaves: 15
+ridge:
+  alpha: 10000.0
+selection_notes:
+  lgbm_cpu_best_val_mae: 0.3883621139856352
+  lgbm_memory_best_val_mae: 318930394.59925073
+  objective_scope: inner_validation_fold0_only
+  outer_evaluation: false
+  ridge_best_val_mae: 0.5480575330286852

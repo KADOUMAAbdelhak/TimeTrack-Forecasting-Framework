@@ -20,47 +20,30 @@ def _run(cmd: list[str]) -> None:
 
 
 def tier_smoke(config: Path, resume: bool) -> None:
-    from experiments.final_hierarchy_runner import load_final_config, run_smoke
-    from timetrack.final_config import validate_final_config
+    """Pack-based smoke: list packs + run shared_tuning only (no auto-queue)."""
+    from timetrack.final_packs import list_pack_rows, load_packs_config
+    from experiments.pack_runner import run_pack
 
-    cfg = load_final_config(config)
-    errs = validate_final_config(cfg, require_frozen=False)
-    if errs:
-        raise SystemExit("Config invalid:\n" + "\n".join(errs))
+    packs_cfg = ROOT / "configs" / "final_fgcs_packs.yaml"
+    cfg = load_packs_config(packs_cfg)
+    print("packs:")
+    for r in list_pack_rows(cfg):
+        print(f"  {r['pack_id']}: {r['status']} (required={r['required']})")
     from timetrack.data import dataset_fingerprint
-    from timetrack.splits import make_outer_chronological_folds
-    from timetrack.data import build_analysis_panel
 
-    fp = dataset_fingerprint()
-    print("dataset_fingerprint", fp["fingerprint"])
-    panel = build_analysis_panel()
-    folds = make_outer_chronological_folds(panel, n_folds=int(cfg["folds"]["n_outer"]))
-    print("n_outer_folds", len(folds), "n_rows", len(panel))
-    manifest = run_smoke(cfg, resume=resume)
+    print("dataset_fingerprint", dataset_fingerprint()["fingerprint"])
+    manifest = run_pack("shared_tuning", packs_cfg, resume=resume)
     print(json.dumps(manifest, indent=2))
 
 
 def tier_final(config: Path, resume: bool) -> None:
-    from timetrack.final_config import validate_final_config
-
-    cfg = yaml.safe_load(config.read_text())
-    errs = validate_final_config(cfg, require_frozen=True)
-    if errs:
-        raise SystemExit(
-            "Final tier requires a frozen config:\n"
-            + "\n".join(errs)
-            + "\nComplete freeze procedure before --tier final."
-        )
-    # Placeholder: full grid runner invoked after freeze
-    from experiments.final_hierarchy_runner import run_smoke
-
-    print("Freeze validated. Launching final hierarchy grid (resume=", resume, ")")
-    # Full final execution will expand beyond smoke; for now require explicit plan approval
-    # via configs and run progressive hierarchy jobs.
     raise SystemExit(
-        "Final grid launcher is gated until experiment-freeze-v1 exists. "
-        "Pre-freeze checkpoint: use --tier smoke. "
-        "After freeze, re-run this command; the freeze commit fills freeze_commit/tag."
+        "Do not auto-run all final packs.\n"
+        "After freeze, launch ONE pack at a time:\n"
+        "  python scripts/list_final_packs.py --config configs/final_fgcs_packs.yaml\n"
+        "  python scripts/run_final_pack.py --config configs/final_fgcs_packs.yaml "
+        "--pack <pack_id> --resume\n"
+        "Do not execute configs/final_fgcs_full.yaml or publication.yaml for claims."
     )
 
 

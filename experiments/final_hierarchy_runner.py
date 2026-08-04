@@ -177,8 +177,8 @@ def _align(packs: list[dict], top_pack: dict) -> dict[str, Any]:
         "origin_test": ot,
         "yb_train_list": [p["y_train"] for p in packs],
         "yt_train": top_pack["y_train"],
-        "bottom_eff": [p["efficiency"] for p in packs],
-        "top_eff": top_pack["efficiency"],
+        "bottom_eff": [p.get("efficiency") for p in packs],
+        "top_eff": top_pack.get("efficiency"),
     }
 
 

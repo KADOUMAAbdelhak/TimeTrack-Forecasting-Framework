@@ -1,0 +1,296 @@
+# Pack-based FGCS final execution (default).
+# Launch ONE pack at a time manually. Do not auto-queue packs.
+# Monolithic optional plan: configs/final_fgcs_full.yaml (default_execution: false).
+
+experiment_stage: final
+execution_mode: manual_packs
+default_execution: true
+eligible_for_final_claims: true
+evaluation_role: outer_evaluation
+
+repository_url: https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git
+branch: main
+freeze_commit: PENDING_EXPERIMENT_FREEZE_V1
+freeze_tag: PENDING_experiment-freeze-v1
+
+dataset_fingerprint: bf06dc0e7fe6ff5e
+dependency_lock_hash: 22dca9902706473b
+sampling_seconds: 42.285166
+context: 32
+n_outer_folds: 3
+
+# Family-level shared hyperparameters (filled by pack 00)
+shared_hyperparameters_path: results/final/packs/00_shared_tuning/selected_hyperparameters.yaml
+
+ridge_alpha_grid: [1.0e-4, 1.0e-2, 1.0, 100.0, 1.0e4]
+lightgbm_max_trials_memory: 8
+lightgbm_max_trials_cpu: 8
+max_required_hpo_trials: 16
+
+dlinear_fixed:
+  epochs: 40
+  patience: 5
+  num_threads: 1
+  max_batches_per_epoch: 200
+  timeout_sec: 180
+
+efficiency_protocol:
+  warmup: 1
+  repeats: 3
+  threads: 1
+
+bootstrap_policy:
+  method: paired_moving_block
+  n_boot: 1000
+  seed: 0
+  acf_threshold: 0.1
+  lower: 8
+  upper: 256
+
+hard_wall_clock_minutes_default: 45
+stop_launching_new_runs_minutes_default: 40
+
+artifact_root: results/final/packs
+
+packs:
+  - id: shared_tuning
+    pack_dir: 00_shared_tuning
+    description: Family-level Ridge grid + LightGBM shared configs + DLinear validation
+    required: true
+    dependencies: []
+    hierarchies: [memory_um, cpu_core_weighted]
+    models: [ridge, lightgbm, dlinear]
+    horizons: [1]
+    outer_folds: [0]
+    seeds: [0]
+    reconciliation_methods: []
+    estimated_base_fits: 28
+    estimated_recon_evals: 0
+    estimated_runtime_minutes: 5
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: shared_tuning
+
+  - id: memory_classical
+    pack_dir: 01_memory_classical
+    description: memory_um classical base + primary reconciliation
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: [memory_um]
+    models: [persistence, ridge, lightgbm]
+    horizons: [1, 8, 16]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, wls, mint]
+    ablations_horizon: 8
+    ablation_methods: [ols]
+    nonnegative_ablation_horizon: 8
+    estimated_base_fits: 216
+    estimated_recon_evals: 144
+    estimated_runtime_minutes: 12
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: memory_dlinear
+    pack_dir: 02_memory_dlinear
+    description: memory_um DLinear + primary reconciliation
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: [memory_um]
+    models: [dlinear]
+    horizons: [1, 8, 16]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, wls, mint]
+    estimated_base_fits: 72
+    estimated_recon_evals: 36
+    estimated_runtime_minutes: 8
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: cpu_classical
+    pack_dir: 03_cpu_classical
+    description: cpu_core_weighted classical + primary reconciliation
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: [cpu_core_weighted]
+    models: [persistence, ridge, lightgbm]
+    horizons: [1, 8, 16]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, wls, mint]
+    ablations_horizon: 8
+    ablation_methods: [ols]
+    nonnegative_ablation_horizon: 8
+    estimated_base_fits: 216
+    estimated_recon_evals: 144
+    estimated_runtime_minutes: 12
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: cpu_dlinear
+    pack_dir: 04_cpu_dlinear
+    description: cpu_core_weighted DLinear + primary reconciliation
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: [cpu_core_weighted]
+    models: [dlinear]
+    horizons: [1, 8, 16]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, wls, mint]
+    estimated_base_fits: 72
+    estimated_recon_evals: 36
+    estimated_runtime_minutes: 8
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: disk_boundary
+    pack_dir: 05_disk_boundary
+    description: disk_ud boundary / method selectivity (no DLinear, no HPO)
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: [disk_ud]
+    models: [persistence, ridge, lightgbm]
+    horizons: [1, 8]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, top_down, wls, mint]
+    estimated_base_fits: 144
+    estimated_recon_evals: 90
+    estimated_runtime_minutes: 10
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: supporting_statistics
+    pack_dir: 06_supporting_statistics
+    description: Block bootstrap, Holm, coherence/efficiency aggregation (no training)
+    required: true
+    dependencies:
+      - memory_classical
+      - memory_dlinear
+      - cpu_classical
+      - cpu_dlinear
+      - disk_boundary
+    hierarchies: [memory_um, cpu_core_weighted, disk_ud]
+    models: []
+    horizons: []
+    outer_folds: []
+    seeds: []
+    reconciliation_methods: []
+    estimated_base_fits: 0
+    estimated_recon_evals: 0
+    estimated_runtime_minutes: 10
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: supporting_statistics
+
+  - id: peak_analysis
+    pack_dir: 07_peak_analysis
+    description: Peak/high-load metrics from stored predictions
+    required: true
+    dependencies: [memory_classical, memory_dlinear, cpu_classical, cpu_dlinear]
+    hierarchies: [memory_um, cpu_core_weighted]
+    models: []
+    horizons: []
+    outer_folds: []
+    seeds: []
+    reconciliation_methods: []
+    estimated_base_fits: 0
+    estimated_recon_evals: 0
+    estimated_runtime_minutes: 8
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: peak_analysis
+
+  - id: downsampling
+    pack_dir: 08_downsampling
+    description: Native vs ~5min downsampling supporting study
+    required: true
+    dependencies: [shared_tuning]
+    hierarchies: []
+    models: [persistence, ridge, lightgbm]
+    horizons: [1, 8]
+    outer_folds: [0]
+    seeds: [0]
+    reconciliation_methods: []
+    downsampling_targets: [cluster_UM, cluster_CU_weighted_mean]
+    downsampling_factors: [1, 7]
+    estimated_base_fits: 24
+    estimated_recon_evals: 0
+    estimated_runtime_minutes: 10
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: downsampling
+
+  - id: network_secondary
+    pack_dir: 09_network_secondary
+    description: Optional bond0 approximate hierarchy (admit if error < 0.02)
+    required: false
+    dependencies: [shared_tuning]
+    hierarchies: [network_bond0]
+    models: [persistence, ridge, lightgbm]
+    horizons: [1, 8]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up, wls, mint]
+    estimated_base_fits: 72
+    estimated_recon_evals: 48
+    estimated_runtime_minutes: 12
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: hierarchy_models
+
+  - id: conformal_intervals
+    pack_dir: 10_conformal_intervals
+    description: Optional 90% split-conformal on retained methods
+    required: false
+    dependencies: [memory_classical, cpu_classical, supporting_statistics]
+    hierarchies: []
+    models: []
+    horizons: [1]
+    outer_folds: [0]
+    seeds: [0]
+    reconciliation_methods: []
+    conformal_targets: [cluster_UM, cluster_CU_weighted_mean]
+    nominal_coverage: [0.90]
+    estimated_base_fits: 4
+    estimated_recon_evals: 0
+    estimated_runtime_minutes: 8
+    hard_wall_clock_minutes: 45
+    stop_launching_new_runs_minutes: 40
+    kind: conformal
+
+  - id: lstm_confirmation
+    pack_dir: 11_lstm_confirmation
+    description: Optional LSTM confirmation (skip if DLinear sufficient)
+    required: false
+    dependencies: [shared_tuning, memory_dlinear, cpu_dlinear]
+    hierarchies: [memory_um, cpu_core_weighted]
+    models: [lstm]
+    horizons: [8]
+    outer_folds: [0, 1, 2]
+    seeds: [0]
+    reconciliation_methods: [independent, bottom_up]
+    estimated_base_fits: 48
+    estimated_recon_evals: 12
+    estimated_runtime_minutes: 28
+    hard_wall_clock_minutes: 30
+    stop_launching_new_runs_minutes: 25
+    kind: hierarchy_models
+
+required_packs_for_aggregation:
+  - shared_tuning
+  - memory_classical
+  - memory_dlinear
+  - cpu_classical
+  - cpu_dlinear
+  - disk_boundary
+  - supporting_statistics
+  - peak_analysis
+  - downsampling

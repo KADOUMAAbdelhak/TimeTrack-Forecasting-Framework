@@ -1,0 +1,38 @@
+# Schema for configs/final_fgcs_packs.yaml
+schema_version: 1
+description: Manual pack-based FGCS final execution
+
+required_top_keys:
+  - experiment_stage
+  - execution_mode
+  - freeze_commit
+  - freeze_tag
+  - dataset_fingerprint
+  - packs
+  - required_packs_for_aggregation
+
+pack_required_fields:
+  - id
+  - pack_dir
+  - description
+  - required
+  - dependencies
+  - estimated_runtime_minutes
+  - hard_wall_clock_minutes
+  - stop_launching_new_runs_minutes
+  - kind
+
+pack_status_values:
+  - pending
+  - running
+  - complete
+  - partial
+  - failed
+  - skipped
+
+constraints:
+  max_required_hpo_trials: 16
+  hard_wall_clock_minutes_max: 45
+  no_automatic_pack_queue: true
+  default_config: configs/final_fgcs_packs.yaml
+  optional_extended: configs/final_fgcs_full.yaml

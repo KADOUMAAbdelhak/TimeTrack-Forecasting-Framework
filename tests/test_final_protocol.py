@@ -63,7 +63,7 @@ def test_block_length_and_holm_deterministic():
 
 
 def test_final_config_yaml_validates():
-    cfg = yaml.safe_load((ROOT / "configs" / "final_fgcs.yaml").read_text())
+    cfg = yaml.safe_load((ROOT / "configs" / "final_fgcs_full.yaml").read_text())
     errs = validate_final_config(cfg, require_frozen=False)
     assert errs == [], errs
     errs_strict = validate_final_config(cfg, require_frozen=True)
@@ -79,15 +79,24 @@ def test_cpu_registry_rejects_raw_conflict_flag_path():
 
 
 def test_validator_rejects_pilot_paths_and_outer_hpo():
-    cfg = yaml.safe_load((ROOT / "configs" / "final_fgcs.yaml").read_text())
+    cfg = yaml.safe_load((ROOT / "configs" / "final_fgcs_full.yaml").read_text())
     cfg = dict(cfg)
     cfg["artifact_paths"] = dict(cfg["artifact_paths"])
     cfg["artifact_paths"]["metrics"] = "results/development/metrics"
     errs = validate_final_config(cfg, require_frozen=False)
     assert any("development" in e for e in errs)
-    cfg2 = yaml.safe_load((ROOT / "configs" / "final_fgcs.yaml").read_text())
+    cfg2 = yaml.safe_load((ROOT / "configs" / "final_fgcs_full.yaml").read_text())
     cfg2 = dict(cfg2)
     cfg2["hpo"] = dict(cfg2["hpo"])
     cfg2["hpo"]["use_outer_labels"] = True
     errs2 = validate_final_config(cfg2, require_frozen=False)
     assert any("outer-label" in e for e in errs2)
+
+
+def test_packs_config_is_default_execution_entry():
+    pointer = yaml.safe_load((ROOT / "configs" / "final_fgcs.yaml").read_text())
+    assert pointer.get("execution_mode") == "manual_packs"
+    assert pointer.get("redirect") == "configs/final_fgcs_packs.yaml"
+    packs = yaml.safe_load((ROOT / "configs" / "final_fgcs_packs.yaml").read_text())
+    assert packs.get("default_execution") is True
+    assert int(packs["max_required_hpo_trials"]) <= 16

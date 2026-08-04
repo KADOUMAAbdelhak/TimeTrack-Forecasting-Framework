@@ -37,6 +37,9 @@ results/**/tuning/*.sqlite3
 results/tuning/
 results/final/metrics/smoke_cache/
 results/final/tuning/
+results/final/packs/**/metrics/predictions/
+results/final/packs/**/logs/
+
 *.pt
 *.pth
 *.ckpt
