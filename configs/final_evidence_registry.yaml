@@ -1,0 +1,68 @@
+# Authoritative final evidence registry for FGCS assessment.
+# Does not alter configs/final_fgcs_packs.yaml dependency graph.
+
+registry_version: 1
+dataset_fingerprint: bf06dc0e7fe6ff5e
+source_config_hash: 998ed4d20a8987d6
+
+prediction_layer:
+  freeze_tag: experiment-freeze-v2
+  freeze_tag_commit: bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7
+  implementation_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+
+statistics_layer:
+  freeze_tag: final-analysis-freeze-v1
+  freeze_tag_commit: a93997feca8c2b383a1d0838410509fd582b2447
+  implementation_commit: c4f5a18e496614b070eb508c378355eb39d02631
+
+peak_layer:
+  freeze_tag: final-peak-analysis-freeze-v1
+  freeze_tag_commit: 7586be02c0a6fa8432030753b159c63a5e8caa96
+  implementation_commit: 96e1218e151df70b052aaf0ed9826f050a7322a9
+
+accepted_prediction_packs:
+  - shared_tuning
+  - memory_classical
+  - memory_dlinear
+  - cpu_classical
+  - cpu_dlinear
+  - disk_boundary
+
+accepted_analysis_packs:
+  - supporting_statistics
+  - peak_analysis
+
+exclusions:
+  downsampling:
+    status: scientifically_blocked
+    executed: false
+    claim_eligible: false
+    reason: frozen helper did not perform actual downsampling
+  network_secondary:
+    status: optional_not_executed
+    claim_eligible: false
+  conformal_intervals:
+    status: optional_not_executed
+    claim_eligible: false
+  lstm_confirmation:
+    status: optional_not_executed
+    claim_eligible: false
+  adaptive_router:
+    status: development_only
+    claim_eligible: false
+  global_lomo:
+    status: development_only
+    claim_eligible: false
+
+pack_dirs:
+  shared_tuning: results/final/packs/00_shared_tuning
+  memory_classical: results/final/packs/01_memory_classical
+  memory_dlinear: results/final/packs/02_memory_dlinear
+  cpu_classical: results/final/packs/03_cpu_classical
+  cpu_dlinear: results/final/packs/04_cpu_dlinear
+  disk_boundary: results/final/packs/05_disk_boundary
+  supporting_statistics: results/final/packs/06_supporting_statistics
+  peak_analysis: results/final/packs/07_peak_analysis
+
+cpu_core_total: 236
+cpu_cores_verified: [36, 48, 36, 36, 20, 36, 24]

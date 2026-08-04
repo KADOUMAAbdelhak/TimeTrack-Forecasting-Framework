@@ -1,0 +1,48 @@
+# Final reporting / aggregation freeze (separate from prediction & analysis freezes).
+reporting_freeze_tag: final-reporting-freeze-v1
+reporting_freeze_tag_commit: PENDING_UNTIL_TAG
+reporting_implementation_commit: PENDING_UNTIL_COMMIT
+
+evidence_registry: configs/final_evidence_registry.yaml
+output_root: results/final/aggregate
+
+rounding:
+  relative_pct: 2
+  mae_cpu: 4
+  mae_memory_sci: 6
+  p_value: 4
+
+missing_value_policy: not_recorded_by_frozen_runner
+
+result_selection:
+  best_observed: lowest_final_outer_mae_in_frozen_comparison
+  recommended_operational: accuracy_coherence_stability_peak_cost_balance
+  wording: best observed in the frozen outer evaluation
+
+unit_separation:
+  - cpu_weighted_mean_pct
+  - memory_bytes
+  - disk_level
+
+tables:
+  - table01_experiment_hierarchy_registry
+  - table02_cpu_main_results
+  - table03_memory_main_results
+  - table04_disk_boundary_results
+  - table05_statistical_evidence
+  - table06_claim_support_matrix
+  - table07_peak_operational_results
+  - table08_efficiency_execution
+
+figures:
+  - cpu_accuracy_vs_horizon
+  - memory_accuracy_vs_horizon
+  - coherence_before_after
+  - top_bottom_tradeoff
+  - bootstrap_relative_effects
+  - disk_boundary
+  - cpu_peak_results
+  - memory_peak_bias
+  - method_selection_map
+
+publication_gates_doc: docs/PUBLICATION_GATES.md

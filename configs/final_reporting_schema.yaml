@@ -1,0 +1,20 @@
+# Schema for configs/final_reporting.yaml
+required_top_level_keys:
+  - reporting_freeze_tag
+  - evidence_registry
+  - output_root
+  - tables
+  - figures
+  - result_selection
+  - unit_separation
+  - missing_value_policy
+
+constraints:
+  reporting_freeze_tag: final-reporting-freeze-v1
+  unit_separation_must_not_pool_raw_mae: true
+
+forbidden:
+  - cross_unit_mae_averages
+  - presenting_best_observed_as_prospective_selection
+  - manuscript_prose_generation
+  - launching_optional_packs

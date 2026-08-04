@@ -1,0 +1,24 @@
+# Schema for configs/final_evidence_registry.yaml
+required_top_level_keys:
+  - registry_version
+  - dataset_fingerprint
+  - prediction_layer
+  - statistics_layer
+  - peak_layer
+  - accepted_prediction_packs
+  - accepted_analysis_packs
+  - exclusions
+  - pack_dirs
+
+constraints:
+  dataset_fingerprint: bf06dc0e7fe6ff5e
+  prediction_layer.freeze_tag: experiment-freeze-v2
+  statistics_layer.freeze_tag: final-analysis-freeze-v1
+  peak_layer.freeze_tag: final-peak-analysis-freeze-v1
+  downsampling.claim_eligible: false
+
+forbidden:
+  - treating_excluded_as_required
+  - modifying_final_fgcs_packs_dependency_graph
+  - regenerating_predictions
+  - model_training
