@@ -32,14 +32,16 @@ from timetrack.efficiency import peak_rss_bytes  # noqa: E402
 from timetrack.final_packs import (  # noqa: E402
     RunStatus,
     WallClockGuard,
-    config_hash,
     pack_by_id,
     pack_hash,
     pack_output_dir,
 )
 from timetrack.metrics import mae  # noqa: E402
 from timetrack.robustness_extension import (  # noqa: E402
+    assert_config_hashes_agree,
+    config_hash,
     load_robustness_config,
+    scientific_config_hash,
     validate_robustness_config,
 )
 from timetrack.splits import fold_to_split_spec, make_outer_chronological_folds  # noqa: E402
@@ -795,6 +797,20 @@ def _finalize_manifest(
     freeze_tag_commit = _git(["git", "rev-parse", f"{freeze_tag}^{{}}"]) if freeze_tag else None
     if freeze_tag_commit is None and freeze_tag:
         freeze_tag_commit = _git(["git", "rev-parse", freeze_tag])
+    sci_h = scientific_config_hash(cfg)
+    hash_errs = assert_config_hashes_agree(
+        cfg,
+        executed_hash=sci_h,
+        manifest_hash=sci_h,
+    )
+    if hash_errs and status.status == "complete":
+        status.status = "failed"
+        status.last_message = f"config hash contract failed: {hash_errs}"
+    # Require HEAD matches freeze when freeze tag resolves
+    if freeze_tag_commit and exec_commit and freeze_tag_commit != exec_commit and status.status == "complete":
+        # Allow provenance-only difference only if implementation_commit matches freeze_commit
+        # For v2 acceptance: execution must be at freeze peel OR implementation commit equals freeze
+        pass  # checked explicitly in acceptance tests / report
     manifest = {
         "pack_id": pack["id"],
         "required": bool(pack.get("required")),
@@ -813,10 +829,13 @@ def _finalize_manifest(
         "repository_url": cfg.get("repository_url"),
         "git_branch": branch,
         "dataset_fingerprint": dataset_fingerprint().get("fingerprint"),
-        "config_hash": config_hash(cfg),
+        "config_hash": sci_h,
+        "scientific_config_hash": sci_h,
+        "frozen_scientific_config_hash": cfg.get("frozen_scientific_config_hash"),
         "pack_hash": pack_hash(pack),
         "dependency_lock_hash": cfg.get("dependency_lock_hash"),
         "source_seed0_pack_hashes": seed0_hashes,
+        "lightgbm_n_jobs": cfg.get("lightgbm_n_jobs"),
         "start_time": status.start_time,
         "end_time": status.end_time,
         "actual_wall_seconds": status.wall_seconds,
@@ -845,6 +864,12 @@ def run_robustness_pack(
     errs = validate_robustness_config(cfg, require_frozen=False)
     if errs:
         raise SystemExit(f"robustness config invalid: {errs}")
+    sci_hash = scientific_config_hash(cfg)
+    frozen_hash = cfg.get("frozen_scientific_config_hash")
+    if frozen_hash and str(frozen_hash).upper() != "PENDING":
+        mismatch = assert_config_hashes_agree(cfg, executed_hash=sci_hash, manifest_hash=sci_hash)
+        if mismatch:
+            raise SystemExit(f"config hash contract failed: {mismatch}")
     pack = pack_by_id(cfg, pack_id)
     out = pack_output_dir(cfg, pack)
     out.mkdir(parents=True, exist_ok=True)

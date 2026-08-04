@@ -137,19 +137,15 @@ class LightGBMForecaster(_TreeMultiHorizon):
     def _make_estimator(self):
         from lightgbm import LGBMRegressor
 
-        # Seed-controlled fields only; do not enable bagging/feature subsample.
-        # Defaults subsample=1.0, subsample_freq=0, colsample_bytree=1.0 are
-        # deterministic given fixed data — identical seeds may yield identical preds.
+        # Must match experiment-freeze-v2 seed-0 wrapper exactly.
+        # Only random_state varies across robustness seeds; n_jobs stays -1.
         return LGBMRegressor(
             n_estimators=self.n_estimators,
             learning_rate=self.learning_rate,
             num_leaves=self.num_leaves,
             max_depth=self.max_depth,
-            random_state=int(self.seed),
-            n_jobs=1,
-            subsample=1.0,
-            subsample_freq=0,
-            colsample_bytree=1.0,
+            random_state=self.seed,
+            n_jobs=-1,
             verbosity=-1,
         )
 

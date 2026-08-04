@@ -177,10 +177,9 @@ def analyze_lightgbm_seed_robustness(cfg: dict[str, Any], pack: dict[str, Any], 
             "n_estimators": int(cfg[key]["n_estimators"]),
             "learning_rate": float(cfg[key]["learning_rate"]),
             "num_leaves": int(cfg[key]["num_leaves"]),
-            "n_jobs": 1,
-            "subsample": 1.0,
-            "subsample_freq": 0,
-            "colsample_bytree": 1.0,
+            "n_jobs": int(cfg.get("lightgbm_n_jobs", -1)),
+            "max_depth": -1,
+            "verbosity": -1,
         }
         cfg_hashes[hier] = hashlib.sha256(json.dumps(params, sort_keys=True).encode()).hexdigest()[:16]
 
@@ -330,6 +329,65 @@ def analyze_lightgbm_seed_robustness(cfg: dict[str, Any], pack: dict[str, Any], 
     results = pd.DataFrame(enriched)
     results.to_csv(metrics / "lightgbm_seed_results.csv", index=False)
     pd.DataFrame(hash_rows).to_csv(metrics / "lightgbm_seed_prediction_hashes.csv", index=False)
+
+    # Seed input comparability: only random_state / seed may differ
+    from timetrack.robustness_extension import lightgbm_execution_fingerprint
+
+    diff_rows = []
+    unexpected = 0
+    for hier, family in [("cpu_core_weighted", "cpu"), ("memory_um", "memory")]:
+        fp0 = lightgbm_execution_fingerprint(0, family=family, cfg=cfg)
+        for seed in (1, 2):
+            fp = lightgbm_execution_fingerprint(seed, family=family, cfg=cfg)
+            all_keys = sorted(set(fp0) | set(fp))
+            for key in all_keys:
+                v0, v1 = fp0.get(key), fp.get(key)
+                if key == "random_state":
+                    status = "intentionally_different_seed_field"
+                elif v0 == v1:
+                    status = "equal"
+                else:
+                    status = "unexpected_difference"
+                    unexpected += 1
+                diff_rows.append(
+                    {
+                        "hierarchy": hier,
+                        "compare_seed_a": 0,
+                        "compare_seed_b": seed,
+                        "field": key,
+                        "value_a": v0,
+                        "value_b": v1,
+                        "status": status,
+                    }
+                )
+    # Timestamp / split alignment across seeds for each hier×fold×horizon
+    align_rows = []
+    for hier in hierarchies:
+        for fold in folds:
+            for horizon in horizons:
+                keys = [(hier, fold, horizon, s) for s in (0, 1, 2)]
+                if not all(k in pred_cache for k in keys):
+                    continue
+                yt = [pred_cache[k]["yt_test"] for k in keys]
+                same_len = len({len(x) for x in yt}) == 1
+                # labels must match (same outer evaluation rows)
+                same_y = all(np.allclose(yt[0], yt[i], equal_nan=True) for i in (1, 2))
+                align_rows.append(
+                    {
+                        "hierarchy": hier,
+                        "fold": fold,
+                        "horizon": horizon,
+                        "n_test_equal": same_len,
+                        "yt_test_equal_across_seeds": same_y,
+                        "n_test": int(len(yt[0])),
+                    }
+                )
+    pd.DataFrame(diff_rows).to_csv(metrics / "seed_input_diff.csv", index=False)
+    pd.DataFrame(align_rows).to_csv(metrics / "seed_timestamp_alignment.csv", index=False)
+    if unexpected:
+        raise RuntimeError(f"seed_input_diff has {unexpected} unexpected non-seed differences")
+    if align_rows and not all(r["yt_test_equal_across_seeds"] for r in align_rows):
+        raise RuntimeError("outer evaluation labels/timestamps do not align across seeds")
 
     # Seed variability summary
     var_rows = []

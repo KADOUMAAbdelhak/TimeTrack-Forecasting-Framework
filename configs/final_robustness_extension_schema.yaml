@@ -1,5 +1,4 @@
-# Schema notes for configs/final_robustness_extension.yaml
-# Validated by timetrack.robustness_extension.validate_robustness_config
+# Schema notes for configs/final_robustness_extension.yaml (freeze v2)
 
 required_top_level:
   - experiment_stage
@@ -9,45 +8,45 @@ required_top_level:
   - context
   - n_outer_folds
   - ewma_alpha_grid
+  - lightgbm_n_jobs
   - artifact_root
   - packs
+  - freeze_tag
+  - frozen_scientific_config_hash
 
 constraints:
   source_experiment_freeze_tag: experiment-freeze-v2
   dataset_fingerprint: bf06dc0e7fe6ff5e
   context: 32
   n_outer_folds: 3
+  lightgbm_n_jobs: -1
   ewma_alpha_grid: [0.05, 0.10, 0.20, 0.30, 0.50, 0.70, 0.90]
-  freeze_tag: final-robustness-extension-freeze-v1
+  freeze_tag: final-robustness-extension-freeze-v2
   must_not_alter_tags:
     - experiment-freeze-v2
     - final-analysis-freeze-v1
     - final-peak-analysis-freeze-v1
     - final-reporting-freeze-v1
+    - final-robustness-extension-freeze-v1
 
-pack_kinds:
-  - ewma_baselines
-  - lightgbm_seed_robustness
-  - dlinear_seed_robustness
-  - robustness_statistics
-
-ewma_baselines:
-  hierarchies: [memory_um, cpu_core_weighted, disk_ud]
-  expected_base_fits: 192
-  alpha_selection: inner_validation_only
-  outer_labels_for_alpha: false
+scientific_config_hash:
+  algorithm: sha256_hex16
+  excludes:
+    - implementation_commit
+    - freeze_commit
+    - freeze_tag_commit
+    - frozen_scientific_config_hash
+  must_agree:
+    - frozen_scientific_config_hash
+    - validated scientific_config_hash
+    - executed config_hash
+    - MANIFEST config_hash / scientific_config_hash
 
 lightgbm_seed_robustness:
   new_seeds: [1, 2]
   reuse_seed0: true
+  n_jobs: -1
   no_disk_lightgbm: true
   expected_additional_base_fits: 288
-
-dlinear_seed_robustness:
-  new_seeds: [1, 2]
-  reuse_seed0: true
-  expected_additional_base_fits: 288
-
-robustness_statistics:
-  trains_models: false
-  claim_a_vs: strongest_of_persistence_ewma_ridge
+  hard_wall_clock_minutes: 30
+  stop_launching_new_runs_minutes: 27

@@ -1,17 +1,26 @@
 # Robustness execution notes
 
-Extension freeze: `final-robustness-extension-freeze-v1`  
+Active extension freeze: `final-robustness-extension-freeze-v2`  
+Preserved (not altered): `final-robustness-extension-freeze-v1`  
 Source prediction freeze: `experiment-freeze-v2`  
 Publication status: **CONDITIONAL GO**
 
-## Accepted packs
+## Accepted / provisional packs
 
 | Pack | Status |
 |------|--------|
 | `ewma_baselines` | COMPLETE (accepted) |
-| `lightgbm_seed_robustness` | pending / in progress |
+| `lightgbm_seed_robustness` (freeze-v1 execution) | **REJECTED provisional** → `results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness/` |
+| `lightgbm_seed_robustness` (freeze-v2) | pending / in progress |
 | `dlinear_seed_robustness` | not launched |
 | `robustness_statistics` | not launched |
+
+Rejection reasons for v1 LightGBM execution:
+
+- execution_logic_differs_from_extension_freeze
+- config_hash_differs_from_extension_freeze
+- thread_count_differs_from_seed0_source
+- seed_not_only_changed_variable
 
 ## EWMA interpretation (accepted; do not rerun)
 
@@ -28,7 +37,7 @@ Publication status: **CONDITIONAL GO**
 ### Memory
 
 - EWMA is the strongest deterministic independent baseline among persistence,
-  Ridge, and EWMA (~−0.8% vs persistence; ~−2.7% vs Ridge independent).
+  Ridge, and EWMA.
 - Final memory claims must compare Ridge/DLinear reconciliation against **EWMA**,
   not only persistence.
 - Do **not** claim that Ridge independent is the strongest classical memory model.
@@ -37,20 +46,11 @@ Publication status: **CONDITIONAL GO**
 
 - EWMA is approximately tied with persistence and better than Ridge independent
   on top MAE.
-- The disk boundary remains based primarily on:
-  - Ridge bottom-up degradation,
-  - Ridge top-down preservation,
-  - persistence/EWMA strength.
+- The disk boundary remains based primarily on Ridge BU/TD and persistence/EWMA.
 - Do **not** reinterpret LightGBM disk stress as the primary disk effect.
 
 ### Units
 
-EWMA CPU outer metrics were stored in **weighted-sum** (`cluster_CU_wsum`) units.
-
-Future aggregate reporting must convert:
-
 ```text
 weighted_mean_cpu = weighted_sum_cpu / 236
 ```
-
-Do not compare weighted-sum MAE directly with percentage MAE.
