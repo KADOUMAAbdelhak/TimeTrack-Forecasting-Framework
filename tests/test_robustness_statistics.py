@@ -58,6 +58,19 @@ def test_rejects_provisional_paths_listed():
     assert any("provisional_robustness_analysis" in r for r in rejected)
 
 
+def test_seed0_dlinear_recon_paths_resolve_under_source_root():
+    cfg = load_stats_config()
+    src = ROOT / (cfg.get("source_artifact_root") or "results/final/packs")
+    from timetrack.robustness_reporting import SOURCE_DIRS
+
+    cpu = src / SOURCE_DIRS["cpu_dlinear"] / "metrics" / "reconciliation_results.csv"
+    mem = src / SOURCE_DIRS["memory_dlinear"] / "metrics" / "reconciliation_results.csv"
+    assert cpu.exists(), cpu
+    assert mem.exists(), mem
+    # Guard against the bug that joined ROOT/SOURCE_DIRS without packs/
+    assert not (ROOT / SOURCE_DIRS["cpu_dlinear"] / "metrics" / "reconciliation_results.csv").exists()
+
+
 def test_no_training_in_reporting_module_source():
     text = (ROOT / "timetrack" / "robustness_reporting.py").read_text()
     assert "build_model" not in text

@@ -345,9 +345,10 @@ def run_robustness_statistics(
     hashes_before = {r["path"]: r["sha256"] for r in hash_rows}
 
     # --- DLinear reconstruction verification ---
+    src_root = ROOT / (cfg.get("source_artifact_root") or "results/final/packs")
     dlin_recon_csv = rob / cfg["dlinear_pack_dir"] / "metrics" / "reconciliation_results.csv"
-    src0_cpu = ROOT / SOURCE_DIRS["cpu_dlinear"] / "metrics" / "reconciliation_results.csv"
-    src0_mem = ROOT / SOURCE_DIRS["memory_dlinear"] / "metrics" / "reconciliation_results.csv"
+    src0_cpu = src_root / SOURCE_DIRS["cpu_dlinear"] / "metrics" / "reconciliation_results.csv"
+    src0_mem = src_root / SOURCE_DIRS["memory_dlinear"] / "metrics" / "reconciliation_results.csv"
     src_frames = []
     if dlin_recon_csv.exists():
         src_frames.append(pd.read_csv(dlin_recon_csv))
@@ -356,6 +357,11 @@ def run_robustness_statistics(
             df = pd.read_csv(p)
             src_frames.append(df[df.base_model == "dlinear"])
     src_recon = pd.concat(src_frames, ignore_index=True) if src_frames else pd.DataFrame()
+    if not src_recon.empty and "seed" in src_recon.columns:
+        src_recon = src_recon.copy()
+        src_recon["seed"] = src_recon["seed"].astype(int)
+        src_recon["fold"] = src_recon["fold"].astype(int)
+        src_recon["horizon"] = src_recon["horizon"].astype(int)
     ver_rows = []
     tol_rel = float(cfg["reconstruction_tolerance"]["relative"])
     tol_abs = float(cfg["reconstruction_tolerance"]["absolute"])
@@ -372,12 +378,11 @@ def run_robustness_statistics(
                             (src_recon.hierarchy == hier)
                             & (src_recon.fold == fold)
                             & (src_recon.horizon == horizon)
-                            & (src_recon.seed == seed)
+                            & (src_recon.seed == int(seed))
                             & (src_recon.reconciliation_method == method)
                             & (src_recon.base_model == "dlinear")
                         ]
                         if sub.empty:
-                            # seed 1/2 only in extension recon; seed0 in source packs
                             status = "missing_source_row"
                             src_mae = float("nan")
                             ok = False
@@ -402,10 +407,11 @@ def run_robustness_statistics(
                         )
     ver_df = pd.DataFrame(ver_rows)
     ver_df.to_csv(metrics / "dlinear_reconstruction_verification.csv", index=False)
-    if not smoke and (ver_df.status == "mismatch").any():
+    if not smoke and (ver_df.status != "ok").any():
+        bad = ver_df[ver_df.status != "ok"]
         raise SystemExit(
-            f"DLinear reconstruction mismatch; max_diff={max_diff}; "
-            f"n={(ver_df.status == 'mismatch').sum()}"
+            f"DLinear reconstruction failed; max_diff={max_diff}; "
+            f"n_bad={len(bad)}; statuses={bad.status.value_counts().to_dict()}"
         )
 
     # --- Atomic comparisons + bootstrap ---
@@ -661,13 +667,18 @@ def run_robustness_statistics(
         ("L1_lgbm_vs_ridge", "cpu_lightgbm_vs_deterministic", "cpu_core_weighted", "lightgbm", "independent", "ridge", "independent"),
         ("L2_lgbm_vs_ewma", "cpu_lightgbm_vs_deterministic", "cpu_core_weighted", "lightgbm", "independent", "ewma", "independent"),
         ("L3_lgbm_vs_pers", "cpu_lightgbm_vs_deterministic", "cpu_core_weighted", "lightgbm", "independent", "persistence", "independent"),
+        ("L4_lgbm_bu", "cpu_lightgbm_reconciliation", "cpu_core_weighted", "lightgbm", "bottom_up", "lightgbm", "independent"),
+        ("L5_lgbm_wls", "cpu_lightgbm_reconciliation", "cpu_core_weighted", "lightgbm", "wls", "lightgbm", "independent"),
         ("L6_lgbm_mint", "cpu_lightgbm_reconciliation", "cpu_core_weighted", "lightgbm", "mint", "lightgbm", "independent"),
         ("D1_dlin_vs_pers", "cpu_dlinear_vs_deterministic", "cpu_core_weighted", "dlinear", "independent", "persistence", "independent"),
         ("D2_dlin_vs_ewma", "cpu_dlinear_vs_deterministic", "cpu_core_weighted", "dlinear", "independent", "ewma", "independent"),
         ("D3_dlin_vs_ridge", "cpu_dlinear_vs_deterministic", "cpu_core_weighted", "dlinear", "independent", "ridge", "independent"),
         ("D4_dlin_bu", "cpu_dlinear_reconciliation", "cpu_core_weighted", "dlinear", "bottom_up", "dlinear", "independent"),
+        ("D5_dlin_wls", "cpu_dlinear_reconciliation", "cpu_core_weighted", "dlinear", "wls", "dlinear", "independent"),
+        ("D6_dlin_mint", "cpu_dlinear_reconciliation", "cpu_core_weighted", "dlinear", "mint", "dlinear", "independent"),
         ("D7_dlin_vs_lgbm", "cpu_dlinear_vs_deterministic", "cpu_core_weighted", "dlinear", "independent", "lightgbm", "independent"),
         ("M1_dlin_vs_ewma", "memory_dlinear_vs_ewma", "memory_um", "dlinear", "independent", "ewma", "independent"),
+        ("M2_dlin_bu", "memory_dlinear_reconciliation", "memory_um", "dlinear", "bottom_up", "dlinear", "independent"),
         ("M3_dlin_wls", "memory_dlinear_reconciliation", "memory_um", "dlinear", "wls", "dlinear", "independent"),
         ("M4_dlin_mint", "memory_dlinear_reconciliation", "memory_um", "dlinear", "mint", "dlinear", "independent"),
         ("M5_dlin_wls_vs_ewma", "memory_dlinear_vs_ewma", "memory_um", "dlinear", "wls", "ewma", "independent"),

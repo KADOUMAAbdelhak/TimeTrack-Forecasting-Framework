@@ -54,3 +54,12 @@ Verified unchanged relative to `final-robustness-extension-freeze-v2`:
 **Conclusion:** source predictions were **not** generated using changed scientific
 logic. Derived tables from analysis-only commits are provisional and superseded
 by `final-robustness-analysis-freeze-v1`.
+
+## Analysis-freeze verification note
+
+An initial peel of `final-robustness-analysis-freeze-v1` omitted
+`source_artifact_root` when locating seed-0 classical
+`reconciliation_results.csv`, so seed-0 reconstruction rows were marked
+`missing_source_row` without failing the run. That path bug is corrected in the
+analysis layer only (no prediction regeneration). Corrected freeze peel requires
+all 216 DLinear reconstruction cells `status=ok`.
