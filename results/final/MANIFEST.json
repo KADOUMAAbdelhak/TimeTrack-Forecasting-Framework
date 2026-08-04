@@ -1,0 +1,20 @@
+{
+  "tier": "smoke",
+  "experiment_stage": "development",
+  "eligible_for_final_claims": false,
+  "evaluation_role": "smoke_validation",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "config_hash": "43cfd8f4a938c83d",
+  "freeze_commit": "PENDING_EXPERIMENT_FREEZE_V1",
+  "freeze_tag": "PENDING_experiment-freeze-v1",
+  "n_base_rows": 16,
+  "n_recon_rows": 8,
+  "artifacts": [
+    "metrics/base_forecasts.csv",
+    "metrics/reconciliation_results.csv",
+    "metrics/coherence.csv",
+    "tables/main_comparison.csv",
+    "figures/coherence_before_after.pdf"
+  ],
+  "note": "Pre-freeze smoke artifacts are not eligible for FGCS claims."
+}
