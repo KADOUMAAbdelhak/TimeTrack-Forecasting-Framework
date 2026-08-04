@@ -1098,13 +1098,19 @@ def run_final_statistics(
     except Exception:
         exec_commit = "UNKNOWN"
     try:
-        analysis_tag_commit = _git(["rev-parse", "final-analysis-freeze-v1"])
+        analysis_tag_commit = _git(["rev-parse", "final-analysis-freeze-v1^{commit}"])
     except Exception:
-        analysis_tag_commit = stats_cfg.get("analysis_freeze_tag_commit") or "PENDING_UNTIL_TAG"
+        try:
+            analysis_tag_commit = _git(["rev-parse", "final-analysis-freeze-v1"])
+        except Exception:
+            analysis_tag_commit = stats_cfg.get("analysis_freeze_tag_commit") or "PENDING_UNTIL_TAG"
     try:
-        src_tag_commit = _git(["rev-parse", "experiment-freeze-v2"])
+        src_tag_commit = _git(["rev-parse", "experiment-freeze-v2^{commit}"])
     except Exception:
-        src_tag_commit = stats_cfg.get("source_experiment_freeze_tag_commit") or "UNKNOWN"
+        try:
+            src_tag_commit = _git(["rev-parse", "experiment-freeze-v2"])
+        except Exception:
+            src_tag_commit = stats_cfg.get("source_experiment_freeze_tag_commit") or "UNKNOWN"
 
     stats_hash = config_hash(stats_cfg)
     manifest = {
