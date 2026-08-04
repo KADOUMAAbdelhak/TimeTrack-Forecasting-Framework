@@ -509,11 +509,35 @@ def run_seed_model_pack(
     fp = dataset_fingerprint()
     folds = make_outer_chronological_folds(panel, n_folds=int(cfg["n_outer_folds"]))
     context = int(cfg.get("context", 32))
-    eff_proto = cfg.get("efficiency_protocol") or {"warmup": 1, "repeats": 3}
+    # Keep latency probes light for seed robustness wall-clock budget
+    eff_proto = {"warmup": 0, "repeats": 1, "threads": 1}
     seeds = [int(s) for s in pack["seeds"]]
     methods = list(pack.get("reconciliation_methods") or [])
     horizons = [int(h) for h in pack["horizons"]]
     fold_ids = [int(f) for f in pack["outer_folds"]]
+    # Verify matrix counts (series fits / recon evals for NEW seeds only)
+    n_hier = len(pack["hierarchies"])
+    n_series = 8
+    expected_fits = n_hier * n_series * len(horizons) * len(fold_ids) * len(seeds)
+    expected_recon = n_hier * len(horizons) * len(fold_ids) * len(seeds) * len(methods)
+    if model_name == "lightgbm":
+        if expected_fits != 288:
+            raise SystemExit(f"expected 288 new LightGBM series fits, got {expected_fits}")
+        if expected_recon != 144:
+            raise SystemExit(f"expected 144 new LightGBM recon evals, got {expected_recon}")
+        if seeds != [1, 2]:
+            raise SystemExit(f"lightgbm pack must train only seeds [1,2], got {seeds}")
+        if 0 in seeds:
+            raise SystemExit("seed 0 must not be retrained")
+    _write_json(
+        metrics / "EXPECTED_COUNTS.json",
+        {
+            "expected_new_series_fits": expected_fits,
+            "expected_new_recon_evals": expected_recon,
+            "new_seeds": seeds,
+            "seed0_retrained": False,
+        },
+    )
 
     jobs = []
     for hier_name in pack["hierarchies"]:
@@ -566,7 +590,10 @@ def run_seed_model_pack(
             p_full_val = np.concatenate([aligned["pb_val"], aligned["pt_val"].reshape(-1, 1)], axis=1)
             cov = estimate_residual_covariance(y_full_val, p_full_val, shrink_diag=0.1)
             series_var = np.maximum(np.diag(cov), 1e-12)
-            pred_bytes = aligned["pt_test"].tobytes() + aligned["pb_test"].tobytes()
+            pred_bytes = (
+                np.ascontiguousarray(aligned["pt_test"]).tobytes()
+                + np.ascontiguousarray(aligned["pb_test"]).tobytes()
+            )
             pred_hash = hashlib.sha256(pred_bytes).hexdigest()[:16]
             meta = {
                 "run_id": run_id,
@@ -672,6 +699,12 @@ def run_seed_model_pack(
             status.status = "complete"
         elif n_done > 0:
             status.status = "partial"
+
+    if status.status == "complete" and model_name == "lightgbm":
+        from experiments.lightgbm_seed_analysis import analyze_lightgbm_seed_robustness
+
+        analysis = analyze_lightgbm_seed_robustness(cfg, pack, out)
+        _write_json(out / "metrics" / "ANALYSIS_SUMMARY.json", analysis)
 
 
 def run_robustness_statistics(

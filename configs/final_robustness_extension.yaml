@@ -150,7 +150,7 @@ packs:
   estimated_base_fits: 288
   estimated_runtime_minutes: 25
   hard_wall_clock_minutes: 30
-  stop_launching_new_runs_minutes: 28
+  stop_launching_new_runs_minutes: 27
   kind: lightgbm_seed_robustness
 - id: dlinear_seed_robustness
   pack_dir: 03_dlinear_seed_robustness
