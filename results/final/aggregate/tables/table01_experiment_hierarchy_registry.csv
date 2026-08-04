@@ -1,0 +1,5 @@
+hierarchy,relation_type,bottom_series,top_series,exact_or_approximate,target_units,horizons,folds,models,reconciliation_methods,claim_role
+cpu_core_weighted,sum_of_core_weighted_cu,machine0k_CU_wcontrib,cluster_CU_wsum → weighted_mean(/236),exact (verified cores),cpu_weighted_mean_pct,"1,8,16","0,1,2","persistence,ridge,lightgbm,dlinear","independent,bottom_up,wls,mint (+ols ablation)",primary positive hierarchy
+memory_um,exact_sum,machine0k_UM,cluster_UM,exact,memory_bytes,"1,8,16","0,1,2","persistence,ridge,lightgbm,dlinear","independent,bottom_up,wls,mint (+ols ablation)",secondary positive/conditional hierarchy
+disk_ud,exact_sum,machine0k_UD,cluster_UD,exact,disk_level,"1,8","0,1,2","persistence,ridge,lightgbm","independent,bottom_up,top_down,wls,mint",boundary/negative hierarchy
+network_bond0,approximate_sum,member NICs,bond0,approximate,n/a,n/a,n/a,n/a,n/a,not evaluated in final packs

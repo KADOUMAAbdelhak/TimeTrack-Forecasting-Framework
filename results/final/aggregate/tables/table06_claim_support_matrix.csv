@@ -1,0 +1,11 @@
+claim,statement,support,n_support,n_uncertain,n_contradict,qualification
+A,LightGBM improves CPU forecasting over persistence.,supported,9,0,0,CPU LightGBM independent vs persistence; separate Holm family; not reconciliation.
+B,Reconciliation improves learned CPU aggregate forecasts.,supported,81,0,0,CPU recon (ridge/lgbm/dlinear × BU/WLS/MinT); bottoms unchanged under BU.
+C,WLS/MinT improve memory forecasts conditionally.,partially_supported,24,12,0,Memory WLS/MinT for Ridge/DLinear only; LightGBM remains negative baseline.
+D1,Disk bottom-up harms learned aggregate forecasts.,supported,6,2,0,Ridge BU mean rel=0.1483; interpret separately from D2.
+D2,Disk top-down preserves the independently forecast top but harms bottoms.,supported,6,0,0,Top MAE unchanged; bottom macro degradation from trade-off tables (accuracy_costly at bottoms).
+P1,General CPU peak benefit from reconciliation.,unsupported,77,85,0,Persistence excluded from positive claim.
+P2,General CPU detection benefit.,unsupported,33,101,28,FA materiality threshold +5%.
+P3,LightGBM remains best for high-load CPU.,supported,18,0,0,Within 2% of best high-load MAE counts as support.
+P4,General memory peak benefit.,unsupported,22,38,12,LightGBM not in claim scope.
+P5,DLinear memory peak compression.,partially_supported,61,0,11,Independent bias must be negative.
