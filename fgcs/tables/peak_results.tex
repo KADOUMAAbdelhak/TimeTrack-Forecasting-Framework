@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Peak/high-load claim outcomes from the frozen peak and reporting freezes.}
+\label{tab:peaks}
+\scriptsize
+\begin{tabular}{@{}clp{5.8cm}@{}}
+\toprule
+ID & Status & Interpretation \\
+\midrule
+P3 & supported & LightGBM remains strongest during CPU high-load periods. \\
+P1 & unsupported & No general CPU high-load MAE gain from reconciliation. \\
+P2 & unsupported & No general peak-recall gain without false-alarm cost. \\
+P4 & unsupported & No general memory peak improvement from reconciliation. \\
+P5 & supported & DLinear memory peak underprediction/range compression persists across seeds and is often amplified by reconciliation. \\
+\bottomrule
+\end{tabular}
+\end{table}

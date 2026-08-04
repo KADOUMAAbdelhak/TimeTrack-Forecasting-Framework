@@ -1,0 +1,17 @@
+claim,statement,classification,evidence_source
+A1,LightGBM independent improves CPU over Ridge independent.,supported,calculated_from_accepted_packs
+A2,LightGBM independent improves CPU over persistence and EWMA.,supported,calculated_from_accepted_packs
+B1,MinT improves LightGBM CPU aggregate forecasts while restoring coherence.,supported,calculated_from_accepted_packs
+B2,Bottom-up/WLS/MinT improve DLinear CPU forecasts across seeds.,supported,calculated_from_accepted_packs
+B3,Reconciliation improves Ridge CPU forecasts.,supported,calculated_from_accepted_packs
+C1,WLS/MinT improve DLinear memory relative to DLinear independent.,supported,calculated_from_accepted_packs
+C2,Reconciled DLinear robustly outperforms EWMA on memory.,contradicted,calculated_from_accepted_packs
+C3,Memory reconciliation is universally beneficial.,unsupported,calculated_from_accepted_packs
+D1,Ridge bottom-up degrades aggregate disk forecasts.,supported,calculated_from_accepted_packs
+D2,Ridge top-down preserves the independently forecast disk top.,supported,calculated_from_accepted_packs
+D3,Top-down preserves disk top accuracy without bottom-level cost.,contradicted,calculated_from_accepted_packs
+P1,Reconciliation generally improves CPU high-load MAE.,unsupported,calculated_from_accepted_packs
+P2,Reconciliation generally improves CPU peak recall without false-alarm cost.,unsupported,calculated_from_accepted_packs
+P3,LightGBM remains the strongest CPU model during high-load periods.,supported,calculated_from_accepted_packs
+P4,Reconciliation generally improves memory peak behavior.,unsupported,calculated_from_accepted_packs
+P5,DLinear memory peak compression persists across seeds (diagnostic).,supported,calculated_from_accepted_packs

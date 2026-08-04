@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{Forecasting baselines/models and reconciliation modes evaluated in the frozen outer protocol.}
+\label{tab:baselines}
+\scriptsize
+\begin{tabular}{@{}llp{4.8cm}@{}}
+\toprule
+Family & Name & Role in this study \\
+\midrule
+Baseline & Persistence & Last-value forecast; deterministic. \\
+Baseline & EWMA & Exponentially weighted mean; $\alpha$ selected on inner validation only. Strongest observed memory method. \\
+Baseline & Ridge & Strongest deterministic learned CPU baseline. \\
+Model & LightGBM & Strongest observed CPU model; seeds $0/1/2$; seed-invariant under frozen config. \\
+Model & DLinear & Neural baseline; seeds $0/1/2$; practically seed-stable on CPU. \\
+\midrule
+Mode & Independent & Separate forecasts per series; may violate exact sums. \\
+Mode & Bottom-up & Aggregate bottoms via summing matrix $S$ (preserves bottoms). \\
+Mode & WLS & Weighted least-squares reconciliation. \\
+Mode & MinT-shrink & MinT with shrinkage covariance (best observed CPU). \\
+Mode & Top-down & Disk boundary only; preserves independent top. \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,26 @@
+\begin{table}[t]
+\begin{threeparttable}
+\centering
+\caption{Disk boundary results (level units). Persistence and EWMA are practical baselines. Ridge bottom-up harms aggregate MAE; top-down preserves the independent top prediction at a bottom-level accuracy cost.}
+\label{tab:disk_boundary}
+\scriptsize
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Model & Method & MAE ($\times 10^9$) & vs Indep. & Bottom macro MAE ($\times 10^8$) \\
+\midrule
+
+persistence & independent & 1.550 & +0.0\% & 2.46 \\
+ewma & independent & 1.557 & +0.0\% & 2.56 \\
+ridge & independent & 1.754 & +0.0\% & 3.79 \\
+\textit{ridge} & \textit{bottom-up} & 1.998 & +14.8\% & 3.79 \\
+ridge & top-down & 1.754 & +0.0\% & 4.55 \\
+ridge & wls & 1.806 & +3.3\% & 3.80 \\
+ridge & mint & 1.778 & +1.5\% & 3.88 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Italic: aggregate-harmful Ridge bottom-up. Top-down MAE equals independent top MAE (0\% top change) with higher bottom macro MAE.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

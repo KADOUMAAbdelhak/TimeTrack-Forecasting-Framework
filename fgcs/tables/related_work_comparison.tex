@@ -1,0 +1,20 @@
+\begin{table*}[t]
+\centering
+\caption{Comparison of closely related forecasting/reconciliation studies. Attributes are descriptive; this table does not claim priority.}
+\label{tab:related}
+\scriptsize
+\begin{tabular}{@{}p{2.1cm}p{1.8cm}p{1.6cm}p{1.5cm}p{1.4cm}p{1.3cm}p{1.2cm}p{1.1cm}p{1.1cm}@{}}
+\toprule
+Study & Context & Dataset & Hierarchy & Recon. & Seeds & Stats & Peaks & Public data \\
+\midrule
+Hyndman et al.\ (2011) & General HTS & Standard HTS & Tree aggregates & OLS combo & -- & -- & -- & Varies \\
+Wickramasuriya et al.\ (2019) & General HTS & Multiple empirics & Hierarchical/grouped & MinT & -- & Accuracy & -- & Varies \\
+HARMONY (2024) & Cloud scaling & Cloud traces & Multi-indicator & End-to-end DL & Partial & Decision metrics & -- & Partial \\
+FRT (2025) & Industrial/DC & Public HTS + DC & Hierarchical TS & Joint deep recon & -- & Accuracy & -- & Partial \\
+MaMiClif (2025) & Microservices & Ant Group LDC & Macro--micro graph & Collaborative & -- & Indicator acc. & -- & No \\
+Zero-Touch (2026) & Cloud--edge NAS & TimeTrack+local & Node-local & None (generation) & -- & MSE/MAE & -- & TimeTrack \\
+Kadouma et al.\ (2025) & CECC APM & Ontology design & Application profile & N/A & -- & -- & -- & Model \\
+\textbf{This work} & OAI CI telemetry & TimeTrack & Exact machine$\to$cluster & BU/WLS/MinT/TD & 3 seeds & MBB+Holm & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\end{table*}

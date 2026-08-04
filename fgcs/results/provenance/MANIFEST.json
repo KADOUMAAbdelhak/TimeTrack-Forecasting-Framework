@@ -1,0 +1,267 @@
+{
+  "artifact": "final_evidence_aggregate_v2",
+  "created_at": "2026-08-04T15:40:13.024116+00:00",
+  "execution_commit": "4408cd1733d57014026cfa6fb477842fe4645a20",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "prediction_layer": {
+    "freeze_tag": "experiment-freeze-v2",
+    "freeze_tag_commit": "bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7",
+    "implementation_commit": "9f1bebb5d5998aab24fbffe33b048fd16b8095a6"
+  },
+  "statistics_layer": {
+    "freeze_tag": "final-analysis-freeze-v1",
+    "freeze_tag_commit": "a93997feca8c2b383a1d0838410509fd582b2447",
+    "implementation_commit": "c4f5a18e496614b070eb508c378355eb39d02631"
+  },
+  "peak_layer": {
+    "freeze_tag": "final-peak-analysis-freeze-v1",
+    "freeze_tag_commit": "7586be02c0a6fa8432030753b159c63a5e8caa96",
+    "implementation_commit": "96e1218e151df70b052aaf0ed9826f050a7322a9"
+  },
+  "robustness_extension_layer": {
+    "freeze_tag": "final-robustness-extension-freeze-v2",
+    "freeze_tag_commit": "9750626607e4bf8bc6d45f89f6ee5805c87f3251",
+    "implementation_commit": "bb6e12a267e3121c689224c66f605eb9efc63384",
+    "scientific_config_hash": "f19707c2a6f24478"
+  },
+  "robustness_statistics_layer": {
+    "freeze_tag": "final-robustness-analysis-freeze-v2",
+    "freeze_tag_commit": "a4337a8e11c62205ac7aa4002d0059327159017f",
+    "implementation_commit": "19bf5a4e970dc4b8725bd632721510a8a09d7b39",
+    "pack_hash": "08859b8132f3d605",
+    "scientific_config_hash": "08859b8132f3d605"
+  },
+  "reporting_freeze_tag": "final-reporting-freeze-v2",
+  "reporting_freeze_tag_commit": "4408cd1733d57014026cfa6fb477842fe4645a20",
+  "reporting_implementation_commit": "88ea98f8de06bc8677c3768d01f63f3a1654323c",
+  "supersedes_reporting_freeze_tag": "final-reporting-freeze-v1",
+  "archived_pre_robustness_aggregate": "/Users/fgtek002/TimeTrack/results/final/archive/pre_robustness_aggregate",
+  "scientific_protocol_hash": "8bce84c8007fa60d",
+  "provenance_envelope_hash": "323036f95a253e82",
+  "registry_full_hash": "12a255b407a8f0bc",
+  "reporting_full_hash": "07c21069e07604a2",
+  "source_pack_hashes": {
+    "shared_tuning": "a36e70b1e36d455e",
+    "memory_classical": "23f54983a9093bc0",
+    "memory_dlinear": "f9aab59b953446a1",
+    "cpu_classical": "2f512f20b8ecc6ec",
+    "cpu_dlinear": "b53277ffe064c35e",
+    "disk_boundary": "5e4b044e118361db",
+    "supporting_statistics": "998ed4d20a8987d6",
+    "peak_analysis": "998ed4d20a8987d6",
+    "ewma_baselines": "8c7c971920dd0c71",
+    "lightgbm_seed_robustness": "446473103b0cf235",
+    "dlinear_seed_robustness": "ecd66cd4bc4a7770",
+    "robustness_statistics": "08859b8132f3d605"
+  },
+  "exclusions": {
+    "lightgbm_seed_robustness_v1": {
+      "status": "rejected_provisional",
+      "claim_eligible": false,
+      "path": "results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness"
+    },
+    "robustness_statistics_v1": {
+      "status": "rejected_provisional_mutated_freeze",
+      "claim_eligible": false,
+      "path": "results/development/provisional_robustness_analysis/final-robustness-analysis-freeze-v1/robustness_statistics"
+    },
+    "provisional_dlinear_summaries": {
+      "status": "rejected_provisional",
+      "claim_eligible": false,
+      "path": "results/development/provisional_robustness_analysis/dlinear_seed_robustness_postfreeze"
+    },
+    "downsampling": {
+      "status": "scientifically_blocked",
+      "executed": false,
+      "claim_eligible": false
+    },
+    "network_secondary": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "conformal_intervals": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "lstm_confirmation": {
+      "status": "optional_not_executed",
+      "claim_eligible": false
+    },
+    "adaptive_router": {
+      "status": "development_only",
+      "claim_eligible": false
+    },
+    "global_lomo": {
+      "status": "development_only",
+      "claim_eligible": false
+    }
+  },
+  "superseded_evidence": [
+    "results/final/archive/pre_robustness_aggregate"
+  ],
+  "headlines": {
+    "cpu_persistence_mae": 1.3213600379035697,
+    "cpu_ewma_mae": 1.320493087197189,
+    "cpu_ridge_independent_mae": 1.2527786208285772,
+    "cpu_lightgbm_independent_mae": 1.0361447195502471,
+    "cpu_lightgbm_vs_ridge_rel": -0.17292273165952515,
+    "cpu_lightgbm_vs_persistence_rel": -0.21584981395822797,
+    "cpu_lightgbm_mint_mae": 0.9311407916065129,
+    "cpu_lightgbm_mint_vs_independent_rel": -0.10134098641096453,
+    "cpu_lightgbm_mint_vs_persistence_rel": -0.2953163673060425,
+    "cpu_lightgbm_seed_std": 0.0,
+    "cpu_dlinear_seed_mean_independent_mae": 1.2486623138363135,
+    "cpu_dlinear_seed_mean_bottom_up_effect": -0.06844793053597374,
+    "cpu_dlinear_seed_std": 0.007056366276154222,
+    "cpu_dlinear_seed_range": 0.3771962315544033,
+    "cpu_coherence_after_lgbm_mint": 0.0,
+    "best_observed_cpu": "lightgbm+mint",
+    "bottom_preserving_cpu": "ridge+bottom_up",
+    "memory_ewma_mae": 1051269953.9175099,
+    "memory_persistence_mae": 1059286579.9348254,
+    "memory_ridge_mae": 1085105463.4664354,
+    "memory_dlinear_seed_mean_independent_mae": 1091115328.6001482,
+    "memory_dlinear_wls_vs_independent_rel": -0.03224227109582959,
+    "memory_dlinear_mint_vs_independent_rel": -0.03395675723136775,
+    "memory_dlinear_wls_vs_ewma_rel": 0.0044378120421990075,
+    "memory_dlinear_mint_vs_ewma_rel": 0.0026583432233794175,
+    "memory_dlinear_wls_vs_ewma_seed2_rel": 0.020567470036980125,
+    "memory_lightgbm_vs_ewma_rel": 0.36894426080506615,
+    "strongest_observed_memory": "ewma+independent",
+    "disk_persistence_mae": 1550152926.0888884,
+    "disk_ewma_mae": 1557307770.7763107,
+    "disk_ridge_independent_mae": 1753583018.9688504,
+    "disk_ridge_bottom_up_vs_independent_rel": 0.1392783068267114,
+    "disk_ridge_top_down_vs_independent_rel": 0.0,
+    "dlinear_memory_peak_bias_all_seeds": true,
+    "claim_matrix": {
+      "A1": "supported",
+      "A2": "supported",
+      "B1": "supported",
+      "B2": "supported",
+      "B3": "supported",
+      "C1": "supported",
+      "C2": "contradicted",
+      "C3": "unsupported",
+      "D1": "supported",
+      "D2": "supported",
+      "D3": "contradicted",
+      "P1": "unsupported",
+      "P2": "unsupported",
+      "P3": "supported",
+      "P4": "unsupported",
+      "P5": "supported"
+    }
+  },
+  "generated_artifact_hashes": [
+    {
+      "artifact": "figures/bootstrap_relative_effects.pdf",
+      "sha256": "a25db65728f0638172c81812f96f105d4658215d799d382b2873a26f139a6796"
+    },
+    {
+      "artifact": "figures/cpu_accuracy_vs_horizon.pdf",
+      "sha256": "3e1489aac853a561cc2c107dc47a2bfb9d0c045afee47552656b05e718038cd9"
+    },
+    {
+      "artifact": "figures/cpu_coherence_before_after.pdf",
+      "sha256": "b978472dbefbc89fb279427c3e1ab7e8dbabfde278d2c1052779d9c0aa8372c9"
+    },
+    {
+      "artifact": "figures/cpu_peak_results.pdf",
+      "sha256": "afcf538359c40437cb156e824cc8560d0ce954c9b062217ea7ddaa45239047d6"
+    },
+    {
+      "artifact": "figures/cpu_reconciliation_effect_by_seed.pdf",
+      "sha256": "6cf42b47c2b39b444c673f70ed28782393a686c71e6bc143bca1403bea0c7b63"
+    },
+    {
+      "artifact": "figures/disk_boundary.pdf",
+      "sha256": "e7b43e7efa27fa0bbf00859c1e59497154321f0cc8fd19a472db8dcfe07308a9"
+    },
+    {
+      "artifact": "figures/dlinear_memory_peak_bias_by_seed.pdf",
+      "sha256": "6b17201e9c5cadcdf62b153102b98aad31e0420c148efcaa187ec7079567780a"
+    },
+    {
+      "artifact": "figures/memory_accuracy_vs_horizon.pdf",
+      "sha256": "176f018c348fe72e25ed512263ef4eb6dd8dfe6e8be92fad93993cfacc1ed5c1"
+    },
+    {
+      "artifact": "figures/memory_reconciliation_vs_ewma.pdf",
+      "sha256": "e84565295cc7813c8b6140ef625ee30b66d1e80560c56f4113341604f9357b39"
+    },
+    {
+      "artifact": "figures/memory_seed_variability.pdf",
+      "sha256": "a0758e01af92eb0392293b48bb6cb1cc91d99eecd679b5d4703f237a20a5bd03"
+    },
+    {
+      "artifact": "figures/method_selection_map.pdf",
+      "sha256": "1c9fee171e27c06ddefc3960c20bc3808d4f19f723a9010077753ef3ec6c565b"
+    },
+    {
+      "artifact": "figures/top_bottom_tradeoff.pdf",
+      "sha256": "92b8ecb4f2a9eb97b7a2b3a24d391955ebd0e6cb634335474a68910de4856da1"
+    },
+    {
+      "artifact": "tables/table01_experiment_registry.csv",
+      "sha256": "2acd4b471feced91f4c510154c6aa351922e9509cb420cdd8c391d0e95f7db47"
+    },
+    {
+      "artifact": "tables/table02_cpu_forecasting_results.csv",
+      "sha256": "7ac682b7af9fbe310c16d52e46de05e60a5a89eda6c2fe61f6df1d85ede41d3c"
+    },
+    {
+      "artifact": "tables/table02_cpu_forecasting_results.tex.csv",
+      "sha256": "7ac682b7af9fbe310c16d52e46de05e60a5a89eda6c2fe61f6df1d85ede41d3c"
+    },
+    {
+      "artifact": "tables/table03_memory_forecasting_results.csv",
+      "sha256": "de466cec550af1ea32526294d0f381b8bd78db2f8b731182bd76153781befee6"
+    },
+    {
+      "artifact": "tables/table04_disk_boundary.csv",
+      "sha256": "0b12d80aea3ba2fc57f5ae4ad50bd27cb497f7629fdf10a54dc52bd59f5b0289"
+    },
+    {
+      "artifact": "tables/table05_seed_robustness.csv",
+      "sha256": "2d4e7d3702be04ba6d2258311b6e356573bd868f55f95febb814860ef3e10239"
+    },
+    {
+      "artifact": "tables/table06_final_statistical_evidence.csv",
+      "sha256": "daef3045a411903cedc8e87b20063f0f9912aa90d6072edc21922defcbf9027b"
+    },
+    {
+      "artifact": "tables/table06_holm_families_robustness.csv",
+      "sha256": "7b3517b15099fdb27ccf543049890dec6e4214baa31b5ecb3270572bec5a9ba7"
+    },
+    {
+      "artifact": "tables/table07_final_claim_matrix.csv",
+      "sha256": "57906ad6552714b52ab8a2db55c3537d1ce7ea3ca5adbeb254497155e634b48c"
+    },
+    {
+      "artifact": "tables/table08_peak_operational_evidence.csv",
+      "sha256": "be259b7977666feef6c51d9bcb2f05aba93d223f4c210fc31608407f7196b335"
+    },
+    {
+      "artifact": "tables/table09_efficiency_execution.csv",
+      "sha256": "2b78e0670a36fbfc08dc9e9f28ada4ffb3b4011676c9291b6a05810c565f38ac"
+    }
+  ],
+  "source_files_unchanged": true,
+  "models_trained": false,
+  "predictions_regenerated": false,
+  "analysis_packs_rerun": false,
+  "n_source_artifacts_hashed": 141,
+  "publication_gates": {
+    "gate1_reproducibility": "pass",
+    "gate2_baseline_strength": "pass",
+    "gate3_stochastic_robustness": "pass",
+    "gate4_statistics": "pass",
+    "gate5_practical_contribution": "pass",
+    "gate6_breadth_negative_evidence": "pass",
+    "gate7_novelty_risk": "pass",
+    "gate8_honesty_limitations": "pass",
+    "final_decision": "GO"
+  },
+  "final_decision": "GO"
+}

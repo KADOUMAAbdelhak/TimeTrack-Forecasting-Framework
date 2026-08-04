@@ -1,0 +1,32 @@
+\begin{table}[t]
+\begin{threeparttable}
+\centering
+\caption{CPU outer-evaluation MAE (weighted-mean percentage, unit \texttt{cpu\_weighted\_mean\_pct}). Values are means across outer folds and horizons $h\in\{1,8,16\}$. Best observed frozen configuration is LightGBM+MinT; Ridge+bottom-up is the bottom-preserving alternative. Seed statistics use seeds $0/1/2$ where applicable.}
+\label{tab:cpu_main}
+\scriptsize
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Model & Method & MAE & vs Pers. & vs Indep. & Coherence after \\
+\midrule
+
+persistence & independent & 1.321 & +0.0\% & +0.0\% & 0 \\
+ewma & independent & 1.320 & -0.1\% & +0.0\% & 0 \\
+ridge & independent & 1.253 & -5.2\% & +0.0\% & 1.21e+02 \\
+\underline{ridge} & \underline{bottom-up} & \underline{1.137} & -14.2\% & -9.4\% & 0 \\
+lightgbm & independent & 1.036 & -21.7\% & +0.0\% & 1.59e+02 \\
+lightgbm & bottom-up & 0.942 & -28.7\% & -9.0\% & 0 \\
+lightgbm & wls & 0.934 & -29.3\% & -9.8\% & 0 \\
+\textbf{lightgbm} & \textbf{mint} & \textbf{0.931} & -29.5\% & -10.0\% & 0 \\
+dlinear & independent & 1.244 & -5.9\% & +0.0\% & 1.11e+02 \\
+dlinear & bottom-up & 1.157 & -12.8\% & -7.3\% & 0 \\
+dlinear & wls & 1.166 & -12.0\% & -6.5\% & 0 \\
+dlinear & mint & 1.161 & -12.3\% & -6.8\% & 0 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Bold: best observed frozen outer evaluation. Underline: bottom-preserving Ridge alternative.
+\item Persistence/EWMA/Ridge are deterministic; LightGBM is seed-invariant; DLinear seed SD$\approx 0.007$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

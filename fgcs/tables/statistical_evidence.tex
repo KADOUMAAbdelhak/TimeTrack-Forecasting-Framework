@@ -1,0 +1,29 @@
+\begin{table}[t]
+\begin{threeparttable}
+\centering
+\caption{Selected relative MAE effects from the frozen evidence summary (outer aggregates). Negative values indicate improvement of method A over B.}
+\label{tab:stats}
+\scriptsize
+\begin{tabular}{@{}llc@{}}
+\toprule
+Comparison & Hierarchy & Relative MAE \\
+\midrule
+LightGBM indep.\ vs Ridge & CPU & $-17.29\%$ \\
+LightGBM indep.\ vs persistence & CPU & $-21.59\%$ \\
+LightGBM MinT vs LightGBM indep. & CPU & $-10.13\%$ \\
+DLinear bottom-up vs indep.\ (seed-mean) & CPU & $-6.84\%$ \\
+DLinear WLS vs indep.\ (seed-mean) & Memory & $-3.22\%$ \\
+DLinear MinT vs indep.\ (seed-mean) & Memory & $-3.40\%$ \\
+DLinear WLS vs EWMA (seed-mean) & Memory & $+0.44\%$ \\
+DLinear WLS vs EWMA (seed 2) & Memory & $+2.06\%$ \\
+LightGBM vs EWMA (mean table) & Memory & $+36.89\%$ \\
+Ridge bottom-up vs indep. & Disk & $+13.93\%$ \\
+Ridge top-down vs indep.\ (top) & Disk & $0.00\%$ \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Bootstrap/Holm family tests are reported in the supplementary material; claim classifications appear in Table~\ref{tab:claim_support}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,21 @@
+\begin{table}[t]
+\begin{threeparttable}
+\centering
+\caption{Seed robustness summary for CPU (seeds $0/1/2$). LightGBM is seed-invariant under the frozen configuration; DLinear is practically seed-stable.}
+\label{tab:seeds}
+\scriptsize
+\begin{tabular}{@{}llccc@{}}
+\toprule
+Model & Method & Seed SD (agg.) & Stability & Identical hashes \\
+\midrule
+LightGBM & independent / MinT & $0$ & seed-invariant & Yes \\
+DLinear & independent & $\approx 0.007$ & practically seed-stable & No \\
+DLinear & bottom-up / WLS / MinT & small nonzero & practically seed-stable & No \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Full seed-by-fold-by-horizon grids are in the supplementary material.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

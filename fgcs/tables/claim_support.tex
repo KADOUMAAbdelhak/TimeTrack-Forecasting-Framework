@@ -1,0 +1,29 @@
+\begin{table}[t]
+\centering
+\caption{Claim-support matrix from frozen final aggregate evidence (\texttt{table07\_final\_claim\_matrix.csv}).}
+\label{tab:claim_support}
+\scriptsize
+\begin{tabular}{@{}clp{5.6cm}@{}}
+\toprule
+ID & Status & Statement \\
+\midrule
+
+A1 & supported & LightGBM independent improves CPU over Ridge independent. \\
+A2 & supported & LightGBM independent improves CPU over persistence and EWMA. \\
+B1 & supported & MinT improves LightGBM CPU aggregate forecasts while restoring coherence. \\
+B2 & supported & Bottom-up/WLS/MinT improve DLinear CPU forecasts across seeds. \\
+B3 & supported & Reconciliation improves Ridge CPU forecasts. \\
+C1 & supported & WLS/MinT improve DLinear memory relative to DLinear independent. \\
+C2 & contradicted & Reconciled DLinear robustly outperforms EWMA on memory. \\
+C3 & unsupported & Memory reconciliation is universally beneficial. \\
+D1 & supported & Ridge bottom-up degrades aggregate disk forecasts. \\
+D2 & supported & Ridge top-down preserves the independently forecast disk top. \\
+D3 & contradicted & Top-down preserves disk top accuracy without bottom-level cost. \\
+P1 & unsupported & Reconciliation generally improves CPU high-load MAE. \\
+P2 & unsupported & Reconciliation generally improves CPU peak recall without false-alarm cost. \\
+P3 & supported & LightGBM remains the strongest CPU model during high-load periods. \\
+P4 & unsupported & Reconciliation generally improves memory peak behavior. \\
+P5 & supported & DLinear memory peak compression persists across seeds (diagnostic). \\
+\bottomrule
+\end{tabular}
+\end{table}
