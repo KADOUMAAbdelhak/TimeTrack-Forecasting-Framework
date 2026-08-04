@@ -1,31 +1,24 @@
-# Final reporting / aggregation freeze v2 (robustness-aware).
 reporting_freeze_tag: final-reporting-freeze-v2
 reporting_freeze_tag_commit: PENDING
-reporting_implementation_commit: PENDING
+reporting_implementation_commit: 88ea98f8de06bc8677c3768d01f63f3a1654323c
 supersedes_reporting_freeze_tag: final-reporting-freeze-v1
-
 evidence_registry: configs/final_evidence_registry_v2.yaml
 output_root: results/final/aggregate
 archived_pre_robustness_aggregate: results/final/archive/pre_robustness_aggregate
-
 rounding:
   relative_pct: 2
   mae_cpu: 4
   mae_memory_sci: 6
   p_value: 4
-
 missing_value_policy: not_recorded_by_frozen_runner
-
 result_selection:
   best_observed: lowest_final_outer_mae_in_frozen_comparison
   wording: best observed in the frozen outer evaluation
   no_prospective_selection: true
-
 unit_separation:
-  - cpu_weighted_mean_pct
-  - memory_bytes
-  - disk_level
-
+- cpu_weighted_mean_pct
+- memory_bytes
+- disk_level
 baseline_hierarchy:
   cpu_strongest_deterministic: ridge
   cpu_strongest_observed_independent: lightgbm
@@ -33,41 +26,37 @@ baseline_hierarchy:
   memory_strongest: ewma
   disk_practical_baseline: persistence_ewma
   disk_primary_boundary_model: ridge
-
 tables:
-  - table01_experiment_registry
-  - table02_cpu_forecasting_results
-  - table03_memory_forecasting_results
-  - table04_disk_boundary
-  - table05_seed_robustness
-  - table06_final_statistical_evidence
-  - table07_final_claim_matrix
-  - table08_peak_operational_evidence
-  - table09_efficiency_execution
-
+- table01_experiment_registry
+- table02_cpu_forecasting_results
+- table03_memory_forecasting_results
+- table04_disk_boundary
+- table05_seed_robustness
+- table06_final_statistical_evidence
+- table07_final_claim_matrix
+- table08_peak_operational_evidence
+- table09_efficiency_execution
 figures:
-  - cpu_accuracy_vs_horizon
-  - cpu_reconciliation_effect_by_seed
-  - cpu_coherence_before_after
-  - memory_accuracy_vs_horizon
-  - memory_reconciliation_vs_ewma
-  - memory_seed_variability
-  - disk_boundary
-  - bootstrap_relative_effects
-  - top_bottom_tradeoff
-  - cpu_peak_results
-  - dlinear_memory_peak_bias_by_seed
-  - method_selection_map
-
+- cpu_accuracy_vs_horizon
+- cpu_reconciliation_effect_by_seed
+- cpu_coherence_before_after
+- memory_accuracy_vs_horizon
+- memory_reconciliation_vs_ewma
+- memory_seed_variability
+- disk_boundary
+- bootstrap_relative_effects
+- top_bottom_tradeoff
+- cpu_peak_results
+- dlinear_memory_peak_bias_by_seed
+- method_selection_map
 scientific_protocol_hash_excludes:
-  - reporting_freeze_tag
-  - reporting_freeze_tag_commit
-  - reporting_implementation_commit
-  - supersedes_reporting_freeze_tag
-  - archived_pre_robustness_aggregate
-  - evidence_registry
-  - output_root
-  - publication_gates_doc
-  - creation_timestamp
-
+- reporting_freeze_tag
+- reporting_freeze_tag_commit
+- reporting_implementation_commit
+- supersedes_reporting_freeze_tag
+- archived_pre_robustness_aggregate
+- evidence_registry
+- output_root
+- publication_gates_doc
+- creation_timestamp
 publication_gates_doc: docs/FGCS_PUBLICATION_READINESS_FINAL.md
