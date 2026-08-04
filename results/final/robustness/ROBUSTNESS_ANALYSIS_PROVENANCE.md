@@ -57,9 +57,14 @@ by `final-robustness-analysis-freeze-v1`.
 
 ## Analysis-freeze verification note
 
-An initial peel of `final-robustness-analysis-freeze-v1` omitted
-`source_artifact_root` when locating seed-0 classical
-`reconciliation_results.csv`, so seed-0 reconstruction rows were marked
-`missing_source_row` without failing the run. That path bug is corrected in the
-analysis layer only (no prediction regeneration). Corrected freeze peel requires
-all 216 DLinear reconstruction cells `status=ok`.
+An initial peel of `final-robustness-analysis-freeze-v1` had two analysis-only
+defects (no prediction regeneration):
+
+1. Seed-0 classical `reconciliation_results.csv` paths omitted
+   `source_artifact_root`, producing `missing_source_row` without failing.
+2. Bootstrap effect dicts overwrote the model `seed` column with RNG seed `0`,
+   collapsing seed-aware summaries onto a single seed label.
+
+Corrected peel (`19c540693a444054c534c2db48043ade2ccbf5cc`) requires all 216
+DLinear reconstruction cells `status=ok` and bootstrap rows with seeds
+`{0,1,2}`.
