@@ -1,4 +1,4 @@
-"""Validate a final/publication config without executing publication.yaml."""
+"""Validate configs/final_fgcs.yaml (and schema companions)."""
 
 from __future__ import annotations
 
@@ -8,42 +8,32 @@ from pathlib import Path
 
 import yaml
 
-REQUIRED_TOP = {
-    "experiment_stage",
-    "targets",
-    "horizons",
-    "models",
-    "seeds",
-    "context_length",
-}
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from timetrack.final_config import validate_final_config
 
 
-def validate(cfg: dict) -> list[str]:
-    errs = []
-    for k in REQUIRED_TOP:
-        if k not in cfg:
-            errs.append(f"missing key: {k}")
-    if cfg.get("experiment_stage") == "final" and cfg.get("eligible_for_final_claims") is not True:
-        errs.append("final stage requires eligible_for_final_claims: true only after freeze")
-    if cfg.get("experiment_stage") == "publication" and not cfg.get("frozen_config_hash"):
-        errs.append("publication stage requires frozen_config_hash")
-    if "horizons" in cfg and any(h < 1 for h in cfg["horizons"]):
-        errs.append("horizons must be >= 1")
-    return errs
-
-
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("config", type=Path)
+    ap.add_argument("--config", type=Path, default=ROOT / "configs" / "final_fgcs.yaml")
+    ap.add_argument(
+        "--require-frozen",
+        action="store_true",
+        help="Reject PENDING freeze_commit/freeze_tag (post-freeze / final tier).",
+    )
     args = ap.parse_args()
-    cfg = yaml.safe_load(args.config.read_text())
-    errs = validate(cfg or {})
+    cfg = yaml.safe_load(args.config.read_text()) or {}
+    errs = validate_final_config(cfg, require_frozen=args.require_frozen)
     if errs:
         print("INVALID")
         for e in errs:
             print("-", e)
         sys.exit(1)
+    pending = str(cfg.get("freeze_commit", "")).upper().startswith("PENDING")
     print("OK")
+    if pending and not args.require_frozen:
+        print("NOTE: freeze markers are PENDING (allowed for pre-freeze dry run).")
 
 
 if __name__ == "__main__":
