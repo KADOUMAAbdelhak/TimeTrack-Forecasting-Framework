@@ -1,0 +1,85 @@
+experiment_stage: final_robustness_analysis
+evaluation_role: robustness_statistical_analysis
+eligible_for_final_claims: true
+repository_url: https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git
+branch: main
+source_experiment_freeze_tag: experiment-freeze-v2
+source_experiment_freeze_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+source_experiment_freeze_tag_commit: bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7
+source_robustness_extension_freeze_tag: final-robustness-extension-freeze-v2
+source_robustness_extension_freeze_commit: bb6e12a267e3121c689224c66f605eb9efc63384
+source_robustness_extension_freeze_tag_commit: 9750626607e4bf8bc6d45f89f6ee5805c87f3251
+source_robustness_extension_scientific_config_hash: f19707c2a6f24478
+implementation_commit: PENDING
+freeze_commit: PENDING
+freeze_tag: final-robustness-analysis-freeze-v1
+frozen_scientific_config_hash: e4896035363f0c47
+dataset_fingerprint: bf06dc0e7fe6ff5e
+dependency_lock_hash: 22dca9902706473b
+context: 32
+n_outer_folds: 3
+cpu_core_total: 236
+source_artifact_root: results/final/packs
+robustness_artifact_root: results/final/robustness
+output_dir: results/final/robustness/04_robustness_statistics
+ewma_pack_dir: 01_ewma_baselines
+lightgbm_pack_dir: 02_lightgbm_seed_robustness
+dlinear_pack_dir: 03_dlinear_seed_robustness
+lightgbm_pack_hash: 446473103b0cf235
+dlinear_pack_hash: ecd66cd4bc4a7770
+rejected_inputs:
+- results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness
+- results/development/provisional_robustness_analysis/dlinear_seed_robustness_postfreeze
+comparators:
+  cpu_strongest_deterministic: ridge
+  memory_strongest_deterministic: ewma
+  also_report_cpu:
+  - persistence
+  - ewma
+  also_report_memory:
+  - persistence
+  - ridge
+bootstrap:
+  method: paired_moving_block
+  n_boot: 5000
+  seed: 0
+  acf_threshold: 0.1
+  lower: 8
+  upper: 256
+  nest_by:
+  - seed
+  - fold
+  - horizon
+holm_alpha: 0.05
+holm_families:
+- cpu_lightgbm_vs_deterministic
+- cpu_lightgbm_reconciliation
+- memory_lightgbm_vs_ewma
+- memory_lightgbm_reconciliation
+- cpu_dlinear_vs_deterministic
+- cpu_dlinear_reconciliation
+- memory_dlinear_vs_ewma
+- memory_dlinear_reconciliation
+reconstruction_tolerance:
+  relative: 1.0e-08
+  absolute: 1.0e-09
+seeds:
+- 0
+- 1
+- 2
+horizons:
+- 1
+- 8
+- 16
+folds:
+- 0
+- 1
+- 2
+methods:
+- independent
+- bottom_up
+- wls
+- mint
+hierarchies:
+- cpu_core_weighted
+- memory_um

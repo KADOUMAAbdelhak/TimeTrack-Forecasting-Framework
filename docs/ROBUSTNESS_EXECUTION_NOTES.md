@@ -14,8 +14,8 @@ Publication status: **CONDITIONAL GO**
 | `ewma_baselines` | COMPLETE (accepted) |
 | `lightgbm_seed_robustness` (freeze-v1) | **REJECTED provisional** → `results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness/` |
 | `lightgbm_seed_robustness` (freeze-v2) | COMPLETE (accepted) |
-| `dlinear_seed_robustness` | pending / in progress |
-| `robustness_statistics` | not launched |
+| `dlinear_seed_robustness` | COMPLETE (predictions accepted; derived analysis superseded by analysis freeze) |
+| `robustness_statistics` | in progress (final-robustness-analysis-freeze-v1) |
 
 ## Accepted LightGBM v2 interpretation (do not rerun)
 

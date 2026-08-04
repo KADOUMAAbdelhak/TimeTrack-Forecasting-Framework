@@ -1,0 +1,27 @@
+# Schema for configs/final_robustness_statistics.yaml
+
+required_top_level:
+  - source_experiment_freeze_tag
+  - source_robustness_extension_freeze_tag
+  - dataset_fingerprint
+  - freeze_tag
+  - bootstrap
+  - holm_families
+  - lightgbm_pack_hash
+  - dlinear_pack_hash
+
+constraints:
+  freeze_tag: final-robustness-analysis-freeze-v1
+  source_experiment_freeze_tag: experiment-freeze-v2
+  source_robustness_extension_freeze_tag: final-robustness-extension-freeze-v2
+  dataset_fingerprint: bf06dc0e7fe6ff5e
+  bootstrap.n_boot: 5000
+  bootstrap.seed: 0
+  cpu_core_total: 236
+  trains_models: false
+
+scientific_config_hash_excludes:
+  - implementation_commit
+  - freeze_commit
+  - freeze_tag_commit
+  - frozen_scientific_config_hash
