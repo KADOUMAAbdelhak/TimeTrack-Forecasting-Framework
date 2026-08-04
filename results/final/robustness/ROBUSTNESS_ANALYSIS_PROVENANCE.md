@@ -22,49 +22,102 @@ Prediction NPZs and fit-level `base_forecasts.csv` /
 
 ### Provisional derived evidence (archived)
 
-Post-freeze analysis-only commits produced derived summaries/figures. Those are
-**not** final-claim evidence and were archived to:
+Post-extension-freeze analysis-only commits produced DLinear derived
+summaries/figures. Those are **not** final-claim evidence:
 
 `results/development/provisional_robustness_analysis/dlinear_seed_robustness_postfreeze/`
 
+### Provisional mutated analysis freeze (archived)
+
+`final-robustness-analysis-freeze-v1` was force-updated after analysis bugs.
+The pack executed under the final v1 peel is archived to:
+
+`results/development/provisional_robustness_analysis/final-robustness-analysis-freeze-v1/robustness_statistics/`
+
+| Field | Value |
+|-------|-------|
+| experiment_stage | development |
+| eligible_for_final_claims | false |
+| evaluation_role | provisional_mutated_analysis_freeze |
+
 Rejection reasons:
 
-- `derived_analysis_not_frozen`
-- `reporting_logic_added_after_extension_freeze`
-- `peak_threshold_column_fixed_after_extension_freeze`
+- `analysis_freeze_tag_force_updated`
+- `reconciliation_path_bug_fixed_after_initial_tag`
+- `seed_column_clobber_fixed_after_initial_tag`
+- `freeze_immutability_violated`
 
-## Post-freeze commit audit (`9750626` → HEAD at analysis freeze)
+**Never force-update `final-robustness-analysis-freeze-v1` again.**
+Corrections require a new versioned freeze tag.
 
-| Commit | Message | Files | Classification |
-|--------|---------|-------|----------------|
-| `6416188` | docs: record accepted LightGBM v2; add DLinear seed analysis-only reporting | `docs/ROBUSTNESS_EXECUTION_NOTES.md`, `experiments/dlinear_seed_analysis.py`, `scripts/analyze_dlinear_seed_robustness.py` | documentation only + **analysis/reporting only** |
-| `2002bf3` | fix: preserve DLinear peak threshold names in seed analysis | `experiments/dlinear_seed_analysis.py` | **analysis/reporting only** |
+Authoritative analysis freeze: `final-robustness-analysis-freeze-v2`.
 
-### Zero post-freeze changes to scientific source path
+## V1 tag force-update incident
+
+Tags are immutable. The following peels are recorded for audit only.
+
+| Order | Peeled commit | Approx. annotated tag object | Reason | Affected files | Numerical results changed? | Predictions changed? |
+|-------|---------------|------------------------------|--------|----------------|-------------|----------------------|
+| 1 (initial) | `a8fd9a5c662d69632df2ca46a843fab65a5b69b1` | `f1180f65ee0b49cfb9c93dc5010145ca8c3cadbc` | Initial analysis freeze + first execution | analysis/reporting + docs/tests/config | N/A (first) | **No** |
+| 2 (force update 1) | `af8634c5d9c93bfb2bedfe36a02ff88fe6ed72fb` | `bc63fd57670ba462adc7451c43579182d7299de8` (replaced prior object `e1515b2…`) | Seed-0 classical recon CSV path omitted `source_artifact_root` (`missing_source_row`) | `timetrack/robustness_reporting.py`, tests, docs, config stamp | Yes — reconstruction verification completed for seed 0; bootstrap labels still wrong | **No** |
+| 3 (force update 2 / final v1 peel) | `19c540693a444054c534c2db48043ade2ccbf5cc` | `b92d201fe8d6f80c086fa0188c5f3a6483bcab49` | Bootstrap effect dict overwrote model `seed` with RNG seed `0` | `timetrack/robustness_reporting.py`, tests, config stamp | Yes — seed-aware summaries/claims restored | **No** |
+
+Final v1 peel (archived pack source): `19c540693a444054c534c2db48043ade2ccbf5cc`.
+
+Post-peel docs-only commit (not retagged): `3dd6d0f` (provenance note).
+
+### Confirmation
+
+Accepted model prediction NPZs and pack hashes were **never** modified by any
+v1 force update. Changes were analysis/reporting only.
+
+## Post-extension-freeze commit audit (`9750626` → analysis code)
+
+| Commit | Message | Classification |
+|--------|---------|----------------|
+| `6416188` | DLinear seed analysis-only reporting + docs | documentation + **analysis/reporting only** |
+| `2002bf3` | preserve DLinear peak threshold names | **analysis/reporting only** |
+| `a0354d0` | freeze multi-seed robustness statistics | **statistical analysis** + reporting + tests + docs |
+| `a8fd9a5` | record freeze-v1 implementation commit | documentation/config stamp only |
+| `7d71597` | seed-0 recon path fix + claim IDs | **statistical analysis** + tests + docs |
+| `af8634c` | record corrected v1 peel | config stamp only |
+| `905c76e` | preserve model seed vs bootstrap RNG seed | **statistical analysis** + tests |
+| `19c5406` | record seed-column fix peel | config stamp only |
+| `3dd6d0f` | provenance note | documentation only |
+
+### Zero changes to accepted prediction science
 
 Verified unchanged relative to `final-robustness-extension-freeze-v2`:
 
-- DLinear training (`models/deep_learning/neural.py`)
-- feature construction / splits / horizons
-- scaling
-- reconciliation / covariance
-- prediction serialization (`experiments/robustness_extension.py` training path)
-- scientific configuration (`configs/final_robustness_extension.yaml` scientific hash)
+- training logic
+- feature construction / scaling / splits / horizons
+- reconciliation implementation used to create accepted predictions
+- prediction serialization
+- source NPZ files
+- scientific robustness-extension configuration (`f19707c2a6f24478`)
 
-**Conclusion:** source predictions were **not** generated using changed scientific
-logic. Derived tables from analysis-only commits are provisional and superseded
-by `final-robustness-analysis-freeze-v1`.
+**Conclusion:** no accepted prediction was produced using post-freeze scientific
+logic. Analysis may reconstruct reconciliation from accepted predictions and
+must match accepted metrics within tolerance.
 
-## Analysis-freeze verification note
+## Freeze immutability policy
 
-An initial peel of `final-robustness-analysis-freeze-v1` had two analysis-only
-defects (no prediction regeneration):
+> Tags are immutable. Corrections require a new versioned freeze tag.
 
-1. Seed-0 classical `reconciliation_results.csv` paths omitted
-   `source_artifact_root`, producing `missing_source_row` without failing.
-2. Bootstrap effect dicts overwrote the model `seed` column with RNG seed `0`,
-   collapsing seed-aware summaries onto a single seed label.
+Do **not** use:
 
-Corrected peel (`19c540693a444054c534c2db48043ade2ccbf5cc`) requires all 216
-DLinear reconstruction cells `status=ok` and bootstrap rows with seeds
-`{0,1,2}`.
+- `git tag -f`
+- `git push --force`
+- `git push --force-with-lease`
+
+for any freeze tag. Use `scripts/create_immutable_freeze_tag.py` (refuses if the
+tag already exists locally or on origin).
+
+Protected prediction/analysis tags must remain untouched:
+
+- `experiment-freeze-v2`
+- `final-analysis-freeze-v1`
+- `final-peak-analysis-freeze-v1`
+- `final-reporting-freeze-v1`
+- `final-robustness-extension-freeze-v2`
+- `final-robustness-analysis-freeze-v1` (historical; do not move)

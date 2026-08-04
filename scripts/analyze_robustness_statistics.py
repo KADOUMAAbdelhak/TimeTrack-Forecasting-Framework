@@ -28,9 +28,12 @@ def main() -> None:
     errs = validate_stats_config(cfg, require_frozen=args.require_frozen)
     if errs:
         raise SystemExit(f"config invalid: {errs}")
-    # Guard: no training imports in this process path beyond what's already loaded
-    forbidden = ("torch.optim",)
-    manifest = run_robustness_statistics(cfg, output_dir=args.output, smoke=args.smoke)
+    manifest = run_robustness_statistics(
+        cfg,
+        output_dir=args.output,
+        smoke=args.smoke,
+        require_frozen=args.require_frozen,
+    )
     print(json.dumps(manifest, indent=2))
 
 

@@ -10,10 +10,10 @@ source_robustness_extension_freeze_tag: final-robustness-extension-freeze-v2
 source_robustness_extension_freeze_commit: bb6e12a267e3121c689224c66f605eb9efc63384
 source_robustness_extension_freeze_tag_commit: 9750626607e4bf8bc6d45f89f6ee5805c87f3251
 source_robustness_extension_scientific_config_hash: f19707c2a6f24478
-implementation_commit: 905c76e16f88733274354f0f5ec29da7165a4a4d
-freeze_commit: 905c76e16f88733274354f0f5ec29da7165a4a4d
-freeze_tag: final-robustness-analysis-freeze-v1
-frozen_scientific_config_hash: e4896035363f0c47
+implementation_commit: PENDING
+freeze_commit: PENDING
+freeze_tag: final-robustness-analysis-freeze-v2
+frozen_scientific_config_hash: 08859b8132f3d605
 dataset_fingerprint: bf06dc0e7fe6ff5e
 dependency_lock_hash: 22dca9902706473b
 context: 32
@@ -30,6 +30,7 @@ dlinear_pack_hash: ecd66cd4bc4a7770
 rejected_inputs:
 - results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness
 - results/development/provisional_robustness_analysis/dlinear_seed_robustness_postfreeze
+- results/development/provisional_robustness_analysis/final-robustness-analysis-freeze-v1/robustness_statistics
 comparators:
   cpu_strongest_deterministic: ridge
   memory_strongest_deterministic: ewma
@@ -83,3 +84,4 @@ methods:
 hierarchies:
 - cpu_core_weighted
 - memory_um
+supersedes_analysis_freeze_tag: final-robustness-analysis-freeze-v1

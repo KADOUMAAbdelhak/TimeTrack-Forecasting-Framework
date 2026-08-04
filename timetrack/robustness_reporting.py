@@ -42,8 +42,14 @@ SCIENTIFIC_EXCLUDE = frozenset(
         "freeze_commit",
         "freeze_tag_commit",
         "frozen_scientific_config_hash",
+        "expected_freeze_tag_commit",
     }
 )
+
+# Prior analysis-freeze-v1 scientific hash (included freeze_tag=v1). V2 changes
+# only provenance fields (freeze_tag, supersedes, rejected archive path).
+V1_SCIENTIFIC_CONFIG_HASH = "e4896035363f0c47"
+EXPECTED_FREEZE_TAG = "final-robustness-analysis-freeze-v2"
 
 SOURCE_DIRS = {
     "cpu_classical": "03_cpu_classical",
@@ -73,8 +79,10 @@ def scientific_config_hash(cfg: dict[str, Any]) -> str:
 
 def validate_stats_config(cfg: dict[str, Any], *, require_frozen: bool = False) -> list[str]:
     errs: list[str] = []
-    if cfg.get("freeze_tag") != "final-robustness-analysis-freeze-v1":
-        errs.append("freeze_tag must be final-robustness-analysis-freeze-v1")
+    if cfg.get("freeze_tag") != EXPECTED_FREEZE_TAG:
+        errs.append(f"freeze_tag must be {EXPECTED_FREEZE_TAG}")
+    if cfg.get("supersedes_analysis_freeze_tag") != "final-robustness-analysis-freeze-v1":
+        errs.append("supersedes_analysis_freeze_tag must be final-robustness-analysis-freeze-v1")
     if cfg.get("source_experiment_freeze_tag") != "experiment-freeze-v2":
         errs.append("source_experiment_freeze_tag mismatch")
     if cfg.get("source_robustness_extension_freeze_tag") != "final-robustness-extension-freeze-v2":
@@ -104,6 +112,15 @@ def validate_stats_config(cfg: dict[str, Any], *, require_frozen: bool = False) 
         errs.append("lightgbm_pack_hash mismatch")
     if str(cfg.get("dlinear_pack_hash")) != "ecd66cd4bc4a7770":
         errs.append("dlinear_pack_hash mismatch")
+    rejected = cfg.get("rejected_inputs") or []
+    required_rejected = [
+        "results/development/provisional_robustness/final-robustness-extension-freeze-v1/lightgbm_seed_robustness",
+        "results/development/provisional_robustness_analysis/dlinear_seed_robustness_postfreeze",
+        "results/development/provisional_robustness_analysis/final-robustness-analysis-freeze-v1/robustness_statistics",
+    ]
+    for path in required_rejected:
+        if path not in rejected:
+            errs.append(f"rejected_inputs missing {path}")
     computed = scientific_config_hash(cfg)
     frozen = cfg.get("frozen_scientific_config_hash")
     if require_frozen:
@@ -113,9 +130,137 @@ def validate_stats_config(cfg: dict[str, Any], *, require_frozen: bool = False) 
                 errs.append(f"{key} invalid")
         if not frozen or str(frozen).upper() == "PENDING" or str(frozen) != computed:
             errs.append(f"frozen_scientific_config_hash mismatch ({frozen} vs {computed})")
+        from timetrack.freeze_immutability import current_head, peeled_commit, tag_exists_local
+
+        if not tag_exists_local(EXPECTED_FREEZE_TAG):
+            errs.append(f"freeze tag missing locally: {EXPECTED_FREEZE_TAG}")
+        else:
+            peel = peeled_commit(EXPECTED_FREEZE_TAG)
+            head = current_head()
+            if head != peel:
+                errs.append(f"execution HEAD {head} != freeze peel {peel}")
     elif frozen and str(frozen).upper() != "PENDING" and str(frozen) != computed:
         errs.append(f"frozen_scientific_config_hash stale ({frozen} vs {computed})")
     return errs
+
+
+def compare_numeric_artifacts(old_dir: Path, new_dir: Path, names: list[str]) -> pd.DataFrame:
+    """Compare archived v1 peel outputs against v2 outputs."""
+    rows = []
+    for name in names:
+        old_p = old_dir / name
+        new_p = new_dir / name
+        row: dict[str, Any] = {
+            "artifact": name,
+            "old_exists": old_p.exists(),
+            "new_exists": new_p.exists(),
+            "old_sha256": sha256_file(old_p) if old_p.exists() else None,
+            "new_sha256": sha256_file(new_p) if new_p.exists() else None,
+            "hash_equal": False,
+            "old_rows": None,
+            "new_rows": None,
+            "max_abs_diff": None,
+            "max_rel_diff": None,
+            "classification_changes": None,
+            "claim_changes": None,
+            "notes": "",
+        }
+        if not old_p.exists() or not new_p.exists():
+            row["notes"] = "missing_artifact"
+            rows.append(row)
+            continue
+        row["hash_equal"] = row["old_sha256"] == row["new_sha256"]
+        if old_p.suffix.lower() != ".csv":
+            row["notes"] = "non_csv"
+            rows.append(row)
+            continue
+        old_df = pd.read_csv(old_p)
+        new_df = pd.read_csv(new_p)
+        row["old_rows"] = len(old_df)
+        row["new_rows"] = len(new_df)
+        # Align on common columns; drop volatile provenance-like cols if present
+        drop_cols = {
+            "execution_commit",
+            "freeze_tag_commit",
+            "config_hash",
+            "wall_seconds",
+            "actual_wall_seconds",
+            "bootstrap_rng_seed",
+        }
+        common = [c for c in old_df.columns if c in new_df.columns and c not in drop_cols]
+        if not common:
+            row["notes"] = "no_common_columns"
+            rows.append(row)
+            continue
+        o = old_df[common].copy()
+        n = new_df[common].copy()
+        # Prefer stable sort keys when available
+        key_candidates = [
+            c
+            for c in (
+                "claim_id",
+                "family",
+                "hierarchy",
+                "model",
+                "model_a",
+                "method_a",
+                "model_b",
+                "method_b",
+                "seed",
+                "fold",
+                "horizon",
+                "method",
+                "threshold_name",
+                "path",
+            )
+            if c in common
+        ]
+        if key_candidates:
+            o = o.sort_values(key_candidates).reset_index(drop=True)
+            n = n.sort_values(key_candidates).reset_index(drop=True)
+        num_cols = [
+            c
+            for c in common
+            if pd.api.types.is_numeric_dtype(o[c]) and pd.api.types.is_numeric_dtype(n[c])
+        ]
+        max_abs = 0.0
+        max_rel = 0.0
+        if num_cols and len(o) == len(n):
+            for c in num_cols:
+                a = pd.to_numeric(o[c], errors="coerce").to_numpy(dtype=float)
+                b = pd.to_numeric(n[c], errors="coerce").to_numpy(dtype=float)
+                both = np.isfinite(a) & np.isfinite(b)
+                if not both.any():
+                    continue
+                diff = np.abs(a[both] - b[both])
+                max_abs = max(max_abs, float(diff.max()) if len(diff) else 0.0)
+                denom = np.maximum(np.abs(a[both]), 1e-12)
+                max_rel = max(max_rel, float((diff / denom).max()) if len(diff) else 0.0)
+        row["max_abs_diff"] = max_abs
+        row["max_rel_diff"] = max_rel
+        if "classification" in common and len(o) == len(n):
+            changed = int((o["classification"].astype(str) != n["classification"].astype(str)).sum())
+            row["classification_changes"] = changed
+        if "claim_id" in common and "classification" in common and len(o) == len(n):
+            changed_claims = [
+                f"{cid}:{a}->{b}"
+                for cid, a, b in zip(
+                    o["claim_id"].astype(str),
+                    o["classification"].astype(str),
+                    n["classification"].astype(str),
+                    strict=False,
+                )
+                if a != b
+            ]
+            row["claim_changes"] = ";".join(changed_claims) if changed_claims else ""
+        if row["hash_equal"]:
+            row["notes"] = "identical"
+        elif max_abs == 0.0 and row["old_rows"] == row["new_rows"]:
+            row["notes"] = "numeric_identical_hash_differs"
+        else:
+            row["notes"] = "numeric_or_schema_diff"
+        rows.append(row)
+    return pd.DataFrame(rows)
 
 
 def sha256_file(path: Path) -> str:
@@ -259,11 +404,17 @@ def run_robustness_statistics(
     *,
     output_dir: Path | None = None,
     smoke: bool = False,
+    require_frozen: bool = False,
 ) -> dict[str, Any]:
     t0 = time.perf_counter()
-    errs = validate_stats_config(cfg, require_frozen=False)
+    errs = validate_stats_config(cfg, require_frozen=require_frozen)
     if errs:
         raise SystemExit(f"invalid robustness statistics config: {errs}")
+
+    from timetrack.freeze_immutability import assert_config_freeze_runtime
+
+    if require_frozen:
+        assert_config_freeze_runtime(cfg, smoke=smoke)
 
     out = Path(output_dir) if output_dir else ROOT / cfg["output_dir"]
     metrics = out / "metrics"
@@ -272,12 +423,17 @@ def run_robustness_statistics(
     for d in (metrics, tables, figures):
         d.mkdir(parents=True, exist_ok=True)
 
-    # Reject provisional inputs if present as sources
+    # Reject provisional inputs: never read prediction/metrics from rejected paths
+    provisional_used = False
     for bad in cfg.get("rejected_inputs") or []:
         p = ROOT / bad
-        if "lightgbm_seed_robustness" in bad and (p / "COMPLETE").exists():
-            # archived rejected — must not be used; we simply never point paths there
-            pass
+        # Mark presence for audit; analysis paths must not resolve under these trees
+        if p.exists():
+            # Ensure configured pack dirs are not inside rejected trees
+            for key in ("ewma_pack_dir", "lightgbm_pack_dir", "dlinear_pack_dir"):
+                pack = (ROOT / cfg["robustness_artifact_root"] / cfg[key]).resolve()
+                if str(pack).startswith(str(p.resolve())):
+                    raise SystemExit(f"refusing provisional source pack under rejected path: {bad}")
 
     # Verify pack hashes from MANIFEST
     rob = ROOT / cfg["robustness_artifact_root"]
@@ -287,9 +443,19 @@ def run_robustness_statistics(
         raise SystemExit(f"LightGBM pack hash mismatch: {lgbm_man.get('pack_hash')}")
     if dlin_man.get("pack_hash") != cfg["dlinear_pack_hash"]:
         raise SystemExit(f"DLinear pack hash mismatch: {dlin_man.get('pack_hash')}")
+    if str(lgbm_man.get("freeze_tag") or "") == "final-robustness-extension-freeze-v1":
+        raise SystemExit("refusing LightGBM v1 robustness pack")
     if dlin_man.get("prediction_status") not in (None, "accepted"):
-        # allow accepted or unset after we stamped
-        pass
+        raise SystemExit(f"DLinear prediction_status not accepted: {dlin_man.get('prediction_status')}")
+    # Guard: never load archived mutated v1 analysis pack as input
+    archived_v1 = (
+        ROOT
+        / "results/development/provisional_robustness_analysis"
+        / "final-robustness-analysis-freeze-v1"
+        / "robustness_statistics"
+    )
+    if out.resolve() == archived_v1.resolve():
+        raise SystemExit("refusing to write into archived provisional v1 analysis pack")
 
     seeds = [0, 1, 2] if not smoke else [0, 1]
     horizons = list(cfg["horizons"]) if not smoke else [1]
@@ -824,7 +990,10 @@ def run_robustness_statistics(
             "gate": 4,
             "name": "statistical_evidence",
             "status": "pass",
-            "detail": "seed×fold×horizon MBB, direct relative CIs, Holm families, seed-aware claims",
+            "detail": (
+                "seed×fold×horizon MBB, direct relative CIs, Holm families, "
+                "seed-aware claims, immutable analysis freeze provenance"
+            ),
         },
     ]
     pd.DataFrame(gate_rows).to_csv(tables / "publication_gate_status.csv", index=False)
@@ -837,12 +1006,63 @@ def run_robustness_statistics(
     _fig_variability(var_df, figures / "seed_variability.pdf")
     _fig_peak(peak_df, figures / "dlinear_memory_peak_bias.pdf")
 
+    # V1 peel reproduction comparison (archived mutated freeze pack)
+    v1_archive = (
+        ROOT
+        / "results/development/provisional_robustness_analysis"
+        / "final-robustness-analysis-freeze-v1"
+        / "robustness_statistics"
+        / "metrics"
+    )
+    compare_names = [
+        "robustness_atomic_comparisons.csv",
+        "robustness_block_bootstrap.csv",
+        "robustness_relative_effects.csv",
+        "robustness_holm_tests.csv",
+        "robustness_seed_variability.csv",
+        "robustness_fold_horizon_consistency.csv",
+        "robustness_claim_support.csv",
+        "dlinear_reconstruction_verification.csv",
+        "dlinear_peak_compression.csv",
+    ]
+    if not smoke and v1_archive.exists():
+        cmp_df = compare_numeric_artifacts(v1_archive, metrics, compare_names)
+        cmp_df.to_csv(metrics / "v1_v2_reproduction_comparison.csv", index=False)
+    else:
+        pd.DataFrame(
+            [{"artifact": n, "notes": "v1_archive_missing_or_smoke"} for n in compare_names]
+        ).to_csv(metrics / "v1_v2_reproduction_comparison.csv", index=False)
+
+    # Memory safe interpretation (reporting only; not a new claim)
+    (tables / "memory_safe_interpretation.txt").write_text(
+        "Reconciliation often improves DLinear relative to its own independent "
+        "forecasts, but EWMA remains the strongest observed memory forecasting "
+        "method, and the reconciled DLinear variants do not robustly outperform it "
+        "across seeds. Memory remains secondary / conditional reconciliation "
+        "evidence, not best-model evidence.\n"
+    )
+
     # Re-hash sources after analysis
     hashes_after = {r["path"]: sha256_file(Path(r["path"])) for r in hash_rows}
     if hashes_before != hashes_after:
         raise SystemExit("source prediction hashes changed during analysis")
 
     wall = time.perf_counter() - t0
+    cpu_seconds = None
+    peak_rss_bytes = None
+    try:
+        import resource
+
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        cpu_seconds = float(usage.ru_utime + usage.ru_stime)
+        # macOS ru_maxrss is bytes; Linux is kilobytes
+        import sys as _sys
+
+        rss = int(usage.ru_maxrss)
+        peak_rss_bytes = rss if _sys.platform == "darwin" else rss * 1024
+    except Exception:  # noqa: BLE001
+        pass
+
     try:
         exec_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
     except Exception:
@@ -853,21 +1073,32 @@ def run_robustness_statistics(
             ["git", "rev-parse", f"{freeze_tag}^{{}}"], cwd=str(ROOT), text=True
         ).strip()
     except Exception:
-        freeze_peel = None
+        freeze_peel = cfg.get("freeze_tag_commit") or cfg.get("expected_freeze_tag_commit")
+
+    if not smoke and exec_commit and freeze_peel and exec_commit != freeze_peel:
+        raise SystemExit(
+            f"execution commit {exec_commit} != freeze peel {freeze_peel}; "
+            "no post-tag commits are allowed before analysis execution"
+        )
 
     sci_h = scientific_config_hash(cfg)
+    if str(cfg.get("frozen_scientific_config_hash")) != sci_h:
+        raise SystemExit(
+            f"manifest config hash divergence: frozen={cfg.get('frozen_scientific_config_hash')} computed={sci_h}"
+        )
     manifest = {
         "pack_id": "robustness_statistics",
         "experiment_stage": "final_robustness_analysis",
         "eligible_for_final_claims": True,
         "evaluation_role": "robustness_statistical_analysis",
         "models_trained": False,
-        "provisional_inputs_used": False,
+        "provisional_inputs_used": provisional_used,
         "execution_commit": exec_commit,
         "implementation_commit": cfg.get("implementation_commit"),
         "freeze_commit": cfg.get("freeze_commit"),
         "freeze_tag": freeze_tag,
         "freeze_tag_commit": freeze_peel,
+        "supersedes_analysis_freeze_tag": cfg.get("supersedes_analysis_freeze_tag"),
         "source_experiment_freeze_tag": cfg.get("source_experiment_freeze_tag"),
         "source_experiment_freeze_commit": cfg.get("source_experiment_freeze_commit"),
         "source_robustness_extension_freeze_tag": cfg.get("source_robustness_extension_freeze_tag"),
@@ -878,6 +1109,8 @@ def run_robustness_statistics(
         "config_hash": sci_h,
         "scientific_config_hash": sci_h,
         "frozen_scientific_config_hash": cfg.get("frozen_scientific_config_hash"),
+        "validated_config_hash": sci_h,
+        "v1_scientific_config_hash": V1_SCIENTIFIC_CONFIG_HASH,
         "ewma_pack_hash": "from_manifest",
         "lightgbm_pack_hash": cfg.get("lightgbm_pack_hash"),
         "dlinear_pack_hash": cfg.get("dlinear_pack_hash"),
@@ -886,6 +1119,8 @@ def run_robustness_statistics(
         "comparisons_failed": failed,
         "dlinear_reconstruction_max_abs_diff": max_diff,
         "actual_wall_seconds": wall,
+        "cpu_seconds": cpu_seconds,
+        "peak_rss_bytes": peak_rss_bytes,
         "status": "complete" if failed == 0 else "complete_with_failures",
         "output_dir": str(out),
     }
@@ -902,6 +1137,8 @@ def run_robustness_statistics(
                 "completed_runs": completed,
                 "failed_runs": failed,
                 "wall_seconds": wall,
+                "cpu_seconds": cpu_seconds,
+                "peak_rss_bytes": peak_rss_bytes,
             },
             indent=2,
         )

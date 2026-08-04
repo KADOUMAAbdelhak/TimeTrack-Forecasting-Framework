@@ -7,12 +7,14 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from timetrack.freeze_immutability import create_annotated_tag_immutable
 from timetrack.robustness_reporting import (
     claim_support,
     classify_seed_variability,
     load_stats_config,
     scientific_config_hash,
     validate_stats_config,
+    V1_SCIENTIFIC_CONFIG_HASH,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,10 +24,13 @@ def test_stats_config_loads():
     cfg = load_stats_config()
     errs = validate_stats_config(cfg, require_frozen=False)
     assert errs == [], errs
-    assert cfg["freeze_tag"] == "final-robustness-analysis-freeze-v1"
+    assert cfg["freeze_tag"] == "final-robustness-analysis-freeze-v2"
+    assert cfg["supersedes_analysis_freeze_tag"] == "final-robustness-analysis-freeze-v1"
     assert int(cfg["bootstrap"]["n_boot"]) == 5000
     assert cfg["lightgbm_pack_hash"] == "446473103b0cf235"
     assert cfg["dlinear_pack_hash"] == "ecd66cd4bc4a7770"
+    assert scientific_config_hash(cfg) == cfg["frozen_scientific_config_hash"]
+    assert V1_SCIENTIFIC_CONFIG_HASH == "e4896035363f0c47"
 
 
 def test_scientific_hash_stable_across_commit_stamps():
@@ -55,7 +60,8 @@ def test_rejects_provisional_paths_listed():
     cfg = load_stats_config()
     rejected = cfg.get("rejected_inputs") or []
     assert any("provisional_robustness/final-robustness-extension-freeze-v1" in r for r in rejected)
-    assert any("provisional_robustness_analysis" in r for r in rejected)
+    assert any("dlinear_seed_robustness_postfreeze" in r for r in rejected)
+    assert any("final-robustness-analysis-freeze-v1/robustness_statistics" in r for r in rejected)
 
 
 def test_seed0_dlinear_recon_paths_resolve_under_source_root():
@@ -67,7 +73,6 @@ def test_seed0_dlinear_recon_paths_resolve_under_source_root():
     mem = src / SOURCE_DIRS["memory_dlinear"] / "metrics" / "reconciliation_results.csv"
     assert cpu.exists(), cpu
     assert mem.exists(), mem
-    # Guard against the bug that joined ROOT/SOURCE_DIRS without packs/
     assert not (ROOT / SOURCE_DIRS["cpu_dlinear"] / "metrics" / "reconciliation_results.csv").exists()
 
 
@@ -79,7 +84,6 @@ def test_no_training_in_reporting_module_source():
 
 
 def test_bootstrap_effects_seed_does_not_clobber_model_seed():
-    """Regression: paired_moving_block_bootstrap_effects returns RNG seed=0."""
     from timetrack.stats_bootstrap import paired_moving_block_bootstrap_effects
 
     effects = paired_moving_block_bootstrap_effects(
@@ -94,11 +98,9 @@ def test_bootstrap_effects_seed_does_not_clobber_model_seed():
 
 
 def test_threshold_name_preservation_in_peak_helper_contract():
-    # peak CSV schema uses threshold_name not overwritten numeric threshold
     from timetrack import robustness_reporting as rr
 
-    src = rr.__file__
-    text = Path(src).read_text()
+    text = Path(rr.__file__).read_text()
     assert "threshold_name" in text
     assert 'threshold_name": qname' in text or "threshold_name" in text
 
@@ -106,3 +108,21 @@ def test_threshold_name_preservation_in_peak_helper_contract():
 def test_protocol_docs_exist():
     assert (ROOT / "docs" / "FINAL_ROBUSTNESS_STATISTICAL_PROTOCOL.md").exists()
     assert (ROOT / "results" / "final" / "robustness" / "ROBUSTNESS_ANALYSIS_PROVENANCE.md").exists()
+
+
+def test_create_tag_refuses_existing_local_tag(monkeypatch):
+    from timetrack import freeze_immutability as fi
+
+    monkeypatch.setattr(fi, "tag_exists_local", lambda tag: True)
+    monkeypatch.setattr(fi, "tag_exists_remote", lambda tag, remote="origin": False)
+    with pytest.raises(SystemExit, match="already exists locally"):
+        create_annotated_tag_immutable("final-robustness-analysis-freeze-v2", "msg")
+
+
+def test_create_tag_refuses_existing_remote_tag(monkeypatch):
+    from timetrack import freeze_immutability as fi
+
+    monkeypatch.setattr(fi, "tag_exists_local", lambda tag: False)
+    monkeypatch.setattr(fi, "tag_exists_remote", lambda tag, remote="origin": True)
+    with pytest.raises(SystemExit, match="already exists on origin"):
+        create_annotated_tag_immutable("final-robustness-analysis-freeze-v2", "msg")
