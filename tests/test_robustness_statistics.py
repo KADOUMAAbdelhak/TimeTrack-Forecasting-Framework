@@ -78,6 +78,21 @@ def test_no_training_in_reporting_module_source():
     assert "LGBMRegressor" not in text
 
 
+def test_bootstrap_effects_seed_does_not_clobber_model_seed():
+    """Regression: paired_moving_block_bootstrap_effects returns RNG seed=0."""
+    from timetrack.stats_bootstrap import paired_moving_block_bootstrap_effects
+
+    effects = paired_moving_block_bootstrap_effects(
+        np.ones(16), np.ones(16) * 1.1, block_size=4, n_boot=8, seed=0
+    )
+    assert "seed" in effects and effects["seed"] == 0
+    model_seed = 2
+    effects = dict(effects)
+    effects.pop("seed", None)
+    row = {"seed": model_seed, **effects}
+    assert row["seed"] == 2
+
+
 def test_threshold_name_preservation_in_peak_helper_contract():
     # peak CSV schema uses threshold_name not overwritten numeric threshold
     from timetrack import robustness_reporting as rr

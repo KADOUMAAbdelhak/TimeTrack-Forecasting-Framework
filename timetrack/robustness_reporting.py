@@ -492,6 +492,8 @@ def run_robustness_statistics(
                         effects = paired_moving_block_bootstrap_effects(
                             ea, eb, block_size=int(bl), n_boot=n_boot, seed=boot_seed
                         )
+                        # effects includes RNG "seed"; do not overwrite model seed
+                        effects.pop("seed", None)
                         row = {
                             "family": spec["family"],
                             "hierarchy": spec["hierarchy"],
@@ -499,7 +501,8 @@ def run_robustness_statistics(
                             "method_a": spec["method_a"],
                             "model_b": spec["model_b"],
                             "method_b": spec["method_b"],
-                            "seed": seed,
+                            "seed": int(seed),
+                            "bootstrap_rng_seed": int(boot_seed),
                             "fold": fold,
                             "horizon": horizon,
                             "mae_a_report": float(np.mean(ea)),
