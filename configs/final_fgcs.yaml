@@ -1,0 +1,209 @@
+# Final FGCS hierarchy evaluation protocol v1 (pre-freeze placeholders).
+# Do NOT execute --tier final until freeze_commit/freeze_tag are real and tagged.
+
+experiment_stage: final
+eligible_for_final_claims: true
+evaluation_role: outer_evaluation
+
+repository_url: https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git
+branch: main
+freeze_commit: PENDING_EXPERIMENT_FREEZE_V1
+freeze_tag: PENDING_experiment-freeze-v1
+
+dataset_fingerprint: bf06dc0e7fe6ff5e
+dependency_lock_hash: 22dca9902706473b
+sampling_seconds: 42.285166
+timeline: post_outage_primary
+
+contribution: C1_hierarchy_reconciliation
+scientific_questions: [RQ1, RQ2, RQ3, RQ4, RQ5, RQ6]
+
+hierarchy_registry:
+  memory_um:
+    role: primary_exact
+    claim_eligible: true
+    bottom: [machine01_UM, machine02_UM, machine03_UM, machine04_UM, machine05_UM, machine06_UM, machine07_UM]
+    top: cluster_UM
+    relation: exact_sum
+  cpu_core_weighted:
+    role: primary_core_weighted
+    claim_eligible: true
+    use_raw_conflicting_core_labels: false
+    bottom_transform: verified_core_count_k * machine_k_CU
+    top: cluster_CU_wsum
+    equivalent_mean: cluster_CU_weighted_mean
+    relation: weighted_sum
+  disk_ud:
+    role: boundary_failure_case
+    claim_eligible: false
+    bottom: [machine01_UD, machine02_UD, machine03_UD, machine04_UD, machine05_UD, machine06_UD, machine07_UD]
+    top: cluster_UD
+    relation: exact_sum
+  network_bond0:
+    role: secondary_approximate
+    claim_eligible: false
+    never_describe_as_exact: true
+    approx_threshold: 0.02
+    candidates:
+      - host: acamas
+        direction: transmitted
+      - host: acamas
+        direction: received
+
+targets:
+  primary_hierarchies: [memory_um, cpu_core_weighted]
+  boundary_hierarchies: [disk_ud]
+  secondary_hierarchies: [network_bond0]
+  conformal: [cluster_UM, cluster_CU_weighted_mean]
+  downsampling:
+    - cluster_CU_weighted_mean
+    - cluster_UM
+    - machine01_DWT
+    - tx_bond0_acamas
+    - averageRttWithGoogleDns
+    - jitterWithGoogleDns
+
+models:
+  - persistence
+  - ridge
+  - lightgbm
+  - lstm
+  - dlinear
+
+reconciliation_methods:
+  - independent
+  - bottom_up
+  - wls
+  - mint
+  - ols
+  - top_down
+
+nonnegative_ablation: [false, true]
+
+folds:
+  n_outer: 3
+  inner: nested_rolling_origin
+  gap_safe: true
+  train_only_scaling: true
+
+horizons: [1, 4, 8, 16]
+horizon_wallclock:
+  h1_sec: 42.3
+  h4_sec: 169.1
+  h8_sec: 338.3
+  h16_sec: 676.6
+
+contexts: [16, 32, 64, 128]
+context_selection: inner_validation_only
+
+seeds:
+  persistence: [0]
+  ridge: [0]
+  lightgbm: [0, 1, 2]
+  lstm: [0, 1, 2]
+  dlinear: [0, 1, 2]
+
+model_kwargs:
+  lightgbm:
+    n_estimators: 400
+  lstm:
+    epochs: 40
+    hidden_size: 64
+    patience: 6
+    num_threads: 1
+  dlinear:
+    epochs: 40
+    patience: 5
+    num_threads: 1
+    max_batches_per_epoch: 200
+
+hpo:
+  framework: optuna
+  objective_scope: inner_fold_only
+  use_outer_labels: false
+  seeded_sampler: true
+  pruning: true
+  resume: true
+  storage: results/final/tuning/optuna_final.db
+  budgets:
+    ridge: 12
+    lightgbm: 20
+    lstm: 15
+    dlinear: 12
+  timeout_per_trial_sec: 300
+
+timeouts:
+  dlinear_per_run_sec: 180
+  lstm_per_run_sec: 300
+  lightgbm_per_run_sec: 120
+  ridge_per_run_sec: 60
+  reconciliation_per_run_sec: 30
+
+statistical_comparisons:
+  families:
+    memory: [[independent, bottom_up], [independent, wls], [independent, mint]]
+    cpu: [[independent, bottom_up], [independent, wls], [independent, mint]]
+    disk: [[independent, bottom_up], [independent, top_down]]
+    network: [[independent, selected_coherent]]
+  correction: holm
+
+bootstrap_policy:
+  method: paired_moving_block
+  n_boot: 1000
+  seed: 0
+  acf_threshold: 0.1
+  lower: 8
+  upper: 256
+  formula: max(horizon, context, first_acf_lag_below_threshold)
+
+efficiency_protocol:
+  warmup: 3
+  repeats: 11
+  report: [median, p25, p75]
+  threads: 1
+  exclude_dataset_loading_from_infer: true
+  end_to_end_separate: true
+
+conformal_protocol:
+  method: split_conformal
+  nominal_coverage: [0.80, 0.90, 0.95]
+  calibration: pre_outer_eval_block_only
+  targets: [cluster_UM, cluster_CU_weighted_mean]
+  distinguish:
+    - coherent_point_forecasts
+    - independently_calibrated_intervals
+    - hierarchically_coherent_intervals_if_constructed
+
+peak_protocol:
+  thresholds_train_only: [q90, q95, median_plus_k_mad]
+  k_mad: 3.0
+  hierarchies: [memory_um, cpu_core_weighted, network_bond0]
+  compare: [independent, retained_reconciled]
+
+downsampling_protocol:
+  resolutions:
+    - native
+    - x2
+    - approx_3min
+    - approx_5min
+  equivalent_wallclock_context: true
+  models: [persistence, ridge, strongest_retained]
+  supporting_study_only: true
+
+artifact_paths:
+  root: results/final
+  metrics: results/final/metrics
+  tables: results/final/tables
+  figures: results/final/figures
+  manifest: results/final/MANIFEST.json
+  reproducibility_report: results/final/REPRODUCIBILITY_REPORT.md
+
+smoke:
+  hierarchies: [memory_um]
+  models: [persistence, ridge]
+  horizons: [1]
+  outer_folds: [0]
+  context: 32
+  seeds: [0]
+  reconciliation_methods: [independent, bottom_up, wls, mint]
+  nonnegative: [false]

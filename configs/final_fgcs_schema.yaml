@@ -1,0 +1,44 @@
+# Schema documentation for configs/final_fgcs.yaml (human + machine checklist).
+schema_version: 1
+description: Final FGCS C1 hierarchy evaluation configuration
+
+required_keys:
+  - experiment_stage
+  - eligible_for_final_claims
+  - evaluation_role
+  - repository_url
+  - branch
+  - freeze_commit
+  - freeze_tag
+  - dataset_fingerprint
+  - dependency_lock_hash
+  - hierarchy_registry
+  - targets
+  - models
+  - reconciliation_methods
+  - folds
+  - horizons
+  - contexts
+  - seeds
+  - hpo
+  - timeouts
+  - statistical_comparisons
+  - bootstrap_policy
+  - efficiency_protocol
+  - conformal_protocol
+  - peak_protocol
+  - downsampling_protocol
+  - artifact_paths
+
+constraints:
+  experiment_stage: final
+  eligible_for_final_claims: true
+  evaluation_role: outer_evaluation
+  horizons: [1, 4, 8, 16]
+  n_outer: 3
+  models_allowed: [persistence, ridge, lightgbm, lstm, dlinear]
+  forbid_raw_conflicting_cpu_cores: true
+  forbid_pilot_development_paths: true
+  hpo_objective_scope: inner_fold_only
+  dlinear_threads: 1
+  freeze_markers_pending_until_tag: true
