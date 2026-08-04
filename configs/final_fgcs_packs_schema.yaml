@@ -7,9 +7,16 @@ required_top_keys:
   - execution_mode
   - freeze_commit
   - freeze_tag
+  - implementation_commit
   - dataset_fingerprint
   - packs
   - required_packs_for_aggregation
+
+freeze_metadata:
+  implementation_commit: protocol logic commit (filled in metadata-only commit)
+  freeze_commit: same as implementation_commit (avoids self-hash in tagged commit)
+  freeze_tag: experiment-freeze-v1
+  freeze_tag_commit: resolved dynamically from git tag at pack runtime
 
 pack_required_fields:
   - id

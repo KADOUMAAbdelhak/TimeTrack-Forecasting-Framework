@@ -33,6 +33,7 @@ from models.hybrid.reconciliation import (
 )
 from timetrack.data import build_analysis_panel, dataset_fingerprint
 from timetrack.efficiency import measure_inference_latencies, timed_train
+from timetrack.final_config import freeze_metadata
 from timetrack.final_packs import (
     RunStatus,
     WallClockGuard,
@@ -696,12 +697,15 @@ def finalize_pack_artifacts(
     status.cpu_seconds = guard.cpu_elapsed()
     status.end_time = _now()
     status.save(out / "RUN_STATUS.json")
+    meta = freeze_metadata(cfg)
     manifest = {
         "pack_id": pack["id"],
         "required": bool(pack.get("required")),
         "dependencies": list(pack.get("dependencies") or []),
-        "freeze_commit": cfg.get("freeze_commit"),
-        "freeze_tag": cfg.get("freeze_tag"),
+        "implementation_commit": meta.get("implementation_commit"),
+        "freeze_commit": meta.get("freeze_commit"),
+        "freeze_tag": meta.get("freeze_tag"),
+        "freeze_tag_commit": meta.get("freeze_tag_commit"),
         "configuration_hash": config_hash(cfg),
         "pack_hash": pack_hash(pack),
         "dataset_fingerprint": dataset_fingerprint().get("fingerprint"),
@@ -737,7 +741,9 @@ def run_pack(pack_id: str, config_path: Path | str | None = None, *, resume: boo
     if not ok:
         raise SystemExit(f"Pack {pack_id} blocked; incomplete dependencies: {missing}")
 
-    pending_freeze = str(cfg.get("freeze_commit", "")).upper().startswith("PENDING")
+    pending_freeze = str(cfg.get("freeze_commit", "")).upper().startswith("PENDING") or str(
+        cfg.get("implementation_commit", "PENDING")
+    ).upper().startswith("PENDING")
     status_path = out / "RUN_STATUS.json"
     if resume and status_path.exists():
         status = RunStatus.load(status_path)

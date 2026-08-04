@@ -26,11 +26,22 @@ def test_packs_config_loads_and_hpo_budget():
     assert cfg["execution_mode"] == "manual_packs"
     assert int(cfg["max_required_hpo_trials"]) == 16
     assert int(cfg["lightgbm_max_trials_memory"]) + int(cfg["lightgbm_max_trials_cpu"]) <= 16
+    assert "implementation_commit" in cfg
     required = [p for p in cfg["packs"] if p.get("required")]
     assert any(p["id"] == "shared_tuning" for p in required)
     for p in cfg["packs"]:
         assert float(p["estimated_runtime_minutes"]) <= 45
         assert float(p["hard_wall_clock_minutes"]) <= 45
+
+
+def test_packs_validator_accepts_pending_prefreeze():
+    from timetrack.final_config import validate_packs_config
+
+    cfg = load_packs_config(ROOT / "configs" / "final_fgcs_packs.yaml")
+    errs = validate_packs_config(cfg, require_frozen=False)
+    assert errs == [], errs
+    errs_f = validate_packs_config(cfg, require_frozen=True)
+    assert errs_f
 
 
 def test_full_config_marked_optional():

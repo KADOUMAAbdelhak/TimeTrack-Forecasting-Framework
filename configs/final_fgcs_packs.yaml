@@ -10,6 +10,12 @@ evaluation_role: outer_evaluation
 
 repository_url: https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework.git
 branch: main
+# Freeze identity (filled by metadata-only commit after protocol freeze commit):
+#   implementation_commit = protocol logic commit
+#   freeze_commit         = same protocol logic commit (non-self-referential)
+#   freeze_tag            = experiment-freeze-v1
+#   freeze_tag_commit     = resolved at runtime via `git rev-parse experiment-freeze-v1`
+implementation_commit: PENDING_EXPERIMENT_FREEZE_V1
 freeze_commit: PENDING_EXPERIMENT_FREEZE_V1
 freeze_tag: PENDING_experiment-freeze-v1
 

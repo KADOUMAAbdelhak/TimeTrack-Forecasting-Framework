@@ -36,7 +36,7 @@ def aggregate(cfg: dict) -> dict:
         man_path = pack_output_dir(cfg, pack) / "MANIFEST.json"
         man = json.loads(man_path.read_text())
         manifests.append(man)
-    keys = ("freeze_commit", "freeze_tag", "dataset_fingerprint")
+    keys = ("freeze_commit", "freeze_tag", "dataset_fingerprint", "implementation_commit")
     for k in keys:
         vals = {m.get(k) for m in manifests}
         if len(vals) != 1:
@@ -44,6 +44,9 @@ def aggregate(cfg: dict) -> dict:
     freeze = manifests[0].get("freeze_commit")
     if str(freeze).upper().startswith("PENDING"):
         raise SystemExit("freeze_commit still PENDING; not eligible for final claims")
+    impl = manifests[0].get("implementation_commit")
+    if not impl or str(impl).upper().startswith("PENDING"):
+        raise SystemExit("implementation_commit missing/PENDING; not eligible for final claims")
 
     out_root = ROOT / "results" / "final"
     metrics = out_root / "metrics"
@@ -118,8 +121,10 @@ def aggregate(cfg: dict) -> dict:
 
     report = {
         "status": "aggregated",
+        "implementation_commit": impl,
         "freeze_commit": freeze,
         "freeze_tag": manifests[0].get("freeze_tag"),
+        "freeze_tag_commit": manifests[0].get("freeze_tag_commit"),
         "dataset_fingerprint": manifests[0].get("dataset_fingerprint"),
         "required_packs": required,
         "optional_packs": optional,
