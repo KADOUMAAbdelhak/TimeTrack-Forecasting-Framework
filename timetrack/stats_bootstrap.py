@@ -170,6 +170,99 @@ def holm_adjust(p_values: Sequence[float]) -> list[float]:
     return [float(x) for x in adj]
 
 
+def holm_adjust_with_ranks(p_values: Sequence[float]) -> list[dict[str, Any]]:
+    """Holm adjust returning per-test rank (1 = smallest raw p) and adjusted p."""
+    p = np.asarray(p_values, dtype=float)
+    m = len(p)
+    if m == 0:
+        return []
+    adjusted = holm_adjust(p)
+    order = np.argsort(p)
+    ranks = np.empty(m, dtype=int)
+    for rank, idx in enumerate(order):
+        ranks[idx] = rank + 1
+    return [
+        {"raw_p": float(p[i]), "adjusted_p": float(adjusted[i]), "rank": int(ranks[i])}
+        for i in range(m)
+    ]
+
+
+def paired_moving_block_bootstrap_effects(
+    abs_error_reconciled: np.ndarray,
+    abs_error_independent: np.ndarray,
+    *,
+    block_size: int,
+    n_boot: int = 5000,
+    seed: int = 0,
+) -> dict[str, Any]:
+    """Paired moving-block bootstrap of absolute and relative MAE effects.
+
+    Statistic:
+        d_t = |error_reconciled_t| - |error_independent_t|
+
+    For each bootstrap replicate b (same block starts for both series):
+        mean_d_b = mean(d_b)
+        relative_effect_b = mean_d_b / mean(|error_independent|_b)
+
+    Returns absolute- and relative-effect summaries. ``prob_improvement`` is the
+    fraction of replicates with ``mean_d_b < 0`` (not inferred from fold counts).
+    """
+    ea = np.asarray(abs_error_reconciled, dtype=float).reshape(-1)
+    eb = np.asarray(abs_error_independent, dtype=float).reshape(-1)
+    if ea.shape != eb.shape:
+        raise ValueError("paired absolute errors must match in length")
+    n = int(ea.shape[0])
+    if n == 0:
+        raise ValueError("empty paired series")
+    d = ea - eb
+    bl = max(1, min(int(block_size), n))
+    n_blocks = int(np.ceil(n / bl))
+    rng = np.random.default_rng(seed)
+    mean_d_boot = np.empty(n_boot, dtype=float)
+    rel_boot = np.empty(n_boot, dtype=float)
+    for i in range(n_boot):
+        starts = rng.integers(0, n - bl + 1, size=n_blocks)
+        idx = np.concatenate([np.arange(s, s + bl) for s in starts])[:n]
+        d_s = d[idx]
+        ind_s = eb[idx]
+        md = float(np.mean(d_s))
+        mean_d_boot[i] = md
+        denom = float(np.mean(ind_s))
+        rel_boot[i] = md / denom if abs(denom) > 1e-18 else float("nan")
+
+    mean_d = float(np.mean(d))
+    mae_ind = float(np.mean(eb))
+    mae_rec = float(np.mean(ea))
+    rel_point = mean_d / mae_ind if abs(mae_ind) > 1e-18 else float("nan")
+    finite_rel = rel_boot[np.isfinite(rel_boot)]
+    p_imp = float(np.mean(mean_d_boot < 0.0))
+    # two-sided bootstrap p-value from replicate means
+    p_two = float(2.0 * min(np.mean(mean_d_boot >= 0.0), np.mean(mean_d_boot <= 0.0)))
+    p_two = float(min(1.0, max(0.0, p_two)))
+    return {
+        "n_paired": n,
+        "block_length": int(bl),
+        "n_boot": int(n_boot),
+        "seed": int(seed),
+        "mean_paired_diff": mean_d,
+        "median_paired_diff": float(np.median(d)),
+        "mae_independent": mae_ind,
+        "mae_reconciled": mae_rec,
+        "relative_mae_diff": float(rel_point),
+        "abs_ci_low": float(np.quantile(mean_d_boot, 0.025)),
+        "abs_ci_high": float(np.quantile(mean_d_boot, 0.975)),
+        "rel_ci_low": float(np.quantile(finite_rel, 0.025)) if len(finite_rel) else float("nan"),
+        "rel_ci_high": float(np.quantile(finite_rel, 0.975)) if len(finite_rel) else float("nan"),
+        "prob_improvement": p_imp,
+        "p_value_raw": p_two,
+        "abs_ci_crosses_zero": bool(np.quantile(mean_d_boot, 0.025) <= 0.0 <= np.quantile(mean_d_boot, 0.975)),
+        "rel_ci_crosses_zero": bool(
+            len(finite_rel)
+            and float(np.quantile(finite_rel, 0.025)) <= 0.0 <= float(np.quantile(finite_rel, 0.975))
+        ),
+    }
+
+
 # Predefined comparison families (final protocol)
 COMPARISON_FAMILIES: dict[str, list[tuple[str, str]]] = {
     "memory": [

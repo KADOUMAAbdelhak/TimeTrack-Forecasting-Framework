@@ -696,9 +696,14 @@ def run_hierarchy_models_pack(
 
 
 def run_supporting_statistics(cfg: dict[str, Any], pack: dict[str, Any], out: Path, status: RunStatus) -> None:
-    from timetrack.stats_bootstrap import holm_adjust, paired_block_bootstrap_comparison, select_block_length
+    """Delegate to frozen final-analysis layer (timestamp-level bootstrap).
 
-    root = ROOT / (cfg.get("artifact_root") or "results/final/packs")
+    Prediction packs remain experiment-freeze-v2; statistics follow
+    configs/final_statistics.yaml (final-analysis-freeze-v1). Does not train models.
+    """
+    from timetrack.statistical_reporting import load_statistics_config, run_final_statistics
+
+    # Preserve dependency reconciliation aggregate for audit/efficiency joins
     dep_ids = pack.get("dependencies") or []
     frames = []
     for dep in dep_ids:
@@ -708,71 +713,23 @@ def run_supporting_statistics(cfg: dict[str, Any], pack: dict[str, Any], out: Pa
             df = pd.read_csv(path)
             df["source_pack"] = dep
             frames.append(df)
-    if not frames:
-        status.status = "failed"
-        status.last_message = "no reconciliation_results.csv from dependencies"
-        return
-    all_df = pd.concat(frames, ignore_index=True)
     metrics = out / "metrics"
     metrics.mkdir(parents=True, exist_ok=True)
-    all_df.to_csv(metrics / "reconciliation_results_aggregated.csv", index=False)
-
-    # Coherence / accuracy tables
-    summary = (
-        all_df.groupby(["hierarchy", "base_model", "horizon", "reconciliation_method"], as_index=False)
-        .agg(top_mae=("top_mae", "mean"), coherence_after=("coherence_error_after", "mean"), coherence_before=("coherence_error_before", "mean"))
-    )
-    summary.to_csv(metrics / "hierarchy_summary.csv", index=False)
     (out / "tables").mkdir(parents=True, exist_ok=True)
-    summary.to_csv(out / "tables" / "main_comparison.csv", index=False)
-
-    families = {
-        "memory_um": [("independent", "bottom_up"), ("independent", "wls"), ("independent", "mint")],
-        "cpu_core_weighted": [("independent", "bottom_up"), ("independent", "wls"), ("independent", "mint")],
-        "disk_ud": [("independent", "bottom_up"), ("independent", "top_down")],
-    }
-    boot_rows = []
-    # Use fold-level MAE differences as paired units when full vectors unavailable
-    for hier, comps in families.items():
-        sub = all_df[all_df["hierarchy"] == hier]
-        if sub.empty:
-            continue
-        for a, b in comps:
-            # pair by fold, horizon, base_model
-            keys = ["fold", "horizon", "base_model"]
-            sa = sub[sub["reconciliation_method"] == a][keys + ["top_mae"]].rename(columns={"top_mae": "mae_a"})
-            sb = sub[sub["reconciliation_method"] == b][keys + ["top_mae"]].rename(columns={"top_mae": "mae_b"})
-            merged = sa.merge(sb, on=keys)
-            if merged.empty:
-                continue
-            d = (merged["mae_a"] - merged["mae_b"]).to_numpy()
-            # treat fold-level diffs with block_length=1 (already aggregated)
-            cmp_ = paired_block_bootstrap_comparison(
-                np.zeros_like(d),
-                merged["mae_a"].to_numpy(),
-                merged["mae_b"].to_numpy(),
-                block_length=1,
-                n_boot=int((cfg.get("bootstrap_policy") or {}).get("n_boot", 1000)),
-                seed=int((cfg.get("bootstrap_policy") or {}).get("seed", 0)),
+    if frames:
+        all_df = pd.concat(frames, ignore_index=True)
+        all_df.to_csv(metrics / "reconciliation_results_aggregated.csv", index=False)
+        summary = (
+            all_df.groupby(["hierarchy", "base_model", "horizon", "reconciliation_method"], as_index=False)
+            .agg(
+                top_mae=("top_mae", "mean"),
+                coherence_after=("coherence_error_after", "mean"),
+                coherence_before=("coherence_error_before", "mean"),
             )
-            boot_rows.append(
-                {
-                    "hierarchy": hier,
-                    "method_a": a,
-                    "method_b": b,
-                    "n_pairs": len(merged),
-                    "fold_sign_consistency": float(np.mean(np.sign(merged["mae_a"] - merged["mae_b"]) < 0)),
-                    **cmp_,
-                }
-            )
-    if boot_rows:
-        boot_df = pd.DataFrame(boot_rows)
-        boot_df["p_holm"] = holm_adjust(boot_df["p_value_approx"].tolist())
-        boot_df.to_csv(metrics / "paired_block_bootstrap.csv", index=False)
-        boot_df.to_csv(metrics / "holm_corrected_tests.csv", index=False)
-        boot_df.to_csv(out / "tables" / "statistical_comparisons.csv", index=False)
+        )
+        summary.to_csv(metrics / "hierarchy_summary.csv", index=False)
+        summary.to_csv(out / "tables" / "main_comparison.csv", index=False)
 
-    # Efficiency aggregation from base forecasts
     eff_frames = []
     for dep in dep_ids:
         dep_pack = pack_by_id(cfg, dep)
@@ -785,6 +742,15 @@ def run_supporting_statistics(cfg: dict[str, Any], pack: dict[str, Any], out: Pa
             g = eff.groupby(["hierarchy", "base_model"], as_index=False)["wall_train_sec_sum"].mean()
             g.to_csv(metrics / "efficiency.csv", index=False)
             g.to_csv(out / "tables" / "efficiency_comparison.csv", index=False)
+
+    try:
+        stats_cfg = load_statistics_config(ROOT / "configs" / "final_statistics.yaml")
+        run_final_statistics(stats_cfg=stats_cfg, source_cfg=cfg, output_dir=out, smoke=False)
+    except Exception as exc:  # noqa: BLE001 — pack status must record failure
+        status.status = "failed"
+        status.failed_runs.append("supporting_statistics")
+        status.last_message = f"final statistics failed: {exc}"
+        return
 
     status.status = "complete"
     status.completed_runs.append("supporting_statistics")
@@ -944,8 +910,18 @@ def finalize_pack_artifacts(
     peak_bytes, peak_available, peak_reason = peak_rss_bytes()
 
     role = "shared_final_tuning" if pack.get("kind") == "shared_tuning" else "outer_evaluation"
+    if pack.get("id") == "supporting_statistics" or pack.get("kind") == "supporting_statistics":
+        role = "final_statistical_analysis"
     if pending_freeze:
         role = "pack_prefreeze"
+    # Preserve analysis-layer provenance if already written by run_final_statistics
+    prior: dict[str, Any] = {}
+    prior_path = out / "MANIFEST.json"
+    if prior_path.exists() and role == "final_statistical_analysis":
+        try:
+            prior = json.loads(prior_path.read_text())
+        except Exception:
+            prior = {}
     manifest = {
         "pack_id": pack["id"],
         "required": bool(pack.get("required")),
@@ -978,6 +954,22 @@ def finalize_pack_artifacts(
         "status": status.status,
         "output_dir": str(out),
     }
+    for k in (
+        "source_experiment_freeze_tag",
+        "source_experiment_freeze_tag_commit",
+        "source_frozen_implementation_commit",
+        "analysis_freeze_tag",
+        "analysis_freeze_tag_commit",
+        "analysis_implementation_commit",
+        "statistical_config_hash",
+        "source_pack_hashes",
+        "bootstrap_n_boot",
+        "bootstrap_seed",
+        "comparisons_completed",
+        "comparisons_failed",
+    ):
+        if k in prior:
+            manifest[k] = prior[k]
     required_fields = [
         "experiment_stage",
         "eligible_for_final_claims",

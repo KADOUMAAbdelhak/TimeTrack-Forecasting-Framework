@@ -1,0 +1,78 @@
+# Frozen statistical analysis protocol for experiment-freeze-v2 predictions.
+# Separate from the prediction freeze: analysis_freeze_tag = final-analysis-freeze-v1
+analysis_freeze_tag: final-analysis-freeze-v1
+analysis_freeze_tag_commit: PENDING_UNTIL_TAG
+analysis_implementation_commit: PENDING_UNTIL_COMMIT
+
+source_experiment_freeze_tag: experiment-freeze-v2
+source_experiment_freeze_tag_commit: bb34ddfc52f5f54f47f0ca644d7c95c619ad95a7
+source_frozen_implementation_commit: 9f1bebb5d5998aab24fbffe33b048fd16b8095a6
+source_config_hash: 998ed4d20a8987d6
+dataset_fingerprint: bf06dc0e7fe6ff5e
+
+context: 32
+alpha: 0.05
+
+source_packs:
+  - memory_classical
+  - memory_dlinear
+  - cpu_classical
+  - cpu_dlinear
+  - disk_boundary
+
+bootstrap:
+  method: paired_moving_block
+  statistic: "d_t = abs(error_reconciled_t) - abs(error_independent_t)"
+  relative_replicate: "mean(d_b) / mean(abs(error_independent_b))"
+  n_boot: 5000
+  smoke_n_boot: 50
+  seed: 0
+  acf_threshold: 0.1
+  lower: 8
+  upper: 256
+  # block_length = clamp(max(horizon, context, first ACF lag below threshold), lower, upper)
+  block_length_policy: train_residual_acf_clamp
+
+holm_families:
+  - memory_ridge
+  - memory_dlinear
+  - memory_lightgbm
+  - cpu_ridge
+  - cpu_dlinear
+  - cpu_lightgbm
+  - disk_ridge
+  - disk_lightgbm
+
+# Persistence ties are descriptive only (not Holm headline families).
+persistence_descriptive_only: true
+
+claim_definitions:
+  A:
+    family: cpu_base_model_lightgbm_vs_persistence
+    description: CPU LightGBM independent vs persistence independent
+  B:
+    description: CPU reconciliation improves ridge/lightgbm/dlinear aggregate accuracy
+  C:
+    description: Memory WLS/MinT modest aggregate gains for Ridge/DLinear
+  D:
+    description: Disk Ridge bottom_up degrades top; top_down preserves independent top
+
+effect_classification:
+  substantial_improvement: "rel <= -0.05"
+  modest_improvement: "-0.05 < rel <= -0.02"
+  accuracy_neutral: "abs(rel) < 0.02"
+  modest_degradation: "0.02 <= rel < 0.05"
+  substantial_degradation: "rel >= 0.05"
+
+fold_consistency:
+  strongly_consistent: "all three folds improve and no fold worsens by more than 2%"
+  directionally_consistent: "at least two folds improve and no fold worsens by more than 5%"
+  mixed: "fold directions differ without catastrophic harm"
+  consistently_harmful: "all folds degrade"
+  unstable: "any fold degrades by at least 20%"
+
+tradeoff_classification:
+  pareto_improvement: "top improves >2%; bottom macro does not worsen >2%; coherence improves"
+  aggregate_focused_improvement: "top improves >2%; bottom macro or worst worsens >2%; coherence improves"
+  coherence_only: "top within ±2%; coherence improves; no catastrophic bottom degradation"
+  accuracy_costly_coherence: "top worsens >2% OR bottom macro worsens >5%"

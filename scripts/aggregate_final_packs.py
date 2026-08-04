@@ -32,12 +32,28 @@ def aggregate(cfg: dict) -> dict:
             + "\n".join(f"- {x['pack_id']}: {x['status']}" for x in incomplete)
         )
 
-    # Verify freeze/fingerprint consistency
+    # Verify freeze/fingerprint consistency; refuse provisional/unfrozen statistics
     manifests = []
     for pid in required:
         pack = pack_by_id(cfg, pid)
         man_path = pack_output_dir(cfg, pack) / "MANIFEST.json"
         man = json.loads(man_path.read_text())
+        if pid == "supporting_statistics":
+            if man.get("experiment_stage") == "development":
+                raise SystemExit(
+                    "REFUSING: supporting_statistics is development/provisional; "
+                    "not eligible for final claim aggregation"
+                )
+            if not bool(man.get("eligible_for_final_claims")):
+                raise SystemExit(
+                    "REFUSING: supporting_statistics eligible_for_final_claims=false "
+                    f"(evaluation_role={man.get('evaluation_role')})"
+                )
+            if man.get("evaluation_role") != "final_statistical_analysis":
+                raise SystemExit(
+                    "REFUSING: supporting_statistics evaluation_role must be "
+                    f"final_statistical_analysis, got {man.get('evaluation_role')}"
+                )
         manifests.append(man)
     keys = ("freeze_commit", "freeze_tag", "dataset_fingerprint", "implementation_commit")
     for k in keys:

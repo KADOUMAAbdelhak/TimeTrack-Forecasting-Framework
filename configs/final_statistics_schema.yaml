@@ -1,0 +1,47 @@
+# Schema for configs/final_statistics.yaml
+required_top_level_keys:
+  - analysis_freeze_tag
+  - source_experiment_freeze_tag
+  - source_frozen_implementation_commit
+  - dataset_fingerprint
+  - source_packs
+  - bootstrap
+  - holm_families
+  - claim_definitions
+  - effect_classification
+  - fold_consistency
+  - tradeoff_classification
+  - alpha
+
+bootstrap_required_keys:
+  - method
+  - n_boot
+  - seed
+  - acf_threshold
+  - lower
+  - upper
+  - block_length_policy
+  - relative_replicate
+
+constraints:
+  analysis_freeze_tag: final-analysis-freeze-v1
+  source_experiment_freeze_tag: experiment-freeze-v2
+  bootstrap.method: paired_moving_block
+  bootstrap.n_boot: 5000
+  bootstrap.seed: 0
+  holm_families_exact:
+    - memory_ridge
+    - memory_dlinear
+    - memory_lightgbm
+    - cpu_ridge
+    - cpu_dlinear
+    - cpu_lightgbm
+    - disk_ridge
+    - disk_lightgbm
+
+forbidden:
+  - model_training
+  - hyperparameter_retuning
+  - regenerating_source_predictions
+  - pooling_across_models_horizons_folds
+  - dividing_absolute_ci_by_point_estimate_for_relative_ci
