@@ -1,0 +1,21 @@
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.abs
+*.xdv
+manuscriptNotes.bib
+manuscript.pdf
+
+# Generated package (kept locally; not committed by default)
+dist/
+
+# Editor / OS
+.DS_Store

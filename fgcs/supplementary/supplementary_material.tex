@@ -1,0 +1,60 @@
+%% Supplementary material for the TimeTrack FGCS manuscript
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs,graphicx,hyperref,natbib}
+\usepackage{amsmath}
+
+\title{Supplementary Material:\\
+Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
+\author{Abdelhak Kadouma \and Amit Shukla \and Mohammed Elmusrati}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Purpose}
+This supplement collects seed-by-fold grids, extended peak matrices, efficiency
+fields, and provenance pointers omitted from the main paper for page limits.
+All numerical claims in the main text are sourced from the frozen aggregate under
+\texttt{final-reporting-freeze-v2}.
+
+\section{Extended seed grids}
+Full LightGBM/DLinear seed-by-fold-by-horizon tables are provided as CSV snapshots
+in \texttt{results/main/table05\_seed\_robustness.csv}.
+
+\section{Peak matrices}
+Complete peak/high-load fields are in
+\texttt{results/main/table08\_peak\_operational\_evidence.csv}.
+
+\section{Statistical families}
+Holm-family and bootstrap detail rows are in
+\texttt{results/main/table06\_final\_statistical\_evidence.csv}.
+
+\section{Additional figures}
+Main-paper figures not shown for space can be regenerated from the aggregate
+figure directory; package copies include coherence, memory-versus-EWMA, and
+DLinear peak-bias PDFs under \texttt{figs/}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/coherence_before_after.pdf}
+\caption{CPU coherence before/after reconciliation (log-scale reduction).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/memory_reconciliation_vs_ewma.pdf}
+\caption{Memory reconciliation relative effects versus EWMA.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
+\caption{DLinear memory peak bias by seed and method.}
+\end{figure}
+
+\section{Provenance}
+See \texttt{results/provenance/MANIFEST.json} and
+\texttt{SOURCE\_ARTIFACT\_HASHES.csv}.
+
+\end{document}

@@ -1,0 +1,554 @@
+%%
+%% FGCS manuscript — Elsevier CAS double column (cas-dc)
+%% Scientific source: results/final/aggregate (final-reporting-freeze-v2)
+%%
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{multirow}
+\usepackage{microtype}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Hierarchy-Aware Forecast Reconciliation for Cloud Telemetry}
+\shortauthors{A. Kadouma et al.}
+
+\title[mode=title]{Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry: Accuracy Gains, Trade-offs, and Failure Boundaries}
+
+\author[1]{Abdelhak Kadouma}
+\cormark[1]
+\ead{abdelhak.kadouma@uwasa.fi}
+\credit{Conceptualization, Methodology, Software, Data curation, Formal analysis, Validation, Visualization, Writing -- original draft}
+
+\author[1]{Amit Shukla}
+\ead{amit.shukla@uwasa.fi}
+\credit{Supervision, Conceptualization, Methodology, Writing -- review \& editing}
+
+\author[1]{Mohammed Elmusrati}
+\ead{moel@uwasa.fi}
+\credit{Supervision, Project administration, Funding acquisition, Writing -- review \& editing}
+
+\affiliation[1]{organization={University of Vaasa},
+            city={Vaasa},
+            country={Finland}}
+
+\cortext[1]{Corresponding author}
+
+\begin{abstract}
+Independent machine-level forecasts of cloud telemetry often violate exact
+machine-to-cluster conservation, producing incoherent capacity views even when
+point accuracy appears acceptable. Using the public TimeTrack OpenAirInterface
+({OAI}) continuous integration/continuous deployment telemetry dataset, we
+evaluate hierarchy-aware forecasting on verified physical hierarchies for
+core-weighted {CPU}, exact memory aggregation, and disk-level summing.
+Baselines include persistence, exponentially weighted moving average ({EWMA}),
+and Ridge regression; learned models include LightGBM and DLinear; reconciliation
+modes include independent forecasts, bottom-up, weighted least squares ({WLS}),
+and MinT-shrink, with top-down used for the disk boundary.
+On {CPU}, LightGBM with MinT yields the best observed frozen outer-evaluation
+accuracy while restoring exact coherence.
+On memory, reconciliation often improves DLinear relative to its own independent
+forecast, yet {EWMA} remains the strongest observed method.
+On disk, Ridge bottom-up degrades aggregate accuracy, whereas top-down preserves
+the independent top forecast at a bottom-level cost.
+Ordinary aggregate mean absolute error ({MAE}) gains do not transfer to universal
+peak-operational improvements.
+These results support selective, hierarchy-dependent reconciliation as a practical
+layer for coherent multi-level telemetry forecasting in application-profiling
+pipelines.
+\end{abstract}
+
+\begin{highlights}
+\item Coherent machine-to-cluster forecasts via hierarchy-aware reconciliation.
+\item LightGBM+MinT improves {CPU} accuracy and restores exact coherence.
+\item Memory gains are conditional; {EWMA} remains the strongest observed method.
+\item Disk shows a failure boundary: bottom-up can harm aggregate accuracy.
+\item Ordinary {MAE} gains do not imply universal peak-operational improvements.
+\end{highlights}
+
+\begin{keywords}
+Cloud telemetry \sep Hierarchical forecasting \sep Forecast reconciliation \sep
+{MinT} \sep LightGBM \sep {DLinear} \sep {EWMA} \sep Application profiling \sep
+TimeTrack \sep OpenAirInterface
+\end{keywords}
+
+\maketitle
+
+%% =====================================================================
+\section{Introduction}
+\label{sec:introduction}
+
+Cloud--edge platforms expose multi-level telemetry in which machine measurements
+must remain consistent with cluster aggregates used for capacity planning,
+autoscaling, and service-level management
+\cite{buyya2019manifesto,shi2016edge,satyanarayanan2017emergence}.
+When machine and cluster forecasts are produced independently, they frequently
+violate exact physical summing relations, yielding incoherent planning signals
+despite competitive point-forecast scores
+\cite{hyndman2011optimal,athanasopoulos2024hierarchical}.
+
+Building on our earlier unified application-profile model for microservices in
+the cloud--edge continuum, which identified predictive resource behavior as a
+next step toward proactive profile management
+\cite{kadouma2025unifiedprofile}, this work develops and evaluates the
+forecasting and reconciliation layer required to operationalize that direction.
+Rather than redefining the application-profile schema, we study coherent
+multi-level forecasts on physical OpenAirInterface ({OAI}) continuous
+integration/continuous deployment ({CI}/{CD}) telemetry from TimeTrack
+\cite{meliani2025timetrack,meliani2025timetrackkaggle}.
+
+We address five research questions:
+
+\begin{description}
+\item[{RQ1}] How do independent and reconciled forecasts affect aggregate
+accuracy and exact machine-to-cluster coherence for core-weighted {CPU}
+telemetry?
+\item[{RQ2}] Do the {CPU} findings remain stable across folds, horizons,
+forecasting models, and stochastic seeds?
+\item[{RQ3}] When does reconciliation improve memory forecasts, and how do
+reconciled learned models compare with {EWMA}?
+\item[{RQ4}] Why can reconciliation degrade disk-level forecasts, and what
+trade-offs arise between bottom-up and top-down reconciliation?
+\item[{RQ5}] Do ordinary aggregate-accuracy gains transfer to high-load and
+peak-operational metrics?
+\end{description}
+
+\paragraph{Contributions.}
+Using only frozen final evidence, this paper contributes:
+(i)~a hierarchy-aware forecasting formulation for exact machine-to-cluster
+{CPU}, memory, and disk relations;
+(ii)~a leakage-controlled comparison of persistence, {EWMA}, Ridge, LightGBM,
+and DLinear under independent, bottom-up, {WLS}, and MinT-shrink modes, with
+top-down for disk;
+(iii)~strong and seed-robust {CPU} evidence that reconciliation restores exact
+coherence and improves learned aggregates, with LightGBM+MinT best observed in
+the frozen outer evaluation;
+(iv)~conditional memory evidence that reconciled DLinear can improve over its
+independent forecast while {EWMA} remains strongest;
+(v)~a disk failure boundary showing bottom-up aggregate harm and top-down
+top-preservation at bottom cost; and
+(vi)~an operational analysis showing that ordinary aggregate-{MAE} gains do not
+imply universal peak improvements.
+
+%% =====================================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Application Profiling in the Cloud--Edge Continuum}
+Application profiling and continuum management formalize placement, service
+objectives, and lifecycle constraints across heterogeneous tiers
+\cite{kadouma2025unifiedprofile,duc2020survey,taherizadeh2018monitoring}.
+Container orchestration surveys emphasize monitoring and scaling loops that
+consume multi-level resource signals
+\cite{casalicchio2019container,rossi2020geo,toka2021kubernetes}.
+Our prior profile model identified predictive resource behavior as a logical
+extension; the present study supplies a coherence-aware forecasting evaluation
+for that extension without claiming a new ontology.
+
+\subsection{Cloud Telemetry and Workload Forecasting}
+Workload prediction for provisioning and autoscaling has long used classical
+and machine-learning forecasts
+\cite{calheiros2015workload,islam2012empirical,masdari2020workload,khan2022workload}.
+Autoscaling taxonomies stress proactive control under bursty demand
+\cite{lorido2014review,qu2018auto}.
+Kubernetes and edge-cluster scaling studies further show that controllers consume
+multi-granularity telemetry, yet typically treat host and aggregate signals as
+independent streams \cite{toka2021kubernetes,rossi2020geo,casalicchio2019container}.
+Neural and Transformer-style forecasting surveys document rapid methodological
+progress \cite{lim2021temporal,wen2023transformers}, while comparative studies
+caution against over-generalizing deep models
+\cite{makridakis2018statistical,zeng2023dlinear}.
+In telecommunications cloud-native settings, public multi-metric traces remain
+comparatively scarce; TimeTrack fills part of that gap with {OAI} {CI}/{CD}
+telemetry \cite{meliani2025timetrack}.
+Zero-Touch Predictive Orchestration studies automated model generation and
+cold-start mitigation using TimeTrack plus local node data
+\cite{meliani2026zerotouch}.
+That line of work is complementary: it targets model-generation automation,
+whereas we evaluate coherent multi-level forecasting, reconciliation trade-offs,
+statistical robustness, and failure boundaries on frozen TimeTrack hierarchies.
+
+\subsection{Hierarchical Forecast Reconciliation}
+Hierarchical time-series forecasting enforces aggregation constraints after or
+during prediction
+\cite{hyndman2011optimal,wickramasuriya2019mint,panagiotelis2021geometric,hyndman2021forecasting}.
+MinT and related optimal combination methods minimize reconciled forecast error
+under summing constraints, often with shrinkage covariance estimators
+\cite{wickramasuriya2019mint,schafer2005shrinkage,athanasopoulos2024hierarchical}.
+Recent cloud systems explore hierarchical multi-indicator forecasting for
+scaling decisions \cite{harmony2024}.
+These works motivate classical reconciliation, but they do not jointly evaluate
+independent/bottom-up/{WLS}/MinT/top-down selectivity on verified physical
+{CPU}/memory/disk hierarchies from TimeTrack under a leakage-safe nested
+protocol with multi-seed and peak diagnostics.
+
+\subsection{Research Gap}
+Table~\ref{tab:related} summarizes the gap: few studies combine exact
+machine-to-cluster physical relations, classical reconciliation ablations,
+strong baselines including {EWMA}, multi-seed stochastic checks, statistical
+testing, and peak-operational qualification on public {OAI} telemetry.
+We do not claim a universal first method; we claim a scoped empirical
+characterization of accuracy, coherence, trade-offs, and failure boundaries.
+
+\input{tables/related_work_comparison}
+
+%% =====================================================================
+\section{TimeTrack Dataset and Telemetry Hierarchies}
+\label{sec:dataset}
+
+\subsection{Dataset and Experimental Timeline}
+TimeTrack is a public high-resolution telemetry dataset collected from an {OAI}
+{CI}/{CD} cluster \cite{meliani2025timetrack,meliani2025timetrackkaggle}.
+The dataset paper characterizes the collection; the present paper studies
+hierarchy-aware forecasting and reconciliation on frozen experimental artifacts.
+The measured median sampling interval in our pipeline is approximately
+$42.285$\,s.
+Analyses use the post-outage primary timeline under nested temporal outer folds
+$0$--$2$.
+Forecast horizons are $h\in\{1,8,16\}$ for {CPU}/memory and $h\in\{1,8\}$ for
+disk.
+
+\subsection{{CPU} Hierarchy}
+{CPU} is reported as a core-weighted mean percentage.
+Verified machine core counts are $36,48,36,36,20,36,24$ (total $236$).
+Cluster {CPU} equals the core-weighted mean of machine percentages
+(equivalently, weighted sum divided by $236$).
+We do not use conflicting raw machine05/machine07 core labels.
+
+\subsection{Memory Hierarchy}
+Memory uses an exact machine-to-cluster sum in bytes for the evaluated memory
+hierarchy.
+Independent forecasts may violate this sum; reconciliation projects forecasts
+onto the summing matrix.
+
+\subsection{Disk Boundary Hierarchy}
+Disk uses an exact level-sum hierarchy.
+Unlike {CPU}/memory, disk is treated as a method-boundary case: bottom-up can
+harm aggregates, motivating top-down comparison.
+
+Figure~\ref{fig:arch} summarizes the forecasting and reconciliation workflow.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/architecture_or_hierarchy.pdf}
+\caption{Hierarchy-aware forecasting workflow: independent base forecasts are
+optionally reconciled through bottom-up, {WLS}, MinT-shrink, or disk top-down
+to produce coherent multi-level outputs.}
+\label{fig:arch}
+\end{figure}
+
+%% =====================================================================
+\section{Forecasting and Reconciliation Methodology}
+\label{sec:methods}
+
+\subsection{Forecasting Problem}
+For each hierarchy, let bottom series $\mathbf{b}_t$ and top series $y_t$ satisfy
+$y_t=\mathbf{s}^\top\mathbf{b}_t$ (or the core-weighted {CPU} analogue).
+Given context windows ending at time $t$, a model produces horizon-$h$ forecasts
+$\hat{\mathbf{b}}_{t+h}$ and $\hat{y}_{t+h}$.
+Independent forecasts need not satisfy the summing constraint; reconciled
+forecasts $\tilde{\mathbf{b}},\tilde{y}$ do.
+
+\subsection{Baselines and Forecasting Models}
+\label{sec:baselines}
+Table~\ref{tab:baselines} defines the baseline set used before any result
+claim.
+Persistence is a last-value forecast.
+{EWMA} selects its smoothing parameter on inner validation only.
+Ridge is the strongest deterministic learned {CPU} baseline in the frozen
+evidence.
+LightGBM \cite{ke2017lightgbm} is the strongest observed {CPU} model and is
+seed-invariant under the frozen configuration for seeds $0/1/2$.
+DLinear \cite{zeng2023dlinear} provides a neural baseline with nonzero but
+generally small {CPU} seed variability.
+{EWMA} is the strongest observed memory method.
+
+\input{tables/baseline_definitions}
+
+\subsection{Reconciliation Methods}
+Bottom-up aggregates bottom forecasts through the summing matrix and preserves
+bottoms.
+{WLS} and MinT-shrink adjust base forecasts using variance/covariance structure;
+MinT uses shrinkage covariance estimation
+\cite{wickramasuriya2019mint,schafer2005shrinkage}.
+Top-down is evaluated for disk to preserve an independently forecast top while
+distributing to bottoms.
+
+\subsection{Evaluation Metrics}
+Primary accuracy uses {MAE}, with supporting {RMSE}/{MASE}/$R^2$ where available
+\cite{hyndman2006accuracy}.
+Coherence error measures absolute violation of the exact summing relation before
+and after reconciliation.
+Peak/high-load metrics use train-derived thresholds from the frozen peak
+analysis; they qualify rather than replace aggregate {MAE}.
+
+%% =====================================================================
+\section{Experimental Protocol}
+\label{sec:protocol}
+
+\input{tables/experiment_registry}
+
+\subsection{Temporal Splits and Horizons}
+Outer evaluation uses nested chronological folds with horizons as above.
+Context policy and train/validation/test chronology follow the frozen
+experiment protocol; no outer-label tuning is performed
+\cite{bergmeir2018note}.
+
+\subsection{Hyperparameter Selection and Leakage Prevention}
+All hyperparameter selection, including {EWMA} $\alpha$ and model
+hyperparameters, uses train/inner validation only.
+Outer test labels are never used for selection.
+
+\subsection{Statistical Analysis}
+Paired moving-block bootstrap estimates direct relative-effect confidence
+intervals.
+Holm correction controls family-wise error within predefined comparison families
+\cite{holm1979simple}.
+
+\subsection{Multi-Seed and Reproducibility Protocol}
+LightGBM and DLinear use seeds $0$, $1$, and $2$.
+Evidence layers are immutable freezes culminating in
+\texttt{final-reporting-freeze-v2}; this manuscript reports only accepted final
+aggregate artifacts.
+
+%% =====================================================================
+\section{Results}
+\label{sec:results}
+
+\subsection{{CPU} Forecasting and Reconciliation}
+\label{sec:cpu}
+Table~\ref{tab:cpu_main} and Figure~\ref{fig:cpu_h} summarize {CPU} results in
+weighted-mean percentage units.
+Horizon-averaged independent {MAE} values are approximately $1.321$
+(persistence), $1.320$ ({EWMA}), $1.253$ (Ridge), and $1.036$ (LightGBM).
+LightGBM independent improves on Ridge by about $17.3\%$ and on persistence by
+about $21.6\%$.
+LightGBM MinT further reduces aggregate {MAE} to about $0.931$
+($\approx 10.1\%$ versus LightGBM independent) while driving coherence error to
+zero.
+Bottom-up preserves machine-level forecasts; {WLS}/MinT can improve the top while
+trading machine-level accuracy.
+DLinear {CPU} is practically seed-stable, and bottom-up/{WLS}/MinT improve its
+aggregates across seeds (bottom-up seed-mean relative effect
+$\approx -6.84\%$).
+Figure~\ref{fig:boot} places selected relative effects with bootstrap intervals;
+Figure~\ref{fig:trade} shows top/bottom trade-offs.
+
+\input{tables/cpu_main_results}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_horizon.pdf}
+\caption{{CPU} aggregate {MAE} versus horizon for selected model--method pairs.
+Points summarize outer folds; units are weighted-mean percentage.}
+\label{fig:cpu_h}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/bootstrap_relative_effects.pdf}
+\caption{Selected bootstrap relative {MAE} effects with direct relative $95\%$
+intervals from the frozen statistical analysis. Negative values favor the
+reconciled or stronger comparator.}
+\label{fig:boot}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
+\caption{Top versus bottom accuracy trade-offs under reconciliation.
+Bottom-up preserves bottoms; {WLS}/MinT may improve aggregates at machine-level
+cost.}
+\label{fig:trade}
+\end{figure}
+
+\subsection{Memory Results}
+\label{sec:memory}
+Table~\ref{tab:memory_main} shows that {EWMA} is the strongest observed memory
+method ({MAE} $\approx 1.051\times 10^9$).
+DLinear independent is weaker than {EWMA}; {WLS}/MinT often improve DLinear
+relative to its own independent forecast (about $-3.22\%$ / $-3.40\%$
+seed-mean), but reconciled DLinear does not robustly beat {EWMA}.
+The seed-mean {WLS}-versus-{EWMA} effect is near zero/slightly positive, and
+seed~$2$ reverses ($\approx +2.06\%$), contradicting a robust win claim.
+MinT versus {EWMA} remains unsupported as a robust improvement.
+LightGBM is substantially worse than {EWMA}: about $+36.9\%$ on the mean table
+summary and about $+38.8\%$ on the paired-bootstrap summary; these are different
+aggregations, not conflicting measurements of one scalar.
+Memory evidence is therefore secondary and conditional.
+
+\input{tables/memory_main_results}
+
+\subsection{Disk Failure Boundary}
+\label{sec:disk}
+Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} show that persistence
+and {EWMA} are practical disk baselines.
+Ridge independent already trails them; Ridge bottom-up further harms aggregate
+accuracy by about $+13.9\%$ relative to independent.
+Ridge top-down preserves the independent top ({MAE} change $0\%$ at the top)
+while materially increasing bottom macro {MAE}.
+LightGBM disk results in the freeze stack are transferred-configuration stress
+evidence only and are not primary claims.
+
+\input{tables/disk_boundary_results}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/disk_boundary.pdf}
+\caption{Disk boundary comparison emphasizing Ridge independent, bottom-up, and
+top-down behavior relative to persistence/{EWMA}.}
+\label{fig:disk}
+\end{figure}
+
+\subsection{Peak-Operational Analysis}
+\label{sec:peaks}
+Table~\ref{tab:peaks} summarizes peak claims.
+LightGBM remains strongest during {CPU} high-load periods (P3 supported).
+General reconciliation benefits for {CPU} high-load {MAE}, peak recall without
+false-alarm cost, and memory peaks are unsupported (P1/P2/P4).
+DLinear memory peak underprediction and range compression persist across all
+seeds and are often amplified by reconciliation (P5 diagnostic).
+Thus ordinary aggregate-{MAE} gains do not imply universal peak-operational
+gains.
+
+\input{tables/peak_results}
+
+\subsection{Seed Robustness}
+\label{sec:seeds}
+Table~\ref{tab:seeds} and Figure~\ref{fig:seed} confirm LightGBM seed invariance
+under the frozen configuration and practical DLinear {CPU} seed stability.
+Reconciliation improvements for DLinear {CPU} hold across seeds~$0/1/2$.
+
+\input{tables/seed_robustness}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/cpu_reconciliation_effect_by_seed.pdf}
+\caption{Reconciliation relative effects by seed for {CPU}. Error bars denote
+cross-seed/fold dispersion in the frozen robustness summaries, not
+independent-dataset confidence intervals.}
+\label{fig:seed}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/coherence_before_after.pdf}
+\caption{{CPU} coherence error before and after reconciliation. Reconciled
+methods drive exact summing violations to numerical zero in the frozen
+evaluation.}
+\label{fig:coh}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/cpu_peak_results.pdf}
+\caption{{CPU} peak/high-load operational metrics for selected configurations.
+Ordinary aggregate {MAE} improvements do not imply universal peak-recall or
+false-alarm gains.}
+\label{fig:cpupeak}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
+\caption{Signed DLinear memory peak bias by seed and reconciliation method.
+Underprediction persists across seeds~$0/1/2$ and is often amplified after
+reconciliation.}
+\label{fig:membias}
+\end{figure}
+
+\input{tables/statistical_evidence}
+\input{tables/claim_support}
+
+%% =====================================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Accuracy--Coherence Trade-offs}
+{RQ1}--{RQ2}: For core-weighted {CPU}, learned independent forecasts already beat
+strong deterministic baselines, and MinT further improves LightGBM aggregates
+while restoring exact coherence.
+Bottom-up is the bottom-preserving alternative; {WLS}/MinT expose an explicit
+top/bottom trade-off.
+
+\subsection{Why Reconciliation Is Hierarchy-Dependent}
+{RQ3}--{RQ4}: Memory and disk demonstrate that reconciliation is not universally
+beneficial.
+On memory, {EWMA} can dominate learned models, so reconciliation should be judged
+against {EWMA}, not only against a model's independent forecast.
+On disk, bottom-up can inject bottom errors into the aggregate, while top-down
+protects the top at bottom cost.
+
+\subsection{Implications for Application Profiling}
+For proactive profile management
+\cite{kadouma2025unifiedprofile}, coherent {CPU} forecasts provide a practical
+planning layer.
+Memory and disk require selective policies: retain strong simple baselines when
+they win, and choose reconciliation mode by hierarchy rather than by default.
+
+\subsection{Limitations}
+Evidence is single-dataset and freeze-scoped.
+Sampling differs slightly from the approximate $45$\,s description in some
+dataset materials; we report the measured median $42.285$\,s.
+Network, downsampling, conformal, {LSTM}, adaptive routing, and {LOMO} results
+are out of scope.
+Public code packaging for this article may still require an author-confirmed
+repository {URL}.
+
+%% =====================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+Hierarchy-aware reconciliation yields strong, seed-robust {CPU} coherence and
+accuracy gains on TimeTrack, conditional memory improvements that do not
+displace {EWMA}, a clear disk failure boundary, and peak-operational limits on
+transferring ordinary {MAE} gains.
+Selective reconciliation is therefore a practical forecasting layer for
+multi-level cloud telemetry in application-profiling pipelines.
+
+\section*{Data Availability}
+The TimeTrack dataset is publicly available on Kaggle
+\cite{meliani2025timetrackkaggle}:
+\url{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}.
+The dataset characterization is described by Meliani et al.\
+\cite{meliani2025timetrack}.
+
+\section*{Code and Artifact Availability}
+Frozen prediction, analysis, peak, robustness, and reporting artifacts are
+tracked in the project repository under immutable freeze tags culminating in
+\texttt{final-reporting-freeze-v2}.
+% TODO-AUTHOR: insert public artifact repository URL before submission
+
+\section*{CRediT Author Statement}
+\textbf{Abdelhak Kadouma:} Conceptualization, Methodology, Software, Data
+curation, Formal analysis, Validation, Visualization, Writing -- original draft.
+\textbf{Amit Shukla:} Supervision, Conceptualization, Methodology, Writing --
+review \& editing.
+\textbf{Mohammed Elmusrati:} Supervision, Project administration, Funding
+acquisition, Writing -- review \& editing.
+
+\section*{Declaration of Competing Interest}
+The authors declare that they have no known competing financial interests or
+personal relationships that could have appeared to influence the work reported
+in this paper.
+
+\section*{Acknowledgements}
+% TODO-AUTHOR: confirm final acknowledgement and funding text before submission
+The authors thank colleagues and collaborators who contributed to the broader
+TimeTrack and application-profiling research context.
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+\end{document}

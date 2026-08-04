@@ -1,0 +1,5 @@
+Coherent machine-to-cluster forecasts via hierarchy-aware reconciliation.
+LightGBM+MinT improves CPU accuracy and restores exact coherence.
+Memory gains are conditional; EWMA remains the strongest observed method.
+Disk shows a failure boundary: bottom-up can harm aggregate accuracy.
+Ordinary MAE gains do not imply universal peak-operational improvements.
