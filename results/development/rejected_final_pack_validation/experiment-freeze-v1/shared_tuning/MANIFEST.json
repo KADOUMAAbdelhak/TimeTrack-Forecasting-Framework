@@ -1,0 +1,30 @@
+{
+  "pack_id": "shared_tuning",
+  "required": true,
+  "dependencies": [],
+  "implementation_commit": "5d145354147d03548babcc43994defc03a9a7f78",
+  "freeze_commit": "5d145354147d03548babcc43994defc03a9a7f78",
+  "freeze_tag": "experiment-freeze-v1",
+  "freeze_tag_commit": "e9d5b9cbf57063a088d9c76c53933561160ba535",
+  "configuration_hash": "1a8fd4c179d62ad1",
+  "pack_hash": "1db1f849dd276709",
+  "dataset_fingerprint": "bf06dc0e7fe6ff5e",
+  "start_time": "2026-08-04T08:33:55.987214+00:00",
+  "end_time": "2026-08-04T08:34:31.182668+00:00",
+  "actual_wall_seconds": 35.19577687500032,
+  "cpu_seconds": 51.266824,
+  "completed_runs": 27,
+  "failed_runs": 0,
+  "skipped_runs": 0,
+  "status": "complete",
+  "eligible_for_final_claims": false,
+  "output_dir": "/Users/fgtek002/TimeTrack/results/final/packs/00_shared_tuning",
+  "experiment_stage": "development",
+  "evaluation_role": "rejected_final_pack_validation",
+  "rejection_reason": [
+    "single_inner_fold_tuning",
+    "incomplete_manifest_provenance",
+    "pathological_dlinear_memory_validation"
+  ],
+  "original_freeze_tag": "experiment-freeze-v1"
+}
