@@ -1,6 +1,6 @@
 {
   "pack_id": "shared_tuning",
-  "status": "complete",
+  "status": "prefreeze_validation_complete",
   "completed_runs": [
     "ridge_grid__memory_um__alpha=0.0001",
     "ridge_grid__memory_um__alpha=0.01",
@@ -39,5 +39,7 @@
   "start_time": "2026-08-04T08:12:28.341811+00:00",
   "end_time": "2026-08-04T08:13:03.400254+00:00",
   "last_message": null,
-  "sessions": []
+  "sessions": [],
+  "eligible_for_final_claims": false,
+  "evaluation_role": "prefreeze_pack_validation"
 }
