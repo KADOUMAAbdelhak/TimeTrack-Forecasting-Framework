@@ -21,6 +21,9 @@ def aggregate(cfg: dict) -> dict:
     for pid in required:
         pack = pack_by_id(cfg, pid)
         st = read_pack_status(cfg, pack)
+        if st == "skipped" and pid in {"memory_dlinear", "cpu_dlinear"}:
+            # eligibility demotion after shared_tuning is acceptable
+            continue
         if st != "complete":
             incomplete.append({"pack_id": pid, "status": st})
     if incomplete:

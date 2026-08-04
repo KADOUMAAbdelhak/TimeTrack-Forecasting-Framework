@@ -76,6 +76,8 @@ def read_pack_status(cfg: dict[str, Any], pack: dict[str, Any]) -> str:
     out = pack_output_dir(cfg, pack)
     if (out / "COMPLETE").exists():
         return "complete"
+    if (out / "SKIPPED_INELIGIBLE").exists():
+        return "skipped"
     status_path = out / "RUN_STATUS.json"
     if not status_path.exists():
         return "pending"

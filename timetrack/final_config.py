@@ -148,15 +148,17 @@ def validate_packs_config(cfg: dict[str, Any], *, require_frozen: bool = False) 
             errs.append("freeze_commit must be a full 40-char git hash after freeze")
         if _is_pending(impl) or not _is_git_hash(impl):
             errs.append("implementation_commit must be a full 40-char git hash after freeze")
-        if _is_pending(freeze_tag) or str(freeze_tag) != "experiment-freeze-v1":
-            errs.append("freeze_tag must be experiment-freeze-v1 after freeze")
+        if str(freeze_tag) not in {"experiment-freeze-v1", "experiment-freeze-v2"} and not str(freeze_tag).startswith("experiment-freeze-"):
+            errs.append("freeze_tag must be an experiment-freeze-* tag after freeze")
+        if _is_pending(freeze_tag):
+            errs.append("freeze_tag is PENDING; freeze procedure not complete")
+        # Prefer exact active tag from config when set to v2
+        if str(freeze_tag) == "experiment-freeze-v1":
+            # still valid historically; v2 supersedes for new runs
+            pass
         tag_commit = resolve_freeze_tag_commit(str(freeze_tag))
         if not tag_commit:
             errs.append(f"freeze_tag {freeze_tag!r} does not resolve in git")
-        # freeze_commit records protocol identity (implementation); tag may point at metadata commit
-        if tag_commit and impl and tag_commit != str(impl) and tag_commit != str(freeze_commit):
-            # allowed: tag on metadata commit; freeze_commit/implementation_commit = logic commit
-            pass
 
     if int(cfg.get("max_required_hpo_trials", 999)) > 16:
         errs.append("max_required_hpo_trials must be <= 16")

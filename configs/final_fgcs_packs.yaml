@@ -15,9 +15,9 @@ branch: main
 #   freeze_commit         = same protocol logic commit (non-self-referential)
 #   freeze_tag            = experiment-freeze-v1
 #   freeze_tag_commit     = resolved at runtime via `git rev-parse experiment-freeze-v1`
-implementation_commit: 5d145354147d03548babcc43994defc03a9a7f78
-freeze_commit: 5d145354147d03548babcc43994defc03a9a7f78
-freeze_tag: experiment-freeze-v1
+implementation_commit: PENDING_EXPERIMENT_FREEZE_V2
+freeze_commit: PENDING_EXPERIMENT_FREEZE_V2
+freeze_tag: PENDING_experiment-freeze-v2
 
 dataset_fingerprint: bf06dc0e7fe6ff5e
 dependency_lock_hash: 22dca9902706473b
@@ -72,7 +72,7 @@ packs:
     reconciliation_methods: []
     estimated_base_fits: 28
     estimated_recon_evals: 0
-    estimated_runtime_minutes: 5
+    estimated_runtime_minutes: 15
     hard_wall_clock_minutes: 45
     stop_launching_new_runs_minutes: 40
     kind: shared_tuning

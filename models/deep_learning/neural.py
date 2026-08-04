@@ -314,7 +314,12 @@ def _make_dlinear_net(context: int, horizon: int, kernel_size: int):
 
 @register("dlinear")
 class DLinearForecaster(BaseForecaster):
-    """DLinear-style: seasonal/trend decomposition via moving avg + linear."""
+    """DLinear-style: seasonal/trend decomposition via moving avg + linear.
+
+    Train-only standardization of the univariate series and targets is required
+    for large-magnitude telemetry (e.g. cluster_UM ~1e11). Without it, float32
+    MSE training collapses to large negative predictions.
+    """
 
     name = "dlinear"
 
@@ -341,6 +346,29 @@ class DLinearForecaster(BaseForecaster):
         self.num_threads = num_threads
         self.runtime_meta_: dict[str, Any] = {}
 
+    def _fit_scaler(self, series: np.ndarray, y: np.ndarray) -> None:
+        s = series.reshape(-1)
+        s = s[np.isfinite(s)]
+        yf = y.reshape(-1)
+        yf = yf[np.isfinite(yf)]
+        self.x_mean_ = float(np.mean(s)) if len(s) else 0.0
+        self.x_std_ = float(np.std(s)) if len(s) else 1.0
+        if not np.isfinite(self.x_std_) or self.x_std_ < 1e-12:
+            self.x_std_ = 1.0
+        self.y_mean_ = float(np.mean(yf)) if len(yf) else 0.0
+        self.y_std_ = float(np.std(yf)) if len(yf) else 1.0
+        if not np.isfinite(self.y_std_) or self.y_std_ < 1e-12:
+            self.y_std_ = 1.0
+
+    def _scale_x(self, series: np.ndarray) -> np.ndarray:
+        return ((series - self.x_mean_) / self.x_std_).astype(np.float32)
+
+    def _scale_y(self, y: np.ndarray) -> np.ndarray:
+        return ((y - self.y_mean_) / self.y_std_).astype(np.float32)
+
+    def _inverse_y(self, y_s: np.ndarray) -> np.ndarray:
+        return y_s.astype(np.float64) * self.y_std_ + self.y_mean_
+
     def fit(self, X, y, X_val=None, y_val=None):
         import time as _time
 
@@ -353,20 +381,24 @@ class DLinearForecaster(BaseForecaster):
 
         t_prep0 = _time.perf_counter()
         X_arr = np.ascontiguousarray(_prepare_seq(X))
-        y_arr = np.ascontiguousarray(np.asarray(y, dtype=np.float32))
+        y_arr = np.ascontiguousarray(np.asarray(y, dtype=np.float64))
         if y_arr.ndim == 1:
             y_arr = y_arr[:, None]
-        series = np.ascontiguousarray(X_arr[:, :, 0])
-        context = series.shape[1]
+        series = np.ascontiguousarray(X_arr[:, :, 0], dtype=np.float64)
+        self._fit_scaler(series, y_arr)
+        series_s = self._scale_x(series)
+        y_s = self._scale_y(y_arr)
+        context = series_s.shape[1]
         prep_s = _time.perf_counter() - t_prep0
 
         Xv = None
         yv = None
         if X_val is not None and y_val is not None and len(X_val):
-            Xv = np.ascontiguousarray(_prepare_seq(X_val)[:, :, 0])
-            yv = np.ascontiguousarray(np.asarray(y_val, dtype=np.float32))
-            if yv.ndim == 1:
-                yv = yv[:, None]
+            Xv = self._scale_x(np.ascontiguousarray(_prepare_seq(X_val)[:, :, 0], dtype=np.float64))
+            yv_raw = np.ascontiguousarray(np.asarray(y_val, dtype=np.float64))
+            if yv_raw.ndim == 1:
+                yv_raw = yv_raw[:, None]
+            yv = self._scale_y(yv_raw)
 
         def _fit():
             t0 = _time.perf_counter()
@@ -374,8 +406,8 @@ class DLinearForecaster(BaseForecaster):
             init_s = _time.perf_counter() - t0
             opt = torch.optim.Adam(self.net_.parameters(), lr=self.lr)
             loss_fn = nn.MSELoss()
-            Xt = torch.tensor(series, dtype=torch.float32)
-            yt = torch.tensor(y_arr, dtype=torch.float32)
+            Xt = torch.tensor(series_s, dtype=torch.float32)
+            yt = torch.tensor(y_s, dtype=torch.float32)
             best_state = None
             best_val = float("inf")
             bad = 0
@@ -433,6 +465,11 @@ class DLinearForecaster(BaseForecaster):
                 "n_train": int(len(Xt)),
                 "timeout_sec": self.timeout_sec,
                 "num_threads": self.num_threads,
+                "x_mean": self.x_mean_,
+                "x_std": self.x_std_,
+                "y_mean": self.y_mean_,
+                "y_std": self.y_std_,
+                "scaling": "train_only_standardize",
             }
             self.metadata.config["runtime"] = dict(self.runtime_meta_)
             return self
@@ -441,17 +478,18 @@ class DLinearForecaster(BaseForecaster):
 
     def predict(self, X):
         torch, _ = _torch()
-        X_arr = np.ascontiguousarray(_prepare_seq(X)[:, :, 0])
+        X_raw = np.ascontiguousarray(_prepare_seq(X)[:, :, 0], dtype=np.float64)
+        X_arr = self._scale_x(X_raw)
 
         def _predict(_X):
             self.net_.eval()
             with torch.no_grad():
-                # chunk large predict to bound memory
                 outs = []
                 bs = max(256, int(self.batch_size))
                 for i in range(0, len(X_arr), bs):
                     outs.append(self.net_(torch.tensor(X_arr[i : i + bs], dtype=torch.float32)).cpu().numpy())
-                pred = np.concatenate(outs, axis=0)
+                pred_s = np.concatenate(outs, axis=0)
+            pred = self._inverse_y(pred_s)
             if self.horizon == 1:
                 return pred.reshape(-1)
             return pred
@@ -475,6 +513,10 @@ class DLinearForecaster(BaseForecaster):
                 "kernel_size": self.kernel_size,
                 "seed": self.seed,
                 "metadata": self.metadata.to_dict(),
+                "x_mean": getattr(self, "x_mean_", 0.0),
+                "x_std": getattr(self, "x_std_", 1.0),
+                "y_mean": getattr(self, "y_mean_", 0.0),
+                "y_std": getattr(self, "y_std_", 1.0),
             },
             path / "dlinear.pt",
         )

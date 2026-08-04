@@ -32,7 +32,7 @@ from models.hybrid.reconciliation import (
     reconcile,
 )
 from timetrack.data import build_analysis_panel, dataset_fingerprint
-from timetrack.efficiency import measure_inference_latencies, timed_train
+from timetrack.efficiency import measure_inference_latencies, peak_rss_bytes, timed_train
 from timetrack.final_config import freeze_metadata
 from timetrack.final_packs import (
     RunStatus,
@@ -63,26 +63,47 @@ def _load_shared_hparams(cfg: dict[str, Any]) -> dict[str, Any]:
     path = ROOT / (cfg.get("shared_hyperparameters_path") or "")
     if path.exists():
         return yaml.safe_load(path.read_text()) or {}
+    dlin = dict(cfg.get("dlinear_fixed") or {})
     return {
-        "ridge": {"alpha": 1.0},
-        "lightgbm_memory": {"n_estimators": 200, "learning_rate": 0.05, "num_leaves": 31},
+        "ridge_cpu": {"alpha": 1.0},
+        "ridge_memory": {"alpha": 1.0},
         "lightgbm_cpu": {"n_estimators": 200, "learning_rate": 0.05, "num_leaves": 31},
-        "dlinear": dict(cfg.get("dlinear_fixed") or {}),
+        "lightgbm_memory": {"n_estimators": 200, "learning_rate": 0.05, "num_leaves": 31},
+        "dlinear_cpu": {**dlin, "enabled": True},
+        "dlinear_memory": {**dlin, "enabled": True},
     }
 
 
 def _model_kwargs_for(cfg: dict[str, Any], shared: dict[str, Any], model: str, hierarchy: str) -> dict[str, Any]:
+    is_cpu = "cpu" in hierarchy
     if model == "ridge":
-        return dict(shared.get("ridge") or {"alpha": 1.0})
+        key = "ridge_cpu" if is_cpu else "ridge_memory"
+        legacy = shared.get("ridge") or {}
+        return dict(shared.get(key) or legacy or {"alpha": 1.0})
     if model == "lightgbm":
-        if "cpu" in hierarchy:
-            return dict(shared.get("lightgbm_cpu") or shared.get("lightgbm_memory") or {})
-        return dict(shared.get("lightgbm_memory") or shared.get("lightgbm_cpu") or {})
+        key = "lightgbm_cpu" if is_cpu else "lightgbm_memory"
+        return dict(shared.get(key) or {})
     if model == "dlinear":
-        return dict(shared.get("dlinear") or cfg.get("dlinear_fixed") or {})
+        key = "dlinear_cpu" if is_cpu else "dlinear_memory"
+        block = dict(shared.get(key) or shared.get("dlinear") or cfg.get("dlinear_fixed") or {})
+        block.pop("enabled", None)
+        block.pop("eligibility_reason", None)
+        return block
     if model == "lstm":
         return {"epochs": 30, "hidden_size": 64, "patience": 5, "num_threads": 1}
     return {}
+
+
+def _complexity_key(model: str, params: dict[str, Any]) -> tuple:
+    if model == "ridge":
+        return (abs(np.log10(max(float(params.get("alpha", 1.0)), 1e-12))),)
+    if model == "lightgbm":
+        return (
+            int(params.get("n_estimators", 0)),
+            int(params.get("num_leaves", 0)),
+            float(params.get("learning_rate", 0)),
+        )
+    return (0,)
 
 
 def _fit_predict(
@@ -148,41 +169,86 @@ def _append_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     df.to_csv(path, index=False)
 
 
-def run_shared_tuning(cfg: dict[str, Any], pack: dict[str, Any], out: Path, guard: WallClockGuard, status: RunStatus) -> None:
-    from timetrack.metrics import mae as _mae
+def _mae_tied(a: float, b: float) -> bool:
+    if not (np.isfinite(a) and np.isfinite(b)):
+        return False
+    return abs(a - b) < max(1e-9, 1e-4 * max(abs(a), abs(b), 1e-12))
 
+
+def _eval_candidate_folds(
+    panel: pd.DataFrame,
+    folds,
+    target: str,
+    model_name: str,
+    params: dict[str, Any],
+    *,
+    context: int,
+    horizon: int,
+    seed: int,
+    eff_proto: dict[str, Any],
+) -> dict[str, Any]:
+    from timetrack.metrics import mae as _mae
+    from timetrack.metrics import mase_result
+
+    fold_maes, fold_mase, fold_mase_valid, fold_pers = [], [], [], []
+    for fold_id, fold in enumerate(folds):
+        split = fold_to_split_spec(fold)
+        pack = _fit_predict(panel, split, target, horizon, context, model_name, seed, params, eff_proto)
+        pers = _fit_predict(panel, split, target, horizon, context, "persistence", 0, {}, {"warmup": 0, "repeats": 1})
+        yv, pv = pack["y_val"], pack["p_val"]
+        fold_maes.append(float(_mae(yv, pv)))
+        mr = mase_result(yv, pv, pack["y_train"])
+        fold_mase.append(float(mr["mase"]) if mr.get("mase_valid") else float("nan"))
+        fold_mase_valid.append(bool(mr.get("mase_valid")))
+        fold_pers.append(float(_mae(pers["y_val"], pers["p_val"])))
+    arr = np.asarray(fold_maes, dtype=float)
+    valid_mase = [m for m, ok in zip(fold_mase, fold_mase_valid) if ok and np.isfinite(m)]
+    return {
+        "fold_maes": fold_maes,
+        "fold_mase": fold_mase,
+        "fold_mase_valid": fold_mase_valid,
+        "fold_persistence_maes": fold_pers,
+        "mean_mae": float(np.mean(arr)),
+        "std_mae": float(np.std(arr, ddof=0)),
+        "mean_valid_mase": float(np.mean(valid_mase)) if valid_mase else float("nan"),
+        "n_valid_mase_folds": int(len(valid_mase)),
+        "mean_persistence_mae": float(np.mean(fold_pers)),
+        "rel_mae_vs_persistence": float(np.mean(arr) / max(float(np.mean(fold_pers)), 1e-12)),
+    }
+
+
+def _eligibility_gate(fold_maes: list[float], fold_pers: list[float], preds_finite: bool = True) -> tuple[bool, str]:
+    if not preds_finite:
+        return False, "non_finite_predictions"
+    if len(fold_maes) < 2:
+        return False, "insufficient_folds"
+    ratios = []
+    for m, p in zip(fold_maes, fold_pers):
+        if not (np.isfinite(m) and np.isfinite(p) and p > 0):
+            continue
+        ratios.append(m / p)
+    if len(ratios) < 2:
+        return False, "fewer_than_two_valid_metric_folds"
+    mean_r = float(np.mean(ratios))
+    if mean_r > 2.0:
+        return False, f"mean_mae_gt_2x_persistence ({mean_r:.3f})"
+    if any(r > 5.0 for r in ratios):
+        return False, f"fold_mae_gt_5x_persistence ({max(ratios):.3f})"
+    return True, "passed_persistence_eligibility_gate"
+
+
+def run_shared_tuning(cfg: dict[str, Any], pack: dict[str, Any], out: Path, guard: WallClockGuard, status: RunStatus) -> None:
     panel = build_analysis_panel()
     folds = make_outer_chronological_folds(panel, n_folds=int(cfg["n_outer_folds"]))
-    split = fold_to_split_spec(folds[0])
     context = int(cfg.get("context", 32))
     horizon = 1
     metrics_dir = out / "metrics"
     metrics_dir.mkdir(parents=True, exist_ok=True)
-    rows = []
+    eff_light = {"warmup": 0, "repeats": 1}
+    rows: list[dict[str, Any]] = []
+    diag_rows: list[dict[str, Any]] = []
 
-    # Ridge grid on representative tops
-    alphas = list(cfg.get("ridge_alpha_grid") or [1e-4, 1e-2, 1.0, 100.0, 1e4])
-    ridge_targets = [("memory_um", "cluster_UM"), ("cpu_core_weighted", "cluster_mean_CU")]
-    best_ridge = {"alpha": 1.0, "mae": float("inf")}
-    for hier, target in ridge_targets:
-        if target not in panel.columns:
-            continue
-        for alpha in alphas:
-            run_id = f"ridge_grid__{hier}__alpha={alpha}"
-            if run_id in status.completed_runs:
-                continue
-            if not guard.may_launch_new_run():
-                status.status = "partial"
-                status.last_message = "launch limit during ridge grid"
-                return
-            pack_out = _fit_predict(panel, split, target, horizon, context, "ridge", 0, {"alpha": float(alpha)}, cfg.get("efficiency_protocol") or {})
-            m = float(_mae(pack_out["y_val"], pack_out["p_val"]))
-            rows.append({"run_id": run_id, "model": "ridge", "hierarchy": hier, "target": target, "alpha": alpha, "val_mae": m})
-            status.completed_runs.append(run_id)
-            if m < best_ridge["mae"]:
-                best_ridge = {"alpha": float(alpha), "mae": m, "target": target}
-
-    # LightGBM small search (8 mem + 8 cpu)
+    alphas = [float(a) for a in (cfg.get("ridge_alpha_grid") or [1e-4, 1e-2, 1.0, 100.0, 1e4])]
     lgbm_space = [
         {"n_estimators": 100, "learning_rate": 0.05, "num_leaves": 15},
         {"n_estimators": 200, "learning_rate": 0.05, "num_leaves": 31},
@@ -193,56 +259,221 @@ def run_shared_tuning(cfg: dict[str, Any], pack: dict[str, Any], out: Path, guar
         {"n_estimators": 150, "learning_rate": 0.08, "num_leaves": 31},
         {"n_estimators": 250, "learning_rate": 0.05, "num_leaves": 47},
     ]
-    assert len(lgbm_space) <= 8
-    best_mem = {"mae": float("inf"), "params": lgbm_space[1]}
-    best_cpu = {"mae": float("inf"), "params": lgbm_space[1]}
-    for tag, target, bucket in (
-        ("memory", "cluster_UM", best_mem),
-        ("cpu", "cluster_mean_CU", best_cpu),
-    ):
-        if target not in panel.columns:
-            continue
-        for i, params in enumerate(lgbm_space):
-            run_id = f"lgbm_{tag}_trial{i}"
-            if run_id in status.completed_runs:
+    assert len(lgbm_space) <= int(cfg.get("lightgbm_max_trials_memory", 8))
+    assert len(lgbm_space) <= int(cfg.get("lightgbm_max_trials_cpu", 8))
+    default_lgbm = {"n_estimators": 200, "learning_rate": 0.05, "num_leaves": 31}
+    canonical_ridge = 1.0
+    dlin_fixed = dict(cfg.get("dlinear_fixed") or {})
+
+    def select_from_candidates(cands: list[dict[str, Any]], *, model: str, default_params: dict[str, Any]) -> dict[str, Any]:
+        finite = [c for c in cands if np.isfinite(c["mean_mae"])]
+        if not finite:
+            raise RuntimeError(f"no finite candidates for {model}")
+        best = min(finite, key=lambda c: c["mean_mae"])
+        tied = [c for c in finite if _mae_tied(c["mean_mae"], best["mean_mae"])]
+        if len(tied) == 1:
+            best["selection_status"] = "selected"
+            best["selection_reason"] = "min_mean_inner_mae"
+            for c in cands:
+                if c is not best:
+                    c["selection_status"] = "rejected"
+            return best
+        # lower complexity, then canonical/default
+        tied_sorted = sorted(tied, key=lambda c: (_complexity_key(model, c["params"]), c["params"] != default_params))
+        pick = tied_sorted[0]
+        # prefer exact default/canonical if present in tie set
+        for c in tied:
+            if c["params"] == default_params:
+                pick = c
+                break
+        pick["selection_status"] = "selected_tie_break"
+        pick["selection_reason"] = "validation_tie_complexity_then_canonical"
+        for c in cands:
+            if c is pick:
                 continue
+            c["selection_status"] = "tied_not_selected" if c in tied else "rejected"
+        return pick
+
+    selected: dict[str, Any] = {}
+
+    # ---- Ridge per family ----
+    for family, target, key, default_alpha in (
+        ("cpu", "cluster_mean_CU", "ridge_cpu", canonical_ridge),
+        ("memory", "cluster_UM", "ridge_memory", canonical_ridge),
+    ):
+        cands = []
+        for alpha in alphas:
+            if not guard.may_launch_new_run():
+                status.status = "partial"
+                status.last_message = "launch limit during ridge tuning"
+                return
+            run_id = f"ridge_{family}_alpha={alpha}"
+            params = {"alpha": float(alpha)}
+            metrics = _eval_candidate_folds(
+                panel, folds, target, "ridge", params, context=context, horizon=horizon, seed=0, eff_proto=eff_light
+            )
+            row = {"run_id": run_id, "model": "ridge", "family": family, "target": target, "params": params, **metrics}
+            cands.append(row)
+            rows.append({**{k: v for k, v in row.items() if k != "params"}, **params})
+            if run_id not in status.completed_runs:
+                status.completed_runs.append(run_id)
+            status.save(out / "RUN_STATUS.json")
+        all_tied = len(cands) >= 2 and all(_mae_tied(c["mean_mae"], cands[0]["mean_mae"]) for c in cands)
+        if family == "memory" and all_tied:
+            pick = next(c for c in cands if float(c["params"]["alpha"]) == default_alpha)
+            pick["selection_status"] = "selected_tie_canonical"
+            pick["selection_reason"] = "validation_tie_canonical_default"
+            for c in cands:
+                if c is not pick:
+                    c["selection_status"] = "tied_not_selected"
+        else:
+            pick = select_from_candidates(cands, model="ridge", default_params={"alpha": default_alpha})
+        selected[key] = {"alpha": float(pick["params"]["alpha"]), "selection_reason": pick.get("selection_reason")}
+        # default comparison
+        def_metrics = _eval_candidate_folds(
+            panel, folds, target, "ridge", {"alpha": default_alpha}, context=context, horizon=horizon, seed=0, eff_proto=eff_light
+        )
+        selected[key]["vs_default_alpha_1_mean_mae"] = def_metrics["mean_mae"]
+        selected[key]["mean_mae"] = pick["mean_mae"]
+        selected[key]["std_mae"] = pick["std_mae"]
+        selected[key]["fold_maes"] = pick["fold_maes"]
+        selected[key]["fold_persistence_maes"] = pick["fold_persistence_maes"]
+        selected[key]["rel_mae_vs_persistence"] = pick["rel_mae_vs_persistence"]
+
+    # ---- LightGBM per family ----
+    for family, target, key in (
+        ("cpu", "cluster_mean_CU", "lightgbm_cpu"),
+        ("memory", "cluster_UM", "lightgbm_memory"),
+    ):
+        cands = []
+        for i, params in enumerate(lgbm_space):
             if not guard.may_launch_new_run():
                 status.status = "partial"
                 status.last_message = "launch limit during lightgbm tuning"
                 return
-            pack_out = _fit_predict(panel, split, target, horizon, context, "lightgbm", 0, params, cfg.get("efficiency_protocol") or {})
-            m = float(_mae(pack_out["y_val"], pack_out["p_val"]))
-            rows.append({"run_id": run_id, "model": "lightgbm", "family": tag, "target": target, "val_mae": m, **params})
+            run_id = f"lgbm_{family}_trial{i}"
+            if run_id in status.completed_runs:
+                # still need cand list — force recompute metrics from scratch if missing; simplest: skip resume for trial body
+                pass
+            metrics = _eval_candidate_folds(
+                panel, folds, target, "lightgbm", params, context=context, horizon=horizon, seed=0, eff_proto=eff_light
+            )
+            row = {"run_id": run_id, "model": "lightgbm", "family": family, "target": target, "params": dict(params), **metrics}
+            cands.append(row)
+            rows.append({**{k: v for k, v in row.items() if k != "params"}, **params})
+            if run_id not in status.completed_runs:
+                status.completed_runs.append(run_id)
+            status.save(out / "RUN_STATUS.json")
+        pick = select_from_candidates(cands, model="lightgbm", default_params=default_lgbm)
+        selected[key] = {**dict(pick["params"]), "selection_reason": pick.get("selection_reason")}
+        def_metrics = _eval_candidate_folds(
+            panel, folds, target, "lightgbm", default_lgbm, context=context, horizon=horizon, seed=0, eff_proto=eff_light
+        )
+        selected[key]["vs_default_mean_mae"] = def_metrics["mean_mae"]
+        selected[key]["mean_mae"] = pick["mean_mae"]
+        selected[key]["std_mae"] = pick["std_mae"]
+        selected[key]["fold_maes"] = pick["fold_maes"]
+        selected[key]["fold_persistence_maes"] = pick["fold_persistence_maes"]
+        selected[key]["rel_mae_vs_persistence"] = pick["rel_mae_vs_persistence"]
+        selected[key]["fold_mase"] = pick["fold_mase"]
+        selected[key]["fold_mase_valid"] = pick["fold_mase_valid"]
+
+    # ---- DLinear validation + eligibility (CPU & memory) ----
+    for family, target, key in (
+        ("cpu", "cluster_mean_CU", "dlinear_cpu"),
+        ("memory", "cluster_UM", "dlinear_memory"),
+    ):
+        if not guard.may_launch_new_run():
+            status.status = "partial"
+            status.last_message = "launch limit during dlinear validation"
+            return
+        run_id = f"dlinear_{family}_validate"
+        fold_diag = []
+        fold_maes, fold_pers = [], []
+        all_finite = True
+        for fold_id, fold in enumerate(folds):
+            split = fold_to_split_spec(fold)
+            pack = _fit_predict(panel, split, target, horizon, context, "dlinear", 0, dlin_fixed, eff_light)
+            pers = _fit_predict(panel, split, target, horizon, context, "persistence", 0, {}, {"warmup": 0, "repeats": 1})
+            from timetrack.metrics import mae as _mae
+
+            yv, pv = pack["y_val"], pack["p_val"]
+            yt = pack["y_train"]
+            finite = bool(np.all(np.isfinite(pv)))
+            all_finite = all_finite and finite
+            mae_v = float(_mae(yv, pv))
+            mae_p = float(_mae(pers["y_val"], pers["p_val"]))
+            fold_maes.append(mae_v)
+            fold_pers.append(mae_p)
+            # scaling diagnostics from a fresh model fit metadata if available
+            fold_diag.append(
+                {
+                    "fold": fold_id,
+                    "y_train_min": float(np.nanmin(yt)),
+                    "y_train_median": float(np.nanmedian(yt)),
+                    "y_train_max": float(np.nanmax(yt)),
+                    "y_val_min": float(np.nanmin(yv)),
+                    "y_val_median": float(np.nanmedian(yv)),
+                    "y_val_max": float(np.nanmax(yv)),
+                    "pred_min": float(np.nanmin(pv)),
+                    "pred_median": float(np.nanmedian(pv)),
+                    "pred_max": float(np.nanmax(pv)),
+                    "finite_pred_pct": float(np.mean(np.isfinite(pv)) * 100),
+                    "mae": mae_v,
+                    "persistence_mae": mae_p,
+                }
+            )
+            diag_rows.append({"run_id": run_id, "family": family, "target": target, **fold_diag[-1]})
+        ok, reason = _eligibility_gate(fold_maes, fold_pers, preds_finite=all_finite)
+        selected[key] = {
+            **dlin_fixed,
+            "enabled": bool(ok),
+            "eligibility_reason": reason,
+            "mean_mae": float(np.mean(fold_maes)),
+            "std_mae": float(np.std(fold_maes, ddof=0)),
+            "fold_maes": fold_maes,
+            "fold_persistence_maes": fold_pers,
+            "rel_mae_vs_persistence": float(np.mean(fold_maes) / max(float(np.mean(fold_pers)), 1e-12)),
+            "fold_diagnostics": fold_diag,
+        }
+        rows.append(
+            {
+                "run_id": run_id,
+                "model": "dlinear",
+                "family": family,
+                "target": target,
+                "mean_mae": selected[key]["mean_mae"],
+                "std_mae": selected[key]["std_mae"],
+                "enabled": ok,
+                "eligibility_reason": reason,
+                **{f"fold{i}_mae": fold_maes[i] for i in range(len(fold_maes))},
+            }
+        )
+        if run_id not in status.completed_runs:
             status.completed_runs.append(run_id)
-            if m < bucket["mae"]:
-                bucket["mae"] = m
-                bucket["params"] = dict(params)
+        status.save(out / "RUN_STATUS.json")
 
-    # DLinear config validation
-    run_id = "dlinear_validate_cluster_UM"
-    if run_id not in status.completed_runs and guard.may_launch_new_run():
-        dkwargs = dict(cfg.get("dlinear_fixed") or {})
-        pack_out = _fit_predict(panel, split, "cluster_UM", horizon, context, "dlinear", 0, dkwargs, cfg.get("efficiency_protocol") or {})
-        m = float(_mae(pack_out["y_val"], pack_out["p_val"]))
-        rows.append({"run_id": run_id, "model": "dlinear", "target": "cluster_UM", "val_mae": m, **dkwargs})
-        status.completed_runs.append(run_id)
-
-    selected = {
-        "ridge": {"alpha": best_ridge["alpha"]},
-        "lightgbm_memory": best_mem["params"],
-        "lightgbm_cpu": best_cpu["params"],
-        "dlinear": dict(cfg.get("dlinear_fixed") or {}),
-        "selection_notes": {
-            "ridge_best_val_mae": best_ridge.get("mae"),
-            "lgbm_memory_best_val_mae": best_mem["mae"],
-            "lgbm_cpu_best_val_mae": best_cpu["mae"],
-            "objective_scope": "inner_validation_fold0_only",
-            "outer_evaluation": False,
+    selected["selection_notes"] = {
+        "objective": "mean_inner_validation_mae_across_3_outer_fit_val_blocks",
+        "outer_evaluation_labels_accessed": False,
+        "n_outer_folds_used_for_inner_val": len(folds),
+        "tie_policy": "max(1e-9 abs, 1e-4 rel); then lower complexity; then canonical default",
+    }
+    (out / "selected_hyperparameters.yaml").write_text(yaml.safe_dump(selected, sort_keys=False))
+    pd.DataFrame(rows).to_csv(metrics_dir / "tuning_summary.csv", index=False)
+    if diag_rows:
+        pd.DataFrame(diag_rows).to_csv(metrics_dir / "dlinear_diagnostics.csv", index=False)
+    # eligibility sidecar for aggregator / later packs
+    elig = {
+        "dlinear_cpu": selected["dlinear_cpu"]["enabled"],
+        "dlinear_memory": selected["dlinear_memory"]["enabled"],
+        "reasons": {
+            "dlinear_cpu": selected["dlinear_cpu"]["eligibility_reason"],
+            "dlinear_memory": selected["dlinear_memory"]["eligibility_reason"],
         },
     }
-    (out / "selected_hyperparameters.yaml").write_text(yaml.safe_dump(selected, sort_keys=True))
-    pd.DataFrame(rows).to_csv(metrics_dir / "tuning_summary.csv", index=False)
-    status.total_runs = len(alphas) * 2 + 16 + 1
+    _write_json(out / "MODEL_ELIGIBILITY.json", elig)
+    status.total_runs = len(status.completed_runs)
     if status.status != "partial":
         status.status = "complete"
 
@@ -693,33 +924,85 @@ def finalize_pack_artifacts(
     *,
     pending_freeze: bool,
 ) -> None:
+    import subprocess
+
+    from timetrack.efficiency import peak_rss_bytes
+
     status.wall_seconds = guard.elapsed()
     status.cpu_seconds = guard.cpu_elapsed()
     status.end_time = _now()
     status.save(out / "RUN_STATUS.json")
     meta = freeze_metadata(cfg)
+    try:
+        exec_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=str(ROOT), text=True).strip()
+    except Exception:
+        exec_commit = None
+    try:
+        branch = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=str(ROOT), text=True).strip()
+    except Exception:
+        branch = cfg.get("branch")
+    peak_bytes, peak_available, peak_reason = peak_rss_bytes()
+
+    role = "shared_final_tuning" if pack.get("kind") == "shared_tuning" else "outer_evaluation"
+    if pending_freeze:
+        role = "pack_prefreeze"
     manifest = {
         "pack_id": pack["id"],
         "required": bool(pack.get("required")),
         "dependencies": list(pack.get("dependencies") or []),
+        "experiment_stage": "development" if pending_freeze else "final",
+        "eligible_for_final_claims": (not pending_freeze) and status.status == "complete",
+        "evaluation_role": role,
+        "execution_commit": exec_commit,
+        "frozen_implementation_commit": meta.get("implementation_commit"),
         "implementation_commit": meta.get("implementation_commit"),
         "freeze_commit": meta.get("freeze_commit"),
         "freeze_tag": meta.get("freeze_tag"),
         "freeze_tag_commit": meta.get("freeze_tag_commit"),
-        "configuration_hash": config_hash(cfg),
-        "pack_hash": pack_hash(pack),
+        "repository_url": cfg.get("repository_url"),
+        "git_branch": branch,
         "dataset_fingerprint": dataset_fingerprint().get("fingerprint"),
+        "config_hash": config_hash(cfg),
+        "pack_hash": pack_hash(pack),
+        "dependency_lock_hash": cfg.get("dependency_lock_hash"),
         "start_time": status.start_time,
         "end_time": status.end_time,
         "actual_wall_seconds": status.wall_seconds,
         "cpu_seconds": status.cpu_seconds,
+        "peak_memory_bytes": peak_bytes,
+        "peak_memory_available": peak_available,
+        "peak_memory_reason": peak_reason,
         "completed_runs": len(status.completed_runs),
         "failed_runs": len(status.failed_runs),
         "skipped_runs": len(status.skipped_runs),
         "status": status.status,
-        "eligible_for_final_claims": (not pending_freeze) and status.status == "complete",
         "output_dir": str(out),
     }
+    required_fields = [
+        "experiment_stage",
+        "eligible_for_final_claims",
+        "evaluation_role",
+        "execution_commit",
+        "frozen_implementation_commit",
+        "freeze_tag",
+        "freeze_tag_commit",
+        "repository_url",
+        "git_branch",
+        "dataset_fingerprint",
+        "config_hash",
+        "pack_hash",
+        "dependency_lock_hash",
+        "peak_memory_available",
+    ]
+    missing = [k for k in required_fields if k not in manifest or manifest[k] is None]
+    # peak_memory_bytes may be null if unavailable
+    if not peak_available and "peak_memory_reason" not in manifest:
+        missing.append("peak_memory_reason")
+    if missing and not pending_freeze and status.status == "complete":
+        status.status = "failed"
+        status.last_message = f"manifest missing required provenance fields: {missing}"
+        manifest["status"] = "failed"
+        manifest["eligible_for_final_claims"] = False
     _write_json(out / "MANIFEST.json", manifest)
     if status.status == "complete":
         (out / "COMPLETE").write_text(_now() + "\n")
@@ -744,6 +1027,25 @@ def run_pack(pack_id: str, config_path: Path | str | None = None, *, resume: boo
     pending_freeze = str(cfg.get("freeze_commit", "")).upper().startswith("PENDING") or str(
         cfg.get("implementation_commit", "PENDING")
     ).upper().startswith("PENDING")
+
+    # Demote DLinear packs when shared_tuning eligibility failed
+    if pack_id in {"memory_dlinear", "cpu_dlinear"} and not pending_freeze:
+        elig_path = pack_output_dir(cfg, pack_by_id(cfg, "shared_tuning")) / "MODEL_ELIGIBILITY.json"
+        if elig_path.exists():
+            elig = json.loads(elig_path.read_text())
+            key = "dlinear_memory" if pack_id == "memory_dlinear" else "dlinear_cpu"
+            if not elig.get(key, True):
+                status = RunStatus(pack_id=pack_id, status="skipped")
+                status.skipped_runs.append(f"ineligible:{elig.get('reasons', {}).get(key)}")
+                status.start_time = _now()
+                guard = WallClockGuard(1, 0.5)
+                status.status = "skipped"
+                finalize_pack_artifacts(cfg, pack, out, status, guard, pending_freeze=pending_freeze)
+                # Write SKIPPED marker instead of COMPLETE for ineligible required demotion
+                (out / "SKIPPED_INELIGIBLE").write_text(json.dumps(elig, indent=2))
+                if (out / "COMPLETE").exists():
+                    (out / "COMPLETE").unlink()
+                return json.loads((out / "MANIFEST.json").read_text())
     status_path = out / "RUN_STATUS.json"
     if resume and status_path.exists():
         status = RunStatus.load(status_path)

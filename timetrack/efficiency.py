@@ -21,6 +21,17 @@ def _peak_rss_mb() -> float:
     return rss / 1024.0
 
 
+def peak_rss_bytes() -> tuple[int | None, bool, str | None]:
+    """Return (bytes, available, reason)."""
+    try:
+        mb = _peak_rss_mb()
+        if not np.isfinite(mb):
+            return None, False, "non_finite_peak_rss"
+        return int(mb * 1024 * 1024), True, None
+    except Exception as exc:  # noqa: BLE001
+        return None, False, f"{type(exc).__name__}: {exc}"
+
+
 def hardware_metadata() -> dict[str, Any]:
     return {
         "platform": platform.platform(),
@@ -130,4 +141,12 @@ def timed_train(fit_fn: Callable[[], Any]) -> tuple[Any, float, float, float]:
     result = fit_fn()
     wall = time.perf_counter() - wall0
     cpu = time.process_time() - cpu0
-    return result, wall, cpu, _peak_rss_mb()
+    _, ok, _ = peak_rss_bytes()
+    # recompute mb via bytes for timed_train compatibility
+    try:
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        rss = float(usage.ru_maxrss)
+        peak = rss / (1024.0 * 1024.0) if sys.platform == "darwin" else rss / 1024.0
+    except Exception:
+        peak = float("nan")
+    return result, wall, cpu, peak
