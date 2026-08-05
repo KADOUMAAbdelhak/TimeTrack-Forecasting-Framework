@@ -1,0 +1,20 @@
+component,manuscript_description,implementation_file,implementation_function_class,frozen_config_source,key_parameters,matches_implementation,notes
+persistence,Last context value tiled across multi-output width,models/classical/baselines.py,PersistenceForecaster,n/a (deterministic),last_context_value; tile to h,True,
+EWMA,Recursive smoother over context; forecast z_L-1; alpha from inner val,models/classical/baselines.py; experiments/robustness_extension.py,EWMAForecaster; select_ewma_alphas,results/final/robustness/01_ewma_baselines/selected_ewma_params.yaml,alpha=0.9 CPU/mem/disk; grid 0.05..0.9; init=first context sample,True,
+Ridge,L2-penalized lag regression per multi-output component,models/classical/linear.py,RidgeForecaster / _SklearnMultiHorizon,results/final/packs/00_shared_tuning/selected_hyperparameters.yaml,CPU alpha=10000; memory/disk alpha=1.0,True,sklearn Ridge; flat lag features
+LightGBM_CPU,GBT on lags; separate model per series/fold/width,models/machine_learning/trees.py,LightGBMForecaster,selected_hyperparameters.yaml lightgbm_cpu,n_estimators=300; lr=0.03; num_leaves=31; subsample/colsample defaults=1,True,
+LightGBM_memory,Same wrapper; memory HPs,models/machine_learning/trees.py,LightGBMForecaster,selected_hyperparameters.yaml lightgbm_memory,n_estimators=100; lr=0.05; num_leaves=15,True,
+LightGBM_disk,Transferred memory configuration (boundary stress),experiments/pack_runner.py _model_kwargs_for,LightGBMForecaster,memory HP block reused for disk_ud,same as memory,True,not independently optimized
+DLinear,MA trend/seasonal + linear maps; train-only zscore; Adam/MSE,models/deep_learning/neural.py,DLinearForecaster / _make_dlinear_net,configs/final_fgcs_packs.yaml dlinear_fixed,kernel=25; epochs<=40; patience=5; threads=1; max_batches=200; timeout=180s,True,univariate channel0 only; not Transformer
+independent,No projection; unreconciled reference,models/hybrid/reconciliation.py,reconcile(method=independent),pack configs methods list,leave yhat unchanged,True,not a reconciliation operator
+bottom-up,tilde y = S hat b; bottoms unchanged,models/hybrid/reconciliation.py,bottom_up / reconcile,pack configs,top=sum bottoms,True,
+top-down,Forecast-proportion allocation; disk only; eps=1e-12,models/hybrid/reconciliation.py,top_down_proportional,disk pack methods,p_i=hat b_i/(sum+eps); preserve top,True,proportions from base bottoms not historical
+WLS,Diagonal residual-variance projection,models/hybrid/reconciliation.py,wls_reconcile,pack_runner residual path,W=diag(var); var from val residuals floored 1e-12,True,vars from already-shrunk cov diagonal
+MinT-shrink,Shrunk residual-covariance projection,models/hybrid/reconciliation.py,mint_shrink_reconcile; estimate_residual_covariance,pack_runner; shrink=0.1,double shrink 0.1 + ridge 1e-8/1e-6,True,does not guarantee lower MAE
+coherence_metric,Mean abs |top - sum bottoms|; CPU wsum units,models/hybrid/reconciliation.py,coherence_error,reporting paths,mean abs over origins,True,
+MAE,Primary point metric in physical units,timetrack/metrics.py,mae,n/a,mean abs error over finite pairs,True,
+RMSE,Large-error sensitive support metric,timetrack/metrics.py,rmse,n/a,sqrt mean squared error,True,
+MASE,MAE / train lag-1 naive scale; undefined if invalid,timetrack/metrics.py,naive_scale + mase helpers,seasonality=1,scale_eps=1e-12; min_pairs=2; NaN if invalid,True,never 0/inf substitute
+R2,Supporting coefficient of determination,timetrack/metrics.py,r2_score,n/a,negative allowed; NaN if SS_tot=0,True,
+peak_metrics,Train q90/q95; exact-timestamp P/R/F1; FA/day; high-load MAE; signed bias,timetrack/peak_reporting.py,peak reporting helpers,configs/final_peak_analysis.yaml,peak_matching=exact_timestamp; no event tolerance,True,do not confuse with tol=2 helper elsewhere
+context_windows,L=32 univariate lags; per-series models; aligned origins,timetrack/splits.py; experiments/pack_runner.py,build_windows; prepare_split_windows; _fit_predict,configs/final_fgcs_packs.yaml context:32,no calendar covariates; skip NaN/gap windows,True,metrics use _first_step (first multi-output component)

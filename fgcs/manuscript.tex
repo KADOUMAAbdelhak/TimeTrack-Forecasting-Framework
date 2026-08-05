@@ -620,46 +620,180 @@ Reconciliation acts on forecasts, not on observations.}
 \section{Forecasting and Reconciliation Methodology}
 \label{sec:methods}
 
-\subsection{Forecasting Problem}
-For each hierarchy, let bottom series $\mathbf{b}_t$ and top series $y_t$ satisfy
-$y_t=\mathbf{s}^\top\mathbf{b}_t$ (or the core-weighted {CPU} analogue).
-Given context windows ending at time $t$, a model produces horizon-$h$ forecasts
-$\hat{\mathbf{b}}_{t+h}$ and $\hat{y}_{t+h}$.
-Independent forecasts need not satisfy the summing constraint; reconciled
-forecasts $\tilde{\mathbf{b}},\tilde{y}$ do.
+\subsection{Forecasting Problem and Hierarchical Representation}
+\label{sec:forecast-problem}
+Let $n=7$ denote the machine-level bottom series and $m=n+1=8$ the full
+hierarchy.
+Write bottom observations $\mathbf{b}_t\in\mathbb{R}^{n}$ and the stacked
+bottom-plus-top vector $\mathbf{y}_t\in\mathbb{R}^{m}$.
+With summing matrix $\mathbf{S}\in\mathbb{R}^{m\times n}$,
+\begin{equation}
+\mathbf{y}_t=\mathbf{S}\mathbf{b}_t.
+\label{eq:hierarchy}
+\end{equation}
+The bottom block of $\mathbf{S}$ is the identity; its top row encodes
+core-weighted contributions for {CPU} and direct additive values for memory and
+disk (Section~\ref{sec:dataset}).
+For {CPU}, reconciliation uses weighted-sum units and totals are divided by
+$236$ only when reporting weighted-mean percentages.
 
-\subsection{Baselines and Forecasting Models}
+Given origin $t$, context length $L$, and multi-output width $h$, each series
+maps the lagged window ending at $t$ to a length-$h$ target vector.
+Independent base forecasts are written $\hat{\mathbf{y}}_{t+h\mid t}$.
+In the frozen pipeline, $L=32$, inputs are univariate lagged targets (no
+calendar covariates), and each bottom and top series is trained separately.
+Windows with missing values or outage crossings are discarded; identical
+origins are retained across levels so reconciliation acts on aligned forecasts.
+Fold construction is deferred to Section~\ref{sec:protocol}.
+Reported accuracy uses the first multi-output component (the one-step value at
+each origin); $h$ still governs training width and the admissible origin set.
+
+Observed telemetry may satisfy~\eqref{eq:hierarchy} exactly while independent
+forecasts do not.
+Coherence requires
+$\tilde{\mathbf{y}}_{t+h\mid t}=\mathbf{S}\tilde{\mathbf{b}}_{t+h\mid t}$,
+equivalently $\tilde{\mathbf{y}}_{t+h\mid t}\in\operatorname{col}(\mathbf{S})$.
+The objective is to evaluate three properties that can conflict: top-level
+accuracy, bottom-level accuracy, and exact top--bottom coherence.
+
+\subsection{Forecasting Baselines and Learned Models}
 \label{sec:baselines}
-Table~\ref{tab:baselines} defines the baseline set used before any result
-claim.
-Persistence is a last-value forecast.
-{EWMA} selects its smoothing parameter on inner validation only.
-Ridge is the strongest deterministic learned {CPU} baseline in the frozen
-evidence.
-LightGBM \cite{ke2017lightgbm} is the strongest observed {CPU} model and is
-seed-invariant under the frozen configuration for seeds $0/1/2$.
-DLinear \cite{zeng2023dlinear} provides a neural baseline with nonzero but
-generally small {CPU} seed variability.
-{EWMA} is the strongest observed memory method.
+Table~\ref{tab:baselines} summarizes forecasting models and forecast modes.
+All share the window construction above; none is hierarchy-aware before
+reconciliation.
 
 \input{tables/baseline_definitions}
+\FloatBarrier
 
-\subsection{Reconciliation Methods}
-Bottom-up aggregates bottom forecasts through the summing matrix and preserves
-bottoms.
-{WLS} and MinT-shrink adjust base forecasts using variance/covariance structure;
-MinT uses shrinkage covariance estimation
-\cite{wickramasuriya2019mint,schafer2005shrinkage}.
-Top-down is evaluated for disk to preserve an independently forecast top while
-distributing to bottoms.
+\paragraph{Persistence and {EWMA}.}
+Persistence forecasts the last context observation,
+$\hat{y}_{t+h\mid t}=y_t$, tiled across the multi-output width.
+It is a demanding baseline for slowly varying memory and disk levels and for
+short-lead evaluation.
+{EWMA} recurses over the context,
+$z_{\ell}=\alpha y_{t-L+1+\ell}+(1-\alpha)z_{\ell-1}$, initialized at the first
+sample, and forecasts $\hat{y}_{t+h\mid t}=z_{L-1}$ for every output component.
+Alpha is selected on inner validation only from
+$\{0.05,0.1,0.2,0.3,0.5,0.7,0.9\}$; the accepted extension selected
+$\alpha=0.90$ for {CPU}, memory, and disk.
+{EWMA} is deterministic, inexpensive, and responsive to recent observations.
 
-\subsection{Evaluation Metrics}
-Primary accuracy uses {MAE}, with supporting {RMSE}, {MASE}, and $R^2$ where
-available \cite{hyndman2006accuracy}.
-Coherence error measures absolute violation of the exact summing relation before
-and after reconciliation.
-Peak and high-load metrics use train-derived thresholds from the frozen peak
-analysis; they qualify rather than replace aggregate {MAE}.
+\paragraph{Ridge and LightGBM.}
+Ridge is $L_2$-penalized lag regression,
+$\min_{\boldsymbol{\beta}}\|\mathbf{X}\boldsymbol{\beta}-\mathbf{z}\|_2^2
++\lambda\|\boldsymbol{\beta}\|_2^2$,
+fit per multi-output component on flattened lags as a regularized linear
+benchmark.
+LightGBM fits gradient-boosted trees on the same features, with a separate model
+per series, fold, and multi-output width \cite{ke2017lightgbm}.
+Frozen core settings use $300$ trees, learning rate $0.03$, and $31$ leaves for
+{CPU}, and $100$ trees, learning rate $0.05$, and $15$ leaves for memory; disk
+uses the transferred memory configuration as boundary-stress evidence, not an
+independently optimized disk fit.
+With full-row and full-column sampling (subsample and column sample $=1$),
+tree-growth randomness controlled by the seed is effectively inactive under this
+frozen setting; any seed invariance is an empirical property of that
+configuration, not an algorithmic contribution.
+
+\paragraph{DLinear.}
+DLinear is a lightweight direct neural baseline, not a Transformer
+\cite{zeng2023dlinear}.
+It splits the univariate context into moving-average trend and residual seasonal
+components (kernel size~$25$) and applies separate linear maps from length~$L$
+to length~$h$.
+Only the target series enters the network.
+Train-only standardization is inverse-transformed before metrics.
+Training uses Adam/{MSE}, at most $40$ epochs, patience~$5$, one {CPU} thread,
+$\le 200$ batches/epoch, and a $180$\,s per-job timeout.
+
+\subsection{Forecast Reconciliation}
+\label{sec:reconciliation}
+Write independent base forecasts
+$\hat{\mathbf{y}}=(\hat{\mathbf{b}}^\top,\hat{y}_{\mathrm{top}})^\top$.
+Linear reconciliation takes the form
+\begin{equation}
+\tilde{\mathbf{y}}=\mathbf{S}\mathbf{G}\hat{\mathbf{y}},
+\label{eq:recon}
+\end{equation}
+so $\tilde{\mathbf{y}}\in\operatorname{col}(\mathbf{S})$ by construction
+\cite{hyndman2011optimal,athanasopoulos2024hierarchical}.
+Independent forecasting is the unreconciled reference---separate top and bottom
+forecasts with no projection---and is not itself a reconciliation method.
+
+Bottom-up sets $\tilde{\mathbf{b}}=\hat{\mathbf{b}}$ and
+$\tilde{y}_{\mathrm{top}}=\mathbf{1}^\top\hat{\mathbf{b}}$, i.e.\
+$\tilde{\mathbf{y}}^{\mathrm{BU}}=\mathbf{S}\hat{\mathbf{b}}$.
+Bottoms are unchanged, so bottom accuracy is preserved while bottom bias
+propagates to the top.
+For disk only, top-down uses
+$p_i=\hat{b}_i/(\sum_j\hat{b}_j+\varepsilon)$ with $\varepsilon=10^{-12}$ and
+$\tilde{b}_i^{\mathrm{TD}}=p_i\hat{y}_{\mathrm{top}}$, preserving the independent
+top exactly while redistributing bottoms.
+
+Projection methods use
+\begin{equation}
+\begin{aligned}
+\tilde{\mathbf{y}}
+&=
+\mathbf{S}
+\bigl(\mathbf{S}^{\top}\mathbf{W}^{-1}\mathbf{S}\bigr)^{+}
+\mathbf{S}^{\top}\mathbf{W}^{-1}
+\hat{\mathbf{y}},
+\end{aligned}
+\label{eq:projection}
+\end{equation}
+with Moore--Penrose pseudoinverse $(\cdot)^{+}$
+\cite{wickramasuriya2019mint}.
+{OLS} ($\mathbf{W}=\mathbf{I}$) is a horizon-restricted ablation only.
+{WLS} uses diagonal residual variances from outer-train/inner-validation
+residuals (floored at $10^{-12}$).
+MinT-shrink uses a residual covariance diagonally shrunk at intensity $0.1$,
+with an additional $0.1$ shrink and small ridge in the reconciler for numerical
+stability \cite{schafer2005shrinkage,wickramasuriya2019mint}.
+These estimators are variance-optimal under stated second-moment assumptions;
+they do not guarantee lower realized {MAE}.
+Outer-evaluation residuals are never used to form $\mathbf{W}$
+(Section~\ref{sec:protocol}).
+
+The coherence residual is the mean absolute
+$|\hat{y}_{\mathrm{top}}-\mathbf{s}^{\top}\hat{\mathbf{b}}|$
+({CPU} in weighted-sum units).
+Reconciled forecasts should be zero within floating-point tolerance, but
+coherence alone does not imply accuracy.
+Mean reconciliation adjustment is the mean absolute difference between
+reconciled and independent forecasts over all hierarchy series.
+
+\subsection{Accuracy, Coherence, and Operational Metrics}
+\label{sec:metrics}
+Primary accuracy is
+$\mathrm{MAE}=N^{-1}\sum_t|y_t-\hat{y}_t|$,
+kept in the target's physical unit \cite{hyndman2006accuracy}.
+{RMSE} emphasizes large errors;
+{MASE} scales {MAE} by the training lag-$1$ naive mean absolute difference and
+is marked undefined (never replaced by $0$ or $\infty$) when that scale is below
+$10^{-12}$ or fewer than two finite pairs exist;
+$R^2$ is supporting only.
+Errors are never pooled across {CPU} percentages, memory bytes, and disk levels.
+We report top {MAE}, bottom macro {MAE}, core-weighted bottom {MAE} for {CPU},
+and worst-machine {MAE}.
+Hierarchy core weighting is distinct from macro averaging of machine errors: a
+top gain can conceal machine-level degradation.
+
+Descriptive relative change uses
+\begin{equation*}
+\Delta_{\mathrm{rel}}
+=
+(\mathrm{MAE}_A-\mathrm{MAE}_B)/\mathrm{MAE}_B,
+\end{equation*}
+with negative values favoring method~$A$.
+Ratios of mean {MAE} and paired moving-block bootstrap relative effects are
+distinct summaries (Section~\ref{sec:results}).
+Peak diagnostics use train-only $q_{90}/q_{95}$ thresholds, exact-timestamp
+precision/recall/{F}1 (no event-tolerance matching), false alarms per day,
+high-load {MAE}, and signed peak bias.
+They are supplementary: ordinary {MAE} can improve while detection recall or
+false alarms worsen.
+Protocol settings appear in Section~\ref{sec:protocol}.
 
 %% =====================================================================
 \section{Experimental Protocol}
