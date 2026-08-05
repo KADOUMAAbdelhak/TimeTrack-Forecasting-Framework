@@ -1,0 +1,56 @@
+% Outer fold calendar spans and H-specific window counts + scored endpoints.
+% Calendar: make_outer_chronological_folds; windows/endpoints: forecast_semantics_eval_sets.csv
+\begin{table}[ht]
+\centering
+\caption{Outer fold calendar boundaries on the post-outage panel
+(identical for {CPU}, memory, and disk). Inner validation is the last
+15\% of each outer-train span.}
+\label{tab:supp_fold_calendar}
+\begin{tabular}{@{}rlll@{}}
+\toprule
+Fold & Train & Validation & Test \\
+\midrule
+0 & 2024-07-03~10:05:20 -- 2024-07-06~21:01:21 ($n=7062$) & 2024-07-06~21:02:03 -- 2024-07-07~11:39:24 ($n=1246$) & 2024-07-07~11:40:06 -- 2024-07-11~13:15:03 ($n=8308$) \\
+1 & 2024-07-03~10:05:20 -- 2024-07-10~07:58:21 ($n=14124$) & 2024-07-10~07:59:03 -- 2024-07-11~13:15:03 ($n=2492$) & 2024-07-11~13:15:45 -- 2024-07-15~14:50:09 ($n=8308$) \\
+2 & 2024-07-03~10:05:20 -- 2024-07-13~18:55:49 ($n=21186$) & 2024-07-13~18:56:31 -- 2024-07-15~14:50:09 ($n=3738$) & 2024-07-15~14:50:51 -- 2024-07-19~16:27:05 ($n=8311$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{$H$-specific admissible window counts and one-step scored-test endpoints
+($L{=}32$). Larger $H$ removes final origins; {CPU} loses additional windows at
+missing-value discontinuities. Metrics score component~0 only.}
+\label{tab:supp_fold_windows}
+\begin{tabular}{@{}llrrrrll@{}}
+\toprule
+Hierarchy & Fold & $H$ & Train$_W$ & Val$_W$ & Test$_W$ & First scored & Last scored \\
+\midrule
+cpu\_core\_weighted & 0 & 1 & 3996 & 899 & 4847 & 2024-07-07~12:06:11 & 2024-07-11~13:15:03 \\
+cpu\_core\_weighted & 0 & 8 & 3541 & 839 & 4295 & 2024-07-07~12:06:11 & 2024-07-11~13:10:07 \\
+cpu\_core\_weighted & 0 & 16 & 3084 & 782 & 3707 & 2024-07-07~12:06:11 & 2024-07-11~13:04:29 \\
+cpu\_core\_weighted & 1 & 1 & 8170 & 1580 & 5261 & 2024-07-11~14:29:47 & 2024-07-15~14:50:09 \\
+cpu\_core\_weighted & 1 & 8 & 7249 & 1434 & 4778 & 2024-07-11~14:29:47 & 2024-07-15~14:45:13 \\
+cpu\_core\_weighted & 1 & 16 & 6304 & 1277 & 4317 & 2024-07-11~14:29:47 & 2024-07-15~14:39:34 \\
+cpu\_core\_weighted & 2 & 1 & 12546 & 2473 & 4852 & 2024-07-15~15:38:47 & 2024-07-19~16:27:05 \\
+cpu\_core\_weighted & 2 & 8 & 11198 & 2271 & 4341 & 2024-07-15~15:38:47 & 2024-07-19~16:22:09 \\
+cpu\_core\_weighted & 2 & 16 & 9844 & 2062 & 3798 & 2024-07-15~16:11:55 & 2024-07-19~16:16:31 \\
+memory\_um & 0 & 1 & 7030 & 1214 & 8276 & 2024-07-07~12:02:39 & 2024-07-11~13:15:03 \\
+memory\_um & 0 & 8 & 7023 & 1207 & 8269 & 2024-07-07~12:02:39 & 2024-07-11~13:10:07 \\
+memory\_um & 0 & 16 & 7015 & 1199 & 8261 & 2024-07-07~12:02:39 & 2024-07-11~13:04:29 \\
+memory\_um & 1 & 1 & 14092 & 2460 & 8276 & 2024-07-11~13:38:19 & 2024-07-15~14:50:09 \\
+memory\_um & 1 & 8 & 14085 & 2453 & 8269 & 2024-07-11~13:38:19 & 2024-07-15~14:45:13 \\
+memory\_um & 1 & 16 & 14077 & 2445 & 8261 & 2024-07-11~13:38:19 & 2024-07-15~14:39:34 \\
+memory\_um & 2 & 1 & 21154 & 3706 & 8279 & 2024-07-15~15:13:25 & 2024-07-19~16:27:05 \\
+memory\_um & 2 & 8 & 21147 & 3699 & 8272 & 2024-07-15~15:13:25 & 2024-07-19~16:22:09 \\
+memory\_um & 2 & 16 & 21139 & 3691 & 8264 & 2024-07-15~15:13:25 & 2024-07-19~16:16:31 \\
+disk\_ud & 0 & 1 & 7030 & 1214 & 8276 & 2024-07-07~12:02:39 & 2024-07-11~13:15:03 \\
+disk\_ud & 0 & 8 & 7023 & 1207 & 8269 & 2024-07-07~12:02:39 & 2024-07-11~13:10:07 \\
+disk\_ud & 1 & 1 & 14092 & 2460 & 8276 & 2024-07-11~13:38:19 & 2024-07-15~14:50:09 \\
+disk\_ud & 1 & 8 & 14085 & 2453 & 8269 & 2024-07-11~13:38:19 & 2024-07-15~14:45:13 \\
+disk\_ud & 2 & 1 & 21154 & 3706 & 8279 & 2024-07-15~15:13:25 & 2024-07-19~16:27:05 \\
+disk\_ud & 2 & 8 & 21147 & 3699 & 8272 & 2024-07-15~15:13:25 & 2024-07-19~16:22:09 \\
+\bottomrule
+\end{tabular}
+\end{table}

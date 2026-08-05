@@ -1,7 +1,7 @@
 %% Supplementary material for the TimeTrack FGCS manuscript
 \documentclass[a4paper,11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{booktabs,graphicx,hyperref,amsmath}
+\usepackage{booktabs,graphicx,hyperref,amsmath,longtable}
 
 \title{Supplementary Material:\\
 Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
@@ -12,9 +12,93 @@ Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
 \maketitle
 
 \section{Purpose}
-This supplement collects the full claim matrix, extended bootstrap forest,
-memory accuracy-versus-output-width plot, and pointers to seed/peak CSV grids.
-All numbers derive from \texttt{final-reporting-freeze-v2} aggregate artifacts.
+This supplement collects protocol detail deferred from the main article,
+the full claim matrix, extended bootstrap forest, memory
+accuracy-versus-output-width plot, and pointers to seed/peak CSV grids.
+All numbers derive from accepted final aggregate and robustness artifacts.
+
+\section{Exact fold boundaries}
+\input{../tables/supplementary_fold_boundaries}
+
+\section{Full hyperparameter configurations}
+\begin{itemize}
+  \item Persistence: no selected hyperparameters.
+  \item {EWMA}: $\alpha=0.9$ for memory, {CPU}, and disk
+    (\texttt{results/final/robustness/01\_ewma\_baselines/selected\_ewma\_params.yaml}).
+  \item Ridge search grid: $\{10^{-4},10^{-2},1,10^{2},10^{4}\}$.
+    Selected: {CPU} $\alpha=10^{4}$; memory/disk $\alpha=1$
+    (\texttt{results/final/packs/00\_shared\_tuning/selected\_hyperparameters.yaml}).
+  \item LightGBM {CPU}: $n_{\mathrm{estimators}}=300$, learning rate $0.03$,
+    $num\_leaves=31$.
+  \item LightGBM memory: $n_{\mathrm{estimators}}=100$, learning rate $0.05$,
+    $num\_leaves=15$.
+  \item Disk LightGBM: transferred memory configuration (stress evidence only).
+  \item DLinear: $\le 40$ epochs, patience $5$, one thread,
+    $\le 200$ batches/epoch, 180\,s timeout; train-only input/target
+    standardization with inverse transform before metrics.
+\end{itemize}
+
+\section{Statistical families}
+\subsection*{Primary analysis Holm families ($\alpha=0.05$)}
+\texttt{memory\_ridge}, \texttt{memory\_dlinear}, \texttt{memory\_lightgbm},
+\texttt{cpu\_ridge}, \texttt{cpu\_dlinear}, \texttt{cpu\_lightgbm},
+\texttt{disk\_ridge}, \texttt{disk\_lightgbm}.
+Claim~A uses a separate family
+\texttt{cpu\_base\_model\_lightgbm\_vs\_persistence}.
+
+\subsection*{Final robustness Holm families (eight)}
+\texttt{cpu\_lightgbm\_vs\_deterministic},
+\texttt{cpu\_lightgbm\_reconciliation},
+\texttt{memory\_lightgbm\_vs\_ewma},
+\texttt{memory\_lightgbm\_reconciliation},
+\texttt{cpu\_dlinear\_vs\_deterministic},
+\texttt{cpu\_dlinear\_reconciliation},
+\texttt{memory\_dlinear\_vs\_ewma},
+\texttt{memory\_dlinear\_reconciliation}.
+
+\subsection*{Atomic comparisons and support rules}
+Atomic units preserve hierarchy $\times$ model $\times$ reconciliation method
+$\times$ output width $\times$ fold (and seed for stochastic robustness).
+Support classes combine relative-effect direction, direct bootstrap CI, fold
+consistency, output-width consistency, seed consistency where applicable, and
+top/bottom trade-off labels; seed-mean pooling alone cannot upgrade a reversed
+seed (see \texttt{docs/FINAL\_STATISTICAL\_PROTOCOL.md} and
+\texttt{configs/final\_robustness\_statistics.yaml}).
+
+\section{Seed policy}
+\begin{itemize}
+  \item Seeds $\{0,1,2\}$ for LightGBM and DLinear robustness checks.
+  \item Python/\texttt{random} and NumPy seeds follow the frozen runner policy
+    for each claim-generating pack.
+  \item DLinear calls \texttt{torch.manual\_seed(seed)} at fit time and retains
+    seed-dependent training variation.
+  \item LightGBM receives \texttt{random\_state=seed} with library-default
+    \texttt{subsample}=1.0 (not overridden); frozen predictions are bitwise
+    identical across seeds and are reported as invariance, not independent
+    replicates.
+  \item Thread settings: DLinear uses one thread in the frozen budget; LightGBM
+    uses \texttt{n\_jobs=-1}.
+\end{itemize}
+
+\section{Frozen provenance}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Layer & Tag \\
+\midrule
+Predictions & \texttt{experiment-freeze-v2} \\
+Statistics & \texttt{final-analysis-freeze-v1} \\
+Peaks & \texttt{final-peak-analysis-freeze-v1} \\
+Robustness extension & \texttt{final-robustness-extension-freeze-v2} \\
+Robustness statistics & \texttt{final-robustness-analysis-freeze-v2} \\
+Reporting & \texttt{final-reporting-freeze-v2} \\
+\bottomrule
+\end{tabular}
+
+\noindent Dataset fingerprint: \texttt{bf06dc0e7fe6ff5e}.
+Peeled commits, pack hashes, and artifact inventories:
+\texttt{results/final/aggregate/REPRODUCIBILITY\_REPORT\_V2.md},
+\texttt{SOURCE\_ARTIFACT\_HASHES.csv}, and
+\texttt{fgcs/results/provenance/MANIFEST.json}.
 
 \section{Full claim-support matrix}
 \input{claim_support_full}
@@ -63,12 +147,5 @@ Side-by-side wide layouts (same frozen numbers) are included here.
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/top_bottom_tradeoff_wide.pdf}
 \caption{Top versus bottom accuracy trade-offs (wide two-panel layout).}
 \end{figure}
-
-\section{Freeze provenance}
-Primary reporting freeze tag: \texttt{final-reporting-freeze-v2}.
-Authoritative aggregate tables live under
-\texttt{results/final/aggregate/}; robustness under
-\texttt{results/final/robustness/}. No model reruns were performed for this
-article; all plotted and tabulated values are drawn from those frozen CSVs.
 
 \end{document}

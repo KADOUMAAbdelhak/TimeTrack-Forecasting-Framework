@@ -1,21 +1,21 @@
-\begin{table}[width=\columnwidth,pos=!ht]
+\begin{table}[width=\columnwidth,pos=!t]
 \centering
-\caption{Experimental protocol summary for the frozen TimeTrack evaluation.}
+\caption{Frozen evaluation design (details in the supplement).}
 \label{tab:experiment}
 \begin{threeparttable}
 \small
 \begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule
-Item & Setting \\
+Item & Frozen setting \\
 \midrule
-Outer folds & Nested temporal folds $0$--$2$ \\
-Output widths & {CPU}/mem.\ $H\in\{1,8,16\}$; disk~$H\in\{1,8\}$ \\
-Scored lead & One-step (first output component) \\
-Context & Frozen context-window length (protocol) \\
-Tuning & Train/inner-validation only \\
-Statistics & {MBB}; relative 95\% {CIs}; Holm \\
-Seeds & LightGBM/DLinear seeds $0/1/2$ \\
-Evidence & Immutable freeze layers (reporting freeze) \\
+Data / folds & Post-outage timeline; 3 expanding chronological outer folds \\
+$L$, $H$, lead & $L{=}32$; multi-output $H{\in}\{1,8,16\}$ (disk $\{1,8\}$);
+component~0 one-step scoring \\
+Selection & Train + inner val.\ ($\approx$15\% of train span); no outer labels \\
+Models / seeds & {CPU}/mem.\ baselines+learners; disk stress transfer;
+seeds $\{0,1,2\}$ \\
+Inference & Recon.\ cov.\ from outer-train val.\ residuals; 5000 paired {MBB};
+Holm; train-only $q_{90}/q_{95}$ \\
 \bottomrule
 \end{tabularx}
 \end{threeparttable}

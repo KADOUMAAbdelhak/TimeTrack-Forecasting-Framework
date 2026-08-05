@@ -13,7 +13,7 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage[section]{placeins}
+\usepackage{placeins}
 \usepackage{multirow}
 \usepackage{microtype}
 \usepackage{xurl}
@@ -647,11 +647,8 @@ Windows with missing values or outage crossings are discarded; identical
 origins are retained across levels so reconciliation acts on aligned forecasts.
 Fold construction is deferred to Section~\ref{sec:protocol}.
 Here $H\in\{1,8,16\}$ (disk $H\in\{1,8\}$) denotes the number of future samples
-jointly predicted during fitting.
-Reported accuracy---and reconciliation---use only the first multi-output
-component (the one-step value at each origin), so frozen point metrics are
-one-step-ahead evaluations rather than $H$-step lead-time scores; $H$ still
-governs training-target dimensionality and the admissible origin set.
+jointly predicted during fitting; scored lead and fold execution are specified
+in Section~\ref{sec:protocol}.
 
 Observed telemetry may satisfy~\eqref{eq:hierarchy} exactly while independent
 forecasts do not.
@@ -678,9 +675,8 @@ one-step evaluation.
 {EWMA} recurses over the context,
 $z_{\ell}=\alpha y_{t-L+1+\ell}+(1-\alpha)z_{\ell-1}$, initialized at the first
 sample, and forecasts $\hat{y}_{t+1\mid t}=z_{L-1}$ for every output component.
-Alpha is selected on inner validation only from
-$\{0.05,0.1,0.2,0.3,0.5,0.7,0.9\}$; the accepted extension selected
-$\alpha=0.90$ for {CPU}, memory, and disk.
+Alpha selection and the frozen accepted value are specified in
+Section~\ref{sec:protocol}.
 {EWMA} is deterministic, inexpensive, and responsive to recent observations.
 
 \paragraph{Ridge and LightGBM.}
@@ -691,14 +687,8 @@ fit per multi-output component on flattened lags as a regularized linear
 benchmark.
 LightGBM fits gradient-boosted trees on the same features, with a separate model
 per series, fold, and joint prediction width \cite{ke2017lightgbm}.
-Frozen core settings use $300$ trees, learning rate $0.03$, and $31$ leaves for
-{CPU}, and $100$ trees, learning rate $0.05$, and $15$ leaves for memory; disk
-uses the transferred memory configuration as boundary-stress evidence, not an
-independently optimized disk fit.
-With full-row and full-column sampling (subsample and column sample $=1$),
-tree-growth randomness controlled by the seed is effectively inactive under this
-frozen setting; any seed invariance is an empirical property of that
-configuration, not an algorithmic contribution.
+Family-specific frozen hyperparameters, disk transfer, and seed-invariance
+behavior are specified in Section~\ref{sec:protocol}.
 
 \paragraph{DLinear.}
 DLinear is a lightweight direct neural baseline, not a Transformer
@@ -707,11 +697,10 @@ It splits the univariate context into moving-average trend and residual seasonal
 components (kernel size~$25$) and applies separate linear maps from length~$L$
 to length~$H$.
 Only the target series enters the network.
-Train-only standardization is inverse-transformed before metrics.
-Training uses Adam/{MSE}, at most $40$ epochs, patience~$5$, one {CPU} thread,
-$\le 200$ batches/epoch, and a $180$\,s per-job timeout.
-
-\subsection{Forecast Reconciliation}
+Train-only standardization is inverse-transformed before metrics; the frozen
+training budget is given in Section~\ref{sec:protocol}.
+DLinear is seed-sensitive under that budget and is evaluated as a lightweight
+neural competitor rather than a deep sequence model.
 \label{sec:reconciliation}
 Write independent base forecasts
 $\hat{\mathbf{y}}=(\hat{\mathbf{b}}^\top,\hat{y}_{\mathrm{top}})^\top$.
@@ -791,46 +780,146 @@ Descriptive relative change uses
 (\mathrm{MAE}_A-\mathrm{MAE}_B)/\mathrm{MAE}_B,
 \end{equation*}
 with negative values favoring method~$A$.
-Ratios of mean {MAE} and paired moving-block bootstrap relative effects are
-distinct summaries (Section~\ref{sec:results}).
-Peak diagnostics use train-only $q_{90}/q_{95}$ thresholds, exact-timestamp
-precision/recall/{F}1 (no event-tolerance matching), false alarms per day,
-high-load {MAE}, and signed peak bias.
-They are supplementary: ordinary {MAE} can improve while detection recall or
-false alarms worsen.
-Protocol settings appear in Section~\ref{sec:protocol}.
+Bootstrap relative effects, peak-threshold transfer, and related protocol
+settings are specified in Section~\ref{sec:protocol}; numerical outcomes appear
+in Section~\ref{sec:results}.
 
 %% =====================================================================
 \section{Experimental Protocol}
 \label{sec:protocol}
 
+Table~\ref{tab:experiment} summarizes the frozen design; fold timestamps,
+hyperparameter grids, Holm families, seeds, and freeze hashes are in the
+supplement.
+
 \input{tables/experiment_registry}
 \FloatBarrier
 
-\subsection{Temporal Splits and Output Widths}
-Outer evaluation uses nested chronological folds with joint prediction widths
-$H$ as above.
-Context policy and train/validation/test chronology follow the frozen
-experiment protocol; no outer-label tuning is performed
+\subsection{Chronological Evaluation Design}
+Claim-generating runs use the retained continuous post-outage timeline.
+Train, inner-validation, and outer-test partitions preserve temporal order; no
+random shuffling is used for fold construction
 \cite{bergmeir2018note}.
+Three expanding chronological outer folds partition the post-outage span into an
+initial training seed plus successive test blocks.
+For fold $k$, timestamps before the test block form the outer-train span; the
+last $15\%$ of that span is inner validation; the remainder is training; the test
+block stays untouched until final scoring.
 
-\subsection{Hyperparameter Selection and Leakage Prevention}
-All hyperparameter selection, including {EWMA} $\alpha$ and model
-hyperparameters, uses train/inner validation only.
-Outer test labels are never used for selection.
+Context length is $L=32$
+($\approx 32\times 42.285\,\mathrm{s}\approx 22.6$\,min at the median interval),
+stated only as an approximate elapsed-time reading because timestamps need not be
+perfectly regular.
+Windows that would cross the multi-day outage, a fold boundary, or a
+missing-value discontinuity are discarded, and identical origins are retained
+across hierarchy levels for aligned reconciliation.
 
-\subsection{Statistical Analysis}
-Paired moving-block bootstrap estimates direct relative-effect confidence
-intervals.
-Holm correction controls family-wise error within predefined comparison families
+Joint prediction widths $H\in\{1,8,16\}$ ({CPU}/memory; disk $H\in\{1,8\}$)
+are the number of future samples predicted jointly during fitting.
+The target vector is $(y_{t+1},\ldots,y_{t+H})$; frozen evaluation extracts only
+component~$0$, so every reported point, reconciliation, and peak metric compares
+one-step $y_{t+1}$ with $\hat y_{t+1\mid t}$.
+$H$ changes training-objective dimensionality and admissible origins near split
+endpoints; it is not the evaluated forecast lead.
+Approximate joint target spans are about $42.285$\,s ($H{=}1$), $5.64$\,min
+($H{=}8$), and $11.28$\,min ($H{=}16$).
+Scored timestamp sets need not match across $H$ because larger widths remove
+final origins---especially on {CPU} fold~$0$, with smaller endpoint differences
+for memory and disk (supplement).
+Comparisons across $H$ are configuration-robustness checks, not controlled
+lead-time comparisons.
+
+\subsection{Model Selection and Leakage Prevention}
+Each outer fold follows a nested sequence: construct the chronological split;
+fit preprocessing on outer-training data only; tune on training/inner
+validation; freeze one configuration per model family; execute under the frozen
+implementation; evaluate once on the untouched outer-test set; and estimate
+reconciliation without outer-test residuals.
+
+Scaling is model-specific.
+DLinear standardizes inputs and targets from training statistics only;
+validation/test reuse those transforms, and predictions are inverse-transformed
+before metrics.
+Persistence, {EWMA}, Ridge, and LightGBM use the native scale (no shared
+scaler).
+Persistence has no selected hyperparameters.
+{EWMA} $\alpha$ is selected on inner validation (frozen $\alpha{=}0.9$).
+Ridge uses the shared-tuning grid ({CPU} $\alpha{=}10^{4}$; memory/disk
+$\alpha{=}1$).
+LightGBM is selected separately for {CPU}
+($300$ trees, learning rate $0.03$, $31$ leaves) and memory
+($100$, $0.05$, $15$); disk LightGBM reuses the memory configuration as stress
+evidence only.
+DLinear uses Adam/{MSE} with the frozen budget ($\le$40 epochs, patience~$5$,
+one thread, $\le$200 batches/epoch, $180$\,s timeout).
+Selected values and full search spaces are in the supplement.
+
+Bottom-up needs no covariance.
+Top-down proportions use independent base forecasts under the frozen
+epsilon/\allowbreak fallback policy.
+{WLS} uses diagonal variances from outer-train validation residuals.
+The frozen MinT shrink covariance uses the same residual source.
+Outer-test residuals never enter reconciliation matrices; reconciliation acts on
+aligned one-step base forecasts.
+Safeguards are chronological splits, train-only scaling where used,
+inner-validation-only tuning, no outer-label selection,
+train/\allowbreak validation residual covariance only, train-derived peak
+thresholds, and immutable configurations before claim-generating runs
+(not a claim that every bias is removed).
+
+\subsection{Statistical and Multi-Seed Analysis}
+Deterministic comparisons preserve hierarchy, model, reconciliation method,
+output width, and fold.
+Stochastic robustness also preserves seed, fold, and output width; seed
+replicates are not independent datasets.
+Paired moving-block bootstrap with $5000$ repetitions resamples absolute-error
+series on shared timestamps.
+Block length is clamped to $[8,256]$ after taking the maximum of $H$, $L$, and
+the first autocorrelation lag below $0.1$ on validation residuals of the
+independent top series (often $32$ when context dominates).
+Within each replicate the relative {MAE} effect
+$(\mathrm{MAE}_A^\ast-\mathrm{MAE}_B^\ast)/\mathrm{MAE}_B^\ast$
+is recomputed directly---not by dividing independent confidence intervals,
+averaging precomputed per-cell percentages, or taking ratios of globally pooled
+means.
+
+Raw hypothesis-test probabilities are Holm-adjusted within predefined families
 \cite{holm1979simple}.
+The final robustness analysis uses eight families (supplement).
+Claim classification combines relative-effect direction, the direct confidence
+interval, fold consistency, output-width consistency, seed consistency where
+applicable, and top/bottom trade-off evidence; a majority of wins is not enough
+for robust support.
+For memory, seed-mean pooling alone cannot upgrade a claim when a seed reverses
+direction.
 
-\subsection{Multi-Seed and Reproducibility Protocol}
 LightGBM and DLinear use seeds $0$, $1$, and $2$.
-Evidence layers are immutable freezes culminating in the reporting freeze
-\texttt{final-reporting-\allowbreak freeze-v2} (full provenance in the
-supplement).
-This manuscript reports only accepted final aggregate artifacts.
+Frozen LightGBM predictions are bitwise identical across seeds and are reported
+as invariance, not as three independent realizations.
+DLinear retains seed-dependent variation, and seed-level results remain visible.
+Performance effects are deferred to Section~\ref{sec:results}.
+
+Peak thresholds $q_{90}$ and $q_{95}$ come from training observations only and
+transfer unchanged to evaluation data.
+Predictions and observations are compared at identical timestamps with no
+event-tolerance window or event merging.
+Reported quantities include high-load {MAE}, precision, recall, {F1}, false
+alarms per evaluation day, signed bias, and predicted range compression where
+relevant.
+This tests transfer from point accuracy to operational high-load behavior;
+models were not optimized for peak metrics.
+
+\subsection{Reproducibility and Frozen Evidence}
+The study separates prediction generation, primary statistical analysis, peak
+analysis, robustness extension, robustness statistics, and final reporting
+aggregation.
+Accepted predictions are not regenerated during claim analysis; source artifact
+hashes are checked; provisional or rejected packs are excluded; final tables come
+from an evidence registry; and analysis/reporting freezes are immutable.
+The dataset fingerprint is fixed, no model is rerun during final aggregation, and
+claim-generating tables trace to accepted artifacts.
+Exact freeze tags, peeled commits, pack hashes, and inventories are in the
+supplement and reproducibility package.
 
 %% =====================================================================
 \section{Results}
@@ -891,7 +980,7 @@ in each row.}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
+\includegraphics[width=0.92\columnwidth]{figs/top_bottom_tradeoff.pdf}
 \caption{Top versus bottom accuracy trade-offs under reconciliation (stacked for
 column width). Top panel: {CPU} and memory. Bottom panel: disk boundary
 (LightGBM transferred disk stress excluded). Axes are percentage relative {MAE}
@@ -971,7 +1060,7 @@ diagnostics.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/cpu_peak_results.pdf}
+\includegraphics[width=0.92\columnwidth]{figs/cpu_peak_results.pdf}
 \caption{{CPU} peak/high-load metrics for thresholds q90 and q95 (stacked for
 column width). Color encodes model; marker shape encodes reconciliation method
 (circle~independent, square~bottom-up, triangle~{WLS}, diamond~MinT). A
@@ -981,7 +1070,7 @@ side-by-side wide layout is in the supplementary material.}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
+\includegraphics[width=0.92\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
 \caption{Signed DLinear memory peak bias (bytes), averaged across folds and
 output widths within each seed and method. Negative values indicate underprediction
 of peak magnitudes; reconciliation often amplifies the negative bias.}
@@ -998,7 +1087,7 @@ Reconciliation improvements for DLinear {CPU} hold across seeds~$0/1/2$.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/cpu_reconciliation_effect_by_seed.pdf}
+\includegraphics[width=0.92\columnwidth]{figs/cpu_reconciliation_effect_by_seed.pdf}
 \caption{{CPU} relative {MAE} versus independent forecasts by seed for
 LightGBM and DLinear under bottom-up, {WLS}, and MinT. LightGBM points coincide
 across seeds (seed-invariant); DLinear shows small seed variation. Values are
@@ -1009,7 +1098,6 @@ means of fold$\times$width relative effects from the robustness freeze.}
 \input{tables/statistical_evidence}
 \input{tables/method_selection}
 \input{tables/claim_summary}
-
 \FloatBarrier
 
 %% =====================================================================
@@ -1091,6 +1179,7 @@ in this paper.
 The authors thank colleagues and collaborators who contributed to the broader
 TimeTrack and application-profiling research context.
 
+\FloatBarrier
 \bibliographystyle{cas-model2-names}
 \bibliography{references}
 
