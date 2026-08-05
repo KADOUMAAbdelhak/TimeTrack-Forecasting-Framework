@@ -17,6 +17,7 @@
 \usepackage{multirow}
 \usepackage{microtype}
 \usepackage{xurl}
+\usepackage{caption}
 
 % Float placement compatible with cas-dc (do not use extreme fractions)
 \setcounter{topnumber}{2}
@@ -518,6 +519,19 @@ disk relations summarized in Table~\ref{tab:hierarchies}.
 Figure~\ref{fig:arch} shows independent bottom- and top-level forecasts under
 exact summing constraints with optional reconciliation.
 
+\begin{center}
+\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{figs/architecture_or_hierarchy.pdf}
+\captionof{figure}{Machine-to-cluster hierarchy workflow on TimeTrack.
+Seven machine-level bottom series and one cluster-level top series are forecast
+independently and may then be reconciled under an exact summing constraint.
+{CPU} uses core-weighted contributions; memory and disk use direct byte sums.
+Reconciliation acts on forecasts, not on observations.}
+\label{fig:arch}
+\end{minipage}
+\end{center}
+
 \paragraph{Timeline preparation and integrity checks.}
 The dataset paper describes a nominal collection interval of approximately
 $45$\,s \cite{meliani2025timetrack}.
@@ -596,18 +610,6 @@ This manuscript's contribution therefore begins after dataset release, with
 validated hierarchies and the frozen protocol of Section~\ref{sec:protocol}.
 
 \input{tables/dataset_hierarchy_summary}
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=\columnwidth]{figs/architecture_or_hierarchy.pdf}
-\caption{Machine-to-cluster hierarchy workflow on TimeTrack.
-Seven machine-level bottom series and one cluster-level top series are forecast
-independently and may then be reconciled under an exact summing constraint.
-{CPU} uses core-weighted contributions; memory and disk use direct byte sums.
-Reconciliation acts on forecasts, not on observations.}
-\label{fig:arch}
-\end{figure}
-\FloatBarrier
 
 %% =====================================================================
 \section{Forecasting and Reconciliation Methodology}
@@ -974,12 +976,36 @@ different joint training widths and admissible endpoint origins---not
 long-lead performance.
 Scored timestamp sets need not be identical across $H$, so cross-$H$ checks are
 not controlled lead-time experiments.
-Figure~\ref{fig:trade} places reconciliation in the top/bottom plane:
-bottom-up preserves machine-level forecasts, whereas {WLS}/MinT can buy larger
-aggregate gains by adjusting bottoms, including some machine-level
-deterioration.
+
+\begin{center}
+\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_output_width.pdf}
+\captionof{figure}{{CPU} aggregate one-step {MAE} versus joint prediction width $H$.
+Metrics evaluate component~0; $H$ is training output width, not lead time.
+Points are means across outer folds; DLinear band shows seed min--max.
+LightGBM seed curves coincide (invariant). Units: weighted-mean percentage.}
+\label{fig:cpu_h}
+\end{minipage}
+\end{center}
+
+Figure~\ref{fig:trade} places reconciliation in the top/bottom plane.
+Bottom-up preserves the machine forecasts.
+{WLS}/MinT can improve aggregates more by adjusting bottoms, at some
+machine-level cost.
 Preferred methods therefore depend on whether cluster planning or
 machine-specific actions dominate.
+
+\begin{center}
+\begin{minipage}{\columnwidth}
+\centering
+\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
+\captionof{figure}{Top versus bottom relative {MAE} under reconciliation.
+Lower-left is desirable (both improve). {CPU}/memory and disk occupy
+different regions; LightGBM disk stress excluded. Wide layout: supplement.}
+\label{fig:trade}
+\end{minipage}
+\end{center}
 
 \paragraph{Statistical support and {RQ} answers.}
 Table~\ref{tab:stats} summarizes claim-relevant relative effects.
@@ -992,25 +1018,6 @@ accuracy while restoring exact coherence.
 seeds under the stated one-step semantics.
 
 \input{tables/cpu_main_results}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_output_width.pdf}
-\caption{{CPU} aggregate one-step {MAE} versus joint prediction width $H$.
-Metrics evaluate component~0; $H$ is training output width, not lead time.
-Points are means across outer folds; DLinear band shows seed min--max.
-LightGBM seed curves coincide (invariant). Units: weighted-mean percentage.}
-\label{fig:cpu_h}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\columnwidth]{figs/top_bottom_tradeoff.pdf}
-\caption{Top versus bottom relative {MAE} under reconciliation.
-Lower-left is desirable (both improve). {CPU}/memory and disk occupy
-different regions; LightGBM disk stress excluded. Wide layout: supplement.}
-\label{fig:trade}
-\end{figure}
 
 \subsection{Conditional Memory Results}
 \label{sec:memory}
