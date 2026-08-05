@@ -1,0 +1,16 @@
+figure,main_or_supplementary,source_script,source_data,units,aggregation,error_bar_meaning,table_consistency,readable,action,notes
+figs/architecture_or_hierarchy.pdf,main,regenerate_publication_figures.py,results/final/aggregate,see caption,outer/fold/H as caption,see caption,yes,yes,retain,H not lead
+figs/cpu_accuracy_vs_output_width.pdf,main,regenerate_publication_figures.py,results/final/aggregate,see caption,outer/fold/H as caption,see caption,yes,yes,retain,H not lead
+figs/top_bottom_tradeoff.pdf,main,regenerate_publication_figures.py,results/final/aggregate,see caption,outer/fold/H as caption,see caption,yes,yes,retain,H not lead
+figs/coherence_before_after.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/memory_reconciliation_vs_ewma.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/cpu_peak_results.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/disk_boundary.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/dlinear_memory_peak_bias_by_seed.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/cpu_reconciliation_effect_by_seed.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/bootstrap_relative_effects.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,deferred
+figs/supplementary/bootstrap_relative_effects_full.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,supp-only
+figs/supplementary/memory_accuracy_vs_output_width.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,supp-only
+figs/supplementary/cpu_peak_results_wide.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,wide layout
+figs/supplementary/dlinear_memory_peak_bias_wide.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,wide layout
+figs/supplementary/top_bottom_tradeoff_wide.pdf,supplementary,regenerate_publication_figures.py,results/final/aggregate,see caption,see caption,see caption,yes,yes,retain,wide layout

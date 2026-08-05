@@ -21,7 +21,7 @@ copy_path() {
     if [[ -d "$rel" ]]; then
       mkdir -p "$STAGE/$rel"
       if command -v rsync >/dev/null 2>&1; then
-        rsync -a --exclude '.DS_Store' "$rel/" "$STAGE/$rel/"
+        rsync -a --exclude '.DS_Store' --exclude '*.aux' --exclude '*.log' --exclude '*.out' --exclude '*.xdv' --exclude '*.fls' --exclude '*.fdb_latexmk' "$rel/" "$STAGE/$rel/"
       else
         cp -R "$rel"/. "$STAGE/$rel"/
       fi
@@ -34,18 +34,20 @@ copy_path() {
 # Explicit allowlist
 for f in manuscript.tex references.bib highlights.txt \
   cas-dc.cls cas-common.sty cas-model2-names.bst \
-  README.md BUILD.md CLEANUP_REPORT.md; do
+  README.md BUILD.md CLEANUP_REPORT.md AI_DECLARATION_CANDIDATE.txt \
+  SUBMISSION_FILE_INVENTORY.md FINAL_MANUSCRIPT_REVIEW.md; do
   copy_path "$f"
 done
 copy_path figs
 copy_path tables
-copy_path results
 copy_path supplementary
 copy_path thumbnails
-# lightweight scripts with relative paths only
+# Do not ship provenance audits or raw results CSVs in Overleaf ZIP
 mkdir -p "$STAGE/scripts"
 cp scripts/validate_manuscript.py scripts/build_manuscript.sh \
+  scripts/build_supplementary.sh \
   scripts/package_overleaf.sh scripts/verify_overleaf_package.sh \
+  scripts/package_editorial_manager_flat.py scripts/verify_editorial_manager_flat.sh \
   "$STAGE/scripts/" 2>/dev/null || true
 
 # Reject symlinks

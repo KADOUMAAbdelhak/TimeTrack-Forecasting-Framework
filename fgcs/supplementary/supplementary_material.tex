@@ -1,15 +1,48 @@
 %% Supplementary material for the TimeTrack FGCS manuscript
-\documentclass[a4paper,11pt]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{booktabs,graphicx,hyperref,amsmath,longtable}
+\documentclass[a4paper,fleqn]{cas-dc}
 
-\title{Supplementary Material:\\
-Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
-\author{Abdelhak Kadouma \and Amit Shukla \and Mohammed Elmusrati}
-\date{}
+\usepackage[numbers]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{xurl}
+
+% CAS prints an empty ORCID footnote when none are supplied.
+\let\printorcid\relax
+
+% Resolve class/style and assets from the FGCS root when compiling in this folder.
+\makeatletter
+\def\input@path{{../}{../tables/}{../figs/}{./}}
+\makeatother
+
+\title[mode=title]{Supplementary Material: Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
+
+\author[1]{Abdelhak Kadouma}
+\author[1]{Amit Shukla}
+\author[1]{Mohammed Elmusrati}
+\affiliation[1]{organization={University of Vaasa},
+            city={Vaasa},
+            country={Finland}}
 
 \begin{document}
+\let\WriteBookmarks\relax
 \maketitle
+\onecolumn
+
+% Supplementary numbering independent of the main article
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{section}{0}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 
 \section{Purpose}
 This supplement collects protocol detail deferred from the main article,
@@ -24,10 +57,10 @@ All numbers derive from accepted final aggregate and robustness artifacts.
 \begin{itemize}
   \item Persistence: no selected hyperparameters.
   \item {EWMA}: $\alpha=0.9$ for memory, {CPU}, and disk
-    (\texttt{results/final/robustness/01\_ewma\_baselines/selected\_ewma\_params.yaml}).
+    (\path{results/final/robustness/01_ewma_baselines/selected_ewma_params.yaml}).
   \item Ridge search grid: $\{10^{-4},10^{-2},1,10^{2},10^{4}\}$.
     Selected: {CPU} $\alpha=10^{4}$; memory/disk $\alpha=1$
-    (\texttt{results/final/packs/00\_shared\_tuning/selected\_hyperparameters.yaml}).
+    (\path{results/final/packs/00_shared_tuning/selected_hyperparameters.yaml}).
   \item LightGBM {CPU}: $n_{\mathrm{estimators}}=300$, learning rate $0.03$,
     $num\_leaves=31$.
   \item LightGBM memory: $n_{\mathrm{estimators}}=100$, learning rate $0.05$,
@@ -96,29 +129,29 @@ Reporting & \texttt{final-reporting-freeze-v2} \\
 
 \noindent Dataset fingerprint: \texttt{bf06dc0e7fe6ff5e}.
 Peeled commits, pack hashes, and artifact inventories:
-\texttt{results/final/aggregate/REPRODUCIBILITY\_REPORT\_V2.md},
-\texttt{SOURCE\_ARTIFACT\_HASHES.csv}, and
-\texttt{fgcs/results/provenance/MANIFEST.json}.
+\path{results/final/aggregate/REPRODUCIBILITY_REPORT_V2.md},
+\path{SOURCE_ARTIFACT_HASHES.csv}, and
+\path{fgcs/results/provenance/MANIFEST.json}.
 
 \section{Deferred main-article figures and tables}
 The following artifacts were moved from the main Results to keep the article
 within the page budget while preserving one-step/$H$-width semantics.
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/coherence_before_after.pdf}
 \caption{CPU coherence error before and after reconciliation for Ridge and
 LightGBM ($\log_{10}(\mathrm{error}+\varepsilon)$, $\varepsilon=10^{-3}$).}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/memory_reconciliation_vs_ewma.pdf}
 \caption{Memory relative MAE versus EWMA independent by model--method and
 seed.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/cpu_peak_results.pdf}
 \caption{CPU peak/high-load metrics at q90/q95 (main-article stacked layout,
@@ -127,7 +160,7 @@ reconciliation method. All metrics are one-step evaluations.}
 \label{fig:cpupeak}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/disk_boundary.pdf}
 \caption{Disk Ridge reconciliation modes for used-disk level with
@@ -138,13 +171,13 @@ comparisons. Metrics evaluate the first predicted component (one-step).}
 \label{fig:disk}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
 \caption{Signed DLinear memory peak bias by seed and method.}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.85\textwidth]{../figs/cpu_reconciliation_effect_by_seed.pdf}
 \caption{CPU relative MAE versus independent by seed for LightGBM and DLinear
@@ -160,7 +193,7 @@ reconciliation modes.}
 \input{claim_support_full}
 
 \section{Extended bootstrap comparisons}
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/bootstrap_relative_effects.pdf}
 \caption{Claim-relevant bootstrap relative MAE effects with mean direct
@@ -169,14 +202,14 @@ Negative values favor the first named method.}
 \label{fig:boot}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/bootstrap_relative_effects_full.pdf}
 \caption{Extended robustness relative-effect forest plot.}
 \end{figure}
 
 \section{Memory accuracy versus output width}
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.7\textwidth]{../figs/supplementary/memory_accuracy_vs_output_width.pdf}
 \caption{Memory one-step MAE versus joint prediction width $H$.
@@ -195,19 +228,19 @@ Statistical families:
 The main article uses single-column stacked peak panels for column fit.
 Side-by-side wide layouts (same frozen numbers) are included here.
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/cpu_peak_results_wide.pdf}
 \caption{CPU peak/high-load metrics (wide two-panel layout).}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/dlinear_memory_peak_bias_wide.pdf}
 \caption{DLinear memory peak bias by seed (wide two-panel layout).}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[pos=h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/top_bottom_tradeoff_wide.pdf}
 \caption{Top versus bottom accuracy trade-offs (wide two-panel layout).}

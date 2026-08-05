@@ -100,7 +100,7 @@ and Ridge regression; learned models include LightGBM and DLinear; reconciliatio
 modes include independent forecasts, bottom-up, weighted least squares ({WLS}),
 and MinT-shrink, with top-down used for the disk boundary.
 On {CPU}, LightGBM with MinT yields the best observed frozen outer-evaluation
-accuracy while restoring exact coherence.
+one-step accuracy while restoring exact coherence.
 On memory, reconciliation often improves DLinear relative to its own independent
 forecast, yet {EWMA} remains the strongest observed method.
 On disk, Ridge bottom-up degrades aggregate accuracy, whereas top-down preserves
@@ -112,18 +112,10 @@ layer for coherent multi-level telemetry forecasting in application-profiling
 pipelines.
 \end{abstract}
 
-\begin{highlights}
-\item Coherent machine-to-cluster forecasts via hierarchy-aware reconciliation.
-\item LightGBM+MinT improves {CPU} accuracy and restores exact coherence.
-\item Memory gains are conditional; {EWMA} remains the strongest observed method.
-\item Disk shows a failure boundary: bottom-up can harm aggregate accuracy.
-\item Ordinary {MAE} gains do not imply universal peak-operational improvements.
-\end{highlights}
-
 \begin{keywords}
 Cloud telemetry \sep Hierarchical forecasting \sep Forecast reconciliation \sep
-{MinT} \sep LightGBM \sep {DLinear} \sep {EWMA} \sep Application profiling \sep
-TimeTrack \sep OpenAirInterface
+Coherent forecasting \sep Application profiling \sep TimeTrack \sep LightGBM \sep
+{DLinear}
 \end{keywords}
 
 \maketitle
@@ -1362,10 +1354,11 @@ The dataset characterization is described by Meliani et al.\
 
 \section*{Code and Artifact Availability}
 Frozen prediction, analysis, peak, robustness, and reporting artifacts are
-tracked in the project repository under immutable freeze tags culminating in
+tracked in the public project repository
+\url{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework}
+under immutable freeze tags culminating in
 \texttt{final-reporting-\allowbreak freeze-v2}; detailed freeze provenance is in
 the supplementary material.
-% TODO-AUTHOR: insert public artifact repository URL before submission
 
 \section*{CRediT Author Statement}
 \textbf{Abdelhak Kadouma:} Conceptualization, Methodology, Software, Data
@@ -1379,11 +1372,6 @@ acquisition, Writing -- review \& editing.
 The authors declare that they have no known competing financial interests or
 personal relationships that could have appeared to influence the work reported
 in this paper.
-
-\section*{Acknowledgements}
-% TODO-AUTHOR: confirm final acknowledgement and funding text before submission
-The authors thank colleagues and collaborators who contributed to the broader
-TimeTrack and application-profiling research context.
 
 \FloatBarrier
 \bibliographystyle{cas-model2-names}

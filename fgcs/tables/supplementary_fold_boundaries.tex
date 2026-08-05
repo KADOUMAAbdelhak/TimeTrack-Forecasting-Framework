@@ -6,6 +6,7 @@
 (identical for {CPU}, memory, and disk). Inner validation is the last
 15\% of each outer-train span.}
 \label{tab:supp_fold_calendar}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}rlll@{}}
 \toprule
 Fold & Train & Validation & Test \\
@@ -14,7 +15,8 @@ Fold & Train & Validation & Test \\
 1 & 2024-07-03~10:05:20 -- 2024-07-10~07:58:21 ($n=14124$) & 2024-07-10~07:59:03 -- 2024-07-11~13:15:03 ($n=2492$) & 2024-07-11~13:15:45 -- 2024-07-15~14:50:09 ($n=8308$) \\
 2 & 2024-07-03~10:05:20 -- 2024-07-13~18:55:49 ($n=21186$) & 2024-07-13~18:56:31 -- 2024-07-15~14:50:09 ($n=3738$) & 2024-07-15~14:50:51 -- 2024-07-19~16:27:05 ($n=8311$) \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[ht]
@@ -23,6 +25,7 @@ Fold & Train & Validation & Test \\
 ($L{=}32$). Larger $H$ removes final origins; {CPU} loses additional windows at
 missing-value discontinuities. Metrics score component~0 only.}
 \label{tab:supp_fold_windows}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}llrrrrll@{}}
 \toprule
 Hierarchy & Fold & $H$ & Train$_W$ & Val$_W$ & Test$_W$ & First scored & Last scored \\
@@ -52,5 +55,6 @@ disk\_ud & 1 & 8 & 14085 & 2453 & 8269 & 2024-07-11~13:38:19 & 2024-07-15~14:45:
 disk\_ud & 2 & 1 & 21154 & 3706 & 8279 & 2024-07-15~15:13:25 & 2024-07-19~16:27:05 \\
 disk\_ud & 2 & 8 & 21147 & 3699 & 8272 & 2024-07-15~15:13:25 & 2024-07-19~16:22:09 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
