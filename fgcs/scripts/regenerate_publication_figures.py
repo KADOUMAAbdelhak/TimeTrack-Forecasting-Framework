@@ -119,12 +119,16 @@ def fig_cpu_accuracy():
             if len(ss):
                 band = ss.groupby("horizon").agg(lo=("min_mae", "mean"), hi=("max_mae", "mean"))
                 ax.fill_between(band.index, band.lo, band.hi, color=color, alpha=0.15, linewidth=0)
-    ax.set_xlabel("Horizon")
+    ax.set_xlabel(r"Joint prediction width $H$ (samples)")
     ax.set_ylabel("MAE (weighted-mean %)")
     ax.set_xticks([1, 8, 16])
     style_axes(ax)
     ax.legend(fontsize=6, frameon=False, loc="upper left")
-    save(fig, FIGS / "cpu_accuracy_vs_horizon.pdf")
+    save(fig, FIGS / "cpu_accuracy_vs_output_width.pdf")
+    # Legacy alias path retained for any stale includes.
+    from shutil import copy2
+
+    copy2(FIGS / "cpu_accuracy_vs_output_width.pdf", FIGS / "cpu_accuracy_vs_horizon.pdf")
 
 
 def fig_seed_recon():
@@ -483,12 +487,15 @@ def fig_memory_accuracy_supp():
         g = mem[(mem.base_model == model) & (mem.reconciliation_method == method)]
         vals = g.groupby("horizon")["seed_mean"].mean() if "seed_mean" in g else g.groupby("horizon").mae.mean()
         ax.plot(vals.index, vals.values / 1e9, ls=ls, color=color, marker="o", ms=3, label=label, lw=1.1)
-    ax.set_xlabel("Horizon")
+    ax.set_xlabel(r"Joint prediction width $H$ (samples)")
     ax.set_ylabel(r"MAE ($\times 10^9$ bytes)")
     ax.set_xticks([1, 8, 16])
     style_axes(ax)
     ax.legend(fontsize=6, frameon=False)
-    save(fig, SUP / "memory_accuracy_vs_horizon.pdf")
+    save(fig, SUP / "memory_accuracy_vs_output_width.pdf")
+    from shutil import copy2
+
+    copy2(SUP / "memory_accuracy_vs_output_width.pdf", SUP / "memory_accuracy_vs_horizon.pdf")
 
 
 def main():

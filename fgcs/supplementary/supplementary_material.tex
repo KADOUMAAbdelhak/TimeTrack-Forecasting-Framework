@@ -13,7 +13,7 @@ Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
 
 \section{Purpose}
 This supplement collects the full claim matrix, extended bootstrap forest,
-memory accuracy-versus-horizon plot, and pointers to seed/peak CSV grids.
+memory accuracy-versus-output-width plot, and pointers to seed/peak CSV grids.
 All numbers derive from \texttt{final-reporting-freeze-v2} aggregate artifacts.
 
 \section{Full claim-support matrix}
@@ -26,15 +26,16 @@ All numbers derive from \texttt{final-reporting-freeze-v2} aggregate artifacts.
 \caption{Extended robustness relative-effect forest plot.}
 \end{figure}
 
-\section{Memory accuracy versus horizon}
+\section{Memory accuracy versus output width}
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.7\textwidth]{../figs/supplementary/memory_accuracy_vs_horizon.pdf}
-\caption{Memory MAE versus horizon for selected model--method pairs.}
+\includegraphics[width=0.7\textwidth]{../figs/supplementary/memory_accuracy_vs_output_width.pdf}
+\caption{Memory one-step MAE versus joint prediction width $H$.
+Metrics evaluate the first predicted component; $H$ is not evaluation lead time.}
 \end{figure}
 
 \section{CSV grids}
-Full seed-by-fold-by-horizon tables:
+Full seed-by-fold-by-width tables:
 \texttt{results/main/table05\_seed\_robustness.csv}.\\
 Peak matrices:
 \texttt{results/main/table08\_peak\_operational\_evidence.csv}.\\

@@ -236,7 +236,8 @@ under independent, bottom-up, weighted least squares ({WLS}), and MinT-shrink
 modes, with top-down reserved for the disk boundary.
 Hierarchies comprise verified core-weighted {CPU}, an exact memory sum, and an
 exact disk-level sum.
-Evaluation uses chronological outer folds, multiple horizons, train-only
+Evaluation uses chronological outer folds, multiple multi-output-width
+configurations, train-only
 hyperparameter selection, seeds $0/1/2$ for LightGBM and DLinear, and immutable
 frozen evidence layers culminating in the reporting freeze.
 Detailed formulations and protocol parameters are given in
@@ -262,8 +263,8 @@ deployment policy.
 These observations motivate five research questions.
 \textbf{RQ1:} How do independent and reconciled forecasts affect aggregate
 accuracy and exact machine-to-cluster coherence for core-weighted {CPU}?
-\textbf{RQ2:} Do the {CPU} findings remain stable across folds, horizons,
-models, and stochastic seeds?
+\textbf{RQ2:} Do the {CPU} findings remain stable across folds, multi-output-width
+configurations, models, and stochastic seeds?
 \textbf{RQ3:} When does reconciliation improve memory forecasts, and how do
 reconciled learned models compare with {EWMA}?
 \textbf{RQ4:} Why can reconciliation degrade disk-level forecasts, and what
@@ -530,7 +531,7 @@ The dataset paper describes a nominal collection interval of approximately
 $45$\,s \cite{meliani2025timetrack}.
 Direct timestamp analysis yields a measured median interval of approximately
 $42.285$\,s (about $99.93\%$ of consecutive steps round to $42$\,s), which we
-use for horizon interpretation.
+use for wall-clock interpretation of the sampling step.
 Five primary traces share $41{,}362$ timestamps from
 $2024$-$06$-$24$~$13$:$37$:$06$ to $2024$-$07$-$19$~$16$:$27$:$05$
 ($\approx 25.12$ calendar days), with no duplicate timestamps and strictly
@@ -637,22 +638,26 @@ disk (Section~\ref{sec:dataset}).
 For {CPU}, reconciliation uses weighted-sum units and totals are divided by
 $236$ only when reporting weighted-mean percentages.
 
-Given origin $t$, context length $L$, and multi-output width $h$, each series
-maps the lagged window ending at $t$ to a length-$h$ target vector.
-Independent base forecasts are written $\hat{\mathbf{y}}_{t+h\mid t}$.
+Given origin $t$, context length $L$, and joint prediction width $H$, each series
+maps the lagged window ending at $t$ to a length-$H$ target vector.
+Independent base forecasts are written $\hat{\mathbf{y}}_{t+H\mid t}$.
 In the frozen pipeline, $L=32$, inputs are univariate lagged targets (no
 calendar covariates), and each bottom and top series is trained separately.
 Windows with missing values or outage crossings are discarded; identical
 origins are retained across levels so reconciliation acts on aligned forecasts.
 Fold construction is deferred to Section~\ref{sec:protocol}.
-Reported accuracy uses the first multi-output component (the one-step value at
-each origin); $h$ still governs training width and the admissible origin set.
+Here $H\in\{1,8,16\}$ (disk $H\in\{1,8\}$) denotes the number of future samples
+jointly predicted during fitting.
+Reported accuracy---and reconciliation---use only the first multi-output
+component (the one-step value at each origin), so frozen point metrics are
+one-step-ahead evaluations rather than $H$-step lead-time scores; $H$ still
+governs training-target dimensionality and the admissible origin set.
 
 Observed telemetry may satisfy~\eqref{eq:hierarchy} exactly while independent
 forecasts do not.
 Coherence requires
-$\tilde{\mathbf{y}}_{t+h\mid t}=\mathbf{S}\tilde{\mathbf{b}}_{t+h\mid t}$,
-equivalently $\tilde{\mathbf{y}}_{t+h\mid t}\in\operatorname{col}(\mathbf{S})$.
+$\tilde{\mathbf{y}}_{t+H\mid t}=\mathbf{S}\tilde{\mathbf{b}}_{t+H\mid t}$,
+equivalently $\tilde{\mathbf{y}}_{t+H\mid t}\in\operatorname{col}(\mathbf{S})$.
 The objective is to evaluate three properties that can conflict: top-level
 accuracy, bottom-level accuracy, and exact top--bottom coherence.
 
@@ -667,12 +672,12 @@ reconciliation.
 
 \paragraph{Persistence and {EWMA}.}
 Persistence forecasts the last context observation,
-$\hat{y}_{t+h\mid t}=y_t$, tiled across the multi-output width.
+$\hat{y}_{t+1\mid t}=y_t$, tiled across the joint prediction width $H$.
 It is a demanding baseline for slowly varying memory and disk levels and for
-short-lead evaluation.
+one-step evaluation.
 {EWMA} recurses over the context,
 $z_{\ell}=\alpha y_{t-L+1+\ell}+(1-\alpha)z_{\ell-1}$, initialized at the first
-sample, and forecasts $\hat{y}_{t+h\mid t}=z_{L-1}$ for every output component.
+sample, and forecasts $\hat{y}_{t+1\mid t}=z_{L-1}$ for every output component.
 Alpha is selected on inner validation only from
 $\{0.05,0.1,0.2,0.3,0.5,0.7,0.9\}$; the accepted extension selected
 $\alpha=0.90$ for {CPU}, memory, and disk.
@@ -685,7 +690,7 @@ $\min_{\boldsymbol{\beta}}\|\mathbf{X}\boldsymbol{\beta}-\mathbf{z}\|_2^2
 fit per multi-output component on flattened lags as a regularized linear
 benchmark.
 LightGBM fits gradient-boosted trees on the same features, with a separate model
-per series, fold, and multi-output width \cite{ke2017lightgbm}.
+per series, fold, and joint prediction width \cite{ke2017lightgbm}.
 Frozen core settings use $300$ trees, learning rate $0.03$, and $31$ leaves for
 {CPU}, and $100$ trees, learning rate $0.05$, and $15$ leaves for memory; disk
 uses the transferred memory configuration as boundary-stress evidence, not an
@@ -700,7 +705,7 @@ DLinear is a lightweight direct neural baseline, not a Transformer
 \cite{zeng2023dlinear}.
 It splits the univariate context into moving-average trend and residual seasonal
 components (kernel size~$25$) and applies separate linear maps from length~$L$
-to length~$h$.
+to length~$H$.
 Only the target series enters the network.
 Train-only standardization is inverse-transformed before metrics.
 Training uses Adam/{MSE}, at most $40$ epochs, patience~$5$, one {CPU} thread,
@@ -744,7 +749,7 @@ Projection methods use
 \end{equation}
 with Moore--Penrose pseudoinverse $(\cdot)^{+}$
 \cite{wickramasuriya2019mint}.
-{OLS} ($\mathbf{W}=\mathbf{I}$) is a horizon-restricted ablation only.
+{OLS} ($\mathbf{W}=\mathbf{I}$) is retained only as an ablation at $H=8$.
 {WLS} uses diagonal residual variances from outer-train/inner-validation
 residuals (floored at $10^{-12}$).
 MinT-shrink uses a residual covariance diagonally shrunk at intensity $0.1$,
@@ -802,8 +807,9 @@ Protocol settings appear in Section~\ref{sec:protocol}.
 \input{tables/experiment_registry}
 \FloatBarrier
 
-\subsection{Temporal Splits and Horizons}
-Outer evaluation uses nested chronological folds with horizons as above.
+\subsection{Temporal Splits and Output Widths}
+Outer evaluation uses nested chronological folds with joint prediction widths
+$H$ as above.
 Context policy and train/validation/test chronology follow the frozen
 experiment protocol; no outer-label tuning is performed
 \cite{bergmeir2018note}.
@@ -834,7 +840,7 @@ This manuscript reports only accepted final aggregate artifacts.
 \label{sec:cpu}
 Table~\ref{tab:cpu_main} and Figure~\ref{fig:cpu_h} summarize {CPU} results in
 weighted-mean percentage units.
-Horizon-averaged independent {MAE} values are about $1.321$ (persistence),
+Width-averaged independent {MAE} values are about $1.321$ (persistence),
 $1.320$ ({EWMA}), $1.253$ (Ridge), and $1.036$ (LightGBM).
 LightGBM independent improves on Ridge by about $17.3\%$ and on persistence by
 about $21.6\%$.
@@ -853,9 +859,12 @@ Figure~\ref{fig:trade} shows top/bottom trade-offs.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_horizon.pdf}
-\caption{{CPU} aggregate {MAE} versus horizon for selected model--method pairs.
-Points are horizon means across outer folds; shaded band for DLinear shows
+\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_output_width.pdf}
+\caption{{CPU} aggregate one-step {MAE} versus joint prediction width $H$ for
+selected model--method pairs.
+Metrics evaluate the first predicted component; $H$ controls the jointly
+trained output width rather than evaluation lead time.
+Points are means across outer folds for each $H$; shaded band for DLinear shows
 mean seed min--max across folds. Units: weighted-mean percentage. LightGBM
 curves for seeds~$0/1/2$ coincide (seed-invariant).}
 \label{fig:cpu_h}
@@ -901,8 +910,8 @@ seed-mean), but reconciled DLinear does not robustly beat {EWMA}.
 The seed-mean {WLS}-versus-{EWMA} effect is near zero/slightly positive, and
 seed~$2$ reverses ($\approx +2.06\%$), contradicting a robust win claim.
 MinT versus {EWMA} remains unsupported as a robust improvement.
-LightGBM is substantially worse than {EWMA}: the ratio of horizon-mean {MAE}s is
-about $+36.9\%$, whereas the mean of horizon-level relative {MAE} fields is about
+LightGBM is substantially worse than {EWMA}: the ratio of width-mean {MAE}s is
+about $+36.9\%$, whereas the mean of width-level relative {MAE} fields is about
 $+38.8\%$ (Table~\ref{tab:memory_main}); these are different aggregations, not
 conflicting measurements of one scalar.
 Figure~\ref{fig:mem_ewma} shows seed-wise relative effects versus {EWMA} for
@@ -926,8 +935,8 @@ DLinear {WLS}/{MinT} remain near zero; LightGBM independent is largely worse.}
 Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} show that persistence
 and {EWMA} are practical disk baselines.
 Ridge independent already trails them; Ridge bottom-up further harms aggregate
-accuracy by $+13.93\%$ when measured as the ratio of horizon-mean {MAE}s
-(Table~\ref{tab:disk_boundary}); the mean of horizon-level relative fields is
+accuracy by $+13.93\%$ when measured as the ratio of width-mean {MAE}s
+(Table~\ref{tab:disk_boundary}); the mean of width-level relative fields is
 $+14.83\%$ and is not used as the primary narrative statistic.
 Ridge top-down preserves the independent top ({MAE} change $0\%$ at the top)
 while materially increasing bottom macro {MAE}.
@@ -974,7 +983,7 @@ side-by-side wide layout is in the supplementary material.}
 \centering
 \includegraphics[width=\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
 \caption{Signed DLinear memory peak bias (bytes), averaged across folds and
-horizons within each seed and method. Negative values indicate underprediction
+output widths within each seed and method. Negative values indicate underprediction
 of peak magnitudes; reconciliation often amplifies the negative bias.}
 \label{fig:membias}
 \end{figure}
@@ -993,7 +1002,7 @@ Reconciliation improvements for DLinear {CPU} hold across seeds~$0/1/2$.
 \caption{{CPU} relative {MAE} versus independent forecasts by seed for
 LightGBM and DLinear under bottom-up, {WLS}, and MinT. LightGBM points coincide
 across seeds (seed-invariant); DLinear shows small seed variation. Values are
-means of fold$\times$horizon relative effects from the robustness freeze.}
+means of fold$\times$width relative effects from the robustness freeze.}
 \label{fig:seed}
 \end{figure}
 
