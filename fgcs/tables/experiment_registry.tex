@@ -1,4 +1,4 @@
-\begin{table}[width=\columnwidth,pos=t]
+\begin{table}[width=\columnwidth,pos=!ht]
 \centering
 \caption{Experimental protocol summary for the frozen TimeTrack evaluation.}
 \label{tab:experiment}
@@ -8,16 +8,13 @@
 \toprule
 Item & Setting \\
 \midrule
-Dataset & TimeTrack OAI CI/CD telemetry \\
-Sampling & Median interval $\approx 42.285$\,s \\
-Timeline & Post-outage primary window \\
-CPU hierarchy & Core-weighted; 236 cores \\
-Memory / disk & Exact machine$\to$cluster sums \\
 Outer folds & Nested temporal folds $0$--$2$ \\
-Horizons & CPU/mem.\ $h\in\{1,8,16\}$; disk~$h\in\{1,8\}$ \\
+Horizons & {CPU}/mem.\ $h\in\{1,8,16\}$; disk~$h\in\{1,8\}$ \\
+Context & Frozen context-window length (protocol) \\
 Tuning & Train/inner-validation only \\
-Statistics & MBB; relative 95\% CIs; Holm \\
+Statistics & {MBB}; relative 95\% {CIs}; Holm \\
 Seeds & LightGBM/DLinear seeds $0/1/2$ \\
+Evidence & Immutable freeze layers (reporting freeze) \\
 \bottomrule
 \end{tabularx}
 \end{threeparttable}

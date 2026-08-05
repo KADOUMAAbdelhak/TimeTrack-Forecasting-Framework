@@ -1,0 +1,5 @@
+hierarchy,source_series,top_series,relation,units,rows_checked,maximum_absolute_error,exact,mapping_source,included_in_final,notes
+cpu_core_weighted,"machine01_CU..machine07_CU (weighted by verified c_i)",cluster_CU_wsum (report as wsum/236 %),y=sum_i c_i u_i_t,percent_weighted_sum / percent_mean,41362,,True,host_correlation+per_core_column_inventory_verified_cores_m05=20_m07=24,True,reconciliation_on_weighted_sum; reporting_uses_weighted_mean; raw_totalCpuCores_m05/m07_swapped_vs_hosts
+memory_um,machine01_UM..machine07_UM,cluster_UM,cluster_UM=sum_i machine_i_UM,bytes,41362,0.0,True,compute_dataset_exact_sum_audit,True,no_capacity_weighting; missing_not_imputed_for_identity_check
+disk_ud,machine01_UD..machine07_UD,cluster_UD,cluster_UD=sum_i machine_i_UD,bytes_level,41362,0.0,True,disk_plus_compute_exact_sum_audit,True,used_disk_level_not_throughput; downward_jumps_possible
+network_bond0_approx,member_NIC_TX/RX_per_host,host_bond0_TX/RX,approximate_sum,rate_units,n/a,n/a,False,throughput_audit_near_exact_but_not_claim_eligible,False,excluded_from_final_claims; NETWORK_APPROX_THRESHOLD=0.02

@@ -1,0 +1,23 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{Verified TimeTrack machine-to-cluster hierarchies used in this study.}
+\label{tab:hierarchies}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Target & Relation / unit & Identity / role \\
+\midrule
+Core-weighted {CPU}
+  & Weighted sum $\sum_i c_i u_{i,t}$; report $/236$ (\%)
+  & Exact (verified cores); primary \\
+Used memory
+  & Cluster {UM} $=$ sum of machine {UM} (bytes)
+  & Exact sum; conditional \\
+Used disk
+  & Cluster {UD} $=$ sum of machine {UD} (bytes)
+  & Exact level sum; boundary \\
+\bottomrule
+\end{tabularx}
+\end{threeparttable}
+\end{table}

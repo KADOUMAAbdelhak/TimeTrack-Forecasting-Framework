@@ -505,46 +505,116 @@ method or cross-dataset numerical superiority.
 \section{TimeTrack Dataset and Telemetry Hierarchies}
 \label{sec:dataset}
 
-\subsection{Dataset and Experimental Timeline}
-TimeTrack is a public high-resolution telemetry dataset collected from an {OAI}
-{CI}/{CD} cluster \cite{meliani2025timetrack,meliani2025timetrackkaggle}.
-The dataset paper characterizes the collection; the present paper studies
-hierarchy-aware forecasting and reconciliation on frozen experimental artifacts.
-The measured median sampling interval in our pipeline is approximately
-$42.285$\,s.
-Analyses use the post-outage primary timeline under nested temporal outer folds
-$0$--$2$.
-Forecast horizons are $h\in\{1,8,16\}$ for {CPU}/memory and $h\in\{1,8\}$ for
-disk.
+\paragraph{Collection environment and trace structure.}
+TimeTrack is a public high-resolution telemetry corpus collected from an
+operational OpenAirInterface ({OAI}) continuous integration and deployment
+({CI}/{CD}) cluster that supports development and testing of {OAI} components
+such as the {gNB}, user equipment ({UE}), and core-network software
+\cite{meliani2025timetrack}.
+The published environment comprises seven physical machines with $236$ {CPU}
+cores, $437.5$\,{GB} {RAM}, approximately $1.8$\,{TB} of {SSD} storage, and
+multiple physical network interfaces; Prometheus is reported as the underlying
+metric source \cite{meliani2025timetrack}.
+Released traces cover computing, per-core {CPU}, disk, memory, network, and
+latency signals and are available on {Kaggle}
+\cite{meliani2025timetrackkaggle}.
+Dataset creation is not a contribution of this manuscript: we take the released
+files as given and begin with hierarchy validation and hierarchy-aware
+forecasting on the metrics required for the accepted exact {CPU}, memory, and
+disk relations summarized in Table~\ref{tab:hierarchies}.
+Figure~\ref{fig:arch} shows independent bottom- and top-level forecasts under
+exact summing constraints with optional reconciliation.
 
-\subsection{{CPU} Hierarchy}
-{CPU} is reported as a core-weighted mean percentage.
-Verified machine core counts are $36,48,36,36,20,36,24$ (total $236$).
-Cluster {CPU} equals the core-weighted mean of machine percentages
-(equivalently, weighted sum divided by $236$).
-We do not use conflicting raw machine05/machine07 core labels.
+\paragraph{Timeline preparation and integrity checks.}
+The dataset paper describes a nominal collection interval of approximately
+$45$\,s \cite{meliani2025timetrack}.
+Direct timestamp analysis yields a measured median interval of approximately
+$42.285$\,s (about $99.93\%$ of consecutive steps round to $42$\,s), which we
+use for horizon interpretation.
+Five primary traces share $41{,}362$ timestamps from
+$2024$-$06$-$24$~$13$:$37$:$06$ to $2024$-$07$-$19$~$16$:$27$:$05$
+($\approx 25.12$ calendar days), with no duplicate timestamps and strictly
+increasing order.
+A major outage from $2024$-$06$-$28$~$13$:$10$:$49$ to
+$2024$-$07$-$03$~$10$:$05$:$20$ ($\approx 4.87$ days) is not interpolated:
+multi-day fill would invent temporal structure.
+Forecasting windows use only the retained continuous post-outage segment
+($33{,}235$ observations); no context window may cross the outage.
+Exact fold boundaries are deferred to Section~\ref{sec:protocol}.
+Sparse missing cells outside the outage are left missing rather than filled
+across the break; hierarchy identity checks use timestamp-aligned rows without
+imputing invented values.
 
-\subsection{Memory Hierarchy}
-Memory uses an exact machine-to-cluster sum in bytes for the evaluated memory
-hierarchy.
-Independent forecasts may violate this sum; reconciliation projects forecasts
-onto the summing matrix.
+\paragraph{Selected metrics.}
+We use per-machine {CPU} consumption percentages with a core-weighted cluster
+representation; used-memory levels (bytes) at machine and cluster scope; and
+used-disk levels ({UD}, bytes) at both scopes.
+{UD} denotes a used-disk level, not disk write rate, disk read rate, or
+cumulative {I}/{O} counters.
+Network-interface and latency telemetry are present in TimeTrack but are not
+used for a final network-hierarchy claim: candidate bond/interface aggregation
+did not meet the same exact physical-identity bar as {CPU}, memory, and disk.
 
-\subsection{Disk Boundary Hierarchy}
-Disk uses an exact level-sum hierarchy.
-Unlike {CPU} and memory, disk is a method-boundary case: bottom-up can harm
-aggregates, which motivates a top-down comparison.
+\paragraph{Core-weighted {CPU} hierarchy.}
+Let $u_{i,t}$ be machine~$i$'s {CPU}-utilization percentage and $c_i$ its
+verified core count, with $C=\sum_i c_i=236$.
+Reported cluster {CPU} is the weighted mean $(\sum_i c_i u_{i,t})/C$.
+Reconciliation uses the additive weighted-sum hierarchy
+$y^{\mathrm{CPU}}_t=\sum_i c_i u_{i,t}$, converting to percentage only for
+reporting as $y^{\mathrm{CPU}}_t/236$.
+An unweighted mean would give equal weight to machines with unequal capacity.
+Verified counts are
+$(c_i)=(36,48,36,36,20,36,24)$ for machines~$01$--$07$ (total~$236$).
+The TimeTrack resource table and raw static core-count fields swap the unequal
+machine05/machine07 labels relative to the released per-core host identifiers
+\cite{meliani2025timetrack}.
+We resolve this by data-derived validation---correlating machine-level {CU}
+with per-core host traces, comparing candidate mappings to host column
+inventories, and retaining the mapping that yields an exact weighted-sum
+identity with $C=236$---not by arbitrary relabeling.
+The total remains $236$, but the two unequal machine-specific labels are
+exchanged between the publication table and the telemetry identifiers; we use
+the empirically verified mapping throughout forecasting and reconciliation.
 
-Figure~\ref{fig:arch} summarizes the forecasting and reconciliation workflow.
+\paragraph{Memory and disk hierarchies.}
+Used memory obeys an exact byte-sum identity: the cluster used-memory series
+equals the sum of the seven machine used-memory series.
+Bytes are already additive, so no capacity weighting is needed.
+On all $41{,}362$ timestamp-aligned compute rows the maximum absolute identity
+error is~$0$ (no imputation for this check).
+Independent forecasts can still violate the identity; reconciliation restores
+it on forecasts.
+Used disk obeys the analogous exact level-sum identity on the same
+$41{,}362$ aligned rows, again with maximum absolute identity error~$0$.
+{UD} is a level series: downward jumps may reflect cleanup, deletion, rotation,
+or reset behavior, unlike smoother capacity-like dynamics.
+Exact structural coherence does not imply that every reconciliation method
+improves accuracy when bottoms respond differently to downward changes;
+measured trade-offs are deferred to Section~\ref{sec:results}.
 
-\begin{figure}[t]
+\paragraph{Scope of the final hierarchy study.}
+Before forecasting we verified numerically that core-weighted {CPU} is exact
+under the verified mapping, that used-memory and used-disk sums are exact on
+aligned observations, and that summing matrices encode these physical relations
+for later reconciliation of forecasts.
+Approximate network bond/interface candidates were inspected and excluded from
+final claims.
+This manuscript's contribution therefore begins after dataset release, with
+validated hierarchies and the frozen protocol of Section~\ref{sec:protocol}.
+
+\input{tables/dataset_hierarchy_summary}
+
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{figs/architecture_or_hierarchy.pdf}
-\caption{Hierarchy-aware forecasting workflow: independent base forecasts are
-optionally reconciled through bottom-up, {WLS}, MinT-shrink, or disk top-down
-to produce coherent multi-level outputs.}
+\caption{Machine-to-cluster hierarchy workflow on TimeTrack.
+Seven machine-level bottom series and one cluster-level top series are forecast
+independently and may then be reconciled under an exact summing constraint.
+{CPU} uses core-weighted contributions; memory and disk use direct byte sums.
+Reconciliation acts on forecasts, not on observations.}
 \label{fig:arch}
 \end{figure}
+\FloatBarrier
 
 %% =====================================================================
 \section{Forecasting and Reconciliation Methodology}
@@ -596,6 +666,7 @@ analysis; they qualify rather than replace aggregate {MAE}.
 \label{sec:protocol}
 
 \input{tables/experiment_registry}
+\FloatBarrier
 
 \subsection{Temporal Splits and Horizons}
 Outer evaluation uses nested chronological folds with horizons as above.
