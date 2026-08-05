@@ -1,0 +1,21 @@
+paragraph,statement,claim_category,evidence_source,numerical_value,qualification,supported,duplicates_abstract,duplicates_discussion,notes
+1,Incoherent machine/cluster forecasts weaken profiling/orchestration,problem_statement,Introduction/Abstract,,conceptual,yes,partial,no,study purpose
+1,Evaluated persistence/EWMA/Ridge/LightGBM/DLinear independent and reconciled,scope,Methods/Abstract,,descriptive,yes,partial,no,no equations
+2,LightGBM strongest independent CPU in frozen outer eval,CPU_primary,SAFE A1 / Results 6.1,,TimeTrack core-weighted one-step frozen,yes,partial,no,not universal
+2,LightGBM improves on Ridge by about 17.3%,CPU_primary,manuscript_number_audit / Intro,~17.3% (−17.29%),approx wording matches Intro,yes,no,no,headline only
+2,MinT further ~10.1% vs LightGBM independent + exact coherence,CPU_primary,SAFE B1 / Intro,~10.1% (−10.13%),aggregate one-step,yes,no,no,headline only
+2,LightGBM seed-invariant; DLinear CPU practically seed-stable,CPU_robustness,SAFE claims 2–3,,frozen deterministic LightGBM,yes,no,partial,RQ2 seeds
+2,CPU pattern across folds/H/models/seeds not across lead times,RQ2_closure,Results RQ synthesis / semantics audit,,H is output width,yes,no,partial,explicit non-lead
+3,Memory: recon helps DLinear vs self; EWMA strongest; no robust EWMA beat,memory_conditional,SAFE 5–6 / RQ3,,seed-aware,yes,yes,partial,conditional
+3,Disk: exact hierarchy ≠ recon gains; BU harms; TD preserves top at bottom cost,disk_boundary,SAFE 7 / RQ4,,no reset causation,yes,yes,partial,boundary
+3,Hierarchy-dependent selection not universal strategy,method_selection,Discussion 7.2,,frozen interpretation,yes,partial,yes,central synthesis
+4,Ordinary MAE ≠ universal peak/high-load gains,peak_qualification,SAFE 8 / RQ5 / P1 P2 P4,,unsupported general peak recon,yes,yes,partial,
+4,LightGBM strongest evaluated CPU in high-load (P3),peak_qualification,SAFE 9,,among evaluated models,yes,no,no,
+4,DLinear memory underprediction/compression amplified by recon,peak_qualification,SAFE 10 / P5,,diagnostic,yes,no,partial,
+4,Coherence accuracy bottoms and peaks assessed separately,operational_synthesis,Discussion 7.1/7.3,,joint requirement,yes,no,yes,
+5,Evidence-backed coherent forecasting layer for future profile fields,application_profile,Discussion 7.3 / kadouma profile,,not evaluated integration,yes,partial,yes,future fields listed
+5,No complete profile integration; no live orchestration/autoscaling,limitation,UNSUPPORTED / Discussion,,explicit non-claim,yes,no,yes,
+5,Retain baselines hierarchy metadata no-recon option top/bottom reporting,practical_lesson,Discussion 7.3,,methodology not software,yes,no,yes,
+6,All metrics one-step; H output width not lead; one dataset/timeline,limitation,semantics audit / Discussion 7.4,,no medium/long-lead,yes,no,yes,prominent
+6,Future: multi-lead; multi-dataset/dynamic hierarchies; adaptive selection; probabilistic; profile/orchestration,future_work,Discussion 7.4,,not completed,yes,no,yes,prioritized not promised
+6,Selective decision layer depends on hierarchy baseline objective operational cost,closing_synthesis,Discussion + Abstract,,rewrite of required closing,yes,partial,partial,strong non-generic close

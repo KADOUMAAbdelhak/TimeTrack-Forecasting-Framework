@@ -1068,8 +1068,8 @@ method selection must retain simple baselines and multi-seed checks.
 \subsection{Disk Reconciliation Failure Boundary}
 \label{sec:disk}
 \paragraph{Independent baselines.}
-Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} concern used-disk
-level (not write throughput).
+Table~\ref{tab:disk_boundary} concerns used-disk level (not write throughput);
+the corresponding Ridge mode comparison appears in the supplementary material.
 Persistence ($1.550\times 10^9$) and {EWMA} ($1.557\times 10^9$) are stronger
 practical baselines than Ridge independent ($1.754\times 10^9$).
 Ridge is retained as the boundary model because it enables controlled
@@ -1099,14 +1099,6 @@ gains; bottom-up and top-down impose different invariants, so method choice
 must track whether top or bottom accuracy is operationally primary.
 
 \input{tables/disk_boundary_results}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/disk_boundary.pdf}
-\caption{Disk Ridge reconciliation modes with persistence/{EWMA} reference
-lines. LightGBM disk stress omitted from the main figure.}
-\label{fig:disk}
-\end{figure}
 
 \subsection{Operational and Robustness Evidence}
 \label{sec:ops}
@@ -1297,12 +1289,68 @@ These identify open research, not completed freeze contributions.
 \section{Conclusion}
 \label{sec:conclusion}
 
-Hierarchy-aware reconciliation yields strong and seed-robust {CPU} coherence and
-accuracy gains on TimeTrack, conditional memory improvements that do not
-displace {EWMA}, a clear disk failure boundary, and peak-operational limits on
-how ordinary {MAE} gains transfer.
-Selective reconciliation is therefore a practical forecasting layer for
-multi-level cloud telemetry in application-profiling pipelines.
+Machine- and cluster-level telemetry forecasts can be individually accurate yet
+physically inconsistent, undermining their use in application profiling,
+planning, and orchestration.
+This study evaluated hierarchy-aware forecasting and reconciliation on
+TimeTrack's verified machine-to-cluster relations for core-weighted {CPU},
+memory, and disk, comparing persistence, {EWMA}, Ridge, LightGBM, and DLinear
+in independent and reconciled modes (bottom-up, {WLS}, MinT-shrink, and
+top-down for the disk boundary).
+
+On core-weighted {CPU} under the frozen one-step outer evaluation, LightGBM is
+the strongest observed independent model, improving on Ridge by about $17.3\%$.
+LightGBM MinT yields a further approximately $10.1\%$ aggregate {MAE} reduction
+relative to LightGBM independent while restoring exact machine-to-cluster
+coherence.
+LightGBM is seed-invariant under the frozen deterministic configuration, and
+DLinear {CPU} reconciliation effects are practically seed-stable.
+These conclusions are scoped to TimeTrack, core-weighted {CPU}, one-step
+scoring of the first multi-output component, and the frozen protocol; they are
+not a claim of universal superiority.
+The {CPU} pattern persists across outer folds, multi-output-width
+configurations, models, and seeds, but is not established across evaluated lead
+times.
+
+Memory and disk establish hierarchy-dependent selection rather than a single
+reconciliation strategy.
+For memory, reconciliation often improves DLinear relative to its own
+independent forecast, yet {EWMA} remains the strongest robust comparator and
+reconciled DLinear does not robustly outperform {EWMA} across seeds.
+For disk, exact hierarchy validity does not guarantee reconciliation gains:
+Ridge bottom-up harms aggregate accuracy, whereas top-down preserves the
+independent top forecast at a machine-level cost.
+
+Ordinary {MAE} improvements do not imply universal high-load or peak-detection
+gains.
+LightGBM remains the strongest among the evaluated {CPU} models during
+high-load periods, but general reconciliation benefits for recall and
+false-alarm behavior are not established.
+DLinear memory underprediction and range compression persist across seeds and
+can be amplified by reconciliation.
+Exact coherence, average predictive accuracy, bottom-level accuracy, and
+peak-operational behavior must therefore be assessed separately.
+
+Relative to earlier unified application-profile work, the present study
+supplies an evidence-backed coherent forecasting layer that could later support
+dynamic profile fields such as predicted demand, hierarchy level, coherence
+status, reconciliation provenance, and uncertainty metadata.
+No complete application-profile integration and no live orchestration or
+autoscaling loop were evaluated.
+The practical lesson is to retain strong independent baselines, explicit
+hierarchy metadata, a no-reconciliation option, and separate top/bottom
+trade-off reporting.
+
+All final metrics are one-step-ahead: $H$ is joint training output width rather
+than evaluated lead time, and the evidence comes from one dataset and one
+retained timeline, so no medium- or long-lead conclusion is supported.
+Priority next steps are true multi-lead evaluation with a separate lead
+variable; replication across datasets and changing hierarchies; prospective
+adaptive method selection; probabilistic coherent uncertainty estimates; and
+integration into profile maintenance and orchestration decisions.
+Coherent telemetry forecasting should therefore be treated as a selective
+decision layer whose value depends jointly on hierarchy semantics, baseline
+strength, forecasting objective, and operational cost.
 
 \section*{Data Availability}
 The TimeTrack dataset is publicly available on Kaggle
