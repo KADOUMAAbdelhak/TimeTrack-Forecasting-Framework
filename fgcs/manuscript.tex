@@ -990,10 +990,10 @@ Preferred methods therefore depend on whether cluster planning or
 machine-specific actions dominate.
 
 \paragraph{Statistical support and {RQ} answers.}
-Figure~\ref{fig:boot} and Table~\ref{tab:stats} summarize claim-relevant
-bootstrap relatives: LightGBM versus Ridge and versus persistence/{EWMA}, and
-LightGBM MinT versus independent, are supported with fold- and $H$-consistent
-direction.
+Table~\ref{tab:stats} summarizes claim-relevant relative effects.
+LightGBM versus Ridge and versus persistence/{EWMA}, and LightGBM MinT versus
+independent, are supported with fold- and $H$-consistent direction
+(extended bootstrap forest in the supplement).
 {RQ1}: selected reconciliation (notably LightGBM+MinT) improves {CPU} aggregate
 accuracy while restoring exact coherence.
 {RQ2} ({CPU}): conclusions persist across folds, $H$ configurations, models, and
@@ -1009,15 +1009,6 @@ Metrics evaluate component~0; $H$ is training output width, not lead time.
 Points are means across outer folds; DLinear band shows seed min--max.
 LightGBM seed curves coincide (invariant). Units: weighted-mean percentage.}
 \label{fig:cpu_h}
-\end{figure}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/bootstrap_relative_effects.pdf}
-\caption{Claim-relevant bootstrap relative {MAE} effects with mean direct
-relative $95\%$ intervals. Negative values favor the first named method.
-Zero marks no relative change.}
-\label{fig:boot}
 \end{figure}
 
 \begin{figure}[t]
@@ -1120,21 +1111,14 @@ lines. LightGBM disk stress omitted from the main figure.}
 \subsection{Operational and Robustness Evidence}
 \label{sec:ops}
 \paragraph{{CPU} high-load performance.}
-Figure~\ref{fig:cpupeak} and Table~\ref{tab:stats} address peak transfer.
+Table~\ref{tab:stats} and the supplementary {CPU} peak panels address peak
+transfer.
 Under train-only $q_{90}/q_{95}$ thresholds with exact-timestamp matching,
 independent LightGBM attains the lowest high-load {MAE} among evaluated models
 (q90~$4.087$, q95~$6.174$), supporting P3: LightGBM remains the strongest
 evaluated {CPU} model in high-load periods.
 High-load {MAE}, recall, and false alarms are distinct from ordinary aggregate
 {MAE}; not every LightGBM reconciliation mode wins every peak metric.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.88\columnwidth]{figs/cpu_peak_results.pdf}
-\caption{{CPU} peak/high-load metrics at q90/q95 (stacked). Color: model;
-marker: reconciliation mode. Wide layout: supplement.}
-\label{fig:cpupeak}
-\end{figure}
 
 \paragraph{Unsupported general peak claims and DLinear compression.}
 P1/P2/P4 are unsupported: reconciliation does not generally improve {CPU}
@@ -1144,7 +1128,7 @@ These are operational limits on transferring average-error gains, not
 experimental failures.
 P5 is supported as a diagnostic: DLinear memory shows negative signed bias at
 q90/q95 for all seeds, with predicted-to-target range ratios about $0.46$--$0.51$;
-BU/{WLS}/MinT often amplify the negative bias.
+BU/{WLS}/MinT often amplify the negative bias (supplementary bias panels).
 Reconciliation restores hierarchy consistency but does not restore missing
 dynamic range; this diagnostic is not generalized to every neural model.
 
@@ -1171,36 +1155,143 @@ operational use therefore requires separate high-load diagnostics.
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Accuracy--Coherence Trade-offs}
-{RQ1}--{RQ2}: For core-weighted {CPU}, learned independent forecasts already beat
-strong deterministic baselines, and MinT further improves LightGBM aggregates
-while restoring exact coherence.
-Bottom-up preserves bottoms; {WLS} and MinT expose an explicit top/bottom
-trade-off.
+\subsection{Why Reconciliation Helps {CPU} Forecasting}
+\label{sec:disc-cpu}
+The independent {CPU} ranking reflects baseline difficulty rather than a
+universal model preference.
+Persistence and {EWMA} test recent levels; Ridge adds regularized linear lags;
+DLinear tests a lightweight neural decomposition; LightGBM probes nonlinear
+lag interactions \cite{ke2017lightgbm,zeng2023dlinear}.
+LightGBM's advantage is specific to core-weighted {CPU}, the TimeTrack
+post-outage timeline, one-step evaluation, and the frozen protocol---not a claim
+that gradient boosting dominates cloud telemetry forecasting in general.
 
-\subsection{Why Reconciliation Is Hierarchy-Dependent}
-{RQ3}--{RQ4}: Memory and disk demonstrate that reconciliation is not universally
-beneficial.
-On memory, {EWMA} can dominate learned models, so reconciliation should be judged
-against {EWMA}, not only against a model's independent forecast.
-On disk, bottom-up can inject bottom errors into the aggregate, while top-down
-protects the top at bottom cost.
+The positive reconciliation result is consistent with complementary forecast
+error across hierarchy levels
+\cite{hyndman2011optimal,wickramasuriya2019mint,athanasopoulos2024hierarchical}.
+Independent top and bottom models estimate related physical quantities whose
+errors need not share direction or scale.
+A covariance-aware projection can combine these imperfect forecasts while
+enforcing the summing relation; MinT uses estimated residual relationships rather
+than replacing one level with another.
+The observed gains suggest useful cross-level residual structure in the
+evaluated trace, without causally identifying a specific workload mechanism.
 
-\subsection{Implications for Application Profiling}
-For proactive profile management
-\cite{kadouma2025unifiedprofile}, coherent {CPU} forecasts provide a practical
-planning layer.
-Memory and disk require selective policies: retain strong simple baselines when
-they win, and choose reconciliation mode by hierarchy rather than by default.
+Bottom-up and {WLS}/MinT serve different operational goals.
+Bottom-up keeps machine forecasts unchanged and revises only the aggregate,
+which helps when machine actions must stay fixed, but bottom errors then flow
+into the cluster estimate.
+{WLS}/MinT revise both levels and can raise aggregate accuracy more, sometimes
+at machine-level cost (Figure~\ref{fig:trade}).
+In the frozen outer evaluation, Ridge with bottom-up is the bottom-preserving
+alternative and LightGBM with MinT the best observed aggregate configuration;
+neither is universally preferred.
+Exact coherence is necessary for physically consistent planning but insufficient
+for accuracy: coherent yet inaccurate forecasts can still support poor decisions,
+while accurate yet incoherent forecasts create contradictory capacity signals.
+The useful outcome jointly achieves acceptable top accuracy, acceptable bottom
+accuracy, and exact physical consistency.
 
-\subsection{Limitations}
-Evidence is single-dataset and freeze-scoped.
-Sampling differs slightly from the approximate $45$\,s description in some
-dataset materials; we report the measured median $42.285$\,s.
-Network, downsampling, conformal, {LSTM}, adaptive routing, and {LOMO} results
-are out of scope.
-Public code packaging for this article may still require an author-confirmed
-repository {URL}.
+\subsection{Hierarchy-Dependent Method Selection}
+\label{sec:disc-select}
+Memory shows why a strong independent baseline can dominate learned alternatives
+even when reconciliation helps a model relative to itself.
+The evaluated series are sufficiently level-persistent for {EWMA} to remain the
+strongest robust comparator, so recent-level smoothing can beat more complex
+learners on these traces.
+Learned models may still improve relative to their own incoherent forecasts
+without beating that baseline.
+Seed-aware evidence is essential: the seed-$2$ {WLS}-versus-{EWMA} reversal
+shows that pooled means can conceal direction changes.
+This interpretation concerns the observed TimeTrack memory traces rather than a
+claim that memory is universally smooth.
+
+Disk is a boundary because used-disk level is additive and can exhibit
+cleanup-, rotation-, or reset-like downward changes that make bottoms less
+suitable as aggregate replacements.
+Bottom-up trusts bottoms and worsens the aggregate when bottom errors accumulate;
+top-down protects the independent top while transferring cost to machines;
+{WLS}/MinT do not reproduce the {CPU} pattern.
+Individual reset events were not separately labeled or causally tested.
+
+The frozen evidence therefore supports hierarchy-aware selection rather than a
+single named algorithm.
+For {CPU} aggregate planning, LightGBM with MinT is the best observed
+configuration; for machine-preserving {CPU} operation, Ridge with bottom-up
+remains defensible.
+For memory, {EWMA} independent is preferred; reconciliation is useful mainly to
+improve a specific learned model relative to itself.
+For disk aggregates, persistence/{EWMA} remain practical baselines and bottom-up
+should not be default; top-down preserves the independent top only with
+bottom-level cost.
+This interprets the frozen outer evaluation; it is not a prospectively validated
+production policy.
+Compared with studies focused mainly on independent accuracy
+\cite{masdari2020workload,hyndman2021forecasting}, the evaluation shows how
+physical consistency, bottom cost, seed variation, and peak behavior alter method
+choice \cite{athanasopoulos2024hierarchical}.
+Physical exactness of an observed hierarchy does not guarantee forecast benefit
+from every coherent projection.
+
+\subsection{Implications for Application Profiling and Operation}
+\label{sec:disc-ops}
+A predictive application profile could store expected demand, forecast timestamp
+and validity interval, hierarchy level, reconciliation method, coherence status,
+uncertainty metadata, top/bottom adjustment magnitude, and model/data provenance
+\cite{kadouma2025unifiedprofile}.
+This paper evaluates the forecast layer needed to populate such fields; it does
+not modify the earlier profile schema or claim an evaluated orchestrator
+integration.
+
+Incoherent predictive fields could report one cluster requirement from machine
+forecasts and another from the aggregate, risking inconsistent placement,
+duplicated reservation, mis-allocation, contradictory scaling, and weak
+post-hoc explanation.
+These risks remain conceptual: no live orchestration experiment was conducted
+\cite{meliani2026zerotouch}.
+A safe pipeline suggested by the evidence would maintain hierarchy metadata;
+evaluate strong independent baselines; fit reconciliation only from
+train/validation residuals; compare top and bottom accuracy separately; retain a
+no-reconciliation option; validate peaks independently from ordinary {MAE}; and
+record method trade-offs in provenance---as methodology, not deployed software.
+Ordinary {MAE} and peak behavior diverge because averages dilute rare high-load
+regions and models may reduce common-state error while compressing extremes.
+The DLinear memory compression diagnostic shows that reconciliation can restore
+sums without restoring dynamic range; recall and false alarms depend on threshold
+crossings, not only error magnitude
+(Table~\ref{tab:stats}; supplementary peak panels).
+
+\subsection{Limitations and Future Research}
+\label{sec:disc-limits}
+\paragraph{Limitations.}
+Evidence is limited to one public TimeTrack dataset from a seven-machine {OAI}
+{CI}/{CD} environment and one retained post-outage segment
+\cite{meliani2025timetrack,meliani2025timetrackkaggle}; multi-site replication is
+required before broader claims.
+All final metrics are one-step-ahead: $H$ is joint training output width, not
+evaluated lead time, and scored timestamp sets differ slightly across $H$, so
+medium-/long-lead performance is not established.
+Model scope is finite (selected classical, tree, and lightweight neural
+families; transferred disk LightGBM as stress only; three DLinear seeds;
+LightGBM invariance under deterministic settings; observational rather than
+prospectively selected winners).
+Peak analysis uses train-derived $q_{90}/q_{95}$ thresholds with exact-timestamp
+matching and no event tolerance; no live autoscaling/{SLA}/energy loop was run;
+bootstrap evidence is timeline-conditional; probabilistic calibration,
+network-hierarchy claims, and valid temporal-resolution studies remain out of
+scope.
+An unavailable downsampling helper is excluded rather than treated as a negative
+empirical finding.
+
+\paragraph{Future research.}
+Priorities include true lead-time evaluation separating lead $\ell$ from output
+width $H$ on common timestamps; multi-dataset and dynamic-hierarchy validation;
+adaptive independent/bottom-up/{WLS}/MinT/top-down selection with prospective
+checks; probabilistic coherent intervals for uncertainty-aware profiles;
+peak-aware objectives and event-oriented evaluation; profile/orchestration
+integration with downstream {SLA}/energy outcomes; and valid
+temporal-resolution studies based on real resampling.
+These identify open research, not completed freeze contributions.
 
 %% =====================================================================
 \section{Conclusion}
@@ -1247,7 +1338,6 @@ The authors thank colleagues and collaborators who contributed to the broader
 TimeTrack and application-profiling research context.
 
 \FloatBarrier
-\clearpage
 \bibliographystyle{cas-model2-names}
 \bibliography{references}
 

@@ -120,6 +120,15 @@ seed.}
 
 \begin{figure}[h]
 \centering
+\includegraphics[width=0.85\textwidth]{../figs/cpu_peak_results.pdf}
+\caption{CPU peak/high-load metrics at q90/q95 (main-article stacked layout,
+deferred for page budget). Color encodes model; marker shape encodes
+reconciliation method. All metrics are one-step evaluations.}
+\label{fig:cpupeak}
+\end{figure}
+
+\begin{figure}[h]
+\centering
 \includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
 \caption{Signed DLinear memory peak bias by seed and method.}
 \end{figure}
@@ -140,6 +149,15 @@ reconciliation modes.}
 \input{claim_support_full}
 
 \section{Extended bootstrap comparisons}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/bootstrap_relative_effects.pdf}
+\caption{Claim-relevant bootstrap relative MAE effects with mean direct
+relative 95\% intervals (deferred from the main Results for page budget).
+Negative values favor the first named method.}
+\label{fig:boot}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.98\textwidth]{../figs/supplementary/bootstrap_relative_effects_full.pdf}

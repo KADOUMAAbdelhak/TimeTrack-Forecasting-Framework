@@ -1,0 +1,18 @@
+discussion_location,statement,category,evidence_source,empirical_or_inference,qualification,supported,prohibited_overclaim,notes
+7.1,LightGBM advantage is protocol/dataset/one-step specific,CPU mechanism interpretation,Section 6 CPU results,inference,not universal superiority,yes,gradient boosting dominates cloud forecasting,scoped to frozen TimeTrack CPU
+7.1,Gains consistent with complementary cross-level residual structure,CPU mechanism interpretation,CPU MinT/BU results + recon theory cites,inference,not causally identified workload mechanism,yes,proves causal mechanism,uses consistent with / suggest
+7.1,BU preserves machines; WLS/MinT may trade bottoms for aggregate,CPU mechanism interpretation,Figure trade + Section 6,empirical+inference,neither universally preferred,yes,universal preferred method,
+7.1,Exact coherence necessary but not sufficient for accuracy,CPU mechanism interpretation,coherence vs MAE discussion,inference,joint top/bottom/coherence needed,yes,coherence guarantees good decisions,
+7.2,EWMA strongest robust memory comparator due to level persistence,memory interpretation,Section 6.2 SAFE claims,empirical+inference,not universally smooth memory,yes,memory always needs EWMA,seed-2 reversal highlighted
+7.2,Disk BU harms aggregate; TD preserves top at bottom cost,disk interpretation,Section 6.3,empirical,reset events not individually labeled,yes,all disk recon fails,boundary interpretation
+7.2,Hierarchy-aware selection framework from frozen evaluation,method-selection implication,Sections 6.1–6.3,inference,not prospectively validated production policy,yes,deploy this policy,explicit qualification
+7.2,Physical exact hierarchy does not guarantee recon benefit,method-selection implication,CPU vs memory/disk contrast,empirical+inference,central discussion point,yes,always reconcile,
+7.3,Predictive profile fields could store recon/coherence/provenance,application-profile implication,kadouma2025unifiedprofile,inference,schema not modified or evaluated here,yes,evaluated integration,continuity only
+7.3,Incoherent profiles risk contradictory orchestration signals,application-profile implication,conceptual,inference,no live orchestration experiment,yes,measured SLA impact,conceptual
+7.3,Safe pipeline: baselines; train/val residuals; top/bottom; peaks,application-profile implication,protocol + results,inference,methodology not deployed software,yes,production system,
+7.3,MAE and peaks diverge; DLinear compression shows recon cannot restore range,peak implication,P5 + Section 6.4,empirical+inference,not all neural models,yes,peaks solved by recon,
+7.4,Single dataset / seven-machine / post-outage scope,limitation,dataset section + SAFE,empirical,multi-site needed,yes,general cloud claim,
+7.4,All metrics one-step; H is output width not lead; timestamp sets differ,limitation,forecast semantics audit,empirical,no medium/long-lead claim,yes,H as horizon,
+7.4,Finite models; transferred disk LGBM; 3 seeds; observational winners,limitation,protocol,empirical,no claim more tuning would help,yes,
+7.4,Peak q90/q95 exact match; no live autoscaling/SLA; no network/downsampling/probabilistic,limitation,peak/protocol docs,empirical,downsampling helper excluded not negative result,yes,invalid helper as empirical finding,
+7.4,Future: separate lead ell from H; dynamic hierarchies; adaptive selection; probabilistic; peak-aware; profile integration; valid resolution,future work,open directions,inference,not completed contributions,yes,promised as done,
