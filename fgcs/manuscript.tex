@@ -1128,6 +1128,14 @@ evaluated {CPU} model in high-load periods.
 High-load {MAE}, recall, and false alarms are distinct from ordinary aggregate
 {MAE}; not every LightGBM reconciliation mode wins every peak metric.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\columnwidth]{figs/cpu_peak_results.pdf}
+\caption{{CPU} peak/high-load metrics at q90/q95 (stacked). Color: model;
+marker: reconciliation mode. Wide layout: supplement.}
+\label{fig:cpupeak}
+\end{figure}
+
 \paragraph{Unsupported general peak claims and DLinear compression.}
 P1/P2/P4 are unsupported: reconciliation does not generally improve {CPU}
 high-load {MAE}, does not generally improve recall without false-alarm cost, and
@@ -1155,14 +1163,6 @@ numerical superiority claims on foreign protocols.
 output width.
 {RQ5}: ordinary {MAE} gains do not transfer universally to peak behavior;
 operational use therefore requires separate high-load diagnostics.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\columnwidth]{figs/cpu_peak_results.pdf}
-\caption{{CPU} peak/high-load metrics at q90/q95 (stacked). Color: model;
-marker: reconciliation mode. Wide layout: supplement.}
-\label{fig:cpupeak}
-\end{figure}
 
 \input{tables/statistical_evidence}
 \FloatBarrier
@@ -1247,6 +1247,7 @@ The authors thank colleagues and collaborators who contributed to the broader
 TimeTrack and application-profiling research context.
 
 \FloatBarrier
+\clearpage
 \bibliographystyle{cas-model2-names}
 \bibliography{references}
 
