@@ -1,26 +1,35 @@
 \begin{table*}[width=\textwidth,pos=t]
 \centering
-\caption{Closest related studies versus this work. Attributes are descriptive; no priority claim is implied.}
+\caption{Closest related studies versus this work (descriptive; no ranking).
+HTS~=~hierarchical time series; E2E~=~end-to-end hierarchical learning;
+BU/{WLS}/MinT/{TD}~=~bottom-up / weighted least squares / MinT / top-down;
+MBB~=~moving-block bootstrap; Part.~=~partial; --~=~not reported or N/A.}
 \label{tab:related}
 \begin{threeparttable}
 \small
-\setlength{\tabcolsep}{4pt}
-\begin{tabularx}{\tblwidth}{@{}>{\raggedright\arraybackslash}p{2.4cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xccc@{}}
+\setlength{\tabcolsep}{2.8pt}
+\begin{tabularx}{\tblwidth}{@{}>{\raggedright\arraybackslash}p{1.85cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}Xccc@{}}
 \toprule
-Study & Context & Dataset & Hierarchy & Recon. & Seeds & Peaks & Public \\
+Study & Context & Data & Hierarchy & Recon. & Rob. & Peak & Pub. \\
 \midrule
-Hyndman+ (2011) & HTS & Std.\ empirics & Tree & OLS & -- & -- & Varies \\
-Wickramasuriya+ (2019) & HTS & Empirics & Hierarchical & MinT & -- & -- & Varies \\
-HARMONY (2024) & Cloud & Traces & Multi-indicator & E2E & Part. & -- & Part. \\
-Zero-Touch (2026) & Edge & TimeTrack & Node-level & None & -- & -- & Yes \\
-Kadouma+ (2025) & CECC & Ontology & Profile schema & N/A & -- & -- & Model \\
-\textbf{This work} & OAI CI/CD & TimeTrack & Exact sum & MinT suite & 3 & Yes & Yes \\
+\cite{hyndman2011optimal} & HTS method & Empirics & Tree & OLS & -- & -- & Varies \\
+\cite{wickramasuriya2019mint} & HTS method & Empirics & Hier./group & MinT & -- & -- & Varies \\
+\cite{harmony2024} & Cloud scaling & Traces & Multi-ind. & E2E attn & Part. & SLA & Part. \\
+\cite{wang2025frt} & HTS / DC load & Public+DC & Hier.\ TS & E2E flow & Part. & -- & Part. \\
+\cite{gao2026mamiclif} & LDC services & LDC\_MS & Macro--micro & Collab. & Part. & -- & Part. \\
+\cite{meliani2026zerotouch} & Continuum & TimeTrack & Node streams & None & Part. & -- & Yes \\
+\cite{kadouma2025unifiedprofile} & CECC profile & Ontology & Profile & N/A & -- & -- & Model \\
+\textbf{This work} & OAI CI/CD & TimeTrack & Exact sum & Suite\textsuperscript{a} & Seeds+MBB & Yes & Yes \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}
 \footnotesize
-\item HTS~=~hierarchical time series; E2E~=~end-to-end hierarchical DL;
-MinT suite~=~independent/BU/WLS/MinT/(disk TD); Part.~=~partial.
+\item\textsuperscript{a} Independent/BU/{WLS}/MinT with disk {TD}.
+Rob.~=~robustness/statistics as reported; Peak~=~high-load/peak or closely
+related operational evaluation; Pub.~=~public data/artifacts.
+\item {HARMONY}, {FRT}, and {MaMiClif} are author-introduced names; their
+hierarchies are not exact machine-to-cluster physical sums of the form evaluated
+here.
 \end{tablenotes}
 \end{threeparttable}
 \end{table*}

@@ -298,60 +298,206 @@ Section~\ref{sec:conclusion} concludes.
 \label{sec:related}
 
 \subsection{Application Profiling in the Cloud--Edge Continuum}
-Application profiling and continuum management formalize placement, service
-objectives, and lifecycle constraints across heterogeneous tiers
-\cite{kadouma2025unifiedprofile,duc2020survey,taherizadeh2018monitoring}.
-Container orchestration surveys emphasize monitoring and scaling loops that
-consume multi-level resource signals
+Application-profile and lifecycle-management research in the cloud--edge
+continuum seeks declarative descriptions that make placement, adaptation, and
+operations tractable across heterogeneous tiers
+\cite{duc2020survey,taherizadeh2018monitoring,buyya2019manifesto}.
+Typical profiles encode components and dependencies, resource requirements,
+deployment constraints, placement preferences, service objectives, and lifecycle
+hooks that orchestration platforms can consume.
+Container orchestration surveys likewise emphasize monitoring and control loops
+that operate on multi-granularity telemetry rather than on a single aggregate
+view
 \cite{casalicchio2019container,rossi2020geo,toka2021kubernetes}.
-Our prior profile model identified predictive resource behavior as a logical
-extension; the present study supplies a coherence-aware forecasting evaluation
-for that extension without claiming a new ontology.
+As continuum applications span edge and cloud nodes, those loops increasingly
+need forecasts that remain meaningful when read jointly at machine and cluster
+scopes.
+
+Telemetry-aware and adaptive profiling extends these representations by feeding
+current measurements---and, increasingly, predicted resource behavior---into
+placement and scaling decisions
+\cite{taherizadeh2018monitoring,duc2020survey}.
+Consistency becomes harder when predictions are produced independently at
+machine and cluster levels: a profile that stores both views can encode
+contradictory capacity expectations even when each forecast appears accurate in
+isolation.
+In contrast to representation-centric profile work, forecast-oriented cloud
+management literature typically optimizes prediction error or scaling cost
+without asking whether multi-level profile fields remain jointly coherent.
+
+Our earlier unified application-profile model for microservices in the continuum
+formalized requirements, components, constraints, and resources in one schema
+and identified predictive resource behavior as a step toward proactive profile
+maintenance
+\cite{kadouma2025unifiedprofile}.
+The present paper supplies a forecasting and reconciliation evaluation that may
+support such future maintenance under exact machine-to-cluster identities.
+It evaluates coherent telemetry forecasts; it does not propose another
+application-profile schema or claim an end-to-end profile-management system.
 
 \subsection{Cloud Telemetry and Workload Forecasting}
-Workload prediction for provisioning and autoscaling has long used classical
-and machine-learning forecasts
-\cite{calheiros2015workload,islam2012empirical,masdari2020workload,khan2022workload}.
-Autoscaling taxonomies stress proactive control under bursty demand
-\cite{lorido2014review,qu2018auto}.
-Kubernetes and edge-cluster scaling studies further show that controllers consume
-multi-granularity telemetry, yet typically treat host and aggregate signals as
-independent streams \cite{toka2021kubernetes,rossi2020geo,casalicchio2019container}.
-Neural and Transformer-style forecasting surveys document rapid methodological
-progress \cite{lim2021temporal,wen2023transformers}, while comparative studies
-caution against over-generalizing deep models
-\cite{makridakis2018statistical,zeng2023dlinear}.
-In telecommunications cloud-native settings, public multi-metric traces remain
-comparatively scarce; TimeTrack fills part of that gap with {OAI} {CI}/{CD}
-telemetry \cite{meliani2025timetrack}.
-Zero-Touch Predictive Orchestration studies automated model generation and
-cold-start mitigation using TimeTrack plus local node data
-\cite{meliani2026zerotouch}.
-That line of work is complementary: it targets model-generation automation,
-whereas we evaluate coherent multi-level forecasting, reconciliation trade-offs,
-statistical robustness, and failure boundaries on frozen TimeTrack hierarchies.
+Classical cloud resource forecasting established persistence, smoothing, and
+autoregressive baselines as practical references for provisioning and quality of
+service
+\cite{calheiros2015workload,islam2012empirical}.
+Persistence and exponentially weighted moving average ({EWMA}) remain important
+not because they are sophisticated, but because they expose whether learned
+models improve upon stable, train-only-tuned alternatives under the same
+protocol.
+Without such references, apparent gains from tree ensembles or neural forecasters
+can be overstated relative to inexpensive, reproducible baselines that operators
+already understand.
+Surveys of workload and resource forecasting therefore treat strong baselines as
+part of evaluation hygiene rather than as obsolete methods
+\cite{masdari2020workload,lorido2014review}.
 
-\subsection{Hierarchical Forecast Reconciliation}
-Hierarchical time-series forecasting enforces aggregation constraints after or
-during prediction
-\cite{hyndman2011optimal,wickramasuriya2019mint,panagiotelis2021geometric,hyndman2021forecasting}.
-MinT and related optimal combination methods minimize reconciled forecast error
-under summing constraints, often with shrinkage covariance estimators
-\cite{wickramasuriya2019mint,schafer2005shrinkage,athanasopoulos2024hierarchical}.
-Recent cloud systems explore hierarchical multi-indicator forecasting for
-scaling decisions \cite{harmony2024}.
-These works motivate classical reconciliation, but they do not jointly evaluate
-independent/bottom-up/{WLS}/MinT/top-down selectivity on verified physical
-{CPU}/memory/disk hierarchies from TimeTrack under a leakage-safe nested
-protocol with multi-seed and peak diagnostics.
+Machine-learning approaches, including regression, tree ensembles such as
+LightGBM
+\cite{ke2017lightgbm},
+and neural models, are widely applied to {CPU}, memory, request rates, and
+related autoscaling signals
+\cite{khan2022workload,qu2018auto,toka2021kubernetes}.
+Their common evaluation practice optimizes point accuracy on independently
+monitored streams and then, in operational settings, feeds those forecasts into
+reactive or proactive controllers.
+This line of work addresses model selection and control policy design rather
+than hierarchy consistency: host and cluster signals may both be predicted, yet
+nothing enforces that the predictions describe one physical system.
+
+Deep forecasting surveys document rapid progress with recurrent, attention, and
+Transformer architectures
+\cite{lim2021temporal,wen2023transformers}.
+Comparative evidence nevertheless cautions that complex models are not
+automatically better across datasets and metrics
+\cite{makridakis2018statistical,zeng2023dlinear}.
+DLinear is particularly relevant here as a deliberately simple neural baseline
+that can match or exceed more elaborate Transformers on several forecasting
+benchmarks
+\cite{zeng2023dlinear}.
+Using LightGBM and DLinear in our study therefore tests competitive learned
+forecasters; it does not claim that the models themselves are novel.
+
+Cloud-native and edge platforms consume node and cluster telemetry for
+Kubernetes scaling, geographically distributed deployment, and continuum
+orchestration
+\cite{toka2021kubernetes,rossi2020geo,casalicchio2019container}.
+Proactive autoscaling taxonomies stress bursty demand and the cost of delayed
+reactions
+\cite{lorido2014review,qu2018auto},
+yet controllers typically treat monitored streams as independent inputs.
+Signature-based and anomaly-aware predictors further show that average error can
+hide costly deviations in resource usage
+\cite{sus2024signature}.
+Spike-sensitive adjustments for cloud provisioning likewise argue that ordinary
+forecast scores understate sudden increases that drive under-provisioning
+\cite{agullo2025spikes}.
+These perspectives motivate peak and high-load qualification ({RQ5}) without
+turning this manuscript into a full autoscaling or {SLA}-control study.
+
+Public multi-metric telecommunications cloud-native traces remain comparatively
+scarce.
+TimeTrack provides {OAI} {CI}/{CD} telemetry with machine and cluster views
+\cite{meliani2025timetrack,meliani2025timetrackkaggle}.
+The dataset paper characterizes the corpus; the Kaggle release enables public
+reuse; Zero-Touch Predictive Orchestration studies automated model generation
+and cold-start mitigation on related continuum forecasting problems
+\cite{meliani2026zerotouch}.
+Unlike those contributions, the present study does not automate model search or
+reintroduce the dataset.
+It instead evaluates machine-to-cluster coherence under classical bottom-up,
+{WLS}, and MinT selectivity, including disk failure boundaries, multi-seed
+robustness, and peak qualification on frozen TimeTrack hierarchies.
+
+\subsection{Hierarchical Forecasting and Reconciliation}
+Independently forecast nodes of a hierarchy generally violate aggregation
+constraints: base forecasts need not coincide with coherent forecasts that
+respect a summing matrix linking bottom series to aggregates
+\cite{hyndman2011optimal,hyndman2021forecasting}.
+The forecasting literature therefore separates the production of base forecasts
+from their projection onto the constraint space, treating coherence as a
+structural requirement rather than as an optional post-check.
+We leave formal matrix notation to Section~\ref{sec:methods} and focus here on
+method classes and their empirical assumptions.
+
+Classical strategies include bottom-up aggregation of bottom forecasts,
+top-down disaggregation of a top forecast, ordinary least-squares combination,
+and weighted least squares ({WLS})
+\cite{hyndman2011optimal,athanasopoulos2024hierarchical}.
+Bottom-up preserves bottoms but can inject bottom-level error into the aggregate;
+top-down preserves the top while redistributing residuals to bottoms; combination
+methods adjust all levels using estimated error structure.
+The practical choice among these modes therefore depends on where forecast error
+is concentrated and on whether the operational objective privileges top accuracy,
+bottom fidelity, or joint coherence.
+Where bottom predictability is weak, bottom-up can therefore harm aggregates---a
+failure mode that is especially relevant for disk-like telemetry with resets or
+large downward movements.
+
+MinT reconciles base forecasts by minimizing the trace of the reconciled error
+covariance under the summing constraints, often with shrinkage estimators that
+stabilize covariance estimates in moderate samples
+\cite{wickramasuriya2019mint,schafer2005shrinkage}.
+Geometric interpretations clarify bias and projection properties of
+reconciliation
+\cite{panagiotelis2021geometric},
+while linear-model formulations show that forecasting and reconciliation can be
+combined efficiently when base models are linear
+\cite{ashouri2022fast}.
+Recent reviews synthesize these developments across point and probabilistic
+settings
+\cite{athanasopoulos2024hierarchical,panagiotelis2023probabilistic}.
+The present paper reuses classical MinT-shrink/{WLS}/bottom-up/top-down
+machinery; it does not introduce a new reconciliation algorithm.
+
+Computing systems increasingly explore hierarchical or multi-level resource
+prediction, but often under different hierarchy semantics.
+{HARMONY} couples hierarchical multi-indicator attention forecasting with
+{Bayesian} scaling decisions for cloud resources; its hierarchy is
+indicator-structural and end-to-end rather than a post-hoc classical
+reconciliation suite on exact machine-to-cluster sums
+\cite{harmony2024}.
+The Flow-based Reconcile Transformer ({FRT}) jointly forecasts and reconciles
+hierarchical series with coherent deep generative modeling and reports
+data-center workload deployments, again as an end-to-end neural method rather
+than a selective classical ablation on physical {CPU}, memory, and disk
+identities
+\cite{wang2025frt}.
+{MaMiClif} models macro-micro microservice indicator dependencies in logical
+data centers through collaborative graph learning; the hierarchy is
+service/indicator relational rather than an exact machine-to-cluster summing
+relation
+\cite{gao2026mamiclif}.
+These systems are valuable adjacent baselines for hierarchical cloud prediction
+and coherent deep forecasting.
+Across them, however, a method that improves aggregate prediction for one
+hierarchy definition need not transfer to core-weighted {CPU}, additive memory,
+or disk levels whose bottom errors can propagate under bottom-up reconciliation.
+That transfer question is empirical and hierarchy-dependent, which is precisely
+the scoped evaluation gap addressed below.
 
 \subsection{Research Gap}
-Table~\ref{tab:related} summarizes the gap: few studies combine exact
-machine-to-cluster physical relations, classical reconciliation ablations,
-strong baselines including {EWMA}, multi-seed stochastic checks, statistical
-testing, and peak operational qualification on public {OAI} telemetry.
-We claim a scoped empirical characterization of accuracy, coherence,
-trade-offs, and failure boundaries rather than a universal first method.
+Table~\ref{tab:related} situates the closest work.
+Cloud forecasting usually evaluates independent streams; reconciliation research
+often uses economic, energy, retail, tourism, or synthetic hierarchies; and
+computing-oriented hierarchical studies may omit strong deterministic baselines,
+seed robustness, or negative hierarchy cases
+\cite{masdari2020workload,athanasopoulos2024hierarchical,harmony2024,wang2025frt}.
+Average forecasting metrics also may not describe peak-operational behavior
+relevant to provisioning risk
+\cite{agullo2025spikes,sus2024signature}.
+Few evaluated systems combine verified physical machine-to-cluster relations,
+metric-specific hierarchy semantics, classical reconciliation selectivity, and
+operational peak qualification on public {OAI} telemetry.
+
+Relative to those closest studies, this work jointly examines verified
+core-weighted {CPU}, exact memory, and exact disk hierarchies on TimeTrack.
+It compares persistence, {EWMA}, Ridge, LightGBM, and DLinear under independent,
+bottom-up, {WLS}, and MinT-shrink modes, with top-down reserved for the disk
+boundary, and reports leakage-controlled outer folds, moving-block bootstrap
+with Holm correction, seeds $0/1/2$, top/bottom trade-offs, peak qualification,
+and a disk negative boundary.
+That scoped combination addresses {RQ1}--{RQ5} without claiming a universal first
+method or cross-dataset numerical superiority.
 
 \input{tables/related_work_comparison}
 
