@@ -1,31 +1,32 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
-\caption{CPU outer-evaluation MAE (weighted-mean percentage). Values are means across outer folds and horizons $h\in\{1,8,16\}$. Bold: best observed frozen configuration. Underline: bottom-preserving Ridge alternative.}
+\caption{CPU outer-evaluation MAE (weighted-mean \%). Means across outer folds and horizons $h\in\{1,8,16\}$. Bold: best frozen configuration. Underline: bottom-preserving Ridge alternative.}
 \label{tab:cpu_main}
-\tiny
-\begin{tabular}{@{}llcccc@{}}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llcccc@{}}
 \toprule
-Model & Method & MAE & vs Pers. & vs Indep. & Coh.\ after \\
+Model & Method & MAE & vs~Pers. & vs~Indep. & Coh. \\
 \midrule
-
-persistence & independent & 1.321 & +0.0\% & +0.0\% & 0 \\
-ewma & independent & 1.320 & -0.1\% & +0.0\% & 0 \\
-ridge & independent & 1.253 & -5.2\% & +0.0\% & 1.2e+02 \\
+persistence & indep. & 1.321 & +0.0\% & +0.0\% & 0 \\
+ewma & indep. & 1.320 & -0.1\% & +0.0\% & 0 \\
+ridge & indep. & 1.253 & -5.2\% & +0.0\% & 1.2e+02 \\
 \underline{ridge} & \underline{bottom-up} & \underline{1.137} & -14.2\% & -9.4\% & 0 \\
-lightgbm & independent & 1.036 & -21.7\% & +0.0\% & 1.6e+02 \\
+lightgbm & indep. & 1.036 & -21.7\% & +0.0\% & 1.6e+02 \\
 lightgbm & bottom-up & 0.942 & -28.7\% & -9.0\% & 0 \\
 lightgbm & wls & 0.934 & -29.3\% & -9.8\% & 0 \\
 \textbf{lightgbm} & \textbf{mint} & \textbf{0.931} & -29.5\% & -10.0\% & 0 \\
-dlinear & independent & 1.244 & -5.9\% & +0.0\% & 1.1e+02 \\
+dlinear & indep. & 1.244 & -5.9\% & +0.0\% & 1.1e+02 \\
 dlinear & bottom-up & 1.157 & -12.8\% & -7.3\% & 0 \\
 dlinear & wls & 1.166 & -12.0\% & -6.5\% & 0 \\
 dlinear & mint & 1.161 & -12.3\% & -6.8\% & 0 \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \begin{tablenotes}
 \footnotesize
-\item Persistence/EWMA/Ridge deterministic; LightGBM seed-invariant; DLinear seed SD$\approx 0.007$ (practically seed-stable).
+\item Coh.~=~coherence error after reconciliation. Indep.~=~independent.
+Persistence/EWMA/Ridge deterministic; LightGBM seed-invariant; DLinear seed SD$\approx 0.007$.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

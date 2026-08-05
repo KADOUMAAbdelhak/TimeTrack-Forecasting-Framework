@@ -1,11 +1,11 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{Forecasting models (A) and reconciliation modes (B) used before any result claim.}
 \label{tab:baselines}
-\scriptsize
+\begin{threeparttable}
+\small
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}llp{3.35cm}@{}}
+\begin{tabularx}{\tblwidth}{@{}ll>{\raggedright\arraybackslash}X@{}}
 \toprule
 \multicolumn{3}{@{}l}{\textit{A. Forecasting models}} \\
 \midrule
@@ -24,6 +24,6 @@ Mode & WLS & Weighted least-squares recon. \\
 Mode & MinT-shrink & MinT with shrinkage covariance. \\
 Mode & Top-down & Disk only; preserves independent top. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{threeparttable}
 \end{table}

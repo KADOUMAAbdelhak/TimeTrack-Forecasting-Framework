@@ -321,8 +321,8 @@ def fig_bootstrap_main_and_supp():
 
 def fig_tradeoff():
     tb = pd.read_csv(STATS / "top_bottom_tradeoff.csv")
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.7))
-    # Left: CPU + memory; Right: disk (exclude lightgbm stress if present)
+    # Main-paper single-column stacked panels
+    fig, axes = plt.subplots(2, 1, figsize=(3.45, 4.6))
     for ax, hiers, title in [
         (axes[0], ["cpu_core_weighted", "memory_um"], "CPU and memory"),
         (axes[1], ["disk_ud"], "Disk boundary"),
@@ -342,11 +342,33 @@ def fig_tradeoff():
         ax.legend(fontsize=6, frameon=False)
     fig.tight_layout()
     save(fig, FIGS / "top_bottom_tradeoff.pdf")
+    # Wide supplementary copy
+    fig2, axes2 = plt.subplots(1, 2, figsize=(7.0, 2.7))
+    for ax, hiers, title in [
+        (axes2[0], ["cpu_core_weighted", "memory_um"], "CPU and memory"),
+        (axes2[1], ["disk_ud"], "Disk boundary"),
+    ]:
+        for hier, marker in zip(hiers, ["o", "s"][: len(hiers)]):
+            s = tb[tb.hierarchy == hier]
+            if "base_model" in s.columns:
+                s = s[s.base_model != "lightgbm"] if hier == "disk_ud" else s
+            ax.scatter(s.macro_rel * 100, s.top_rel * 100, marker=marker, alpha=0.75, s=22, label=hier.replace("_", " "))
+        ax.axhline(0, color="k", lw=0.5)
+        ax.axvline(0, color="k", lw=0.5)
+        ax.set_xlabel("Bottom macro relative MAE (%)")
+        ax.set_ylabel("Top relative MAE (%)")
+        ax.set_title(title, fontsize=9)
+        ax.text(0.02, 0.98, "Desired:\ntop↓ bottom↓", transform=ax.transAxes, va="top", fontsize=6, color="#009E73")
+        style_axes(ax)
+        ax.legend(fontsize=6, frameon=False)
+    fig2.tight_layout()
+    save(fig2, SUP / "top_bottom_tradeoff_wide.pdf")
 
 
 def fig_cpu_peaks():
+    """Single-column stacked q90/q95 panels for cas-dc column width."""
     t8 = pd.read_csv(AGG / "tables" / "table08_peak_operational_evidence.csv")
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.7))
+    fig, axes = plt.subplots(2, 1, figsize=(3.45, 4.6), sharex=False)
     methods = ["independent", "bottom_up", "wls", "mint"]
     for ax, thr in zip(axes, ["q90", "q95"]):
         s = t8[(t8.hierarchy == "cpu_core_weighted") & (t8.threshold == thr)]
@@ -360,15 +382,13 @@ def fig_cpu_peaks():
                     m.high_load_mae,
                     c=COLORS[model],
                     marker=MARKERS.get(method, "o"),
-                    s=28,
+                    s=26,
                     alpha=0.85,
-                    label=f"{model}/{METHOD_LABEL.get(method, method)}" if thr == "q90" else None,
                 )
         ax.set_title(f"CPU high-load {thr}", fontsize=9)
         ax.set_xlabel("Recall")
         ax.set_ylabel("High-load MAE")
         style_axes(ax)
-    # Compact legends: models by color; methods by marker (stated in caption)
     from matplotlib.lines import Line2D
 
     model_handles = [
@@ -379,18 +399,45 @@ def fig_cpu_peaks():
         Line2D([0], [0], marker=MARKERS[m], color="k", linestyle="None", markersize=6, label=METHOD_LABEL[m])
         for m in ["independent", "bottom_up", "wls", "mint"]
     ]
-    axes[0].legend(handles=model_handles, fontsize=6, frameon=False, title="Model", title_fontsize=6, loc="best")
-    axes[1].legend(handles=method_handles, fontsize=6, frameon=False, title="Method", title_fontsize=6, loc="best")
+    axes[0].legend(handles=model_handles, fontsize=5.5, frameon=False, title="Model", title_fontsize=6, loc="best")
+    axes[1].legend(handles=method_handles, fontsize=5.5, frameon=False, title="Method", title_fontsize=6, loc="best")
     fig.tight_layout()
     save(fig, FIGS / "cpu_peak_results.pdf")
+    # Keep a wide supplementary copy for the full side-by-side view
+    fig2, axes2 = plt.subplots(1, 2, figsize=(7.0, 2.7))
+    for ax, thr in zip(axes2, ["q90", "q95"]):
+        s = t8[(t8.hierarchy == "cpu_core_weighted") & (t8.threshold == thr)]
+        for model in ["persistence", "ridge", "lightgbm", "dlinear"]:
+            for method in methods:
+                m = s[(s.base_model == model) & (s.method == method)]
+                if not len(m):
+                    continue
+                ax.scatter(
+                    m.recall,
+                    m.high_load_mae,
+                    c=COLORS[model],
+                    marker=MARKERS.get(method, "o"),
+                    s=28,
+                    alpha=0.85,
+                )
+        ax.set_title(f"CPU high-load {thr}", fontsize=9)
+        ax.set_xlabel("Recall")
+        ax.set_ylabel("High-load MAE")
+        style_axes(ax)
+    axes2[0].legend(handles=model_handles, fontsize=6, frameon=False, title="Model", title_fontsize=6, loc="best")
+    axes2[1].legend(handles=method_handles, fontsize=6, frameon=False, title="Method", title_fontsize=6, loc="best")
+    fig2.tight_layout()
+    save(fig2, SUP / "cpu_peak_results_wide.pdf")
 
 
 def fig_dlinear_bias():
+    """Single-column stacked bias panels; wide copy in supplementary."""
     pc = pd.read_csv(ROB / "metrics" / "dlinear_peak_compression.csv")
     mem = pc[pc.hierarchy == "memory_um"]
-    fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.7))
     methods = ["independent", "bottom_up", "wls", "mint"]
     colors = [COLORS["dlinear"], "#56B4E9", "#CC79A7", "#E69F00"]
+
+    fig, axes = plt.subplots(2, 1, figsize=(3.45, 4.4))
     for ax, thr in zip(axes, ["q90", "q95"]):
         g = mem[mem.threshold_name == thr].groupby(["seed", "method"]).signed_bias.mean().unstack()
         g = g.reindex(columns=methods)
@@ -404,6 +451,21 @@ def fig_dlinear_bias():
         ax.tick_params(axis="x", rotation=0)
     fig.tight_layout()
     save(fig, FIGS / "dlinear_memory_peak_bias_by_seed.pdf")
+
+    fig2, axes2 = plt.subplots(1, 2, figsize=(7.0, 2.7))
+    for ax, thr in zip(axes2, ["q90", "q95"]):
+        g = mem[mem.threshold_name == thr].groupby(["seed", "method"]).signed_bias.mean().unstack()
+        g = g.reindex(columns=methods)
+        g.plot(kind="bar", ax=ax, color=colors, width=0.8)
+        ax.axhline(0, color="k", lw=0.6)
+        ax.set_title(f"DLinear memory peak bias ({thr})", fontsize=9)
+        ax.set_xlabel("Seed")
+        ax.set_ylabel("Signed bias (bytes)")
+        ax.legend([METHOD_LABEL[m] for m in methods], fontsize=5.5, frameon=False)
+        style_axes(ax)
+        ax.tick_params(axis="x", rotation=0)
+    fig2.tight_layout()
+    save(fig2, SUP / "dlinear_memory_peak_bias_wide.pdf")
 
 
 def fig_memory_accuracy_supp():

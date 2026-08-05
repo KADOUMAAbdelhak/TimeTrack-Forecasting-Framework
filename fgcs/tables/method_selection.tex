@@ -1,10 +1,10 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{Method-selection summary from the frozen outer evaluation (descriptive; not a prospective selector).}
 \label{tab:method_selection}
-\scriptsize
-\begin{tabular}{@{}ll@{}}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule
 Hierarchy & Preferred observed configuration \\
 \midrule
@@ -13,7 +13,7 @@ CPU (alt.) & Ridge + bottom-up \\
 Memory & EWMA independent \\
 Disk & Persistence / EWMA \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \begin{tablenotes}
 \footnotesize
 \item CPU MinT: best observed accuracy+coherence. Ridge BU: bottom-preserving.

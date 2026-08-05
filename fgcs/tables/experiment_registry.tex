@@ -1,10 +1,10 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{Experimental protocol summary for the frozen TimeTrack evaluation.}
 \label{tab:experiment}
-\scriptsize
-\begin{tabular}{@{}lp{4.7cm}@{}}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
 \toprule
 Item & Setting \\
 \midrule
@@ -19,6 +19,6 @@ Tuning & Train/inner-validation only \\
 Statistics & MBB; relative 95\% CIs; Holm \\
 Seeds & LightGBM/DLinear seeds $0/1/2$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{threeparttable}
 \end{table}

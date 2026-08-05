@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{threeparttable}
+\usepackage{makecell}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
@@ -27,6 +28,38 @@
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\floatpagefraction}{0.75}
 \renewcommand{\dblfloatpagefraction}{0.75}
+
+% CAS prints an empty ORCID(s) footnote when no ORCIDs are supplied.
+% Omit ORCID commands entirely; suppress the empty footnote without editing cas-*.
+\let\printorcid\relax
+
+% CAS Abstract places the ARTICLE INFO box in a rigid zero-width \hbox, which
+% always warns Overfull \hbox (0.25\textwidth) even when visually correct.
+% Adding \hss preserves the side-by-side layout without the spurious warning.
+\ExplSyntaxOn
+\RenewDocumentEnvironment { Abstract } { o }
+{
+  \group_begin:
+  \IfNoValueTF { #1 } { }
+  { \tex_gdef:D \abstractname { #1 } }
+  \parindent \c_zero_dim
+  \box_if_empty:NTF \g_stm_key_box
+  { \leftskip = .35 \textwidth }
+  {
+    \dim_gset:Nn \l_tmpa_dim { \box_ht:N \g_stm_key_box }
+    \dim_gadd:Nn \l_tmpa_dim { \box_dp:N \g_stm_key_box }
+    \leftskip .35\textwidth
+    \hspace*{-.35 \textwidth }
+    \noindent\hbox_to_wd:nn { \c_zero_dim } { \box_use:N \g_stm_key_box \hss }
+    \skip_vertical:n { - \l_tmpa_dim }
+  }
+  \noindent \abstractname \par
+  \skip_vertical:n { -4pt }
+  \noindent \rule{.65\textwidth}{.2pt}\par \footnotesize
+  \ignorespaces \everypar { \parindent=1.5em }
+}
+{ \par \group_end: }
+\ExplSyntaxOff
 
 \begin{document}
 \let\WriteBookmarks\relax
@@ -207,9 +240,9 @@ protocol with multi-seed and peak diagnostics.
 Table~\ref{tab:related} summarizes the gap: few studies combine exact
 machine-to-cluster physical relations, classical reconciliation ablations,
 strong baselines including {EWMA}, multi-seed stochastic checks, statistical
-testing, and peak-operational qualification on public {OAI} telemetry.
-We do not claim a universal first method; we claim a scoped empirical
-characterization of accuracy, coherence, trade-offs, and failure boundaries.
+testing, and peak operational qualification on public {OAI} telemetry.
+We claim a scoped empirical characterization of accuracy, coherence,
+trade-offs, and failure boundaries rather than a universal first method.
 
 \input{tables/related_work_comparison}
 
@@ -244,8 +277,8 @@ onto the summing matrix.
 
 \subsection{Disk Boundary Hierarchy}
 Disk uses an exact level-sum hierarchy.
-Unlike {CPU}/memory, disk is treated as a method-boundary case: bottom-up can
-harm aggregates, motivating top-down comparison.
+Unlike {CPU} and memory, disk is a method-boundary case: bottom-up can harm
+aggregates, which motivates a top-down comparison.
 
 Figure~\ref{fig:arch} summarizes the forecasting and reconciliation workflow.
 
@@ -296,11 +329,11 @@ Top-down is evaluated for disk to preserve an independently forecast top while
 distributing to bottoms.
 
 \subsection{Evaluation Metrics}
-Primary accuracy uses {MAE}, with supporting {RMSE}/{MASE}/$R^2$ where available
-\cite{hyndman2006accuracy}.
+Primary accuracy uses {MAE}, with supporting {RMSE}, {MASE}, and $R^2$ where
+available \cite{hyndman2006accuracy}.
 Coherence error measures absolute violation of the exact summing relation before
 and after reconciliation.
-Peak/high-load metrics use train-derived thresholds from the frozen peak
+Peak and high-load metrics use train-derived thresholds from the frozen peak
 analysis; they qualify rather than replace aggregate {MAE}.
 
 %% =====================================================================
@@ -329,7 +362,8 @@ Holm correction controls family-wise error within predefined comparison families
 \subsection{Multi-Seed and Reproducibility Protocol}
 LightGBM and DLinear use seeds $0$, $1$, and $2$.
 Evidence layers are immutable freezes culminating in the reporting freeze
-tag \texttt{final-reporting-\allowbreak freeze-v2}.
+\texttt{final-reporting-\allowbreak freeze-v2} (full provenance in the
+supplement).
 This manuscript reports only accepted final aggregate artifacts.
 
 %% =====================================================================
@@ -340,18 +374,17 @@ This manuscript reports only accepted final aggregate artifacts.
 \label{sec:cpu}
 Table~\ref{tab:cpu_main} and Figure~\ref{fig:cpu_h} summarize {CPU} results in
 weighted-mean percentage units.
-Horizon-averaged independent {MAE} values are approximately $1.321$
-(persistence), $1.320$ ({EWMA}), $1.253$ (Ridge), and $1.036$ (LightGBM).
+Horizon-averaged independent {MAE} values are about $1.321$ (persistence),
+$1.320$ ({EWMA}), $1.253$ (Ridge), and $1.036$ (LightGBM).
 LightGBM independent improves on Ridge by about $17.3\%$ and on persistence by
 about $21.6\%$.
 LightGBM MinT further reduces aggregate {MAE} to about $0.931$
-($\approx 10.1\%$ versus LightGBM independent) while driving coherence error to
+(about $10.1\%$ versus LightGBM independent) while driving coherence error to
 zero.
 Bottom-up preserves machine-level forecasts; {WLS}/MinT can improve the top while
 trading machine-level accuracy.
 DLinear {CPU} is practically seed-stable, and bottom-up/{WLS}/MinT improve its
-aggregates across seeds (bottom-up seed-mean relative effect
-$\approx -6.84\%$).
+aggregates across seeds (bottom-up seed-mean relative effect about $-6.84\%$).
 Figure~\ref{fig:coh} shows coherence before/after reconciliation.
 Figure~\ref{fig:boot} places selected relative effects with bootstrap intervals;
 Figure~\ref{fig:trade} shows top/bottom trade-offs.
@@ -387,15 +420,16 @@ in each row.}
 \label{fig:boot}
 \end{figure}
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figs/top_bottom_tradeoff.pdf}
-\caption{Top versus bottom accuracy trade-offs under reconciliation.
-Left: {CPU} and memory. Right: disk boundary (LightGBM transferred disk stress
-excluded). Axes are percentage relative {MAE} changes; the lower-left quadrant
-is desirable (top and bottom both improve).}
+\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
+\caption{Top versus bottom accuracy trade-offs under reconciliation (stacked for
+column width). Top panel: {CPU} and memory. Bottom panel: disk boundary
+(LightGBM transferred disk stress excluded). Axes are percentage relative {MAE}
+changes; the lower-left quadrant is desirable (top and bottom both improve). A
+wide side-by-side layout is in the supplementary material.}
 \label{fig:trade}
-\end{figure*}
+\end{figure}
 
 \subsection{Memory Results}
 \label{sec:memory}
@@ -466,23 +500,24 @@ diagnostics.
 
 \input{tables/peak_results}
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figs/cpu_peak_results.pdf}
-\caption{{CPU} peak/high-load metrics for thresholds q90 and q95. Color encodes
-model; marker shape encodes reconciliation method (circle~independent,
-square~bottom-up, triangle~{WLS}, diamond~MinT).}
+\includegraphics[width=\columnwidth]{figs/cpu_peak_results.pdf}
+\caption{{CPU} peak/high-load metrics for thresholds q90 and q95 (stacked for
+column width). Color encodes model; marker shape encodes reconciliation method
+(circle~independent, square~bottom-up, triangle~{WLS}, diamond~MinT). A
+side-by-side wide layout is in the supplementary material.}
 \label{fig:cpupeak}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
+\includegraphics[width=\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
 \caption{Signed DLinear memory peak bias (bytes), averaged across folds and
 horizons within each seed and method. Negative values indicate underprediction
 of peak magnitudes; reconciliation often amplifies the negative bias.}
 \label{fig:membias}
-\end{figure*}
+\end{figure}
 
 \subsection{Seed Robustness}
 \label{sec:seeds}
@@ -516,8 +551,8 @@ means of fold$\times$horizon relative effects from the robustness freeze.}
 {RQ1}--{RQ2}: For core-weighted {CPU}, learned independent forecasts already beat
 strong deterministic baselines, and MinT further improves LightGBM aggregates
 while restoring exact coherence.
-Bottom-up is the bottom-preserving alternative; {WLS}/MinT expose an explicit
-top/bottom trade-off.
+Bottom-up preserves bottoms; {WLS} and MinT expose an explicit top/bottom
+trade-off.
 
 \subsection{Why Reconciliation Is Hierarchy-Dependent}
 {RQ3}--{RQ4}: Memory and disk demonstrate that reconciliation is not universally
@@ -547,27 +582,26 @@ repository {URL}.
 \section{Conclusion}
 \label{sec:conclusion}
 
-Hierarchy-aware reconciliation yields strong, seed-robust {CPU} coherence and
+Hierarchy-aware reconciliation yields strong and seed-robust {CPU} coherence and
 accuracy gains on TimeTrack, conditional memory improvements that do not
 displace {EWMA}, a clear disk failure boundary, and peak-operational limits on
-transferring ordinary {MAE} gains.
+how ordinary {MAE} gains transfer.
 Selective reconciliation is therefore a practical forecasting layer for
 multi-level cloud telemetry in application-profiling pipelines.
 
 \section*{Data Availability}
 The TimeTrack dataset is publicly available on Kaggle
 \cite{meliani2025timetrackkaggle}.
-Dataset landing page:
-\begin{flushleft}
-\scriptsize\path{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}
-\end{flushleft}
+Landing page:
+\url{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}.
 The dataset characterization is described by Meliani et al.\
 \cite{meliani2025timetrack}.
 
 \section*{Code and Artifact Availability}
 Frozen prediction, analysis, peak, robustness, and reporting artifacts are
 tracked in the project repository under immutable freeze tags culminating in
-\texttt{final-reporting-\allowbreak freeze-v2}.
+\texttt{final-reporting-\allowbreak freeze-v2}; detailed freeze provenance is in
+the supplementary material.
 % TODO-AUTHOR: insert public artifact repository URL before submission
 
 \section*{CRediT Author Statement}

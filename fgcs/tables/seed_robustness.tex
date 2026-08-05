@@ -1,18 +1,18 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{CPU seed robustness (seeds $0/1/2$).}
 \label{tab:seeds}
-\scriptsize
-\begin{tabular}{@{}llcc@{}}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}llc>{\raggedright\arraybackslash}X@{}}
 \toprule
 Model & Method & Seed SD & Stability \\
 \midrule
-LightGBM & Indep.\ / MinT & $0$ & seed-invariant \\
-DLinear & Independent & $\approx 0.007$ & practically stable \\
-DLinear & BU / WLS / MinT & small nonzero & practically stable \\
+LightGBM & Indep./MinT & $0$ & seed-invariant \\
+DLinear & Indep. & $\approx 0.007$ & practically stable \\
+DLinear & BU/WLS/MinT & small & practically stable \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \begin{tablenotes}
 \footnotesize
 \item Full seed$\times$fold$\times$horizon grids are in the supplementary material.

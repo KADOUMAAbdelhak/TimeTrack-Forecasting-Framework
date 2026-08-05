@@ -1,10 +1,10 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{Peak/high-load claim outcomes from the frozen peak and reporting freezes.}
 \label{tab:peaks}
-\scriptsize
-\begin{tabular}{@{}clp{5.4cm}@{}}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}cl>{\raggedright\arraybackslash}X@{}}
 \toprule
 ID & Status & Interpretation \\
 \midrule
@@ -14,6 +14,6 @@ P2 & unsupported & No general peak-recall gain without FA cost. \\
 P4 & unsupported & No general memory peak improvement from recon. \\
 P5 & supported & DLinear memory underprediction persists across seeds. \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{threeparttable}
 \end{table}

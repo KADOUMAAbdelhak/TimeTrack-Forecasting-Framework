@@ -1,27 +1,27 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
-\caption{Disk boundary results. Persistence/EWMA are practical baselines. Relative change vs independent uses the ratio of horizon-mean MAEs (primary). Mean of horizon-level relative fields is reported in the note.}
+\caption{Disk boundary results. Persistence/EWMA are practical baselines. Relative change vs independent uses the ratio of horizon-mean MAEs (primary).}
 \label{tab:disk_boundary}
-\tiny
-\begin{tabular}{@{}llccc@{}}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llccc@{}}
 \toprule
-Model & Method & MAE ($\times 10^9$) & vs Indep.\textsuperscript{a} & Bottom macro ($\times 10^8$) \\
+Model & Method & MAE ($\times 10^9$) & vs~Indep.\textsuperscript{a} & Bottom\textsuperscript{b} \\
 \midrule
-
-persistence & independent & 1.550 & +0.0\% & 2.46 \\
-ewma & independent & 1.557 & +0.0\% & 2.56 \\
-ridge & independent & 1.754 & +0.0\% & 3.79 \\
+persistence & indep. & 1.550 & +0.0\% & 2.46 \\
+ewma & indep. & 1.557 & +0.0\% & 2.56 \\
+ridge & indep. & 1.754 & +0.0\% & 3.79 \\
 \textit{ridge} & \textit{bottom-up} & 1.998 & +13.9\% & 3.79 \\
 ridge & top-down & 1.754 & +0.0\% & 4.55 \\
 ridge & wls & 1.806 & +3.0\% & 3.80 \\
 ridge & mint & 1.778 & +1.4\% & 3.88 \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 \begin{tablenotes}
 \footnotesize
-\item\textsuperscript{a} Ratio of horizon-mean MAEs. For Ridge bottom-up this is +13.9\%; the mean of horizon-level \texttt{mae\_vs\_independent} values is +14.8\%.
-\item Italic: aggregate-harmful Ridge bottom-up. Top-down preserves independent top MAE (0\% top change) at higher bottom macro MAE.
+\item\textsuperscript{a} Ratio of horizon-mean MAEs. Ridge bottom-up: $+13.9\%$ (primary); mean of horizon-level relatives: $+14.8\%$.
+\item\textsuperscript{b} Bottom macro MAE ($\times 10^8$). Italic: aggregate-harmful Ridge bottom-up. Top-down preserves independent top MAE.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

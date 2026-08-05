@@ -1,11 +1,11 @@
-\begin{table}[t]
+\begin{table}[width=\columnwidth,pos=t]
 \centering
-\begin{threeparttable}
 \caption{Selected relative MAE effects. Negative values favor the first method. Disk Ridge bottom-up primary value is the ratio of horizon-mean MAEs.}
 \label{tab:stats}
-\tiny
-\setlength{\tabcolsep}{2.5pt}
-\begin{tabular}{@{}p{3.9cm}lc@{}}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\tblwidth}{@{}>{\raggedright\arraybackslash}Xlc@{}}
 \toprule
 Comparison & Hier. & Rel.\ MAE \\
 \midrule
@@ -22,6 +22,6 @@ LGBM vs EWMA (mean rel.) & Mem. & $+38.82\%$ \\
 Ridge BU vs indep.\ (ratio) & Disk & $+13.93\%$ \\
 Ridge TD vs indep.\ (top) & Disk & $0.00\%$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{threeparttable}
 \end{table}
