@@ -100,6 +100,42 @@ Peeled commits, pack hashes, and artifact inventories:
 \texttt{SOURCE\_ARTIFACT\_HASHES.csv}, and
 \texttt{fgcs/results/provenance/MANIFEST.json}.
 
+\section{Deferred main-article figures and tables}
+The following artifacts were moved from the main Results to keep the article
+within the page budget while preserving one-step/$H$-width semantics.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/coherence_before_after.pdf}
+\caption{CPU coherence error before and after reconciliation for Ridge and
+LightGBM ($\log_{10}(\mathrm{error}+\varepsilon)$, $\varepsilon=10^{-3}$).}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/memory_reconciliation_vs_ewma.pdf}
+\caption{Memory relative MAE versus EWMA independent by model--method and
+seed.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
+\caption{Signed DLinear memory peak bias by seed and method.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/cpu_reconciliation_effect_by_seed.pdf}
+\caption{CPU relative MAE versus independent by seed for LightGBM and DLinear
+reconciliation modes.}
+\end{figure}
+
+\input{../tables/seed_robustness}
+\input{../tables/peak_results}
+\input{../tables/method_selection}
+\input{../tables/claim_summary}
+
 \section{Full claim-support matrix}
 \input{claim_support_full}
 

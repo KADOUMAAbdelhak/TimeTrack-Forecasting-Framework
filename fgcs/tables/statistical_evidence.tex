@@ -1,27 +1,31 @@
-\begin{table}[width=\columnwidth,pos=t]
+\begin{table}[width=\columnwidth,pos=!ht]
 \centering
-\caption{Selected relative MAE effects. Negative values favor the first method. Disk Ridge bottom-up primary value is the ratio of width-mean MAEs.}
+\caption{Compact claim summary from frozen robustness/peak/reporting evidence.
+``Unsupported'' $\neq$ ``no effect.'' Full Holm details: supplement.}
 \label{tab:stats}
 \begin{threeparttable}
-\small
-\setlength{\tabcolsep}{3pt}
-\begin{tabularx}{\tblwidth}{@{}>{\raggedright\arraybackslash}Xlc@{}}
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\begin{tabularx}{\tblwidth}{@{}c>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
 \toprule
-Comparison & Hier. & Rel.\ MAE \\
+ID & Comparison & Class.\ /\ effect \\
 \midrule
-LGBM indep.\ vs Ridge & CPU & $-17.29\%$ \\
-LGBM indep.\ vs pers. & CPU & $-21.59\%$ \\
-LGBM MinT vs LGBM indep. & CPU & $-10.13\%$ \\
-DLinear BU vs indep. & CPU & $-6.84\%$ \\
-DLinear WLS vs indep. & Mem. & $-3.22\%$ \\
-DLinear MinT vs indep. & Mem. & $-3.40\%$ \\
-DLinear WLS vs EWMA & Mem. & $+0.44\%$ \\
-DLinear WLS vs EWMA (seed~2) & Mem. & $+2.06\%$ \\
-LGBM vs EWMA (ratio means) & Mem. & $+36.89\%$ \\
-LGBM vs EWMA (mean rel.) & Mem. & $+38.82\%$ \\
-Ridge BU vs indep.\ (ratio) & Disk & $+13.93\%$ \\
-Ridge TD vs indep.\ (top) & Disk & $0.00\%$ \\
+A1 & LGBM vs Ridge (CPU) & supported ($-17.29\%$) \\
+A2 & LGBM vs pers./{EWMA} (CPU) & supported ($-21.59\%$) \\
+B1 & LGBM MinT vs indep.\ (CPU) & supported ($-10.13\%$) \\
+B2 & DLinear recon vs indep.\ (CPU) & supported (BU $-6.84\%$; $27/27$) \\
+C1 & DLinear WLS/MinT vs indep.\ (mem.) & supported ($-3.22/-3.40\%$) \\
+C2 & DLinear recon vs {EWMA} (mem.) & contradicted (seed~2 {WLS} $+2.06\%$) \\
+D1 & Ridge BU vs indep.\ (disk) & boundary ($+13.93\%$ ratio) \\
+D2 & Ridge TD top (disk) & boundary ($0\%$ top; bottom$\uparrow$) \\
+P3 & LGBM CPU high-load & supported \\
+P1/P2/P4 & General peak transfer & unsupported \\
+P5 & DLinear mem.\ peak bias & supported (range $\approx0.46$--$0.51$) \\
 \bottomrule
 \end{tabularx}
+\begin{tablenotes}
+\footnotesize
+\item LightGBM seeds are bitwise invariant (not independent replicates).
+\end{tablenotes}
 \end{threeparttable}
 \end{table}

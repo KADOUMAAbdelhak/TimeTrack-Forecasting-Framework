@@ -11,3 +11,18 @@ Results/CPU narrative,MAE,cpu_core_weighted,persistence,independent,"mean(h1,h8,
 Results/CPU narrative,MAE,cpu_core_weighted,lightgbm,independent,"mean(h1,h8,h16)",outer_mean,as applicable,1.03614,table02_cpu_forecasting_results.csv,mae,1.03614472,mean over horizons of fold-aggregated mae,yes,
 Results/CPU narrative,MAE,cpu_core_weighted,lightgbm,mint,"mean(h1,h8,h16)",outer_mean,as applicable,0.93114,table02_cpu_forecasting_results.csv,mae,0.93114079,mean over horizons of fold-aggregated mae,yes,
 Results/CPU narrative,MAE,cpu_core_weighted,ridge,independent,"mean(h1,h8,h16)",outer_mean,as applicable,1.25278,table02_cpu_forecasting_results.csv,mae,1.25277862,mean over horizons of fold-aggregated mae,yes,
+Results/6.1 CPU,relative_MAE,cpu_core_weighted,lightgbm,independent,"mean(h1,h8,h16)",outer_mean,seed_invariant,-17.29%,results/final/aggregate/tables + statistical_evidence,relative_effect,-0.172923,paired_relative_vs_ridge,yes,A1
+Results/6.1 CPU,relative_MAE,cpu_core_weighted,lightgbm,independent,"mean(h1,h8,h16)",outer_mean,seed_invariant,-21.59%,statistical_evidence / FINAL,relative_effect,-0.215850,paired_relative_vs_persistence,yes,A2
+Results/6.1 CPU,relative_MAE,cpu_core_weighted,lightgbm,mint,"mean(h1,h8,h16)",outer_mean,seed_invariant,-10.13%,FINAL / statistical_evidence,relative_effect,-0.101341,paired_relative_vs_lgbm_indep,yes,B1
+Results/6.1 CPU,relative_MAE,cpu_core_weighted,dlinear,bottom_up,mean,outer_mean,seed_mean_0_1_2,-6.84%,robustness_claim_support / FINAL,seed_mean_rel,-0.068448,seed_mean_relative_vs_indep,yes,B2; 27/27
+Results/6.1 CPU table,MAE,cpu_core_weighted,persistence,independent,1/8/16 + mean,outer_mean,deterministic,1.320/1.316/1.328; mean 1.321,table02_cpu_forecasting_results.csv,mae,1.321360,mean_folds_per_H then mean_H,yes,
+Results/6.1 CPU table,MAE,cpu_core_weighted,lightgbm,mint,1/8/16 + mean,outer_mean,seed_invariant,0.927/0.926/0.940; mean 0.931,table02_cpu_forecasting_results.csv,mae,0.931141,mean_folds_per_H then mean_H,yes,best observed
+Results/6.2 Memory,support_cells,memory_um,dlinear,bottom_up,all,all,0_1_2,16/27,robustness_claim_support.csv,support_cells,16,cell_count M2,yes,partially_supported
+Results/6.2 Memory,support_cells,memory_um,dlinear,wls,all,all,0_1_2,20/27,robustness_claim_support.csv,support_cells,20,cell_count M3,yes,supported
+Results/6.2 Memory,support_cells,memory_um,dlinear,mint,all,all,0_1_2,21/27,robustness_claim_support.csv,support_cells,21,cell_count M4,yes,supported
+Results/6.2 Memory,relative_MAE_vs_EWMA,memory_um,dlinear,wls,mean,mean,2,+2.06%,robustness_claim_support.csv,seed_mean_rels[2],0.020567,seed_specific_relative,yes,M5 reversal
+Results/6.3 Disk,bottom_macro_MAE,disk_ud,ridge,top_down,"mean(h1,h8)",outer_mean,deterministic,3.79e8 to 4.55e8,table04_disk_boundary.csv,bottom_macro_mae,3.787e8 / 4.548e8,mean_H,yes,~+20% bottom cost
+Results/6.4 Peaks,high_load_MAE_q90,cpu_core_weighted,lightgbm,independent,aggregated,peak_freeze,invariant,4.087,table08_peak_operational_evidence.csv,high_load_mae,4.08686,reported,yes,P3
+Results/6.4 Peaks,high_load_MAE_q95,cpu_core_weighted,lightgbm,independent,aggregated,peak_freeze,invariant,6.174,table08_peak_operational_evidence.csv,high_load_mae,6.17420,reported,yes,P3
+Results/6.4 Peaks,pred_to_target_range_ratio,memory_um,dlinear,independent,all,all,0_1_2,0.46-0.51,dlinear_peak_compression.csv,pred_to_target_range_ratio,mean 0.4955; mass in 0.46-0.51,central_mass_of_cells,yes,P5
+Results/6.1 Seeds,seed_cv,cpu_core_weighted,dlinear,independent,mean,outer_mean,0_1_2,≈0.55%,table02_cpu_forecasting_results.csv,seed_cv,0.0054945,mean_H seed_cv,yes,8/9 practically stable

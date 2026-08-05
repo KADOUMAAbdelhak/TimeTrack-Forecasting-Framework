@@ -925,179 +925,246 @@ supplement and reproducibility package.
 \section{Results}
 \label{sec:results}
 
-\subsection{{CPU} Forecasting and Reconciliation}
+All reported accuracy, reconciliation, and peak metrics evaluate the first
+multi-output component (one-step ahead).
+Configured $H\in\{1,8,16\}$ ({CPU}/memory; disk $H\in\{1,8\}$) is the joint
+training output width, not the evaluated lead
+(Section~\ref{sec:protocol}).
+
+\subsection{{CPU} Forecast Accuracy, Coherence, and Trade-offs}
 \label{sec:cpu}
-Table~\ref{tab:cpu_main} and Figure~\ref{fig:cpu_h} summarize {CPU} results in
-weighted-mean percentage units.
-Width-averaged independent {MAE} values are about $1.321$ (persistence),
-$1.320$ ({EWMA}), $1.253$ (Ridge), and $1.036$ (LightGBM).
-LightGBM independent improves on Ridge by about $17.3\%$ and on persistence by
-about $21.6\%$.
-LightGBM MinT further reduces aggregate {MAE} to about $0.931$
-(about $10.1\%$ versus LightGBM independent) while driving coherence error to
-zero.
-Bottom-up preserves machine-level forecasts; {WLS}/MinT can improve the top while
-trading machine-level accuracy.
-DLinear {CPU} is practically seed-stable, and bottom-up/{WLS}/MinT improve its
-aggregates across seeds (bottom-up seed-mean relative effect about $-6.84\%$).
-Figure~\ref{fig:coh} shows coherence before/after reconciliation.
-Figure~\ref{fig:boot} places selected relative effects with bootstrap intervals;
-Figure~\ref{fig:trade} shows top/bottom trade-offs.
+\paragraph{Independent forecasting strength.}
+Table~\ref{tab:cpu_main} reports core-weighted mean percentage {MAE} for
+one-step {CPU} forecasts.
+Width-averaged independent means are $1.321$ (persistence), $1.320$ ({EWMA}),
+$1.253$ (Ridge), $1.244$ (DLinear), and $1.036$ (LightGBM).
+Persistence and {EWMA} test whether recent levels suffice; Ridge tests
+regularized linear lags; DLinear a lightweight neural alternative; LightGBM
+nonlinear lag interactions.
+LightGBM independent improves on Ridge by $-17.29\%$ and on persistence by
+$-21.59\%$ (paired relative effects; Table~\ref{tab:stats}).
+These same-dataset baselines show that recent-level predictors are already
+strong, yet nonlinear lag structure still yields a clear unreconciled gain.
+The result does not imply universal superiority of gradient boosting.
+
+\paragraph{Effect of reconciliation.}
+Reconciling LightGBM further reduces aggregate {MAE} to $0.942$ (bottom-up),
+$0.934$ ({WLS}), and $0.931$ (MinT).
+MinT improves on LightGBM independent by $-10.13\%$ while restoring exact
+coherence (Table~\ref{tab:cpu_main}; independent coherence is nonzero).
+Bottom-up leaves machine forecasts unchanged; {WLS}/MinT adjust top and bottom
+forecasts under residual-weighting, so aggregate gains can coincide with
+machine-level trade-offs.
+MinT is the best observed frozen outer-evaluation configuration, not a
+prospectively selected universal winner.
+Exact coherence is necessary for hierarchy-consistent planning but does not by
+itself prove accuracy gains.
+
+\paragraph{Ridge, DLinear, and seed evidence.}
+The {CPU} pattern is not LightGBM-specific.
+Ridge bottom-up improves the aggregate to $1.137$ while preserving bottoms
+(underline in Table~\ref{tab:cpu_main}).
+DLinear bottom-up/{WLS}/MinT improve its independent aggregate across seeds;
+the bottom-up seed-mean relative effect is $-6.84\%$, with improvement in
+$27/27$ seed$\times$fold$\times H$ cells for each of BU/{WLS}/MinT.
+DLinear remains weaker than LightGBM, and DLinear versus Ridge is unsupported
+as a robust win ($18/27$ cells).
+LightGBM predictions are bitwise identical across seeds~$0/1/2$ (invariance,
+not three independent replications).
+DLinear {CPU} independent mean seed {CV} is about $0.55\%$, with $8/9$
+fold$\times H$ cells practically seed-stable and one moderate.
+
+\paragraph{Output-width consistency and top/bottom trade-offs.}
+Figure~\ref{fig:cpu_h} shows that model ranking and reconciliation direction
+persist across $H=1,8,16$.
+Because every metric remains one-step, this is configuration robustness under
+different joint training widths and admissible endpoint origins---not
+long-lead performance.
+Scored timestamp sets need not be identical across $H$, so cross-$H$ checks are
+not controlled lead-time experiments.
+Figure~\ref{fig:trade} places reconciliation in the top/bottom plane:
+bottom-up preserves machine-level forecasts, whereas {WLS}/MinT can buy larger
+aggregate gains by adjusting bottoms, including some machine-level
+deterioration.
+Preferred methods therefore depend on whether cluster planning or
+machine-specific actions dominate.
+
+\paragraph{Statistical support and {RQ} answers.}
+Figure~\ref{fig:boot} and Table~\ref{tab:stats} summarize claim-relevant
+bootstrap relatives: LightGBM versus Ridge and versus persistence/{EWMA}, and
+LightGBM MinT versus independent, are supported with fold- and $H$-consistent
+direction.
+{RQ1}: selected reconciliation (notably LightGBM+MinT) improves {CPU} aggregate
+accuracy while restoring exact coherence.
+{RQ2} ({CPU}): conclusions persist across folds, $H$ configurations, models, and
+seeds under the stated one-step semantics.
 
 \input{tables/cpu_main_results}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_output_width.pdf}
-\caption{{CPU} aggregate one-step {MAE} versus joint prediction width $H$ for
-selected model--method pairs.
-Metrics evaluate the first predicted component; $H$ controls the jointly
-trained output width rather than evaluation lead time.
-Points are means across outer folds for each $H$; shaded band for DLinear shows
-mean seed min--max across folds. Units: weighted-mean percentage. LightGBM
-curves for seeds~$0/1/2$ coincide (seed-invariant).}
+\caption{{CPU} aggregate one-step {MAE} versus joint prediction width $H$.
+Metrics evaluate component~0; $H$ is training output width, not lead time.
+Points are means across outer folds; DLinear band shows seed min--max.
+LightGBM seed curves coincide (invariant). Units: weighted-mean percentage.}
 \label{fig:cpu_h}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figs/coherence_before_after.pdf}
-\caption{{CPU} coherence error before and after reconciliation for Ridge and
-LightGBM. Values are $\log_{10}(\mathrm{error}+\varepsilon)$ with
-$\varepsilon=10^{-3}$; markers labeled ``exact 0'' denote numerical zero after
-reconciliation. Independent forecasts retain nonzero coherence error.}
-\label{fig:coh}
-\end{figure}
-
-\begin{figure}[t]
-\centering
 \includegraphics[width=\columnwidth]{figs/bootstrap_relative_effects.pdf}
-\caption{Selected claim-relevant bootstrap relative {MAE} effects with mean
-direct relative $95\%$ intervals. Negative values favor the first method named
-in each row.}
+\caption{Claim-relevant bootstrap relative {MAE} effects with mean direct
+relative $95\%$ intervals. Negative values favor the first named method.
+Zero marks no relative change.}
 \label{fig:boot}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\columnwidth]{figs/top_bottom_tradeoff.pdf}
-\caption{Top versus bottom accuracy trade-offs under reconciliation (stacked for
-column width). Top panel: {CPU} and memory. Bottom panel: disk boundary
-(LightGBM transferred disk stress excluded). Axes are percentage relative {MAE}
-changes; the lower-left quadrant is desirable (top and bottom both improve). A
-wide side-by-side layout is in the supplementary material.}
+\caption{Top versus bottom relative {MAE} under reconciliation.
+Lower-left is desirable (both improve). {CPU}/memory and disk occupy
+different regions; LightGBM disk stress excluded. Wide layout: supplement.}
 \label{fig:trade}
 \end{figure}
 
-\subsection{Memory Results}
+\subsection{Conditional Memory Results}
 \label{sec:memory}
-Table~\ref{tab:memory_main} shows that {EWMA} is the strongest observed memory
-method ({MAE} $\approx 1.051\times 10^9$).
-DLinear independent is weaker than {EWMA}; {WLS}/MinT often improve DLinear
-relative to its own independent forecast (about $-3.22\%$ / $-3.40\%$
-seed-mean), but reconciled DLinear does not robustly beat {EWMA}.
-The seed-mean {WLS}-versus-{EWMA} effect is near zero/slightly positive, and
-seed~$2$ reverses ($\approx +2.06\%$), contradicting a robust win claim.
-MinT versus {EWMA} remains unsupported as a robust improvement.
-LightGBM is substantially worse than {EWMA}: the ratio of width-mean {MAE}s is
-about $+36.9\%$, whereas the mean of width-level relative {MAE} fields is about
-$+38.8\%$ (Table~\ref{tab:memory_main}); these are different aggregations, not
-conflicting measurements of one scalar.
-Figure~\ref{fig:mem_ewma} shows seed-wise relative effects versus {EWMA} for
-DLinear and LightGBM.
-Memory evidence is therefore secondary and conditional.
+\paragraph{Baseline ranking.}
+Table~\ref{tab:memory_main} reports one-step memory {MAE} in bytes
+($\times 10^9$).
+Width-averaged means are $1.059$ (persistence), $1.051$ ({EWMA}), $1.085$
+(Ridge independent), $1.091$ (DLinear independent seed-mean), and $1.439$
+(LightGBM independent).
+{EWMA} is the strongest robust memory method: a recency-weighted deterministic
+baseline is difficult to beat, so complex learners are not automatically
+preferable for these level-like traces.
+Comparisons must therefore include {EWMA}, not only a model's own independent
+forecast.
+
+\paragraph{Reconciliation versus own independent forecast.}
+Relative to DLinear independent, seed-mean relatives are about $-1.6\%$
+(bottom-up; partially supported, $16/27$), $-3.22\%$ ({WLS}; supported,
+$20/27$), and $-3.40\%$ (MinT; supported, $21/27$).
+Reconciliation can therefore repair part of DLinear's internal top/bottom
+inconsistency and improve its aggregate estimate---a conditional claim that does
+not promote DLinear to the strongest memory predictor.
+
+\paragraph{Reconciliation versus {EWMA} and point-estimate traps.}
+DLinear independent versus {EWMA} is contradicted.
+DLinear {WLS} versus {EWMA} has seed-mean relative $+0.44\%$ and is
+contradicted because seed~$2$ reverses ($+2.06\%$); MinT versus {EWMA}
+($+0.27\%$; $14/27$) remains unsupported as a robust win.
+Seed-mean pooling cannot upgrade a claim when a seed reverses.
+Some reconciled Ridge/DLinear descriptive means lie near or slightly below the
+displayed {EWMA} mean; a lower descriptive point estimate is not a seed-aware
+supported superiority claim.
+Paired fold/$H$/seed behavior and confidence intervals determine the final
+classification, so {EWMA} remains the strongest robust comparator.
+
+\paragraph{LightGBM negative result and {RQ3}.}
+LightGBM degrades versus {EWMA}: the ratio of width-mean {MAE}s is $+36.89\%$,
+whereas the mean of width-level relative fields is $+38.82\%$---different
+aggregators, same qualitative conclusion.
+Neither quantity should be read as a paired-bootstrap estimate of the other.
+{RQ3}: memory gains are conditional---reconciliation often helps DLinear
+relative to itself, but {EWMA} remains stronger under seed-aware comparison, so
+method selection must retain simple baselines and multi-seed checks.
 
 \input{tables/memory_main_results}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{figs/memory_reconciliation_vs_ewma.pdf}
-\caption{Memory relative {MAE} versus {EWMA} independent, grouped by model and
-method, for seeds~$0/1/2$. Unlike an earlier ambiguous plot that averaged across
-models within method labels, each series here is a single model--method pair.
-DLinear {WLS}/{MinT} remain near zero; LightGBM independent is largely worse.}
-\label{fig:mem_ewma}
-\end{figure}
-
-\subsection{Disk Failure Boundary}
+\subsection{Disk Reconciliation Failure Boundary}
 \label{sec:disk}
-Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} show that persistence
-and {EWMA} are practical disk baselines.
-Ridge independent already trails them; Ridge bottom-up further harms aggregate
-accuracy by $+13.93\%$ when measured as the ratio of width-mean {MAE}s
-(Table~\ref{tab:disk_boundary}); the mean of width-level relative fields is
-$+14.83\%$ and is not used as the primary narrative statistic.
-Ridge top-down preserves the independent top ({MAE} change $0\%$ at the top)
-while materially increasing bottom macro {MAE}.
-LightGBM disk results in the freeze stack are transferred-configuration stress
-evidence only and are not primary claims.
+\paragraph{Independent baselines.}
+Table~\ref{tab:disk_boundary} and Figure~\ref{fig:disk} concern used-disk
+level (not write throughput).
+Persistence ($1.550\times 10^9$) and {EWMA} ($1.557\times 10^9$) are stronger
+practical baselines than Ridge independent ($1.754\times 10^9$).
+Ridge is retained as the boundary model because it enables controlled
+reconciliation contrasts; transferred LightGBM disk fits are stress evidence
+only (supplement) and are not primary model comparisons.
+
+\paragraph{Bottom-up failure and top-down cost.}
+Ridge bottom-up worsens aggregate accuracy by $+13.93\%$ as the ratio of
+width-mean {MAE}s (primary narrative statistic); the mean of width-level
+relatives is $+14.83\%$ (secondary; table note).
+Bottom-up preserves each bottom forecast, so bottom errors sum into the top:
+coherence becomes exact while aggregate accuracy worsens.
+Top-down preserves the independent top ({MAE} change $0\%$ at the top) but
+raises bottom macro {MAE} from $3.79\times 10^8$ to $4.55\times 10^8$
+(about $+20\%$).
+Coherence is obtained by redistributing the top; the cost is transferred to
+machines.
+
+\paragraph{{WLS}/{MinT} and {RQ4}.}
+{WLS} ($+3.0\%$) and MinT ($+1.4\%$) versus Ridge independent are small
+degradations or near-neutral and do not reproduce the positive {CPU} pattern;
+they restore coherence without a strong aggregate win.
+MinT is not described as generally harmful, only as non-helpful on this disk
+boundary.
+{RQ4}: exact hierarchy validity does not guarantee reconciliation accuracy
+gains; bottom-up and top-down impose different invariants, so method choice
+must track whether top or bottom accuracy is operationally primary.
 
 \input{tables/disk_boundary_results}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{figs/disk_boundary.pdf}
-\caption{Disk boundary for Ridge reconciliation modes. Horizontal lines mark
-persistence and {EWMA} practical baselines. LightGBM disk stress is omitted from
-the main figure.}
+\caption{Disk Ridge reconciliation modes with persistence/{EWMA} reference
+lines. LightGBM disk stress omitted from the main figure.}
 \label{fig:disk}
 \end{figure}
 
-\subsection{Peak-Operational Analysis}
-\label{sec:peaks}
-Table~\ref{tab:peaks} summarizes peak claims.
-LightGBM remains strongest during {CPU} high-load periods (P3 supported).
-General reconciliation benefits for {CPU} high-load {MAE}, peak recall without
-false-alarm cost, and memory peaks are unsupported (P1/P2/P4).
-DLinear memory peak underprediction and range compression persist across all
-seeds and are often amplified by reconciliation (P5 diagnostic).
-Thus ordinary aggregate-{MAE} gains do not imply universal peak-operational
-gains.
-Figure~\ref{fig:cpupeak} and Figure~\ref{fig:membias} summarize the peak
-diagnostics.
+\subsection{Operational and Robustness Evidence}
+\label{sec:ops}
+\paragraph{{CPU} high-load performance.}
+Figure~\ref{fig:cpupeak} and Table~\ref{tab:stats} address peak transfer.
+Under train-only $q_{90}/q_{95}$ thresholds with exact-timestamp matching,
+independent LightGBM attains the lowest high-load {MAE} among evaluated models
+(q90~$4.087$, q95~$6.174$), supporting P3: LightGBM remains the strongest
+evaluated {CPU} model in high-load periods.
+High-load {MAE}, recall, and false alarms are distinct from ordinary aggregate
+{MAE}; not every LightGBM reconciliation mode wins every peak metric.
 
-\input{tables/peak_results}
+\paragraph{Unsupported general peak claims and DLinear compression.}
+P1/P2/P4 are unsupported: reconciliation does not generally improve {CPU}
+high-load {MAE}, does not generally improve recall without false-alarm cost, and
+does not establish general memory peak improvement.
+These are operational limits on transferring average-error gains, not
+experimental failures.
+P5 is supported as a diagnostic: DLinear memory shows negative signed bias at
+q90/q95 for all seeds, with predicted-to-target range ratios about $0.46$--$0.51$;
+BU/{WLS}/MinT often amplify the negative bias.
+Reconciliation restores hierarchy consistency but does not restore missing
+dynamic range; this diagnostic is not generalized to every neural model.
+
+\paragraph{Seed synthesis, literature positioning, and {RQ} closure.}
+LightGBM seed invariance confirms {CPU} findings under the frozen deterministic
+configuration without counting triplicate random replications.
+DLinear {CPU} shows low practical seed variability and stable reconciliation
+direction; memory is more seed-sensitive, including one unstable independent
+cell and the seed~$2$ {WLS}-versus-{EWMA} reversal.
+Relative to the closest literature in Section~\ref{sec:related}, the present
+evidence adds exact machine-to-cluster coherence, strong same-dataset baselines,
+top/bottom reporting, multi-seed evaluation, temporal bootstrap with Holm
+correction, and explicit negative hierarchy/peak results---without cross-paper
+numerical superiority claims on foreign protocols.
+{RQ2} (robustness): {CPU} conclusions hold across folds/$H$/seeds with $H$ as
+output width.
+{RQ5}: ordinary {MAE} gains do not transfer universally to peak behavior;
+operational use therefore requires separate high-load diagnostics.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\columnwidth]{figs/cpu_peak_results.pdf}
-\caption{{CPU} peak/high-load metrics for thresholds q90 and q95 (stacked for
-column width). Color encodes model; marker shape encodes reconciliation method
-(circle~independent, square~bottom-up, triangle~{WLS}, diamond~MinT). A
-side-by-side wide layout is in the supplementary material.}
+\caption{{CPU} peak/high-load metrics at q90/q95 (stacked). Color: model;
+marker: reconciliation mode. Wide layout: supplement.}
 \label{fig:cpupeak}
 \end{figure}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\columnwidth]{figs/dlinear_memory_peak_bias_by_seed.pdf}
-\caption{Signed DLinear memory peak bias (bytes), averaged across folds and
-output widths within each seed and method. Negative values indicate underprediction
-of peak magnitudes; reconciliation often amplifies the negative bias.}
-\label{fig:membias}
-\end{figure}
-
-\subsection{Seed Robustness}
-\label{sec:seeds}
-Table~\ref{tab:seeds} and Figure~\ref{fig:seed} confirm LightGBM seed invariance
-under the frozen configuration and practical DLinear {CPU} seed stability.
-Reconciliation improvements for DLinear {CPU} hold across seeds~$0/1/2$.
-
-\input{tables/seed_robustness}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.92\columnwidth]{figs/cpu_reconciliation_effect_by_seed.pdf}
-\caption{{CPU} relative {MAE} versus independent forecasts by seed for
-LightGBM and DLinear under bottom-up, {WLS}, and MinT. LightGBM points coincide
-across seeds (seed-invariant); DLinear shows small seed variation. Values are
-means of fold$\times$width relative effects from the robustness freeze.}
-\label{fig:seed}
-\end{figure}
-
 \input{tables/statistical_evidence}
-\input{tables/method_selection}
-\input{tables/claim_summary}
 \FloatBarrier
 
 %% =====================================================================

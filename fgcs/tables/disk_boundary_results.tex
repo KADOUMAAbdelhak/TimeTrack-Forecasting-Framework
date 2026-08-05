@@ -1,27 +1,31 @@
-\begin{table}[width=\columnwidth,pos=t]
+\begin{table}[width=\columnwidth,pos=!t]
 \centering
-\caption{Disk boundary results. Persistence/EWMA are practical baselines. Relative change vs independent uses the ratio of width-mean MAEs (primary).}
+\caption{Disk boundary (used-disk level, bytes). Persistence/{EWMA} are
+practical baselines; Ridge enables controlled reconciliation comparison.
+Relative change versus Ridge independent uses the ratio of width-mean MAEs.}
 \label{tab:disk_boundary}
 \begin{threeparttable}
 \small
 \setlength{\tabcolsep}{2.5pt}
-\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llccc@{}}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llcccc@{}}
 \toprule
-Model & Method & MAE ($\times 10^9$) & vs~Indep.\textsuperscript{a} & Bottom\textsuperscript{b} \\
+Model & Method & Top MAE & vs~Indep. & Bottom & Coh. \\
 \midrule
-persistence & indep. & 1.550 & +0.0\% & 2.46 \\
-ewma & indep. & 1.557 & +0.0\% & 2.56 \\
-ridge & indep. & 1.754 & +0.0\% & 3.79 \\
-\textit{ridge} & \textit{bottom-up} & 1.998 & +13.9\% & 3.79 \\
-ridge & top-down & 1.754 & +0.0\% & 4.55 \\
-ridge & wls & 1.806 & +3.0\% & 3.80 \\
-ridge & mint & 1.778 & +1.4\% & 3.88 \\
+persistence & indep. & 1.550 & --- & 2.46 & 0 \\
+ewma & indep. & 1.557 & --- & 2.56 & 0 \\
+ridge & indep. & 1.754 & $+0.0\%$ & 3.79 & $\neq0$ \\
+\textit{ridge} & \textit{BU} & 1.998 & $+13.93\%$ & 3.79 & 0 \\
+ridge & TD & 1.754 & $+0.0\%$ & 4.55 & 0 \\
+ridge & WLS & 1.806 & $+3.0\%$ & 3.80 & 0 \\
+ridge & MinT & 1.778 & $+1.4\%$ & 3.88 & 0 \\
 \bottomrule
 \end{tabular*}
 \begin{tablenotes}
 \footnotesize
-\item\textsuperscript{a} Ratio of width-mean MAEs. Ridge bottom-up: $+13.9\%$ (primary); mean of width-level relatives: $+14.8\%$.
-\item\textsuperscript{b} Bottom macro MAE ($\times 10^8$). Italic: aggregate-harmful Ridge bottom-up. Top-down preserves independent top MAE.
+\item MAE columns $\times 10^9$ (top) and $\times 10^8$ (bottom macro).
+Italic: aggregate-harmful bottom-up. TD preserves the independent top;
+bottom cost $\approx +20\%$. Mean of width-level BU relatives $=+14.83\%$
+(secondary). LightGBM disk stress: supplement only.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}

@@ -1,0 +1,14 @@
+claim_id,manuscript_text,hierarchy,model,method,comparator,metric,effect,CI,fold_support,H_support,seed_support,status,source_table,safe_wording,prohibited_wording
+A1,LightGBM independent improves on Ridge by -17.29%,cpu,lightgbm,independent,ridge,relative_MAE,-17.29%,bootstrap 95% (fig boot),consistent,1/8/16,invariant,supported,tab:stats,supported paired relative improvement,universally superior
+A2,LightGBM vs persistence -21.59%,cpu,lightgbm,independent,persistence,relative_MAE,-21.59%,bootstrap,consistent,yes,invariant,supported,tab:stats,supported vs persistence/EWMA,SOTA
+B1,LightGBM MinT vs independent -10.13% with exact coherence,cpu,lightgbm,mint,lightgbm_independent,relative_MAE,-10.13%,bootstrap,consistent,yes,invariant,supported,tab:cpu_main/tab:stats,best observed frozen configuration,prospectively selected universal winner
+B2,DLinear BU -6.84%; 27/27 cells,cpu,dlinear,bottom_up,dlinear_independent,relative_MAE,-6.84%,seed-aware,yes,yes,27/27,supported,tab:stats,improves across seeds; weaker than LightGBM,beats LightGBM
+C1,DLinear WLS/MinT vs indep -3.22/-3.40%,memory,dlinear,wls/mint,dlinear_independent,relative_MAE,-3.22/-3.40%,seed-aware,yes,yes,20/27 and 21/27,supported,tab:memory_main,conditional repair vs own independent,strongest memory predictor
+C2,DLinear WLS vs EWMA contradicted; seed2 +2.06%,memory,dlinear,wls,ewma,relative_MAE,+0.44% mean; +2.06% seed2,seed-aware,mixed,mixed,reversal,contradicted,tab:stats,does not robustly beat EWMA,beats EWMA
+D1,Ridge BU +13.93% ratio of means,disk,ridge,bottom_up,ridge_independent,relative_MAE,+13.93%,NA descriptive ratio,yes,1/8,NA,boundary,tab:disk_boundary,aggregate harms; coherence restored,all disk recon fails
+D2,Ridge TD top 0%; bottom 3.79 to 4.55 e8,disk,ridge,top_down,ridge_independent,top_and_bottom_mae,0% top; bottom +~20%,NA,yes,yes,NA,boundary,tab:disk_boundary,top preserved at bottom cost,free coherence
+P3,LightGBM strongest CPU high-load MAE,cpu,lightgbm,independent,other_models,high_load_mae,q90 4.087; q95 6.174,NA descriptive ranking,frozen peak,aggregated,invariant,supported,tab:stats/fig:cpupeak,strongest evaluated in high-load periods,every recon mode wins every peak metric
+P1,No general CPU high-load MAE gain from recon,cpu,various,recon,independent,high_load_mae,NA,NA,NA,NA,NA,unsupported,tab:stats,unsupported general transfer,experimental failure
+P2,No general peak-recall gain without FA cost,cpu,various,recon,independent,recall/FA,NA,NA,NA,NA,NA,unsupported,tab:stats,unsupported,peak solved
+P4,No general memory peak improvement from recon,memory,various,recon,independent,peak,NA,NA,NA,NA,NA,unsupported,tab:stats,unsupported,memory peaks fixed
+P5,DLinear memory peak compression range 0.46-0.51,memory,dlinear,all,targets,range_ratio,0.46-0.51,NA,all seeds,yes,all,supported,tab:stats,diagnostic underprediction/compression,all neural models
