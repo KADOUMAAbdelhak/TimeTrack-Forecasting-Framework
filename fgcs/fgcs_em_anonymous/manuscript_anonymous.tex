@@ -1,6 +1,6 @@
 %%
 %% FGCS manuscript — Elsevier CAS double column (cas-dc)
-%% Scientific source: results/final/aggregate (final-reporting-freeze-v2)
+%% Anonymized manuscript for double-anonymized peer review
 %%
 \documentclass[a4paper,fleqn]{cas-dc}
 
@@ -13,6 +13,10 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\hypersetup{
+  pdfauthor={Anonymous},
+  pdftitle={Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry: Accuracy Gains, Trade-offs, and Failure Boundaries}
+}
 \usepackage{placeins}
 \usepackage{multirow}
 \usepackage{microtype}
@@ -66,28 +70,14 @@
 \let\WriteBookmarks\relax
 
 \shorttitle{Hierarchy-Aware Forecast Reconciliation for Cloud Telemetry}
-\shortauthors{A. Kadouma et al.}
+\shortauthors{Anonymous Author(s)}
 
 \title[mode=title]{Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry: Accuracy Gains, Trade-offs, and Failure Boundaries}
 
-\author[1]{Abdelhak Kadouma}
-\cormark[1]
-\ead{abdelhak.kadouma@uwasa.fi}
-\credit{Conceptualization, Methodology, Software, Data curation, Formal analysis, Validation, Visualization, Writing -- original draft}
-
-\author[1]{Amit Shukla}
-\ead{amit.shukla@uwasa.fi}
-\credit{Supervision, Conceptualization, Methodology, Writing -- review \& editing}
-
-\author[1]{Mohammed Elmusrati}
-\ead{moel@uwasa.fi}
-\credit{Supervision, Project administration, Funding acquisition, Writing -- review \& editing}
-
-\affiliation[1]{organization={University of Vaasa},
-            city={Vaasa},
-            country={Finland}}
-
-\cortext[1]{Corresponding author}
+\author[1]{Anonymous Author(s)}
+\affiliation[1]{
+  organization={Anonymous institution}
+}
 
 \begin{abstract}
 Independent machine-level forecasts of cloud telemetry often violate exact
@@ -491,7 +481,7 @@ and a disk negative boundary.
 That scoped combination addresses {RQ1}--{RQ5} without claiming a universal first
 method or cross-dataset numerical superiority.
 
-\input{tables/related_work_comparison}
+\input{related_work_comparison}
 
 %% =====================================================================
 \section{TimeTrack Dataset and Telemetry Hierarchies}
@@ -520,7 +510,7 @@ exact summing constraints with optional reconciliation.
 \begin{center}
 \begin{minipage}{\columnwidth}
 \centering
-\includegraphics[width=\columnwidth]{figs/architecture_or_hierarchy.pdf}
+\includegraphics[width=\columnwidth]{architecture_or_hierarchy.png}
 \captionof{figure}{Machine-to-cluster hierarchy workflow on TimeTrack.
 Seven machine-level bottom series and one cluster-level top series are forecast
 independently and may then be reconciled under an exact summing constraint.
@@ -609,7 +599,7 @@ final claims.
 This manuscript's contribution therefore begins after dataset release, with
 validated hierarchies and the frozen protocol of Section~\ref{sec:protocol}.
 
-\input{tables/dataset_hierarchy_summary}
+\input{dataset_hierarchy_summary}
 
 %% =====================================================================
 \section{Forecasting and Reconciliation Methodology}
@@ -658,7 +648,7 @@ Table~\ref{tab:baselines} summarizes forecasting models and forecast modes.
 All share the window construction above; none is hierarchy-aware before
 reconciliation.
 
-\input{tables/baseline_definitions}
+\input{baseline_definitions}
 \FloatBarrier
 
 \paragraph{Persistence and {EWMA}.}
@@ -786,7 +776,7 @@ Table~\ref{tab:experiment} summarizes the frozen design; fold timestamps,
 hyperparameter grids, Holm families, seeds, and freeze hashes are in the
 supplement.
 
-\input{tables/experiment_registry}
+\input{experiment_registry}
 \FloatBarrier
 
 \subsection{Chronological Evaluation Design}
@@ -980,7 +970,7 @@ not controlled lead-time experiments.
 \begin{center}
 \begin{minipage}{\columnwidth}
 \centering
-\includegraphics[width=\columnwidth]{figs/cpu_accuracy_vs_output_width.pdf}
+\includegraphics[width=\columnwidth]{cpu_accuracy_vs_output_width.pdf}
 \captionof{figure}{{CPU} aggregate one-step {MAE} versus joint prediction width $H$.
 Metrics evaluate component~0; $H$ is training output width, not lead time.
 Points are means across outer folds; DLinear band shows seed min--max.
@@ -999,7 +989,7 @@ machine-specific actions dominate.
 \begin{center}
 \begin{minipage}{\columnwidth}
 \centering
-\includegraphics[width=\columnwidth]{figs/top_bottom_tradeoff.pdf}
+\includegraphics[width=\columnwidth]{top_bottom_tradeoff.pdf}
 \captionof{figure}{Top versus bottom relative {MAE} under reconciliation.
 Lower-left is desirable (both improve). {CPU}/memory and disk occupy
 different regions; LightGBM disk stress excluded. Wide layout: supplement.}
@@ -1017,7 +1007,7 @@ accuracy while restoring exact coherence.
 {RQ2} ({CPU}): conclusions persist across folds, $H$ configurations, models, and
 seeds under the stated one-step semantics.
 
-\input{tables/cpu_main_results}
+\input{cpu_main_results}
 
 \subsection{Conditional Memory Results}
 \label{sec:memory}
@@ -1062,7 +1052,7 @@ Neither quantity should be read as a paired-bootstrap estimate of the other.
 relative to itself, but {EWMA} remains stronger under seed-aware comparison, so
 method selection must retain simple baselines and multi-seed checks.
 
-\input{tables/memory_main_results}
+\input{memory_main_results}
 
 \subsection{Disk Reconciliation Failure Boundary}
 \label{sec:disk}
@@ -1097,7 +1087,7 @@ boundary.
 gains; bottom-up and top-down impose different invariants, so method choice
 must track whether top or bottom accuracy is operationally primary.
 
-\input{tables/disk_boundary_results}
+\input{disk_boundary_results}
 
 \subsection{Operational and Robustness Evidence}
 \label{sec:ops}
@@ -1139,7 +1129,7 @@ output width.
 {RQ5}: ordinary {MAE} gains do not transfer universally to peak behavior;
 operational use therefore requires separate high-load diagnostics.
 
-\input{tables/statistical_evidence}
+\input{statistical_evidence}
 \FloatBarrier
 
 %% =====================================================================
@@ -1358,24 +1348,16 @@ The dataset characterization is described by Meliani et al.\
 \cite{meliani2025timetrack}.
 
 \section*{Code and Artifact Availability}
+An anonymized read-only artifact repository is available at
+\url{https://anonymous.4open.science/r/TimeTrack-Forecasting-Framework-E369}.
 Frozen prediction, analysis, peak, robustness, and reporting artifacts are
-tracked in the public project repository
-\url{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework}
-under immutable freeze tags culminating in
-\texttt{final-reporting-\allowbreak freeze-v2}; detailed freeze provenance is in
-the supplementary material.
-
-\section*{Funding}
-
-This work was partially supported by the European Union’s Horizon Europe Research and Innovation programme under the AC3 project (Grant Agreement No. 101093129).
-
-\section*{Acknowledgements}
-
-The authors would like to thank the University of Vaasa for providing an excellent research environment and academic support throughout the development of this work. The authors also acknowledge Fingletek Oy for its technical contributions, infrastructure support, and collaboration within the AC3 project framework. The views and opinions expressed in this paper are those of the authors and do not necessarily reflect the official position of the European Union or the affiliated institutions.
+tracked under an immutable final reporting snapshot; detailed freeze provenance
+is in the supplementary material.
+The permanent repository URL will be disclosed after completion of the anonymous
+review process.
 
 \section*{Declaration of generative AI and AI-assisted technologies in the
 manuscript preparation process}
-
 During the preparation of this work, the authors used ChatGPT by OpenAI and
 Cursor to assist with manuscript organization, language refinement, code review,
 and consistency checking. OpenAI image-generation tools were also used to assist
@@ -1383,20 +1365,8 @@ with the initial layout of the explanatory workflow diagram in Figure~\ref{fig:a
 The authors reviewed, edited, and independently validated all AI-assisted
 outputs and take full responsibility for the content of the publication.
 
-\section*{CRediT Author Statement}
-\textbf{Abdelhak Kadouma:} Conceptualization, Methodology, Software, Data
-curation, Formal analysis, Validation, Visualization, Writing -- original draft.
-\textbf{Amit Shukla:} Supervision, Conceptualization, Methodology, Writing --
-review \& editing.
-\textbf{Mohammed Elmusrati:} Supervision, Project administration, Funding
-acquisition, Writing -- review \& editing.
-
-\section*{Declaration of Competing Interest}
-
-The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
-
 \FloatBarrier
 \bibliographystyle{cas-model2-names}
-\bibliography{references}
+\bibliography{references_anonymous}
 
 \end{document}

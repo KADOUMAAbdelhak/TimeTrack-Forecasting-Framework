@@ -1,0 +1,22 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{Frozen evaluation design (details in the supplement).}
+\label{tab:experiment}
+\begin{threeparttable}
+\small
+\begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+\toprule
+Item & Frozen setting \\
+\midrule
+Data / folds & Post-outage timeline; 3 expanding chronological outer folds \\
+$L$, $H$, lead & $L{=}32$; multi-output $H{\in}\{1,8,16\}$ (disk $\{1,8\}$);
+component~0 one-step scoring \\
+Selection & Train + inner val.\ ($\approx$15\% of train span); no outer labels \\
+Models / seeds & {CPU}/mem.\ baselines+learners; disk stress transfer;
+seeds $\{0,1,2\}$ \\
+Inference & Recon.\ cov.\ from outer-train val.\ residuals; 5000 paired {MBB};
+Holm; train-only $q_{90}/q_{95}$ \\
+\bottomrule
+\end{tabularx}
+\end{threeparttable}
+\end{table}

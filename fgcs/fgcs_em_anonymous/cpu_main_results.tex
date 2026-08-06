@@ -1,0 +1,33 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{CPU one-step MAE (weighted-mean \%) by joint prediction width $H$.
+Metrics score component~0; $H$ is training output width, not lead. Means across
+outer folds. Bold: best observed; underline: bottom-preserving Ridge.}
+\label{tab:cpu_main}
+\begin{threeparttable}
+\scriptsize
+\setlength{\tabcolsep}{1.8pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llcccc@{}}
+\toprule
+Model & Method & $H{=}1$ & $H{=}8$ & $H{=}16$ & Mean \\
+\midrule
+persistence & indep. & 1.320 & 1.316 & 1.328 & 1.321 \\
+ewma & indep. & 1.319 & 1.315 & 1.327 & 1.320 \\
+ridge & indep. & 1.253 & 1.247 & 1.258 & 1.253 \\
+\underline{ridge} & \underline{BU} & \underline{1.141} & \underline{1.130} & \underline{1.141} & \underline{1.137} \\
+lightgbm & indep. & 1.035 & 1.028 & 1.046 & 1.036 \\
+lightgbm & BU & 0.936 & 0.937 & 0.952 & 0.942 \\
+\textbf{lightgbm} & \textbf{MinT} & \textbf{0.927} & \textbf{0.926} & \textbf{0.940} & \textbf{0.931} \\
+dlinear & indep. & 1.249 & 1.239 & 1.245 & 1.244 \\
+dlinear & BU & 1.153 & 1.159 & 1.158 & 1.157 \\
+\bottomrule
+\end{tabular*}
+\begin{tablenotes}
+\footnotesize
+\item Independent Ridge/LightGBM/DLinear retain nonzero coherence; BU/MinT
+restore exact coherence ($0$). LightGBM seed-invariant.
+Relatives: LightGBM indep.\ vs Ridge $-17.29\%$, vs persistence $-21.59\%$;
+MinT vs indep.\ $-10.13\%$. {WLS} and full grids: supplement.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

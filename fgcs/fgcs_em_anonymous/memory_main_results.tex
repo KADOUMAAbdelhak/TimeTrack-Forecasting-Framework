@@ -1,0 +1,37 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{Memory one-step MAE (bytes, $\times 10^9$). Seed-mean for DLinear/
+LightGBM; mean over $H$ otherwise. Bold: strongest robust comparator ({EWMA}).
+Lower descriptive means than {EWMA} do not imply a seed-aware win.}
+\label{tab:memory_main}
+\begin{threeparttable}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llcc@{}}
+\toprule
+Model & Method & MAE & vs~{EWMA} \\
+\midrule
+persistence & indep. & 1.059 & $+0.8\%$ \\
+\textbf{ewma} & \textbf{indep.} & \textbf{1.051} & $+0.0\%$ \\
+ridge & indep. & 1.085 & $+2.8\%$ \\
+ridge & WLS & 1.042 & $-1.2\%$\textsuperscript{a} \\
+ridge & MinT & 1.041 & $-1.3\%$\textsuperscript{a} \\
+lightgbm & indep. & 1.439 & $+36.89\%$\textsuperscript{b} \\
+dlinear & indep. & 1.091 & $+1.9\%$ \\
+dlinear & BU & 1.071 & $+0.3\%$ \\
+dlinear & WLS & 1.056 & $+0.44\%$ \\
+dlinear & MinT & 1.054 & $+0.27\%$ \\
+\bottomrule
+\end{tabular*}
+\begin{tablenotes}
+\footnotesize
+\item vs~Indep.\ (DLinear seed-mean): BU~$\approx{-}1.6\%$ (partial, $16/27$);
+WLS~$-3.22\%$ (supported, $20/27$); MinT~$-3.40\%$ (supported, $21/27$).
+vs~{EWMA}: DLinear indep.\ contradicted; {WLS} contradicted (seed~$2$
+$+2.06\%$); MinT unsupported ($14/27$).
+\item\textsuperscript{a} Mean of width-level relatives (descriptive).
+\item\textsuperscript{b} Ratio of width-mean MAEs; mean of width-level
+relatives $=+38.82\%$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,31 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{Disk boundary (used-disk level, bytes). Persistence/{EWMA} are
+practical baselines; Ridge enables controlled reconciliation comparison.
+Relative change versus Ridge independent uses the ratio of width-mean MAEs.}
+\label{tab:disk_boundary}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular*}{\tblwidth}{@{\extracolsep{\fill}}llcccc@{}}
+\toprule
+Model & Method & Top MAE & vs~Indep. & Bottom & Coh. \\
+\midrule
+persistence & indep. & 1.550 & --- & 2.46 & 0 \\
+ewma & indep. & 1.557 & --- & 2.56 & 0 \\
+ridge & indep. & 1.754 & $+0.0\%$ & 3.79 & $\neq0$ \\
+\textit{ridge} & \textit{BU} & 1.998 & $+13.93\%$ & 3.79 & 0 \\
+ridge & TD & 1.754 & $+0.0\%$ & 4.55 & 0 \\
+ridge & WLS & 1.806 & $+3.0\%$ & 3.80 & 0 \\
+ridge & MinT & 1.778 & $+1.4\%$ & 3.88 & 0 \\
+\bottomrule
+\end{tabular*}
+\begin{tablenotes}
+\footnotesize
+\item MAE columns $\times 10^9$ (top) and $\times 10^8$ (bottom macro).
+Italic: aggregate-harmful bottom-up. TD preserves the independent top;
+bottom cost $\approx +20\%$. Mean of width-level BU relatives $=+14.83\%$
+(secondary). LightGBM disk stress: supplement only.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,30 @@
+\begin{table}[width=\columnwidth,pos=!t]
+\centering
+\caption{Forecasting models (A) and forecast modes (B) used in the frozen study.}
+\label{tab:baselines}
+\begin{threeparttable}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\tblwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\multicolumn{3}{@{}l}{\textit{A. Forecasting models}} \\
+\midrule
+Model & Mechanism & Role \\
+Persistence & Last context value & Deterministic baseline \\
+{EWMA} & Recursive smoother ($\alpha$) & Deterministic level baseline \\
+Ridge & $L_2$-penalized lag regression & Regularized linear baseline \\
+LightGBM & Gradient-boosted trees & Tree-ensemble baseline \\
+DLinear & Trend/seasonal linear map & Lightweight neural baseline \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{B. Forecast modes}} \\
+\midrule
+Mode & Operator & Role \\
+Independent & No projection & Unreconciled reference \\
+Bottom-up & $\tilde{\mathbf{y}}=\mathbf{S}\hat{\mathbf{b}}$ & Bottom-preserving recon. \\
+{WLS} & Diagonal-variance projection & Weighted projection recon. \\
+MinT-shrink & Shrunk-covariance projection & Covariance-aware recon. \\
+Top-down & Forecast-proportion allocation & Disk-only recon.\ mode \\
+\bottomrule
+\end{tabularx}
+\end{threeparttable}
+\end{table}
