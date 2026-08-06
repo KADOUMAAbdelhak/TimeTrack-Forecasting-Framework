@@ -105,8 +105,7 @@ pipelines.
 
 \begin{keywords}
 Cloud telemetry \sep Hierarchical forecasting \sep Forecast reconciliation \sep
-Coherent forecasting \sep Application profiling \sep TimeTrack \sep LightGBM \sep
-{DLinear}
+Application profiling \sep Cloud-edge continuum \sep TimeTrack
 \end{keywords}
 
 \maketitle
@@ -510,7 +509,7 @@ exact summing constraints with optional reconciliation.
 \begin{center}
 \begin{minipage}{\columnwidth}
 \centering
-\includegraphics[width=\columnwidth]{architecture_or_hierarchy.png}
+\includegraphics[width=\columnwidth]{architecture_or_hierarchy.pdf}
 \captionof{figure}{Machine-to-cluster hierarchy workflow on TimeTrack.
 Seven machine-level bottom series and one cluster-level top series are forecast
 independently and may then be reconciled under an exact summing constraint.
@@ -624,7 +623,16 @@ $236$ only when reporting weighted-mean percentages.
 
 Given origin $t$, context length $L$, and joint prediction width $H$, each series
 maps the lagged window ending at $t$ to a length-$H$ target vector.
-Independent base forecasts are written $\hat{\mathbf{y}}_{t+H\mid t}$.
+Independent base forecasts are written
+\[
+\widehat{\mathbf{Y}}_{t}^{(H)}
+=
+\left[
+\widehat{\mathbf{y}}_{t+1\mid t},
+\ldots,
+\widehat{\mathbf{y}}_{t+H\mid t}
+\right].
+\]
 In the frozen pipeline, $L=32$, inputs are univariate lagged targets (no
 calendar covariates), and each bottom and top series is trained separately.
 Windows with missing values or outage crossings are discarded; identical
@@ -637,8 +645,15 @@ in Section~\ref{sec:protocol}.
 Observed telemetry may satisfy~\eqref{eq:hierarchy} exactly while independent
 forecasts do not.
 Coherence requires
-$\tilde{\mathbf{y}}_{t+H\mid t}=\mathbf{S}\tilde{\mathbf{b}}_{t+H\mid t}$,
-equivalently $\tilde{\mathbf{y}}_{t+H\mid t}\in\operatorname{col}(\mathbf{S})$.
+\[
+\widetilde{\mathbf{y}}_{t+k\mid t}
+=
+\mathbf{S}\widetilde{\mathbf{b}}_{t+k\mid t},
+\qquad k=1,\ldots,H.
+\]
+equivalently $\widetilde{\mathbf{y}}_{t+k\mid t}\in\operatorname{col}(\mathbf{S})$
+componentwise for $k=1,\ldots,H$.
+All reported metrics evaluate the first component, $k=1$.
 The objective is to evaluate three properties that can conflict: top-level
 accuracy, bottom-level accuracy, and exact top--bottom coherence.
 
@@ -685,6 +700,7 @@ Train-only standardization is inverse-transformed before metrics; the frozen
 training budget is given in Section~\ref{sec:protocol}.
 DLinear is seed-sensitive under that budget and is evaluated as a lightweight
 neural competitor rather than a deep sequence model.
+\subsection{Forecast Reconciliation}
 \label{sec:reconciliation}
 Write independent base forecasts
 $\hat{\mathbf{y}}=(\hat{\mathbf{b}}^\top,\hat{y}_{\mathrm{top}})^\top$.
@@ -828,8 +844,7 @@ Persistence, {EWMA}, Ridge, and LightGBM use the native scale (no shared
 scaler).
 Persistence has no selected hyperparameters.
 {EWMA} $\alpha$ is selected on inner validation (frozen $\alpha{=}0.9$).
-Ridge uses the shared-tuning grid ({CPU} $\alpha{=}10^{4}$; memory/disk
-$\alpha{=}1$).
+Ridge uses $\lambda{=}10^{4}$ for {CPU} and $\lambda{=}1$ for memory and disk.
 LightGBM is selected separately for {CPU}
 ($300$ trees, learning rate $0.03$, $31$ leaves) and memory
 ($100$, $0.05$, $15$); disk LightGBM reuses the memory configuration as stress
@@ -1366,7 +1381,396 @@ The authors reviewed, edited, and independently validated all AI-assisted
 outputs and take full responsibility for the content of the publication.
 
 \FloatBarrier
-\bibliographystyle{cas-model2-names}
-\bibliography{references_anonymous}
+\begin{thebibliography}{39}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Agull{\'o} et~al.(2025)Agull{\'o}, Gutierrez-Torre, Torres and
+  Berral}]{agullo2025spikes}
+\bibinfo{author}{Agull{\'o}, F.}, \bibinfo{author}{Gutierrez-Torre, A.},
+  \bibinfo{author}{Torres, J.}, \bibinfo{author}{Berral, J.L.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Enhancing the output of time series forecasting
+  algorithms for cloud resource provisioning}.
+\newblock \bibinfo{journal}{Future Generation Computer Systems}
+  \bibinfo{volume}{170}, \bibinfo{pages}{107833}.
+\newblock \DOIprefix\doi{10.1016/j.future.2025.107833}.
+%Type = Misc
+\bibitem[{Ashouri et~al.(2022)Ashouri, Hyndman and Shmueli}]{ashouri2022fast}
+\bibinfo{author}{Ashouri, M.}, \bibinfo{author}{Hyndman, R.J.},
+  \bibinfo{author}{Shmueli, G.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Fast forecast reconciliation using linear models}.
+\newblock \bibinfo{journal}{Journal of Computational and Graphical Statistics}
+  \bibinfo{volume}{31}, \bibinfo{pages}{263--282}.
+\newblock \DOIprefix\doi{10.1080/10618600.2021.1939038}.
+%Type = Article
+\bibitem[{Athanasopoulos et~al.(2024)Athanasopoulos, Hyndman, Kourentzes and
+  Panagiotelis}]{athanasopoulos2024hierarchical}
+\bibinfo{author}{Athanasopoulos, G.}, \bibinfo{author}{Hyndman, R.J.},
+  \bibinfo{author}{Kourentzes, N.}, \bibinfo{author}{Panagiotelis, A.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Forecast reconciliation: A review}.
+\newblock \bibinfo{journal}{International Journal of Forecasting}
+  \bibinfo{volume}{40}, \bibinfo{pages}{430--456}.
+\newblock \DOIprefix\doi{10.1016/j.ijforecast.2023.10.010}.
+%Type = Article
+\bibitem[{Bergmeir et~al.(2018)Bergmeir, Hyndman and Koo}]{bergmeir2018note}
+\bibinfo{author}{Bergmeir, C.}, \bibinfo{author}{Hyndman, R.J.},
+  \bibinfo{author}{Koo, B.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{A note on the validity of cross-validation for
+  evaluating autoregressive time series prediction}.
+\newblock \bibinfo{journal}{Computational Statistics \& Data Analysis}
+  \bibinfo{volume}{120}, \bibinfo{pages}{70--83}.
+\newblock \DOIprefix\doi{10.1016/j.csda.2017.11.003}.
+%Type = Article
+\bibitem[{Buyya et~al.(2019)Buyya, Srirama, Casale, Calheiros, Simmhan,
+  Varghese, Gelenbe, Javadi, Vaquero, Netto, Toosi, Rodriguez, Llorente,
+  De~Pellegrini, Di~Modica, De~Lara, Rana, Zhou, Jin, Gkoutos, Shen and
+  Wang}]{buyya2019manifesto}
+\bibinfo{author}{Buyya, R.}, \bibinfo{author}{Srirama, S.N.},
+  \bibinfo{author}{Casale, G.}, \bibinfo{author}{Calheiros, R.},
+  \bibinfo{author}{Simmhan, Y.}, \bibinfo{author}{Varghese, B.},
+  \bibinfo{author}{Gelenbe, E.}, \bibinfo{author}{Javadi, B.},
+  \bibinfo{author}{Vaquero, L.M.}, \bibinfo{author}{Netto, M.A.S.},
+  \bibinfo{author}{Toosi, A.N.}, \bibinfo{author}{Rodriguez, M.A.},
+  \bibinfo{author}{Llorente, I.M.}, \bibinfo{author}{De~Pellegrini, S.},
+  \bibinfo{author}{Di~Modica, G.}, \bibinfo{author}{De~Lara, E.},
+  \bibinfo{author}{Rana, O.}, \bibinfo{author}{Zhou, W.}, \bibinfo{author}{Jin,
+  H.}, \bibinfo{author}{Gkoutos, A.V.}, \bibinfo{author}{Shen, Y.},
+  \bibinfo{author}{Wang, Y.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{A manifesto for future generation cloud computing:
+  Research directions for the next decade}.
+\newblock \bibinfo{journal}{ACM Computing Surveys} \bibinfo{volume}{51},
+  \bibinfo{pages}{105:1--105:38}.
+\newblock \DOIprefix\doi{10.1145/3241737}.
+%Type = Article
+\bibitem[{Calheiros et~al.(2015)Calheiros, Masoumi, Ranjan and
+  Buyya}]{calheiros2015workload}
+\bibinfo{author}{Calheiros, R.N.}, \bibinfo{author}{Masoumi, E.},
+  \bibinfo{author}{Ranjan, R.}, \bibinfo{author}{Buyya, R.},
+  \bibinfo{year}{2015}.
+\newblock \bibinfo{title}{Workload prediction using {ARIMA} model and its
+  impact on cloud applications' {QoS}}.
+\newblock \bibinfo{journal}{IEEE Transactions on Cloud Computing}
+  \bibinfo{volume}{3}, \bibinfo{pages}{449--458}.
+\newblock \DOIprefix\doi{10.1109/TCC.2014.2350475}.
+%Type = Incollection
+\bibitem[{Casalicchio(2019)}]{casalicchio2019container}
+\bibinfo{author}{Casalicchio, E.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Container orchestration: A survey}, in:
+  \bibinfo{booktitle}{Systems Modeling: Methodologies and Tools}.
+  \bibinfo{publisher}{Springer}, pp. \bibinfo{pages}{221--235}.
+\newblock \DOIprefix\doi{10.1007/978-3-319-92378-9_14}.
+%Type = Article
+\bibitem[{Duc et~al.(2020)Duc, Leiva, Casari and {\"O}stberg}]{duc2020survey}
+\bibinfo{author}{Duc, T.L.}, \bibinfo{author}{Leiva, R.G.},
+  \bibinfo{author}{Casari, P.}, \bibinfo{author}{{\"O}stberg, P.O.},
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Machine learning methods for reliable resource
+  provisioning in edge-cloud computing: A survey}.
+\newblock \bibinfo{journal}{ACM Computing Surveys} \bibinfo{volume}{52},
+  \bibinfo{pages}{94:1--94:39}.
+\newblock \DOIprefix\doi{10.1145/3341145}.
+%Type = Inproceedings
+\bibitem[{Gao et~al.(2026)Gao, Yu, Luo, Ma, Sun, Fang and
+  Gao}]{gao2026mamiclif}
+\bibinfo{author}{Gao, M.}, \bibinfo{author}{Yu, Z.}, \bibinfo{author}{Luo, Y.},
+  \bibinfo{author}{Ma, L.}, \bibinfo{author}{Sun, Y.}, \bibinfo{author}{Fang,
+  Y.}, \bibinfo{author}{Gao, X.}, \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Macro-micro collaborative learning for logical data
+  center microservice indicators forecasting}, in:
+  \bibinfo{booktitle}{Proceedings of the {ACM} Web Conference 2026 ({WWW}
+  '26)}, \bibinfo{publisher}{{ACM}}. pp. \bibinfo{pages}{5010--5020}.
+\newblock \DOIprefix\doi{10.1145/3774904.3792125}.
+%Type = Article
+\bibitem[{Holm(1979)}]{holm1979simple}
+\bibinfo{author}{Holm, S.}, \bibinfo{year}{1979}.
+\newblock \bibinfo{title}{A simple sequentially rejective multiple test
+  procedure}.
+\newblock \bibinfo{journal}{Scandinavian Journal of Statistics}
+  \bibinfo{volume}{6}, \bibinfo{pages}{65--70}.
+%Type = Article
+\bibitem[{Hyndman et~al.(2011)Hyndman, Ahmed, Athanasopoulos and
+  Shang}]{hyndman2011optimal}
+\bibinfo{author}{Hyndman, R.J.}, \bibinfo{author}{Ahmed, R.A.},
+  \bibinfo{author}{Athanasopoulos, G.}, \bibinfo{author}{Shang, H.L.},
+  \bibinfo{year}{2011}.
+\newblock \bibinfo{title}{Optimal combination forecasts for hierarchical time
+  series}.
+\newblock \bibinfo{journal}{Computational Statistics \& Data Analysis}
+  \bibinfo{volume}{55}, \bibinfo{pages}{2579--2590}.
+\newblock \DOIprefix\doi{10.1016/j.csda.2011.03.006}.
+%Type = Book
+\bibitem[{Hyndman and Athanasopoulos(2021)}]{hyndman2021forecasting}
+\bibinfo{author}{Hyndman, R.J.}, \bibinfo{author}{Athanasopoulos, G.},
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Forecasting: Principles and Practice}.
+\newblock \bibinfo{edition}{3rd} ed., \bibinfo{publisher}{OTexts}.
+\newblock \URLprefix \url{https://otexts.com/fpp3/}.
+%Type = Article
+\bibitem[{Hyndman and Koehler(2006)}]{hyndman2006accuracy}
+\bibinfo{author}{Hyndman, R.J.}, \bibinfo{author}{Koehler, A.B.},
+  \bibinfo{year}{2006}.
+\newblock \bibinfo{title}{Another look at measures of forecast accuracy}.
+\newblock \bibinfo{journal}{International Journal of Forecasting}
+  \bibinfo{volume}{22}, \bibinfo{pages}{679--688}.
+\newblock \DOIprefix\doi{10.1016/j.ijforecast.2006.03.001}.
+%Type = Article
+\bibitem[{Islam et~al.(2012)Islam, Keung, Lee and Liu}]{islam2012empirical}
+\bibinfo{author}{Islam, S.}, \bibinfo{author}{Keung, J.}, \bibinfo{author}{Lee,
+  K.}, \bibinfo{author}{Liu, A.}, \bibinfo{year}{2012}.
+\newblock \bibinfo{title}{Empirical prediction models for adaptive resource
+  provisioning in the cloud}.
+\newblock \bibinfo{journal}{Future Generation Computer Systems}
+  \bibinfo{volume}{28}, \bibinfo{pages}{155--162}.
+\newblock \DOIprefix\doi{10.1016/j.future.2011.05.027}.
+%Type = Inproceedings
+\bibitem[{Ke et~al.(2017)Ke, Meng, Finley, Wang, Chen, Ma, Ye and
+  Liu}]{ke2017lightgbm}
+\bibinfo{author}{Ke, G.}, \bibinfo{author}{Meng, Q.}, \bibinfo{author}{Finley,
+  T.}, \bibinfo{author}{Wang, T.}, \bibinfo{author}{Chen, W.},
+  \bibinfo{author}{Ma, W.}, \bibinfo{author}{Ye, Q.}, \bibinfo{author}{Liu,
+  T.Y.}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{{LightGBM}: A highly efficient gradient boosting
+  decision tree}, in: \bibinfo{booktitle}{Advances in Neural Information
+  Processing Systems}.
+%Type = Article
+\bibitem[{Khan et~al.(2022)Khan, Tian, Zhou, Ilager, Gong and
+  Buyya}]{khan2022workload}
+\bibinfo{author}{Khan, T.}, \bibinfo{author}{Tian, W.}, \bibinfo{author}{Zhou,
+  G.}, \bibinfo{author}{Ilager, S.}, \bibinfo{author}{Gong, M.},
+  \bibinfo{author}{Buyya, R.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Machine learning ({ML})-centric resource management
+  in cloud computing: A review and future directions}.
+\newblock \bibinfo{journal}{Journal of Network and Computer Applications}
+  \bibinfo{volume}{204}, \bibinfo{pages}{103405}.
+\newblock \DOIprefix\doi{10.1016/j.jnca.2022.103405}.
+%Type = Article
+\bibitem[{Lim and Zohren(2021)}]{lim2021temporal}
+\bibinfo{author}{Lim, B.}, \bibinfo{author}{Zohren, S.}, \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Time-series forecasting with deep learning: a
+  survey}.
+\newblock \bibinfo{journal}{Philosophical Transactions of the Royal Society A}
+  \bibinfo{volume}{379}, \bibinfo{pages}{20200209}.
+\newblock \DOIprefix\doi{10.1098/rsta.2020.0209}.
+%Type = Article
+\bibitem[{Lorido-Botran et~al.(2014)Lorido-Botran, Miguel-Alonso and
+  Lozano}]{lorido2014review}
+\bibinfo{author}{Lorido-Botran, T.}, \bibinfo{author}{Miguel-Alonso, J.},
+  \bibinfo{author}{Lozano, J.A.}, \bibinfo{year}{2014}.
+\newblock \bibinfo{title}{A review of auto-scaling techniques for elastic
+  applications in cloud environments}.
+\newblock \bibinfo{journal}{Journal of Grid Computing} \bibinfo{volume}{12},
+  \bibinfo{pages}{559--592}.
+\newblock \DOIprefix\doi{10.1007/s10723-014-9314-7}.
+%Type = Misc
+\bibitem[{Luo et~al.(2024)Luo, Wang, Yu, Lu, Gao, Ma and Chen}]{harmony2024}
+\bibinfo{author}{Luo, Y.}, \bibinfo{author}{Wang, S.}, \bibinfo{author}{Yu,
+  Z.}, \bibinfo{author}{Lu, W.}, \bibinfo{author}{Gao, X.},
+  \bibinfo{author}{Ma, L.}, \bibinfo{author}{Chen, G.}, \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Adaptive two-stage cloud resource scaling via
+  hierarchical multi-indicator forecasting and {Bayesian} decision-making}.
+\newblock \DOIprefix\doi{10.48550/arXiv.2408.01000},
+  \href{http://arxiv.org/abs/2408.01000}{\tt arXiv:2408.01000}.
+%Type = Article
+\bibitem[{Makridakis et~al.(2018)Makridakis, Spiliotis and
+  Assimakopoulos}]{makridakis2018statistical}
+\bibinfo{author}{Makridakis, S.}, \bibinfo{author}{Spiliotis, E.},
+  \bibinfo{author}{Assimakopoulos, V.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Statistical and machine learning forecasting methods:
+  Concerns and ways forward}.
+\newblock \bibinfo{journal}{PLOS ONE} \bibinfo{volume}{13},
+  \bibinfo{pages}{e0194889}.
+\newblock \DOIprefix\doi{10.1371/journal.pone.0194889}.
+%Type = Article
+\bibitem[{Masdari and Khoshnevis(2020)}]{masdari2020workload}
+\bibinfo{author}{Masdari, M.}, \bibinfo{author}{Khoshnevis, A.},
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{A survey and classification of the workload
+  forecasting methods in cloud computing}.
+\newblock \bibinfo{journal}{Cluster Computing} \bibinfo{volume}{23},
+  \bibinfo{pages}{2399--2424}.
+\newblock \DOIprefix\doi{10.1007/s10586-019-03010-3}.
+%Type = Misc
+\bibitem[{Meliani(2025)}]{meliani2025timetrackkaggle}
+\bibinfo{author}{Meliani, A.E.}, \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{Open {Air} interface {CI}/{CD} timeseries dataset
+  ({TimeTrack})}.
+\newblock \bibinfo{howpublished}{Kaggle Dataset}.
+\newblock \URLprefix
+  \url{https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset}.
+  \bibinfo{note}{accessed 2026-08-04}.
+%Type = Inproceedings
+\bibitem[{Meliani et~al.(2025)Meliani, Arora, Ksentini and
+  Knopp}]{meliani2025timetrack}
+\bibinfo{author}{Meliani, A.E.}, \bibinfo{author}{Arora, S.},
+  \bibinfo{author}{Ksentini, A.}, \bibinfo{author}{Knopp, R.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{{TimeTrack}: A dataset for exploring temporal
+  patterns and predictive insights into {OpenAirInterface} ({OAI}) {CI}/{CD}
+  cluster}, in: \bibinfo{booktitle}{IEEE International Conference on
+  Communications ({ICC})}, \bibinfo{publisher}{{IEEE}}.
+\newblock \DOIprefix\doi{10.1109/ICC52391.2025.11161298}.
+%Type = Misc
+\bibitem[{Meliani et~al.(2026)Meliani, Arora, Ksentini and
+  Knopp}]{meliani2026zerotouch}
+\bibinfo{author}{Meliani, A.E.}, \bibinfo{author}{Arora, S.},
+  \bibinfo{author}{Ksentini, A.}, \bibinfo{author}{Knopp, R.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Zero touch predictive orchestration: Automating
+  time-series models for the cloud-edge continuum}.
+\newblock \DOIprefix\doi{10.48550/arXiv.2606.09787},
+  \href{http://arxiv.org/abs/2606.09787}{\tt arXiv:2606.09787}.
+%Type = Article
+\bibitem[{Panagiotelis et~al.(2021)Panagiotelis, Athanasopoulos, Gamakumara and
+  Hyndman}]{panagiotelis2021geometric}
+\bibinfo{author}{Panagiotelis, A.}, \bibinfo{author}{Athanasopoulos, G.},
+  \bibinfo{author}{Gamakumara, P.}, \bibinfo{author}{Hyndman, R.J.},
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Forecast reconciliation: A geometric view with new
+  insights on bias correction}.
+\newblock \bibinfo{journal}{International Journal of Forecasting}
+  \bibinfo{volume}{37}, \bibinfo{pages}{343--359}.
+\newblock \DOIprefix\doi{10.1016/j.ijforecast.2020.06.004}.
+%Type = Article
+\bibitem[{Panagiotelis et~al.(2023)Panagiotelis, Gamakumara, Athanasopoulos and
+  Hyndman}]{panagiotelis2023probabilistic}
+\bibinfo{author}{Panagiotelis, A.}, \bibinfo{author}{Gamakumara, P.},
+  \bibinfo{author}{Athanasopoulos, G.}, \bibinfo{author}{Hyndman, R.J.},
+  \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Probabilistic forecast reconciliation: Properties,
+  evaluation and score optimisation}.
+\newblock \bibinfo{journal}{European Journal of Operational Research}
+  \bibinfo{volume}{306}, \bibinfo{pages}{693--706}.
+\newblock \DOIprefix\doi{10.1016/j.ejor.2022.07.040}.
+%Type = Article
+\bibitem[{Qu et~al.(2018)Qu, Calheiros and Buyya}]{qu2018auto}
+\bibinfo{author}{Qu, C.}, \bibinfo{author}{Calheiros, R.N.},
+  \bibinfo{author}{Buyya, R.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Auto-scaling web applications in clouds: A taxonomy
+  and survey}.
+\newblock \bibinfo{journal}{ACM Computing Surveys} \bibinfo{volume}{51},
+  \bibinfo{pages}{73:1--73:33}.
+\newblock \DOIprefix\doi{10.1145/3148149}.
+%Type = Article
+\bibitem[{Rossi et~al.(2020)Rossi, Cardellini, Presti and
+  Nardelli}]{rossi2020geo}
+\bibinfo{author}{Rossi, F.}, \bibinfo{author}{Cardellini, V.},
+  \bibinfo{author}{Presti, F.L.}, \bibinfo{author}{Nardelli, M.},
+  \bibinfo{year}{2020}.
+\newblock \bibinfo{title}{Geo-distributed efficient deployment of containers
+  with {Kubernetes}}.
+\newblock \bibinfo{journal}{Computer Communications} \bibinfo{volume}{159},
+  \bibinfo{pages}{161--174}.
+\newblock \DOIprefix\doi{10.1016/j.comcom.2020.04.061}.
+%Type = Article
+\bibitem[{Satyanarayanan(2017)}]{satyanarayanan2017emergence}
+\bibinfo{author}{Satyanarayanan, M.}, \bibinfo{year}{2017}.
+\newblock \bibinfo{title}{The emergence of edge computing}.
+\newblock \bibinfo{journal}{Computer} \bibinfo{volume}{50},
+  \bibinfo{pages}{30--39}.
+\newblock \DOIprefix\doi{10.1109/MC.2017.9}.
+%Type = Article
+\bibitem[{Sch{\"a}fer and Strimmer(2005)}]{schafer2005shrinkage}
+\bibinfo{author}{Sch{\"a}fer, J.}, \bibinfo{author}{Strimmer, K.},
+  \bibinfo{year}{2005}.
+\newblock \bibinfo{title}{A shrinkage approach to large-scale covariance matrix
+  estimation and implications for functional genomics}.
+\newblock \bibinfo{journal}{Statistical Applications in Genetics and Molecular
+  Biology} \bibinfo{volume}{4}.
+\newblock \DOIprefix\doi{10.2202/1544-6115.1175}.
+%Type = Article
+\bibitem[{Shi et~al.(2016)Shi, Cao, Zhang, Li and Xu}]{shi2016edge}
+\bibinfo{author}{Shi, W.}, \bibinfo{author}{Cao, J.}, \bibinfo{author}{Zhang,
+  Q.}, \bibinfo{author}{Li, Y.}, \bibinfo{author}{Xu, L.},
+  \bibinfo{year}{2016}.
+\newblock \bibinfo{title}{Edge computing: Vision and challenges}.
+\newblock \bibinfo{journal}{IEEE Internet of Things Journal}
+  \bibinfo{volume}{3}, \bibinfo{pages}{637--646}.
+\newblock \DOIprefix\doi{10.1109/JIOT.2016.2579198}.
+%Type = Article
+\bibitem[{Sus and Nawrocki(2024)}]{sus2024signature}
+\bibinfo{author}{Sus, W.}, \bibinfo{author}{Nawrocki, P.},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Signature-based adaptive cloud resource usage
+  prediction using machine learning and anomaly detection}.
+\newblock \bibinfo{journal}{Journal of Grid Computing} \bibinfo{volume}{22},
+  \bibinfo{pages}{46}.
+\newblock \DOIprefix\doi{10.1007/s10723-024-09764-4}.
+%Type = Article
+\bibitem[{Taherizadeh et~al.(2018)Taherizadeh, Jones, Taylor, Zhao and
+  Stankovski}]{taherizadeh2018monitoring}
+\bibinfo{author}{Taherizadeh, S.}, \bibinfo{author}{Jones, A.C.},
+  \bibinfo{author}{Taylor, I.}, \bibinfo{author}{Zhao, Z.},
+  \bibinfo{author}{Stankovski, V.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{Monitoring self-adaptive applications within edge
+  computing frameworks: A state-of-the-art review}.
+\newblock \bibinfo{journal}{Journal of Systems and Software}
+  \bibinfo{volume}{136}, \bibinfo{pages}{19--38}.
+\newblock \DOIprefix\doi{10.1016/j.jss.2017.10.033}.
+%Type = Article
+\bibitem[{Toka et~al.(2021)Toka, Dobreff, Fodor and
+  Sonkoly}]{toka2021kubernetes}
+\bibinfo{author}{Toka, L.}, \bibinfo{author}{Dobreff, G.},
+  \bibinfo{author}{Fodor, B.}, \bibinfo{author}{Sonkoly, B.},
+  \bibinfo{year}{2021}.
+\newblock \bibinfo{title}{Machine learning-based scaling management for
+  {Kubernetes} edge clusters}.
+\newblock \bibinfo{journal}{IEEE Transactions on Network and Service
+  Management} \bibinfo{volume}{18}, \bibinfo{pages}{958--972}.
+\newblock \DOIprefix\doi{10.1109/TNSM.2021.3052837}.
+%Type = Inproceedings
+\bibitem[{Wang et~al.(2025)Wang, Lu, Li, Shi, Zhong, Ye, Jin and
+  Wen}]{wang2025frt}
+\bibinfo{author}{Wang, S.}, \bibinfo{author}{Lu, W.}, \bibinfo{author}{Li, J.},
+  \bibinfo{author}{Shi, X.}, \bibinfo{author}{Zhong, X.}, \bibinfo{author}{Ye,
+  Z.}, \bibinfo{author}{Jin, M.}, \bibinfo{author}{Wen, Q.},
+  \bibinfo{year}{2025}.
+\newblock \bibinfo{title}{{FRT}: Flow-based reconcile transformer for
+  hierarchical time series}, in: \bibinfo{booktitle}{Proceedings of the 31st
+  {ACM} {SIGKDD} Conference on Knowledge Discovery and Data Mining {V}.2 ({KDD}
+  '25)}, \bibinfo{publisher}{{ACM}}. pp. \bibinfo{pages}{4995--5006}.
+\newblock \DOIprefix\doi{10.1145/3711896.3737224}.
+%Type = Inproceedings
+\bibitem[{Wen et~al.(2023)Wen, Zhou, Zhang, Chen, Ma, Yan and
+  Sun}]{wen2023transformers}
+\bibinfo{author}{Wen, Q.}, \bibinfo{author}{Zhou, T.}, \bibinfo{author}{Zhang,
+  C.}, \bibinfo{author}{Chen, W.}, \bibinfo{author}{Ma, Z.},
+  \bibinfo{author}{Yan, J.}, \bibinfo{author}{Sun, L.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Transformers in time series: A survey}, in:
+  \bibinfo{booktitle}{Proceedings of the Thirty-Second International Joint
+  Conference on Artificial Intelligence ({IJCAI})}, pp.
+  \bibinfo{pages}{6778--6786}.
+\newblock \DOIprefix\doi{10.24963/ijcai.2023/759}.
+%Type = Article
+\bibitem[{Wickramasuriya et~al.(2019)Wickramasuriya, Athanasopoulos and
+  Hyndman}]{wickramasuriya2019mint}
+\bibinfo{author}{Wickramasuriya, S.L.}, \bibinfo{author}{Athanasopoulos, G.},
+  \bibinfo{author}{Hyndman, R.J.}, \bibinfo{year}{2019}.
+\newblock \bibinfo{title}{Optimal forecast reconciliation for hierarchical and
+  grouped time series through trace minimization}.
+\newblock \bibinfo{journal}{Journal of the American Statistical Association}
+  \bibinfo{volume}{114}, \bibinfo{pages}{804--819}.
+\newblock \DOIprefix\doi{10.1080/01621459.2018.1448825}.
+%Type = Inproceedings
+\bibitem[{Zeng et~al.(2023)Zeng, Chen, Zhang and Xu}]{zeng2023dlinear}
+\bibinfo{author}{Zeng, A.}, \bibinfo{author}{Chen, M.}, \bibinfo{author}{Zhang,
+  L.}, \bibinfo{author}{Xu, Q.}, \bibinfo{year}{2023}.
+\newblock \bibinfo{title}{Are transformers effective for time series
+  forecasting?}, in: \bibinfo{booktitle}{Proceedings of the {AAAI} Conference
+  on Artificial Intelligence}, pp. \bibinfo{pages}{11121--11128}.
+\newblock \DOIprefix\doi{10.1609/aaai.v37i9.26317}.
+
+\end{thebibliography}
 
 \end{document}
