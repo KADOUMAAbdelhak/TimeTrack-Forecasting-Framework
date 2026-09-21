@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scientific_task": "seven machine CPU targets; eight real future leads jointly",
+  "feature_sets": [
+    "F0_LOCAL",
+    "F1_THROUGHPUT",
+    "F2_LOMO_MEAN",
+    "F3_LOMO_MEDIAN",
+    "F4_THROUGHPUT_LOMO_MEAN",
+    "F5_THROUGHPUT_LOMO_MEDIAN"
+  ],
+  "model_families": [
+    "Persistence",
+    "Ridge",
+    "LightGBM",
+    "DLinear",
+    "TCN"
+  ],
+  "expected_outer_run_records": 1890,
+  "expected_lead_metric_rows": 15120,
+  "full_benchmark_executed": false,
+  "empty_run_registry_rows": 0,
+  "empty_metric_rows": 0,
+  "empty_selected_config_rows": 0,
+  "joint_fold_rows": 35,
+  "joint_fold_leakage_failures": 0,
+  "joint_eligible_range": [
+    26729,
+    29986
+  ],
+  "eligibility_comparison_rows": 56,
+  "unit_tests": 18,
+  "unit_test_failures": 0,
+  "unit_test_errors": 0,
+  "smoke_status": "PASS",
+  "smoke_model_feature_executions": 10,
+  "smoke_outputs_all_n_by_8": true,
+  "phase1c_boundary_equivalence": {
+    "checked": 280,
+    "failures": 0,
+    "pass": true
+  },
+  "outer_target_time_leakage": 0,
+  "inner_target_time_leakage": 0,
+  "segment_crossings": 0,
+  "outer_test_used_for_selection": false,
+  "canonical_panel_unchanged": true,
+  "raw_hashes_match_phase1": true,
+  "forbidden_model_names": []
+}

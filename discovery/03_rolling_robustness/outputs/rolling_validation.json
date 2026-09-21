@@ -1,0 +1,124 @@
+{
+  "status": "PASS",
+  "runtime_seconds": 10.288322374999552,
+  "peak_rss_bytes": 726482944,
+  "sklearn_version": "1.9.1",
+  "ridge_settings": {
+    "alpha": 1.0,
+    "fit_intercept": true,
+    "copy_X": true,
+    "max_iter": null,
+    "tol": 0.0001,
+    "solver": "auto",
+    "positive": false,
+    "random_state": null
+  },
+  "hpo_performed": false,
+  "expected_experiments": 1960,
+  "evaluated_experiments": 1960,
+  "unevaluable_experiments": 0,
+  "fold_boundary_rows": 280,
+  "fold_test_size_ranges": {
+    "1": {
+      "min": 3917,
+      "max": 4048
+    },
+    "2": {
+      "min": 3916,
+      "max": 4048
+    },
+    "3": {
+      "min": 3917,
+      "max": 4048
+    },
+    "4": {
+      "min": 3916,
+      "max": 4048
+    },
+    "5": {
+      "min": 3917,
+      "max": 4049
+    }
+  },
+  "purge_counts_by_lead": {
+    "1": 35,
+    "2": 70,
+    "4": 140,
+    "8": 275,
+    "16": 557,
+    "32": 1105,
+    "64": 2194,
+    "128": 4354
+  },
+  "robustness_label_counts": {
+    "ROBUST_POSITIVE": 50,
+    "CONSISTENT_SMALL_POSITIVE": 99,
+    "MIXED": 134,
+    "NEGATIVE": 109,
+    "INSUFFICIENT_FOLDS": 0
+  },
+  "target_time_leakage_failures": 0,
+  "test_overlap_failures": 0,
+  "expanding_training_failures": 0,
+  "segment_crossing_windows": 0,
+  "matched_row_failures": 0,
+  "candidate_labels": [
+    "global_jitter",
+    "global_rtt_mean",
+    "lomo_cpu_mean",
+    "lomo_cpu_median",
+    "same_machine_memory",
+    "same_machine_throughput",
+    "same_machine_used_disk"
+  ],
+  "candidate_set_exactly_frozen": true,
+  "folds_per_consistency_row": [
+    5
+  ],
+  "throughput_robust_machines": 5,
+  "common_context_robust_machines": 2,
+  "throughput_support_leads": [
+    1,
+    4,
+    32,
+    64,
+    128
+  ],
+  "common_context_support_leads": [
+    16
+  ],
+  "decision_gate": "PROCEED_WITH_BOTH",
+  "input_hashes_unchanged": true,
+  "canonical_panel_unchanged": true,
+  "raw_hashes_match_phase1_and_unchanged": true,
+  "figure_count": 5,
+  "input_hashes": {
+    "panel": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "registry": "cf8af7a315d0717bf6e1b8865677999afe4d73088c249498065ee499bf98f562",
+    "boundaries": "693d8135f0546373c2cece5e8a228c3ed7f42b649d06f0a7ac3c71fd44d22f49",
+    "protocol": "499ce00aaee1e823d3598b3e49f4e1fb3f9dddc666219e6823bdd57ba860dcfb"
+  },
+  "raw_hashes": {
+    "compute_dataset.csv": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904",
+    "detailed_cpu_cores_dataset.csv": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c",
+    "disk_dataset.csv": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f",
+    "network_dataset.csv": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2",
+    "packet-loss-dataset.csv": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37",
+    "throughputs_dataset.csv": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+  },
+  "generated_files": [
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/rolling_predictive_value.parquet",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/rolling_paired_error_summary.parquet",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/rolling_consistency_summary.csv",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/cpu_throughput_robustness.csv",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/cpu_context_comparison.csv",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/rolling_lead_summary.csv",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/figures/01_cpu_throughput_gain_by_lead_machine.png",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/figures/02_cpu_throughput_fold_consistency.png",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/figures/03_throughput_vs_lomo_context_by_lead.png",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/figures/04_positive_fold_fraction.png",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/figures/05_rolling_test_block_timeline.png",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/ROLLING_ROBUSTNESS_REPORT.md",
+    "/Users/fgtek002/TimeTrack/discovery/03_rolling_robustness/outputs/rolling_validation.json"
+  ]
+}

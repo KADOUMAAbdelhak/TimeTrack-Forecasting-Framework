@@ -1,0 +1,19 @@
+dataset,previous_timestamp,next_timestamp,interval_seconds,gt_2x_median,gt_5x_median,gt_30_minutes,gt_1_hour
+compute_dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+compute_dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True
+detailed_cpu_cores_dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+detailed_cpu_cores_dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True
+disk_dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+disk_dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True
+network_dataset.csv,2024-06-26 22:28:08.975080,2024-06-26 22:29:34.645226,85.670146,True,False,False,False
+network_dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+network_dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True
+network_dataset.csv,2024-07-10 13:11:16.248259,2024-07-10 13:12:42.002445,85.754186,True,False,False,False
+network_dataset.csv,2024-07-11 07:21:53.700442,2024-07-11 07:23:19.463187,85.762745,True,False,False,False
+network_dataset.csv,2024-07-11 07:31:05.152420,2024-07-11 07:32:30.784428,85.632008,True,False,False,False
+network_dataset.csv,2024-07-12 17:11:43.473972,2024-07-12 17:13:09.037150,85.563178,True,False,False,False
+network_dataset.csv,2024-07-15 14:43:05.664436,2024-07-15 14:44:31.188415,85.523979,True,False,False,False
+packet-loss-dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+packet-loss-dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True
+throughputs_dataset.csv,2024-06-28 06:32:38.521594,2024-06-28 06:38:08.604979,330.083385,True,True,False,False
+throughputs_dataset.csv,2024-06-28 13:10:49.165290,2024-07-03 10:05:20.693178,420871.527888,True,True,True,True

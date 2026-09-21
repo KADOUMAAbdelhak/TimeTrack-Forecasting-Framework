@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "runtime_seconds": 2.172014791000038,
+  "peak_rss_bytes": 286195712,
+  "thresholds": {
+    "strong_mae_pct": 3.0,
+    "strong_rmse_pct": 2.0,
+    "strong_r2_delta_strict": 0.0,
+    "strong_abs_spearman": 0.2,
+    "strong_positive_segment_weight": 0.67,
+    "strong_min_test_segments": 2,
+    "moderate_mae_pct": 1.0,
+    "moderate_rmse_pct": 0.5,
+    "moderate_r2_delta": 0.0,
+    "moderate_abs_spearman": 0.1,
+    "moderate_positive_segment_weight": 0.5,
+    "neighbor_mae_pct": 1.0
+  },
+  "experiments_classified": 4928,
+  "unique_classified_experiment_ids": 4928,
+  "classification_counts": {
+    "STRONG": 0,
+    "MODERATE": 163,
+    "WEAK": 3025,
+    "UNSUPPORTED": 1740
+  },
+  "segment_level_experiment_ids": 4928,
+  "eligible_test_segment_distribution": {
+    "1": 4928
+  },
+  "every_experiment_exactly_one_test_segment": true,
+  "strong_numeric_but_segment_ineligible": 38,
+  "best_augmentations_selected_by_validation_only": true,
+  "test_based_predictor_selection": false,
+  "models_rerun": false,
+  "input_hashes_unchanged": true,
+  "canonical_panel_unchanged": true,
+  "raw_hashes_match_phase1_and_unchanged": true,
+  "total_figure_count": 10,
+  "association_figure_count": 5,
+  "predictive_figure_count": 5,
+  "report_numbered_answers": 17,
+  "input_hashes": {
+    "ridge": "86a7777f98fc7dcafc0a3f16a0d090b6a5257fb309e86625d8fbab4924ea0bf2",
+    "ridge_segments": "013fd55ca3273a962a96afb2d797ea945cd86179399ceed9a2466b0ec772e9e6",
+    "test_association": "b04892576e6313a3aac34974a3f741c8adfd7a2db2b5b5fe2b704026f67ea42f",
+    "selected_lags": "d370c7d40b11237d57e8585882c4bda2adbc244d6ca4e41fab9862d2865b5296",
+    "association_direction_summary": "9f67fd141f71c362681dd29a4982f1ad3105b59d313b5bfa3ad07c9e51367153",
+    "cross_machine_association": "b860ec5c3d12fb541f53460ef9448c5213983f3fe00fb6db96de247a03b5f17a",
+    "association_lead_decay": "b7680b6e83830fb713c7bbfbf622009695be4d0729c6821b133766614e440f65",
+    "ridge_validation": "3e8a2e93f3a61bd7f8ed497b12c16570dcb26130e38f83f4f401f666bc61f756",
+    "panel": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "registry": "cf8af7a315d0717bf6e1b8865677999afe4d73088c249498065ee499bf98f562",
+    "protocol": "0098b272411cc5c546613933407928b6acdf8ba8e6e7a878528db6c295c56283"
+  },
+  "raw_hashes": {
+    "compute_dataset.csv": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904",
+    "detailed_cpu_cores_dataset.csv": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c",
+    "disk_dataset.csv": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f",
+    "network_dataset.csv": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2",
+    "packet-loss-dataset.csv": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37",
+    "throughputs_dataset.csv": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+  },
+  "generated_files": [
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/dependency_evidence_classified.parquet",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/dependency_classification_counts.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/resource_direction_predictive_summary.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/cross_machine_predictive_summary.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/level_vs_change_predictive_summary.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/predictive_lead_decay.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/validation_selected_best_augmentations.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/figures/06_resource_direction_test_mae_gain_heatmap.png",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/figures/07_cpu_predictive_lead_decay.png",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/figures/08_memory_predictive_lead_decay.png",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/figures/09_disk_predictive_lead_decay.png",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/figures/10_cross_machine_predictive_comparison.png",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/DEPENDENCY_ANALYSIS_REPORT.md",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/dependency_synthesis_validation.json"
+  ]
+}

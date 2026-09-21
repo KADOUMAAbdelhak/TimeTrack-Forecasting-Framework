@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "runtime_seconds": 17.002776500001346,
+  "peak_rss_mb": 1751.546875,
+  "python": "3.13.2",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "pandas": "3.0.5",
+  "numpy": "2.5.1",
+  "raw_hashes_unchanged": true,
+  "files_audited": [
+    "compute_dataset.csv",
+    "detailed_cpu_cores_dataset.csv",
+    "disk_dataset.csv",
+    "network_dataset.csv",
+    "packet-loss-dataset.csv",
+    "throughputs_dataset.csv"
+  ],
+  "criteria": {
+    "near_constant_dominant_fraction": 0.99,
+    "zero_dominated_fraction": 0.95,
+    "sparse_nonmissing_fraction": 0.05,
+    "high_correlation_abs_pearson": 0.995,
+    "outlier_iqr_multiplier": 3.0
+  }
+}

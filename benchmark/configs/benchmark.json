@@ -1,0 +1,40 @@
+{
+  "future_leads": [1, 2, 4, 8, 16, 32, 64, 128],
+  "context_lengths": [32, 64, 128],
+  "feature_sets": [
+    "F0_LOCAL",
+    "F1_THROUGHPUT",
+    "F2_LOMO_MEAN",
+    "F3_LOMO_MEDIAN",
+    "F4_THROUGHPUT_LOMO_MEAN",
+    "F5_THROUGHPUT_LOMO_MEDIAN"
+  ],
+  "outer_folds": 5,
+  "initial_train_fraction": 0.5,
+  "outer_test_fraction": 0.1,
+  "inner_validation_fraction": 0.15,
+  "ridge_alpha_grid": [0.01, 0.1, 1.0, 10.0, 100.0],
+  "lightgbm_grid": {
+    "num_leaves": [15, 31],
+    "learning_rate": [0.03, 0.05],
+    "n_estimators": [200, 400]
+  },
+  "neural_seeds": [0, 1, 2],
+  "neural": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_epochs": 50,
+    "early_stopping_patience": 7,
+    "loss": "MSE",
+    "gradient_clip_norm": 1.0
+  },
+  "dlinear": {
+    "moving_average_kernel": 25
+  },
+  "tcn": {
+    "channels": [32, 32],
+    "kernel_size": 3,
+    "dropout": 0.1
+  }
+}

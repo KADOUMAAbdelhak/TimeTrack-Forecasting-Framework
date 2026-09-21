@@ -1,0 +1,120 @@
+{
+  "status": "PASS",
+  "runtime_seconds": 22.08679154099991,
+  "peak_rss_bytes": 719601664,
+  "sklearn_version": "1.9.1",
+  "ridge_constructor": "Ridge(alpha=1.0, fit_intercept=True, copy_X=True, max_iter=None, tol=0.0001, solver='auto', positive=False, random_state=None)",
+  "ridge_settings": {
+    "alpha": 1.0,
+    "fit_intercept": true,
+    "copy_X": true,
+    "max_iter": null,
+    "tol": 0.0001,
+    "solver": "auto",
+    "positive": false,
+    "random_state": null
+  },
+  "standard_scaler_settings": {
+    "copy": true,
+    "with_mean": true,
+    "with_std": true
+  },
+  "future_leads": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "target_history_lags": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "predictor_history_lags": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "ridge_alpha_exactly_1": true,
+  "hpo_performed": false,
+  "association_selected_lag_used_as_ridge_feature": false,
+  "expected_experiments": 4928,
+  "evaluated_experiments": 4928,
+  "unevaluable_experiments": 0,
+  "counts_by_target_family": {
+    "memory": 2016,
+    "CPU": 1008,
+    "throughput": 1008,
+    "disk": 896
+  },
+  "counts_by_analysis_mode": {
+    "native": 2016,
+    "change": 1456,
+    "level": 1456
+  },
+  "sample_count_ranges": {
+    "train": {
+      "min": 19768,
+      "max": 24648
+    },
+    "validation": {
+      "min": 6296,
+      "max": 8215
+    },
+    "test": {
+      "min": 6668,
+      "max": 8215
+    }
+  },
+  "segment_level_result_rows": 4928,
+  "feature_window_crossings": 0,
+  "target_window_crossings": 0,
+  "train_validation_target_time_leakage_failures": 0,
+  "validation_test_target_time_leakage_failures": 0,
+  "baseline_augmented_row_mismatch_experiments": 0,
+  "same_target_labels_for_baseline_and_augmentation": true,
+  "scaling_fit_on_train_only": true,
+  "test_used_for_model_fitting": false,
+  "test_used_for_scaling": false,
+  "test_used_for_candidate_selection": false,
+  "baseline_consistency_rows": 336,
+  "baseline_consistency_failures": 0,
+  "canonical_panel_unchanged": true,
+  "canonical_registry_unchanged": true,
+  "all_immutable_inputs_unchanged": true,
+  "raw_hashes_match_phase1_and_unchanged": true,
+  "immutable_input_hashes": {
+    "panel": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "registry": "cf8af7a315d0717bf6e1b8865677999afe4d73088c249498065ee499bf98f562",
+    "protocol": "0098b272411cc5c546613933407928b6acdf8ba8e6e7a878528db6c295c56283",
+    "splits": "37cc910bafea8ff3c597235a74f863be6db3b71919073578dc17437fabc0fa80",
+    "association_manifest": "d370c7d40b11237d57e8585882c4bda2adbc244d6ca4e41fab9862d2865b5296",
+    "association_test": "b04892576e6313a3aac34974a3f741c8adfd7a2db2b5b5fe2b704026f67ea42f"
+  },
+  "raw_hashes": {
+    "compute_dataset.csv": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904",
+    "detailed_cpu_cores_dataset.csv": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c",
+    "disk_dataset.csv": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f",
+    "network_dataset.csv": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2",
+    "packet-loss-dataset.csv": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37",
+    "throughputs_dataset.csv": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+  },
+  "generated_files": [
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/incremental_predictive_value.parquet",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/incremental_predictive_value_by_segment.parquet",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/baseline_consistency.csv",
+    "/Users/fgtek002/TimeTrack/discovery/02_dependency_analysis/outputs/ridge_screen_validation.json"
+  ]
+}

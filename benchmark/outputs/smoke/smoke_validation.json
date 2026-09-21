@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "scientific_interpretation_allowed": false,
+  "machine": "machine01",
+  "outer_fold": 1,
+  "feature_sets": [
+    "F0_LOCAL",
+    "F5_THROUGHPUT_LOMO_MEDIAN"
+  ],
+  "models": [
+    "Persistence",
+    "Ridge",
+    "LightGBM",
+    "DLinear",
+    "TCN"
+  ],
+  "neural_seed": 0,
+  "context_length": 32,
+  "smoke_training_caps": {
+    "inner_train": 1024,
+    "inner_validation": 512,
+    "outer_train": 2048,
+    "outer_test": 512
+  },
+  "model_feature_executions": 10,
+  "all_output_shapes_n_by_8": true,
+  "exact_future_leads": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "phase1c_boundary_equivalence": {
+    "checked": 280,
+    "failures": 0,
+    "pass": true
+  },
+  "outer_target_time_leakage": 0,
+  "inner_target_time_leakage": 0,
+  "segment_crossings": 0,
+  "outer_test_used_for_selection": false,
+  "target_scaled": false,
+  "panel_unchanged": true,
+  "raw_hashes_unchanged": true,
+  "raw_hashes_match_phase1": true,
+  "runtime_seconds": 5.116089457998896,
+  "peak_rss_bytes": 601980928
+}

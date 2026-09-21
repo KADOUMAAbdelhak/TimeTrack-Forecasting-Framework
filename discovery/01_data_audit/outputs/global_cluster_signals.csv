@@ -1,0 +1,12 @@
+dataset,column,resource_family,metric,scope,machine,host,interface,core,unit_if_inferable,signal_type,notes
+compute_dataset.csv,totalProvMemory,memory,provisioned memory,cluster/global,,,,,bytes (inferred),configuration/level,
+compute_dataset.csv,cluster AM,memory,available memory,cluster,,,,,bytes (inferred),level,
+compute_dataset.csv,cluster UM,memory,used memory,cluster,,,,,bytes (inferred),level,
+compute_dataset.csv,totalNumberOfCores,CPU,CPU core count,cluster/global,,,,,cores,configuration/count,
+compute_dataset.csv,cluster Available disk space,disk/storage,available disk,cluster,,,,,bytes (inferred),level,
+compute_dataset.csv,cluster UD,disk/storage,used disk,cluster,,,,,bytes (inferred),level,
+network_dataset.csv,maxrttWithGoogleDns,latency,maximum RTT,global,,,,,milliseconds (inferred),continuous,
+network_dataset.csv,minRttwithGoogleDns,latency,minimum RTT,global,,,,,milliseconds (inferred),continuous,
+network_dataset.csv,averageRttWithGoogleDns,latency,average RTT,global,,,,,milliseconds (inferred),continuous,
+network_dataset.csv,mdevrttWithGoogleDns,latency,RTT mean deviation,global,,,,,milliseconds (inferred),continuous,
+network_dataset.csv,jitterWithGoogleDns,jitter,network jitter,global,,,,,milliseconds (inferred),continuous,

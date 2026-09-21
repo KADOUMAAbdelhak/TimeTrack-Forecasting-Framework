@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "raw_hashes_match_phase1_and_unchanged": true,
+  "rows": 41356,
+  "columns_including_timestamp_interval_segment": 116,
+  "registered_signals": 113,
+  "timestamp_min": "2024-06-24 13:37:06.164306",
+  "timestamp_max": "2024-07-19 16:27:05.246403",
+  "timestamps_strictly_increasing": true,
+  "duplicate_timestamps": 0,
+  "all_file_intersection_size": 41356,
+  "all_file_union_size": 41362,
+  "median_interval_seconds": 42.285164,
+  "segment_gap_threshold_seconds": 84.570328,
+  "temporal_segments": 9,
+  "network_missing_timestamp_boundaries_preserved": 6,
+  "throughput_primary_resolved_all_machines": true,
+  "per_core_columns_in_primary_panel": 0,
+  "split_rows": 224,
+  "split_window_crossings": 0,
+  "association_lags": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "ridge_history_lags": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "future_leads": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "runtime_seconds": 12.651281542001016,
+  "python": "3.13.2",
+  "pandas": "3.0.5",
+  "pyarrow_engine": "pandas default parquet engine",
+  "hashes_before": {
+    "compute_dataset.csv": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904",
+    "detailed_cpu_cores_dataset.csv": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c",
+    "disk_dataset.csv": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f",
+    "network_dataset.csv": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2",
+    "packet-loss-dataset.csv": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37",
+    "throughputs_dataset.csv": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+  },
+  "hashes_after": {
+    "compute_dataset.csv": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904",
+    "detailed_cpu_cores_dataset.csv": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c",
+    "disk_dataset.csv": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f",
+    "network_dataset.csv": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2",
+    "packet-loss-dataset.csv": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37",
+    "throughputs_dataset.csv": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+  }
+}

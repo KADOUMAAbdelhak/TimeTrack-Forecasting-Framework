@@ -1,0 +1,7 @@
+dataset,row_timestamps,unique_timestamps,common_intersection_size,global_union_size,missing_from_global_union,missing_vs_compute_reference,extra_vs_compute_reference,exactly_matches_compute_timestamp_sequence,nearest_timestamp_matching_required_for_exact_inner_join,notes
+compute_dataset.csv,41362,41362,41356,41362,0,0,0,True,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.
+detailed_cpu_cores_dataset.csv,41362,41362,41356,41362,0,0,0,True,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.
+disk_dataset.csv,41362,41362,41356,41362,0,0,0,True,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.
+network_dataset.csv,41356,41356,41356,41362,6,6,0,False,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.
+packet-loss-dataset.csv,41362,41362,41356,41362,0,0,0,True,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.
+throughputs_dataset.csv,41362,41362,41356,41362,0,0,0,True,False,Exact timestamp join loses rows listed as missing; nearest matching is not required for shared timestamps and is not performed.

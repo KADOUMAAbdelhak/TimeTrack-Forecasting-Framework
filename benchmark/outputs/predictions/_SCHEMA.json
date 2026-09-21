@@ -1,0 +1,13 @@
+{
+  "format": "parquet partitioned by run_id",
+  "columns": [
+    "run_id",
+    "origin_timestamp",
+    "machine",
+    "outer_fold",
+    "lead",
+    "y_true",
+    "y_pred",
+    "segment_id"
+  ]
+}
