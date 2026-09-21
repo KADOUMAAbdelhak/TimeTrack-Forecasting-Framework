@@ -1,0 +1,246 @@
+%% Supplementary material for the TimeTrack FGCS manuscript
+\documentclass[a4paper,fleqn]{cas-dc}
+
+\usepackage[numbers]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{xurl}
+\hypersetup{pdfauthor={Anonymous},pdftitle={Supplementary Material (Anonymous)}}
+
+% CAS prints an empty ORCID footnote when none are supplied.
+\let\printorcid\relax
+
+% Resolve class/style and assets from the FGCS root when compiling in this folder.
+\makeatletter
+\def\input@path{{../}{../tables/}{../figs/}{./}}
+\makeatother
+
+\title[mode=title]{Supplementary Material: Hierarchy-Aware Forecast Reconciliation for Multi-Level Cloud Telemetry}
+
+\author[1]{Anonymous Author(s)}
+\affiliation[1]{organization={Anonymous institution}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\maketitle
+\onecolumn
+
+% Supplementary numbering independent of the main article
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{section}{0}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\section{Purpose}
+This supplement collects protocol detail deferred from the main article,
+the full claim matrix, extended bootstrap forest, memory
+accuracy-versus-output-width plot, and pointers to seed/peak CSV grids.
+All numbers derive from accepted final aggregate and robustness artifacts.
+
+\section{Exact fold boundaries}
+\input{../tables/supplementary_fold_boundaries}
+
+\section{Full hyperparameter configurations}
+\begin{itemize}
+  \item Persistence: no selected hyperparameters.
+  \item {EWMA}: $\alpha=0.9$ for memory, {CPU}, and disk
+    (\path{results/final/robustness/01_ewma_baselines/selected_ewma_params.yaml}).
+  \item Ridge search grid: $\{10^{-4},10^{-2},1,10^{2},10^{4}\}$.
+    Selected: {CPU} $\alpha=10^{4}$; memory/disk $\alpha=1$
+    (\path{results/final/packs/00_shared_tuning/selected_hyperparameters.yaml}).
+  \item LightGBM {CPU}: $n_{\mathrm{estimators}}=300$, learning rate $0.03$,
+    $num\_leaves=31$.
+  \item LightGBM memory: $n_{\mathrm{estimators}}=100$, learning rate $0.05$,
+    $num\_leaves=15$.
+  \item Disk LightGBM: transferred memory configuration (stress evidence only).
+  \item DLinear: $\le 40$ epochs, patience $5$, one thread,
+    $\le 200$ batches/epoch, 180\,s timeout; train-only input/target
+    standardization with inverse transform before metrics.
+\end{itemize}
+
+\section{Statistical families}
+\subsection*{Primary analysis Holm families ($\alpha=0.05$)}
+\texttt{memory\_ridge}, \texttt{memory\_dlinear}, \texttt{memory\_lightgbm},
+\texttt{cpu\_ridge}, \texttt{cpu\_dlinear}, \texttt{cpu\_lightgbm},
+\texttt{disk\_ridge}, \texttt{disk\_lightgbm}.
+Claim~A uses a separate family
+\texttt{cpu\_base\_model\_lightgbm\_vs\_persistence}.
+
+\subsection*{Final robustness Holm families (eight)}
+\texttt{cpu\_lightgbm\_vs\_deterministic},
+\texttt{cpu\_lightgbm\_reconciliation},
+\texttt{memory\_lightgbm\_vs\_ewma},
+\texttt{memory\_lightgbm\_reconciliation},
+\texttt{cpu\_dlinear\_vs\_deterministic},
+\texttt{cpu\_dlinear\_reconciliation},
+\texttt{memory\_dlinear\_vs\_ewma},
+\texttt{memory\_dlinear\_reconciliation}.
+
+\subsection*{Atomic comparisons and support rules}
+Atomic units preserve hierarchy $\times$ model $\times$ reconciliation method
+$\times$ output width $\times$ fold (and seed for stochastic robustness).
+Support classes combine relative-effect direction, direct bootstrap CI, fold
+consistency, output-width consistency, seed consistency where applicable, and
+top/bottom trade-off labels; seed-mean pooling alone cannot upgrade a reversed
+seed (see \texttt{docs/FINAL\_STATISTICAL\_PROTOCOL.md} and
+\texttt{configs/final\_robustness\_statistics.yaml}).
+
+\section{Seed policy}
+\begin{itemize}
+  \item Seeds $\{0,1,2\}$ for LightGBM and DLinear robustness checks.
+  \item Python/\texttt{random} and NumPy seeds follow the frozen runner policy
+    for each claim-generating pack.
+  \item DLinear calls \texttt{torch.manual\_seed(seed)} at fit time and retains
+    seed-dependent training variation.
+  \item LightGBM receives \texttt{random\_state=seed} with library-default
+    \texttt{subsample}=1.0 (not overridden); frozen predictions are bitwise
+    identical across seeds and are reported as invariance, not independent
+    replicates.
+  \item Thread settings: DLinear uses one thread in the frozen budget; LightGBM
+    uses \texttt{n\_jobs=-1}.
+\end{itemize}
+
+\section{Frozen provenance}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Layer & Snapshot ID \\
+\midrule
+Predictions & Prediction snapshot P2 \\
+Statistics & Statistical snapshot S1 \\
+Peaks & Peak snapshot K1 \\
+Robustness extension & Robustness snapshot R2a \\
+Robustness statistics & Robustness snapshot R2b \\
+Reporting & Reporting snapshot F2 \\
+\bottomrule
+\end{tabular}
+
+
+oindent Dataset fingerprint and pack hashes are withheld for double-anonymized
+review and are available from the corresponding author after acceptance.
+Neutral snapshot IDs above map to the immutable freeze tags used in the
+identified artifact repository.
+
+\section{Deferred main-article figures and tables}
+The following artifacts were moved from the main Results to keep the article
+within the page budget while preserving one-step/$H$-width semantics.
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/coherence_before_after.pdf}
+\caption{CPU coherence error before and after reconciliation for Ridge and
+LightGBM ($\log_{10}(\mathrm{error}+\varepsilon)$, $\varepsilon=10^{-3}$).}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/memory_reconciliation_vs_ewma.pdf}
+\caption{Memory relative MAE versus EWMA independent by model--method and
+seed.}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/cpu_peak_results.pdf}
+\caption{CPU peak/high-load metrics at q90/q95 (main-article stacked layout,
+deferred for page budget). Color encodes model; marker shape encodes
+reconciliation method. All metrics are one-step evaluations.}
+\label{fig:cpupeak}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/disk_boundary.pdf}
+\caption{Disk Ridge reconciliation modes for used-disk level with
+persistence/{EWMA} reference lines (deferred from the main Results for page
+budget). The main-article disk boundary table retains the primary numerical
+evidence; LightGBM disk stress fits are omitted here as they are not primary
+comparisons. Metrics evaluate the first predicted component (one-step).}
+\label{fig:disk}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/dlinear_memory_peak_bias_by_seed.pdf}
+\caption{Signed DLinear memory peak bias by seed and method.}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.85\textwidth]{../figs/cpu_reconciliation_effect_by_seed.pdf}
+\caption{CPU relative MAE versus independent by seed for LightGBM and DLinear
+reconciliation modes.}
+\end{figure}
+
+\input{../tables/seed_robustness}
+\input{../tables/peak_results}
+\input{../tables/method_selection}
+\input{../tables/claim_summary}
+
+\section{Full claim-support matrix}
+\input{claim_support_full}
+
+\section{Extended bootstrap comparisons}
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/bootstrap_relative_effects.pdf}
+\caption{Claim-relevant bootstrap relative MAE effects with mean direct
+relative 95\% intervals (deferred from the main Results for page budget).
+Negative values favor the first named method.}
+\label{fig:boot}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/supplementary/bootstrap_relative_effects_full.pdf}
+\caption{Extended robustness relative-effect forest plot.}
+\end{figure}
+
+\section{Memory accuracy versus output width}
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.7\textwidth]{../figs/supplementary/memory_accuracy_vs_output_width.pdf}
+\caption{Memory one-step MAE versus joint prediction width $H$.
+Metrics evaluate the first predicted component; $H$ is not evaluation lead time.}
+\end{figure}
+
+\section{CSV grids}
+Full seed-by-fold-by-width tables:
+\texttt{results/main/table05\_seed\_robustness.csv}.\\
+Peak matrices:
+\texttt{results/main/table08\_peak\_operational\_evidence.csv}.\\
+Statistical families:
+\texttt{results/main/table06\_final\_statistical\_evidence.csv}.
+
+\section{Wide peak layouts}
+The main article uses single-column stacked peak panels for column fit.
+Side-by-side wide layouts (same frozen numbers) are included here.
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/supplementary/cpu_peak_results_wide.pdf}
+\caption{CPU peak/high-load metrics (wide two-panel layout).}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/supplementary/dlinear_memory_peak_bias_wide.pdf}
+\caption{DLinear memory peak bias by seed (wide two-panel layout).}
+\end{figure}
+
+\begin{figure}[pos=h]
+\centering
+\includegraphics[width=0.98\textwidth]{../figs/supplementary/top_bottom_tradeoff_wide.pdf}
+\caption{Top versus bottom accuracy trade-offs (wide two-panel layout).}
+\end{figure}
+
+\end{document}

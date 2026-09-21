@@ -19,14 +19,22 @@ network_dataset.csv
 packet-loss-dataset.csv
 throughputs_dataset.csv
 
+# Archived legacy environment and materialized raw dataset duplicates (never commit)
+old_fgcs_rejected/.venv_legacy/
+old_fgcs_rejected/root_dataset_duplicates/
+old_fgcs_rejected/.pytest_cache/
+
 # Large/intermediate processed data
 data/interim/
 data/processed/
+old_fgcs_rejected/data_interim/
+old_fgcs_rejected/data_processed/
 *.parquet
 *.feather
 *.h5
 *.hdf5
 docs/_audit_cache/
+old_fgcs_rejected/docs/_audit_cache/
 
 # Model checkpoints and tuning databases
 results/**/models/
@@ -39,6 +47,16 @@ results/final/metrics/smoke_cache/
 results/final/tuning/
 results/final/packs/**/metrics/predictions/
 results/final/packs/**/logs/
+old_fgcs_rejected/results/**/models/
+old_fgcs_rejected/results/**/predictions/
+old_fgcs_rejected/results/**/tuning/*.db
+old_fgcs_rejected/results/**/tuning/*.sqlite
+old_fgcs_rejected/results/**/tuning/*.sqlite3
+old_fgcs_rejected/results/tuning/
+old_fgcs_rejected/results/final/metrics/smoke_cache/
+old_fgcs_rejected/results/final/tuning/
+old_fgcs_rejected/results/final/packs/**/metrics/predictions/
+old_fgcs_rejected/results/final/packs/**/logs/
 
 *.pt
 *.pth
@@ -50,6 +68,7 @@ results/final/packs/**/logs/
 # Logs and temporary outputs
 *.log
 results/**/logs/
+old_fgcs_rejected/results/**/logs/
 tmp/
 .cache/
 
@@ -57,6 +76,9 @@ tmp/
 results/models/
 results/predictions/
 results/paper/
+old_fgcs_rejected/results/models/
+old_fgcs_rejected/results/predictions/
+old_fgcs_rejected/results/paper/
 
 # Keep lightweight tuning metadata (json/csv/png) trackable; DBs already ignored above.
 # Pilot statistical test JSONs may be tracked when small.

@@ -1,0 +1,156 @@
+{
+  "checked_at": "2026-09-21T15:01:12",
+  "files": [
+    {
+      "name": "compute_dataset.csv",
+      "raw": {
+        "size_bytes": 26942966,
+        "inode": 43767063,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 56,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904"
+      },
+      "root": {
+        "size_bytes": 26942966,
+        "inode": 43767063,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 56,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "9204c25fe1079a18982f811131910d03f60d075aea29353f4198e434ecbe8904"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    },
+    {
+      "name": "detailed_cpu_cores_dataset.csv",
+      "raw": {
+        "size_bytes": 331354469,
+        "inode": 43767064,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 473,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c"
+      },
+      "root": {
+        "size_bytes": 331354469,
+        "inode": 43767064,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 473,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "8630691e51d926269ebdc4f1df5c6848e2e879eafb67aa68958b5667713f708c"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    },
+    {
+      "name": "disk_dataset.csv",
+      "raw": {
+        "size_bytes": 8425241,
+        "inode": 43767068,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 15,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f"
+      },
+      "root": {
+        "size_bytes": 8425241,
+        "inode": 43767068,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 15,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "2e4dcc1e2a79380dbba876422e42a6741a08da5cb55c15d29fb63a610d24aa6f"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    },
+    {
+      "name": "network_dataset.csv",
+      "raw": {
+        "size_bytes": 2932318,
+        "inode": 43767069,
+        "nlink": 2,
+        "n_rows": 41356,
+        "n_cols": 6,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2"
+      },
+      "root": {
+        "size_bytes": 2932318,
+        "inode": 43767069,
+        "nlink": 2,
+        "n_rows": 41356,
+        "n_cols": 6,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "75ffdd7fc260010ad3a4549af3b3978eb1aa7657e5f992969b0c5a58e4fcf1d2"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    },
+    {
+      "name": "packet-loss-dataset.csv",
+      "raw": {
+        "size_bytes": 12389830,
+        "inode": 43767070,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 91,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37"
+      },
+      "root": {
+        "size_bytes": 12389830,
+        "inode": 43767070,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 91,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "e586455adbb3561795ad6309c71ea3d8fb650251ec68c19c85ba08d2b4a5eb37"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    },
+    {
+      "name": "throughputs_dataset.csv",
+      "raw": {
+        "size_bytes": 40993889,
+        "inode": 43767071,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 91,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+      },
+      "root": {
+        "size_bytes": 40993889,
+        "inode": 43767071,
+        "nlink": 2,
+        "n_rows": 41362,
+        "n_cols": 91,
+        "ts_first": "2024-06-24 13:37:06.164306",
+        "ts_last": "2024-07-19 16:27:05.246403",
+        "sha256": "22739d4527c56a15ba11ebf4090dc44138bc5549cea88d0eddc126a70053393f"
+      },
+      "byte_identical": true,
+      "same_inode_hardlink": true
+    }
+  ],
+  "all_byte_identical": true
+}
