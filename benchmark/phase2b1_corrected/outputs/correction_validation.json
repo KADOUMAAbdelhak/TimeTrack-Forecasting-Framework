@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "decision_sha256": "72b5bf5b984c5eeb5b8d4b21b83f9b2fa9807f6fc944c79ee5edc89aeb33dd8e",
+  "support_comparisons": 350,
+  "support_hash_failures": 0,
+  "completed_comparators": 350,
+  "failed_comparators": 0,
+  "ridge_comparators": 175,
+  "lightgbm_comparators": 175,
+  "inner_ridge_fits": 2625,
+  "final_ridge_fits": 175,
+  "inner_lightgbm_lead_models": 33600,
+  "final_lightgbm_lead_models": 1400,
+  "candidate_reruns": 0,
+  "outer_test_controlled_selection": false,
+  "prediction_files": 350,
+  "sample_id_mismatches": 0,
+  "target_mismatches": 0,
+  "maximum_differences": {
+    "metric_abs_difference": 0.0,
+    "ridge_prediction_abs_difference": 0.0,
+    "gain_abs_difference": 0.0
+  },
+  "frozen_hashes_checked": 33,
+  "frozen_hash_failures": [],
+  "raw_hashes_unchanged": true,
+  "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+  "original_heavy_artifacts_checked": 632,
+  "original_heavy_artifact_failures": [],
+  "failures": []
+}

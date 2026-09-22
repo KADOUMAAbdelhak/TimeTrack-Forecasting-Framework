@@ -1,0 +1,33 @@
+{
+  "families": {
+    "Persistence": {
+      "completed_machines": 7,
+      "worker_runtime_seconds_sum": 4.368440209993423,
+      "candidate_fits": 0,
+      "final_models": 0,
+      "peak_worker_rss_bytes": 480460800,
+      "wall_runtime_seconds": 3.5980262919983943
+    },
+    "Ridge": {
+      "completed_machines": 7,
+      "worker_runtime_seconds_sum": 34.84336458299731,
+      "candidate_fits": 3150,
+      "final_models": 210,
+      "peak_worker_rss_bytes": 667090944,
+      "wall_runtime_seconds": 7.857147499998973
+    },
+    "LightGBM": {
+      "completed_machines": 7,
+      "worker_runtime_seconds_sum": 180131.169828958,
+      "candidate_fits": 40320,
+      "final_models": 1680,
+      "peak_worker_rss_bytes": 561512448,
+      "wall_runtime_seconds": 26982.400054375
+    }
+  },
+  "registered_runs": 630,
+  "metric_rows": 5040,
+  "analysis_runtime_seconds": 9.782760791997134,
+  "metric_recomputation_max_abs_difference": 0.0,
+  "total_recorded_wall_seconds": 27003.637988958995
+}

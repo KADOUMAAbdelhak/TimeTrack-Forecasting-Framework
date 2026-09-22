@@ -1,0 +1,1784 @@
+{
+  "completed_comparators": 350,
+  "failed_or_missing_comparators": 0,
+  "completed_comparator_ids": [
+    "LightGBM/F1_THROUGHPUT/machine01/1",
+    "LightGBM/F1_THROUGHPUT/machine01/2",
+    "LightGBM/F1_THROUGHPUT/machine01/3",
+    "LightGBM/F1_THROUGHPUT/machine01/4",
+    "LightGBM/F1_THROUGHPUT/machine01/5",
+    "LightGBM/F1_THROUGHPUT/machine02/1",
+    "LightGBM/F1_THROUGHPUT/machine02/2",
+    "LightGBM/F1_THROUGHPUT/machine02/3",
+    "LightGBM/F1_THROUGHPUT/machine02/4",
+    "LightGBM/F1_THROUGHPUT/machine02/5",
+    "LightGBM/F1_THROUGHPUT/machine03/1",
+    "LightGBM/F1_THROUGHPUT/machine03/2",
+    "LightGBM/F1_THROUGHPUT/machine03/3",
+    "LightGBM/F1_THROUGHPUT/machine03/4",
+    "LightGBM/F1_THROUGHPUT/machine03/5",
+    "LightGBM/F1_THROUGHPUT/machine04/1",
+    "LightGBM/F1_THROUGHPUT/machine04/2",
+    "LightGBM/F1_THROUGHPUT/machine04/3",
+    "LightGBM/F1_THROUGHPUT/machine04/4",
+    "LightGBM/F1_THROUGHPUT/machine04/5",
+    "LightGBM/F1_THROUGHPUT/machine05/1",
+    "LightGBM/F1_THROUGHPUT/machine05/2",
+    "LightGBM/F1_THROUGHPUT/machine05/3",
+    "LightGBM/F1_THROUGHPUT/machine05/4",
+    "LightGBM/F1_THROUGHPUT/machine05/5",
+    "LightGBM/F1_THROUGHPUT/machine06/1",
+    "LightGBM/F1_THROUGHPUT/machine06/2",
+    "LightGBM/F1_THROUGHPUT/machine06/3",
+    "LightGBM/F1_THROUGHPUT/machine06/4",
+    "LightGBM/F1_THROUGHPUT/machine06/5",
+    "LightGBM/F1_THROUGHPUT/machine07/1",
+    "LightGBM/F1_THROUGHPUT/machine07/2",
+    "LightGBM/F1_THROUGHPUT/machine07/3",
+    "LightGBM/F1_THROUGHPUT/machine07/4",
+    "LightGBM/F1_THROUGHPUT/machine07/5",
+    "LightGBM/F2_LOMO_MEAN/machine01/1",
+    "LightGBM/F2_LOMO_MEAN/machine01/2",
+    "LightGBM/F2_LOMO_MEAN/machine01/3",
+    "LightGBM/F2_LOMO_MEAN/machine01/4",
+    "LightGBM/F2_LOMO_MEAN/machine01/5",
+    "LightGBM/F2_LOMO_MEAN/machine02/1",
+    "LightGBM/F2_LOMO_MEAN/machine02/2",
+    "LightGBM/F2_LOMO_MEAN/machine02/3",
+    "LightGBM/F2_LOMO_MEAN/machine02/4",
+    "LightGBM/F2_LOMO_MEAN/machine02/5",
+    "LightGBM/F2_LOMO_MEAN/machine03/1",
+    "LightGBM/F2_LOMO_MEAN/machine03/2",
+    "LightGBM/F2_LOMO_MEAN/machine03/3",
+    "LightGBM/F2_LOMO_MEAN/machine03/4",
+    "LightGBM/F2_LOMO_MEAN/machine03/5",
+    "LightGBM/F2_LOMO_MEAN/machine04/1",
+    "LightGBM/F2_LOMO_MEAN/machine04/2",
+    "LightGBM/F2_LOMO_MEAN/machine04/3",
+    "LightGBM/F2_LOMO_MEAN/machine04/4",
+    "LightGBM/F2_LOMO_MEAN/machine04/5",
+    "LightGBM/F2_LOMO_MEAN/machine05/1",
+    "LightGBM/F2_LOMO_MEAN/machine05/2",
+    "LightGBM/F2_LOMO_MEAN/machine05/3",
+    "LightGBM/F2_LOMO_MEAN/machine05/4",
+    "LightGBM/F2_LOMO_MEAN/machine05/5",
+    "LightGBM/F2_LOMO_MEAN/machine06/1",
+    "LightGBM/F2_LOMO_MEAN/machine06/2",
+    "LightGBM/F2_LOMO_MEAN/machine06/3",
+    "LightGBM/F2_LOMO_MEAN/machine06/4",
+    "LightGBM/F2_LOMO_MEAN/machine06/5",
+    "LightGBM/F2_LOMO_MEAN/machine07/1",
+    "LightGBM/F2_LOMO_MEAN/machine07/2",
+    "LightGBM/F2_LOMO_MEAN/machine07/3",
+    "LightGBM/F2_LOMO_MEAN/machine07/4",
+    "LightGBM/F2_LOMO_MEAN/machine07/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine01/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine01/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine01/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine01/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine01/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine02/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine02/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine02/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine02/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine02/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine03/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine03/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine03/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine03/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine03/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine04/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine04/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine04/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine04/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine04/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine05/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine05/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine05/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine05/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine05/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine06/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine06/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine06/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine06/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine06/5",
+    "LightGBM/F3_LOMO_MEDIAN/machine07/1",
+    "LightGBM/F3_LOMO_MEDIAN/machine07/2",
+    "LightGBM/F3_LOMO_MEDIAN/machine07/3",
+    "LightGBM/F3_LOMO_MEDIAN/machine07/4",
+    "LightGBM/F3_LOMO_MEDIAN/machine07/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine01/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine01/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine01/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine01/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine01/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine02/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine02/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine02/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine02/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine02/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine03/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine03/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine03/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine03/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine03/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine04/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine04/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine04/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine04/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine04/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine05/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine05/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine05/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine05/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine05/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine06/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine06/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine06/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine06/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine06/5",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine07/1",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine07/2",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine07/3",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine07/4",
+    "LightGBM/F4_THROUGHPUT_LOMO_MEAN/machine07/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine01/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine01/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine01/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine01/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine01/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine02/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine02/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine02/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine02/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine02/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine03/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine03/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine03/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine03/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine03/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine04/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine04/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine04/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine04/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine04/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine05/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine05/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine05/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine05/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine05/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine06/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine06/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine06/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine06/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine06/5",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine07/1",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine07/2",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine07/3",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine07/4",
+    "LightGBM/F5_THROUGHPUT_LOMO_MEDIAN/machine07/5",
+    "Ridge/F1_THROUGHPUT/machine01/1",
+    "Ridge/F1_THROUGHPUT/machine01/2",
+    "Ridge/F1_THROUGHPUT/machine01/3",
+    "Ridge/F1_THROUGHPUT/machine01/4",
+    "Ridge/F1_THROUGHPUT/machine01/5",
+    "Ridge/F1_THROUGHPUT/machine02/1",
+    "Ridge/F1_THROUGHPUT/machine02/2",
+    "Ridge/F1_THROUGHPUT/machine02/3",
+    "Ridge/F1_THROUGHPUT/machine02/4",
+    "Ridge/F1_THROUGHPUT/machine02/5",
+    "Ridge/F1_THROUGHPUT/machine03/1",
+    "Ridge/F1_THROUGHPUT/machine03/2",
+    "Ridge/F1_THROUGHPUT/machine03/3",
+    "Ridge/F1_THROUGHPUT/machine03/4",
+    "Ridge/F1_THROUGHPUT/machine03/5",
+    "Ridge/F1_THROUGHPUT/machine04/1",
+    "Ridge/F1_THROUGHPUT/machine04/2",
+    "Ridge/F1_THROUGHPUT/machine04/3",
+    "Ridge/F1_THROUGHPUT/machine04/4",
+    "Ridge/F1_THROUGHPUT/machine04/5",
+    "Ridge/F1_THROUGHPUT/machine05/1",
+    "Ridge/F1_THROUGHPUT/machine05/2",
+    "Ridge/F1_THROUGHPUT/machine05/3",
+    "Ridge/F1_THROUGHPUT/machine05/4",
+    "Ridge/F1_THROUGHPUT/machine05/5",
+    "Ridge/F1_THROUGHPUT/machine06/1",
+    "Ridge/F1_THROUGHPUT/machine06/2",
+    "Ridge/F1_THROUGHPUT/machine06/3",
+    "Ridge/F1_THROUGHPUT/machine06/4",
+    "Ridge/F1_THROUGHPUT/machine06/5",
+    "Ridge/F1_THROUGHPUT/machine07/1",
+    "Ridge/F1_THROUGHPUT/machine07/2",
+    "Ridge/F1_THROUGHPUT/machine07/3",
+    "Ridge/F1_THROUGHPUT/machine07/4",
+    "Ridge/F1_THROUGHPUT/machine07/5",
+    "Ridge/F2_LOMO_MEAN/machine01/1",
+    "Ridge/F2_LOMO_MEAN/machine01/2",
+    "Ridge/F2_LOMO_MEAN/machine01/3",
+    "Ridge/F2_LOMO_MEAN/machine01/4",
+    "Ridge/F2_LOMO_MEAN/machine01/5",
+    "Ridge/F2_LOMO_MEAN/machine02/1",
+    "Ridge/F2_LOMO_MEAN/machine02/2",
+    "Ridge/F2_LOMO_MEAN/machine02/3",
+    "Ridge/F2_LOMO_MEAN/machine02/4",
+    "Ridge/F2_LOMO_MEAN/machine02/5",
+    "Ridge/F2_LOMO_MEAN/machine03/1",
+    "Ridge/F2_LOMO_MEAN/machine03/2",
+    "Ridge/F2_LOMO_MEAN/machine03/3",
+    "Ridge/F2_LOMO_MEAN/machine03/4",
+    "Ridge/F2_LOMO_MEAN/machine03/5",
+    "Ridge/F2_LOMO_MEAN/machine04/1",
+    "Ridge/F2_LOMO_MEAN/machine04/2",
+    "Ridge/F2_LOMO_MEAN/machine04/3",
+    "Ridge/F2_LOMO_MEAN/machine04/4",
+    "Ridge/F2_LOMO_MEAN/machine04/5",
+    "Ridge/F2_LOMO_MEAN/machine05/1",
+    "Ridge/F2_LOMO_MEAN/machine05/2",
+    "Ridge/F2_LOMO_MEAN/machine05/3",
+    "Ridge/F2_LOMO_MEAN/machine05/4",
+    "Ridge/F2_LOMO_MEAN/machine05/5",
+    "Ridge/F2_LOMO_MEAN/machine06/1",
+    "Ridge/F2_LOMO_MEAN/machine06/2",
+    "Ridge/F2_LOMO_MEAN/machine06/3",
+    "Ridge/F2_LOMO_MEAN/machine06/4",
+    "Ridge/F2_LOMO_MEAN/machine06/5",
+    "Ridge/F2_LOMO_MEAN/machine07/1",
+    "Ridge/F2_LOMO_MEAN/machine07/2",
+    "Ridge/F2_LOMO_MEAN/machine07/3",
+    "Ridge/F2_LOMO_MEAN/machine07/4",
+    "Ridge/F2_LOMO_MEAN/machine07/5",
+    "Ridge/F3_LOMO_MEDIAN/machine01/1",
+    "Ridge/F3_LOMO_MEDIAN/machine01/2",
+    "Ridge/F3_LOMO_MEDIAN/machine01/3",
+    "Ridge/F3_LOMO_MEDIAN/machine01/4",
+    "Ridge/F3_LOMO_MEDIAN/machine01/5",
+    "Ridge/F3_LOMO_MEDIAN/machine02/1",
+    "Ridge/F3_LOMO_MEDIAN/machine02/2",
+    "Ridge/F3_LOMO_MEDIAN/machine02/3",
+    "Ridge/F3_LOMO_MEDIAN/machine02/4",
+    "Ridge/F3_LOMO_MEDIAN/machine02/5",
+    "Ridge/F3_LOMO_MEDIAN/machine03/1",
+    "Ridge/F3_LOMO_MEDIAN/machine03/2",
+    "Ridge/F3_LOMO_MEDIAN/machine03/3",
+    "Ridge/F3_LOMO_MEDIAN/machine03/4",
+    "Ridge/F3_LOMO_MEDIAN/machine03/5",
+    "Ridge/F3_LOMO_MEDIAN/machine04/1",
+    "Ridge/F3_LOMO_MEDIAN/machine04/2",
+    "Ridge/F3_LOMO_MEDIAN/machine04/3",
+    "Ridge/F3_LOMO_MEDIAN/machine04/4",
+    "Ridge/F3_LOMO_MEDIAN/machine04/5",
+    "Ridge/F3_LOMO_MEDIAN/machine05/1",
+    "Ridge/F3_LOMO_MEDIAN/machine05/2",
+    "Ridge/F3_LOMO_MEDIAN/machine05/3",
+    "Ridge/F3_LOMO_MEDIAN/machine05/4",
+    "Ridge/F3_LOMO_MEDIAN/machine05/5",
+    "Ridge/F3_LOMO_MEDIAN/machine06/1",
+    "Ridge/F3_LOMO_MEDIAN/machine06/2",
+    "Ridge/F3_LOMO_MEDIAN/machine06/3",
+    "Ridge/F3_LOMO_MEDIAN/machine06/4",
+    "Ridge/F3_LOMO_MEDIAN/machine06/5",
+    "Ridge/F3_LOMO_MEDIAN/machine07/1",
+    "Ridge/F3_LOMO_MEDIAN/machine07/2",
+    "Ridge/F3_LOMO_MEDIAN/machine07/3",
+    "Ridge/F3_LOMO_MEDIAN/machine07/4",
+    "Ridge/F3_LOMO_MEDIAN/machine07/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine01/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine01/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine01/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine01/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine01/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine02/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine02/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine02/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine02/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine02/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine03/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine03/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine03/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine03/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine03/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine04/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine04/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine04/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine04/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine04/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine05/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine05/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine05/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine05/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine05/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine06/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine06/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine06/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine06/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine06/5",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine07/1",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine07/2",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine07/3",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine07/4",
+    "Ridge/F4_THROUGHPUT_LOMO_MEAN/machine07/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine01/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine01/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine01/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine01/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine01/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine02/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine02/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine02/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine02/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine02/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine03/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine03/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine03/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine03/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine03/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine04/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine04/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine04/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine04/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine04/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine05/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine05/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine05/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine05/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine05/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine06/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine06/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine06/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine06/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine06/5",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine07/1",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine07/2",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine07/3",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine07/4",
+    "Ridge/F5_THROUGHPUT_LOMO_MEDIAN/machine07/5"
+  ],
+  "failed_or_missing_comparator_ids": [],
+  "inner_candidate_fits": 6825,
+  "inner_lead_models": 33600,
+  "final_models": 1575,
+  "inner_runtime_seconds_sum": 52461.77368440213,
+  "final_runtime_seconds_sum": 3263.9573551679496,
+  "comparator_runtime_seconds_sum": 55759.89425871597,
+  "per_comparator": [
+    {
+      "run_id": "602972c02d1e648b8023cbb5",
+      "seconds": 0.1756201670068549
+    },
+    {
+      "run_id": "edd5d41a77e25da30f47cb4c",
+      "seconds": 0.1901949580060318
+    },
+    {
+      "run_id": "630819a94b4ed04cc612278c",
+      "seconds": 0.27714791700418573
+    },
+    {
+      "run_id": "d2f39c8d5ec1b73c529f8765",
+      "seconds": 0.3364644999965094
+    },
+    {
+      "run_id": "f7e4b55f128780845bc026a2",
+      "seconds": 0.2981915830023354
+    },
+    {
+      "run_id": "5179c57cf4e219d7d7f98f5f",
+      "seconds": 0.0826963750005234
+    },
+    {
+      "run_id": "c76f0208f73a91ce72c6a47b",
+      "seconds": 0.20763687499857042
+    },
+    {
+      "run_id": "ae0ac3cb2b3d4d9fec33aa47",
+      "seconds": 0.232796625001356
+    },
+    {
+      "run_id": "5afae9a2523ecec3c592efd5",
+      "seconds": 0.1868686660018284
+    },
+    {
+      "run_id": "afb9324ee61b1fb2bc05b133",
+      "seconds": 0.35724020800262224
+    },
+    {
+      "run_id": "80677a96faeafdb95ec26fec",
+      "seconds": 0.11084504199970979
+    },
+    {
+      "run_id": "1cfcc8231708f26b4abb5606",
+      "seconds": 0.1835493749968009
+    },
+    {
+      "run_id": "d2e75b92b6984fc1d9a2c8d1",
+      "seconds": 0.30775283300317824
+    },
+    {
+      "run_id": "103aa4c5a15698595b0ce999",
+      "seconds": 0.4684635830053594
+    },
+    {
+      "run_id": "59f174541b926ea2495868b2",
+      "seconds": 0.2556078749912558
+    },
+    {
+      "run_id": "4f7648ba1d1c25c5f50b4175",
+      "seconds": 0.5000549589894945
+    },
+    {
+      "run_id": "064da5b63543087361a9ec87",
+      "seconds": 0.32706520799547434
+    },
+    {
+      "run_id": "061748881a4d80ece62aa0d6",
+      "seconds": 0.1914077089895727
+    },
+    {
+      "run_id": "496910468a66fc8247294b8e",
+      "seconds": 0.21454312499554362
+    },
+    {
+      "run_id": "b7fb9164376d224274b650c3",
+      "seconds": 0.12665895799000282
+    },
+    {
+      "run_id": "6ce681e2179b246a2e99e240",
+      "seconds": 0.07257600000593811
+    },
+    {
+      "run_id": "7b5fc36df868e40fc070f3c7",
+      "seconds": 0.10521712500485592
+    },
+    {
+      "run_id": "5ab5360a1451601c7e6a211e",
+      "seconds": 0.1084838340029819
+    },
+    {
+      "run_id": "01319e1a3225e71cdc1f7420",
+      "seconds": 0.12132624999503605
+    },
+    {
+      "run_id": "920dd89f7c3a4b881797c014",
+      "seconds": 0.10077841699239798
+    },
+    {
+      "run_id": "163150c70f78d94516f87368",
+      "seconds": 0.1421427089953795
+    },
+    {
+      "run_id": "1541b91d08f6d0c1ea527681",
+      "seconds": 0.1700709170108894
+    },
+    {
+      "run_id": "042b5186bb2c554f6f5a0530",
+      "seconds": 0.16965887500555255
+    },
+    {
+      "run_id": "62318e32833478ef4c1dfdf1",
+      "seconds": 0.14926183299394324
+    },
+    {
+      "run_id": "8c7b14f0ff24a6b2cbb4e5df",
+      "seconds": 0.2456252499978291
+    },
+    {
+      "run_id": "d9c42c89008f4ace2e08d811",
+      "seconds": 0.09685916699527297
+    },
+    {
+      "run_id": "96344a50b68e0eb0ea332f04",
+      "seconds": 0.15197208400059026
+    },
+    {
+      "run_id": "4db811ce144b3ec5574391c1",
+      "seconds": 0.17180895899946336
+    },
+    {
+      "run_id": "5779a402811d5f1e24f05b3b",
+      "seconds": 0.15507170800992753
+    },
+    {
+      "run_id": "cd72e44274a61f3edd53a51c",
+      "seconds": 0.15993824999895878
+    },
+    {
+      "run_id": "f5f9583b26de0671f02718e1",
+      "seconds": 0.11957466699823271
+    },
+    {
+      "run_id": "1b95471d985b2268f58b2888",
+      "seconds": 0.15925795800285414
+    },
+    {
+      "run_id": "191c6e4ab33c8d920299f292",
+      "seconds": 0.38066325000545476
+    },
+    {
+      "run_id": "3a8d24aa9c3a222093dd5683",
+      "seconds": 0.11094387499906588
+    },
+    {
+      "run_id": "cfdf4e7bc4f64cb0b3ec9000",
+      "seconds": 0.14539237499411684
+    },
+    {
+      "run_id": "8bc80a7b456b150143a089f4",
+      "seconds": 0.09630691600614227
+    },
+    {
+      "run_id": "8d5eacb465b7d3bc0781b08c",
+      "seconds": 0.16686362499604002
+    },
+    {
+      "run_id": "c33e5c7ace3cc5d18e09f844",
+      "seconds": 0.49434283400478307
+    },
+    {
+      "run_id": "3e84eaf238d41a6c6b441272",
+      "seconds": 0.14269441599026322
+    },
+    {
+      "run_id": "7531aeeee9389ba55129fc37",
+      "seconds": 0.16239583300193772
+    },
+    {
+      "run_id": "491b8e5783f2b589385a502f",
+      "seconds": 0.10166908398969099
+    },
+    {
+      "run_id": "8d026429a9a2e65f78929387",
+      "seconds": 0.5857427080045454
+    },
+    {
+      "run_id": "56ab7a3af770ca72453a343f",
+      "seconds": 0.22152058299980126
+    },
+    {
+      "run_id": "6f51afb343a06da4822a517a",
+      "seconds": 0.1581811249925522
+    },
+    {
+      "run_id": "41e5d4af81166ed550b3ad86",
+      "seconds": 0.18184166701394133
+    },
+    {
+      "run_id": "2c6f7669e56e10fedb917480",
+      "seconds": 0.22716562500863802
+    },
+    {
+      "run_id": "59b4e7501e899507249b4b98",
+      "seconds": 0.21485516699613072
+    },
+    {
+      "run_id": "d20f078fe620418a3f76e062",
+      "seconds": 0.2755810829985421
+    },
+    {
+      "run_id": "742d8956569c9372cb411d56",
+      "seconds": 0.3280427909921855
+    },
+    {
+      "run_id": "27ee8eddb2872dd257d71cd5",
+      "seconds": 0.2748949579981854
+    },
+    {
+      "run_id": "4ce77fdc5a9f73e2fbbb4620",
+      "seconds": 0.09860612500051502
+    },
+    {
+      "run_id": "c8c2ce84430cbdf6a83efe08",
+      "seconds": 0.21344404200499412
+    },
+    {
+      "run_id": "bf8f4ca2efa1afd8ca85e7bb",
+      "seconds": 0.2540182910015574
+    },
+    {
+      "run_id": "ab56212396dafaecde5344e6",
+      "seconds": 0.4019992079993244
+    },
+    {
+      "run_id": "913000d0930c531e6cb706f4",
+      "seconds": 0.21711987500020768
+    },
+    {
+      "run_id": "8b5e22cd456a74e6514f650d",
+      "seconds": 0.10020516600343399
+    },
+    {
+      "run_id": "b5f6dcab5ee9af2328f82161",
+      "seconds": 0.20875150000210851
+    },
+    {
+      "run_id": "c09542e360ceaf2b67d56eff",
+      "seconds": 0.5390832080011023
+    },
+    {
+      "run_id": "39d1fba33eafce1187e13c95",
+      "seconds": 0.2551331669965293
+    },
+    {
+      "run_id": "dc8f259db97cd6b96eb523ed",
+      "seconds": 0.6935860410012538
+    },
+    {
+      "run_id": "7175a26d63521a76ca4a6139",
+      "seconds": 0.1514960000058636
+    },
+    {
+      "run_id": "84f48a52e6c8cedb7ef15ec7",
+      "seconds": 0.1294413750001695
+    },
+    {
+      "run_id": "06fac67ceefc3e59acd413ea",
+      "seconds": 0.2049362500110874
+    },
+    {
+      "run_id": "13a92042105c150da786f995",
+      "seconds": 0.18817475000105333
+    },
+    {
+      "run_id": "6474597f890726cc9fbd6ddb",
+      "seconds": 0.12887837500602473
+    },
+    {
+      "run_id": "4799384f44398fa8db6c9e2d",
+      "seconds": 0.060510459006763995
+    },
+    {
+      "run_id": "77dca749aca2d4b16f106ed3",
+      "seconds": 0.09864229201048147
+    },
+    {
+      "run_id": "bac18ba6d047b891c80b1ee7",
+      "seconds": 0.11159645901352633
+    },
+    {
+      "run_id": "80491bec5b304f1629a3354d",
+      "seconds": 0.11914433300262317
+    },
+    {
+      "run_id": "8937951778f726b880748f37",
+      "seconds": 0.11054791699280031
+    },
+    {
+      "run_id": "9bf490600820abcc505d379d",
+      "seconds": 0.22286387499480043
+    },
+    {
+      "run_id": "3f8bac21cab3ccccbc488a33",
+      "seconds": 0.22340737500053365
+    },
+    {
+      "run_id": "3beae149d000671fef666e98",
+      "seconds": 0.2531956250022631
+    },
+    {
+      "run_id": "874574563e12ec81fd570820",
+      "seconds": 0.285315166998771
+    },
+    {
+      "run_id": "39aa20771b3ef19e5e93041b",
+      "seconds": 0.3351808750012424
+    },
+    {
+      "run_id": "821cc688139d2c257882b52a",
+      "seconds": 0.08883191698987503
+    },
+    {
+      "run_id": "4a725a46d902509dff018bf6",
+      "seconds": 0.18761216700659133
+    },
+    {
+      "run_id": "5c3720701e6ef9fe8e107a8e",
+      "seconds": 0.2575535840005614
+    },
+    {
+      "run_id": "3543c3f6a79c7572edaa217d",
+      "seconds": 0.4304954999970505
+    },
+    {
+      "run_id": "83cea38116cc32a2b70c7a3d",
+      "seconds": 0.20676087500760332
+    },
+    {
+      "run_id": "524099ff0adb83da7fb1b581",
+      "seconds": 0.08071733399992809
+    },
+    {
+      "run_id": "3353b7d5cf0df7b9472eab74",
+      "seconds": 0.22467049999977462
+    },
+    {
+      "run_id": "dbddf7d530a976c4140f63f1",
+      "seconds": 0.5680092919938033
+    },
+    {
+      "run_id": "abdfb47476eff6c3178b0b9d",
+      "seconds": 0.22367183399910573
+    },
+    {
+      "run_id": "e193d772c21d8724f057e898",
+      "seconds": 0.6479031670023687
+    },
+    {
+      "run_id": "d36aa15c3dd151a8b81815f2",
+      "seconds": 0.2138799999956973
+    },
+    {
+      "run_id": "49e11c73fe301ec17acc2c50",
+      "seconds": 0.16813604200433474
+    },
+    {
+      "run_id": "000a13ba666a5dd7a50cf3b4",
+      "seconds": 0.2197061670012772
+    },
+    {
+      "run_id": "65bc3b82e4e7149f30270be6",
+      "seconds": 0.08890158300346229
+    },
+    {
+      "run_id": "f250a9cd90894cda68d271f3",
+      "seconds": 0.15096641599666327
+    },
+    {
+      "run_id": "d1494da4d66f415aec757353",
+      "seconds": 0.07150658400496468
+    },
+    {
+      "run_id": "d33dd9e703ccb74ed98b8707",
+      "seconds": 0.10620758299774025
+    },
+    {
+      "run_id": "ca45c6953297e5eb85b60f4e",
+      "seconds": 0.11055508400022518
+    },
+    {
+      "run_id": "a57200e293d921c55a183fa2",
+      "seconds": 0.06798337500367779
+    },
+    {
+      "run_id": "5e862f41a1e955029f99caf7",
+      "seconds": 0.12480125000001863
+    },
+    {
+      "run_id": "24ec7c41db26cb5cd5ec1538",
+      "seconds": 0.2127337909914786
+    },
+    {
+      "run_id": "427f441628cac001559f65e5",
+      "seconds": 0.2200861659948714
+    },
+    {
+      "run_id": "fa9f2e1c1fb3dbdcec21028f",
+      "seconds": 0.19825291700544767
+    },
+    {
+      "run_id": "98b6d3d4db913f6e77edb260",
+      "seconds": 0.22944504200131632
+    },
+    {
+      "run_id": "c164b06442e4cd1c5dd4dacc",
+      "seconds": 0.2686682500061579
+    },
+    {
+      "run_id": "392d946a843bebcc498f7feb",
+      "seconds": 0.12416370899882168
+    },
+    {
+      "run_id": "244f6bfbd0aba52a3afb431c",
+      "seconds": 0.14688387500063982
+    },
+    {
+      "run_id": "bb2bcdd50dd9f9489f077c50",
+      "seconds": 0.14818608299538027
+    },
+    {
+      "run_id": "e77f38aaeafe89d38c3741e1",
+      "seconds": 0.1121705830009887
+    },
+    {
+      "run_id": "2061d665597fda45bd2c0817",
+      "seconds": 0.1620953749952605
+    },
+    {
+      "run_id": "37a84884f33e9f04b3276679",
+      "seconds": 0.1356343749939697
+    },
+    {
+      "run_id": "e4e308525ec4194e5814372d",
+      "seconds": 0.3124430829921039
+    },
+    {
+      "run_id": "d86ce0eea03489783f702cbb",
+      "seconds": 0.10442291699291673
+    },
+    {
+      "run_id": "189c2d4616814f9e10549b82",
+      "seconds": 0.12417429199558683
+    },
+    {
+      "run_id": "7c8773f60c00fa7059d4974c",
+      "seconds": 0.13084500000695698
+    },
+    {
+      "run_id": "ff4da6055c22e6cabe0b95ca",
+      "seconds": 0.11788962500577327
+    },
+    {
+      "run_id": "57ec64f282a653b81b6cff90",
+      "seconds": 0.5014190829970175
+    },
+    {
+      "run_id": "e38b2a4366abb928e808925c",
+      "seconds": 0.13419874999090098
+    },
+    {
+      "run_id": "f6a017ef61a8c41d44a36ab4",
+      "seconds": 0.1678388750005979
+    },
+    {
+      "run_id": "ea0307ff6f7df4e90752ec74",
+      "seconds": 0.4284022920037387
+    },
+    {
+      "run_id": "e945f725341a8918358bfdfa",
+      "seconds": 0.3001367919932818
+    },
+    {
+      "run_id": "f9b543a8cfe4acb206eb3cd5",
+      "seconds": 0.17356837500119582
+    },
+    {
+      "run_id": "e587a03f77b70288888ccd1a",
+      "seconds": 0.12605108300340362
+    },
+    {
+      "run_id": "6ca7394f4277d6487ca5c6e5",
+      "seconds": 0.14901049999753013
+    },
+    {
+      "run_id": "6d1183f57e4c36aad4998096",
+      "seconds": 0.15877445800288115
+    },
+    {
+      "run_id": "6717952e88885fb076ebbd0c",
+      "seconds": 0.199817582994001
+    },
+    {
+      "run_id": "d6fa0172a7863e4f6325e855",
+      "seconds": 0.290326999995159
+    },
+    {
+      "run_id": "8df096e49d5d5f767d65506e",
+      "seconds": 0.2096803330059629
+    },
+    {
+      "run_id": "7bedbdb9ef012fd472083035",
+      "seconds": 0.32161945798725355
+    },
+    {
+      "run_id": "c651e3f0a3c160b71f004e98",
+      "seconds": 0.3267748340003891
+    },
+    {
+      "run_id": "d6fdc89b3b08e9e41d7f1402",
+      "seconds": 0.11259908298961818
+    },
+    {
+      "run_id": "deb998371b550ea9af308dde",
+      "seconds": 0.19205749999673571
+    },
+    {
+      "run_id": "cb507cada2242b743151a3b0",
+      "seconds": 0.18005387499579228
+    },
+    {
+      "run_id": "2de9aa653f8053d22a53d965",
+      "seconds": 0.1374750000104541
+    },
+    {
+      "run_id": "b90c4020f550ede7e2b73c52",
+      "seconds": 0.31188129099609796
+    },
+    {
+      "run_id": "14c9e6ac7477b633d63fcbba",
+      "seconds": 0.0877362089959206
+    },
+    {
+      "run_id": "1eb135fb5c8402113829f2ce",
+      "seconds": 0.2003465409943601
+    },
+    {
+      "run_id": "29269e763c7fd3a209c0ad35",
+      "seconds": 0.10261179201188497
+    },
+    {
+      "run_id": "487fa405eb4128dfec490add",
+      "seconds": 0.1384820000093896
+    },
+    {
+      "run_id": "706443c5ea4b2c00d1a2781f",
+      "seconds": 0.4521952909999527
+    },
+    {
+      "run_id": "7830cd1ddc17c8fd0e7aac6c",
+      "seconds": 0.13772104198869783
+    },
+    {
+      "run_id": "8adbbefcc6eb83fd0f9d998b",
+      "seconds": 0.1742491670011077
+    },
+    {
+      "run_id": "3f9027cde194ca90244ecf0a",
+      "seconds": 0.3665694999945117
+    },
+    {
+      "run_id": "03ee982dfcba88b5ac22dbc2",
+      "seconds": 0.4471072079904843
+    },
+    {
+      "run_id": "b050913f10f1821fe2565383",
+      "seconds": 0.2103209579945542
+    },
+    {
+      "run_id": "3ca9f8a2a0b40928ff7e0d12",
+      "seconds": 0.1221896250062855
+    },
+    {
+      "run_id": "8c13453d032031a2b1f88f12",
+      "seconds": 0.13903541599574964
+    },
+    {
+      "run_id": "a32695d29b2ddf1e36a97052",
+      "seconds": 0.13494099999661557
+    },
+    {
+      "run_id": "dd7ab31aa33f57271af5b8e8",
+      "seconds": 0.07021550000354182
+    },
+    {
+      "run_id": "40f88233c42e869f56972403",
+      "seconds": 0.13082466600462794
+    },
+    {
+      "run_id": "9eca3ccc09efcea5b6df8725",
+      "seconds": 0.17465483299747575
+    },
+    {
+      "run_id": "5dbec01178118ae6fb0580ca",
+      "seconds": 0.2453056249942165
+    },
+    {
+      "run_id": "0a49988622132d2006a9170c",
+      "seconds": 0.2481043750012759
+    },
+    {
+      "run_id": "ebfbd95b01304a777291f396",
+      "seconds": 0.2450968329940224
+    },
+    {
+      "run_id": "884ddd54e9b978fca3a0fb8f",
+      "seconds": 0.29713462499785237
+    },
+    {
+      "run_id": "fda6f17836450d320dc5ba1d",
+      "seconds": 0.08061370899667963
+    },
+    {
+      "run_id": "8923d6e4245df6f5b3028083",
+      "seconds": 0.1870142089901492
+    },
+    {
+      "run_id": "3956fe76c3b24825e162239f",
+      "seconds": 0.14823841699399054
+    },
+    {
+      "run_id": "72d5e703eedc5e50b146c64d",
+      "seconds": 0.15143474999058526
+    },
+    {
+      "run_id": "c80f254f06d1351fc130e996",
+      "seconds": 0.14705512500950135
+    },
+    {
+      "run_id": "8186a2bc88fb3fca70cc7fc1",
+      "seconds": 0.2810555000032764
+    },
+    {
+      "run_id": "129cacecc8e4c2463b04312e",
+      "seconds": 0.16091670798778068
+    },
+    {
+      "run_id": "a2f20262735c1ed95ce06fc3",
+      "seconds": 0.11784054100280628
+    },
+    {
+      "run_id": "96f22221fedcaf04332b81c1",
+      "seconds": 0.11904845900426153
+    },
+    {
+      "run_id": "aa360e23b55c629bff3c30a8",
+      "seconds": 0.2153482910071034
+    },
+    {
+      "run_id": "c052ec852e7fb3c214feac4f",
+      "seconds": 0.33082191699941177
+    },
+    {
+      "run_id": "331fb325d5ca0258331c2365",
+      "seconds": 0.18257295900548343
+    },
+    {
+      "run_id": "352f5da6022c5a2b3d87f484",
+      "seconds": 0.175664542010054
+    },
+    {
+      "run_id": "5b36f96223ed88cdc7870773",
+      "seconds": 0.1540602090099128
+    },
+    {
+      "run_id": "75e33f4dc3b786fd12e60b0f",
+      "seconds": 0.5377387500047917
+    },
+    {
+      "run_id": "fb592759f0849046e9c48de0",
+      "seconds": 0.1885411249968456
+    },
+    {
+      "run_id": "8dae167cecd92a70ec60e3ba",
+      "seconds": 0.1295296669995878
+    },
+    {
+      "run_id": "b20fcc2f938bb34f59f45c5a",
+      "seconds": 0.13751349999802187
+    },
+    {
+      "run_id": "9e8f5585a3c5176a8793cd49",
+      "seconds": 0.09742583399929572
+    },
+    {
+      "run_id": "b72eca5e12900f0128b7cbb2",
+      "seconds": 0.1035724579996895
+    },
+    {
+      "run_id": "aaa13885c2f1e6cf5ae4765d",
+      "seconds": 268.4730657089967
+    },
+    {
+      "run_id": "1329361d222fec440a42aed8",
+      "seconds": 327.26286050000635
+    },
+    {
+      "run_id": "e7f2cbb4937b3cdf7d3588fb",
+      "seconds": 360.8341242500028
+    },
+    {
+      "run_id": "93734f40d7f149ae1ae7d083",
+      "seconds": 389.048353916005
+    },
+    {
+      "run_id": "a8b671f3282fb8817eb4e135",
+      "seconds": 483.24541204101115
+    },
+    {
+      "run_id": "0e0e25e2500c3acde1ec0f0c",
+      "seconds": 219.51596766700095
+    },
+    {
+      "run_id": "29c0c288ca2713272ede8be3",
+      "seconds": 344.89580650000426
+    },
+    {
+      "run_id": "5d4efc8c424f399dc37106f1",
+      "seconds": 247.23371279200364
+    },
+    {
+      "run_id": "ba80fd57192187b678bdc361",
+      "seconds": 251.95567137499165
+    },
+    {
+      "run_id": "a5d3c6d7e686534805c18300",
+      "seconds": 436.84212587500224
+    },
+    {
+      "run_id": "dfab5dcd76edd7e4992fa863",
+      "seconds": 222.09074858299573
+    },
+    {
+      "run_id": "0a631086fa0ecd41c660ebb9",
+      "seconds": 362.4030704589968
+    },
+    {
+      "run_id": "1bc62859f496926d8a06c3ec",
+      "seconds": 238.5651031669986
+    },
+    {
+      "run_id": "87602c3f9d58d99246950a51",
+      "seconds": 240.69908000000578
+    },
+    {
+      "run_id": "5f4e312f7ecef5083bd516ef",
+      "seconds": 459.83870320800634
+    },
+    {
+      "run_id": "0864f81bf759cd0c12fb68f3",
+      "seconds": 215.2550875839952
+    },
+    {
+      "run_id": "f2339ffbd7120e0fb058c6d6",
+      "seconds": 220.83582441600447
+    },
+    {
+      "run_id": "9712c83c807c3dc8ab667da9",
+      "seconds": 212.21660550001252
+    },
+    {
+      "run_id": "1777c81f71696aca6b55c744",
+      "seconds": 217.3957338330074
+    },
+    {
+      "run_id": "154b3b6f3b92a3552af331da",
+      "seconds": 412.3824422500038
+    },
+    {
+      "run_id": "5b47d25a42528d4efc91d82c",
+      "seconds": 227.87538495899935
+    },
+    {
+      "run_id": "ca366cfcce03ef3e4300ba8d",
+      "seconds": 218.06363241700456
+    },
+    {
+      "run_id": "1913f7820fd8eaebcd071d58",
+      "seconds": 216.50736929100822
+    },
+    {
+      "run_id": "73cc120b4632cab91fb68e89",
+      "seconds": 218.8299282920052
+    },
+    {
+      "run_id": "2488df6c233e98c84777de2f",
+      "seconds": 387.81975062499987
+    },
+    {
+      "run_id": "375e350c02efb641fdb78b12",
+      "seconds": 259.2177605409961
+    },
+    {
+      "run_id": "c00fe2c0b03f514f3b52fc77",
+      "seconds": 327.7248761669907
+    },
+    {
+      "run_id": "3006b775a60eee1b31a6b070",
+      "seconds": 362.54428216700035
+    },
+    {
+      "run_id": "80e621ed1f86d51a491bf40a",
+      "seconds": 373.19821791601134
+    },
+    {
+      "run_id": "c3ba6bca67a1ef3d8aba471a",
+      "seconds": 391.3333579579921
+    },
+    {
+      "run_id": "848af6cb9dc1db876afc700b",
+      "seconds": 262.31069187499816
+    },
+    {
+      "run_id": "c0b6d6dcde203aa969f5248b",
+      "seconds": 347.2639859159972
+    },
+    {
+      "run_id": "96936169cb785bc2ac55a46d",
+      "seconds": 308.18881016699015
+    },
+    {
+      "run_id": "3d2d6c381051775ad5d484b7",
+      "seconds": 302.1708303339983
+    },
+    {
+      "run_id": "3f21851a4bbb37852b242377",
+      "seconds": 433.1992417500005
+    },
+    {
+      "run_id": "f318801c68ac121a396a90eb",
+      "seconds": 271.7340288340056
+    },
+    {
+      "run_id": "96673e86dc17e6dadcf21e48",
+      "seconds": 360.4710570000025
+    },
+    {
+      "run_id": "9e066d15472b308ccf6d1e51",
+      "seconds": 300.3441098330077
+    },
+    {
+      "run_id": "e187f0616d9cd672a0400806",
+      "seconds": 313.4620811249915
+    },
+    {
+      "run_id": "431801ca97dc33afbfa34df3",
+      "seconds": 442.2944424159941
+    },
+    {
+      "run_id": "6a15dd8397fc21afe1ee3f66",
+      "seconds": 228.80079325000406
+    },
+    {
+      "run_id": "47d9e6eb1a1af49640c40f45",
+      "seconds": 385.98189654199814
+    },
+    {
+      "run_id": "1054f06e805681e9a0b30317",
+      "seconds": 333.6026114999986
+    },
+    {
+      "run_id": "b5ebe5f90193c5a4d3902fda",
+      "seconds": 272.98149312500027
+    },
+    {
+      "run_id": "691bfe00e975a60221628c64",
+      "seconds": 385.54154795799695
+    },
+    {
+      "run_id": "d26b914105adfd7b51707aab",
+      "seconds": 217.35120612499304
+    },
+    {
+      "run_id": "8b37e5089177525414d74acf",
+      "seconds": 383.8114757079893
+    },
+    {
+      "run_id": "c70fc2088ea0e0961718050c",
+      "seconds": 231.669479958
+    },
+    {
+      "run_id": "36a460a97433f3505261f698",
+      "seconds": 231.8256429170142
+    },
+    {
+      "run_id": "009dab9b4cbe4058cba5e0b0",
+      "seconds": 253.8953627919982
+    },
+    {
+      "run_id": "823af9babaf45a1e2d50b35d",
+      "seconds": 310.01907366598607
+    },
+    {
+      "run_id": "8472d7f41e7f74e537dd856f",
+      "seconds": 375.9825615000009
+    },
+    {
+      "run_id": "8d4a86bde3d5b8dec74bff2d",
+      "seconds": 425.6338701249915
+    },
+    {
+      "run_id": "ab6f4e2a08c46d0a4c7405c7",
+      "seconds": 467.2688615000079
+    },
+    {
+      "run_id": "f4ef20d21ed19cf924b84baa",
+      "seconds": 439.36860920900654
+    },
+    {
+      "run_id": "3a835470da8a5b7167e7fef8",
+      "seconds": 233.01214749999053
+    },
+    {
+      "run_id": "29ac18274ba10d8201de8060",
+      "seconds": 297.19500175000576
+    },
+    {
+      "run_id": "8c0e838881615778eecc6660",
+      "seconds": 254.2908671250043
+    },
+    {
+      "run_id": "2cbb0524f57985bca46e6232",
+      "seconds": 368.8936692080024
+    },
+    {
+      "run_id": "a363e0b53d6a82cf0e9295f5",
+      "seconds": 458.34430212499865
+    },
+    {
+      "run_id": "42a7230b9748b6c79df00eaf",
+      "seconds": 243.81709754199255
+    },
+    {
+      "run_id": "20915f234a0b1f99a159c39a",
+      "seconds": 302.1295055829978
+    },
+    {
+      "run_id": "4623164b8345f6e2f468ce61",
+      "seconds": 245.2898017080006
+    },
+    {
+      "run_id": "f2505ac9ab40788e232625e4",
+      "seconds": 379.4343980419944
+    },
+    {
+      "run_id": "d55c43b29f4497a02f14dcc1",
+      "seconds": 478.92344608299027
+    },
+    {
+      "run_id": "59d886fe595dde74fc70293b",
+      "seconds": 212.90006766699662
+    },
+    {
+      "run_id": "ba2f0f593c44fd9dd2f098ed",
+      "seconds": 216.40301549999276
+    },
+    {
+      "run_id": "77d40d8b95efbc276f7b8145",
+      "seconds": 227.24985170799482
+    },
+    {
+      "run_id": "ede2ec089dbd3628236f7c33",
+      "seconds": 327.39915612500045
+    },
+    {
+      "run_id": "986d560e042b116d052acad1",
+      "seconds": 356.89287200001127
+    },
+    {
+      "run_id": "417afde761abf5693df93d60",
+      "seconds": 213.2458008340036
+    },
+    {
+      "run_id": "e480504269c85e3efcfe51fd",
+      "seconds": 215.63995758300007
+    },
+    {
+      "run_id": "37358e8c0bc3683dffce084c",
+      "seconds": 217.430833624996
+    },
+    {
+      "run_id": "7721440b8cc8500c7386bfdf",
+      "seconds": 284.06736675000866
+    },
+    {
+      "run_id": "a45eab9defce5d5d0774793c",
+      "seconds": 284.73126429200056
+    },
+    {
+      "run_id": "aba2b30355fa8a7fca880ad4",
+      "seconds": 362.8577554169897
+    },
+    {
+      "run_id": "8f471303fb02f1be76b7bab0",
+      "seconds": 462.0313364169997
+    },
+    {
+      "run_id": "feb6a76e4cf805fbdd17e6ef",
+      "seconds": 481.2262889590056
+    },
+    {
+      "run_id": "83c19cc9dcad4577a6264e45",
+      "seconds": 508.89438058300584
+    },
+    {
+      "run_id": "92baa5e9d8973fb55e311ce6",
+      "seconds": 601.161377167009
+    },
+    {
+      "run_id": "16e82e05ad95f3c9e4a4948b",
+      "seconds": 248.20289179199608
+    },
+    {
+      "run_id": "dbde59c25766bb5386a232af",
+      "seconds": 422.68246183299925
+    },
+    {
+      "run_id": "afa2bc7a024ee3b1d79582d6",
+      "seconds": 410.1237017090025
+    },
+    {
+      "run_id": "0f11c061b47803a086a44334",
+      "seconds": 465.8081236660073
+    },
+    {
+      "run_id": "54721045a792203d8ffff6a3",
+      "seconds": 491.61638133400993
+    },
+    {
+      "run_id": "b584fff5d306734bf75b51cb",
+      "seconds": 259.6988037500123
+    },
+    {
+      "run_id": "f8c0b0a4f33cb8c081fae277",
+      "seconds": 405.45358641700295
+    },
+    {
+      "run_id": "072b5c41bb49074b772bfab9",
+      "seconds": 257.7584077079955
+    },
+    {
+      "run_id": "3e24082df58cb436b35b25fa",
+      "seconds": 456.61038412500056
+    },
+    {
+      "run_id": "560abb465cdc452bd837da7c",
+      "seconds": 519.3972378340113
+    },
+    {
+      "run_id": "6e9347983f5c0d37fd731d33",
+      "seconds": 304.29638929100474
+    },
+    {
+      "run_id": "57de5ab8ad52b91a22d23a0b",
+      "seconds": 389.45589695801027
+    },
+    {
+      "run_id": "a0c1fc378b9f566290b09807",
+      "seconds": 221.7698553329974
+    },
+    {
+      "run_id": "4446963dde22768d90f87ac0",
+      "seconds": 213.80341062499792
+    },
+    {
+      "run_id": "f518b961ddebe94e893a441e",
+      "seconds": 385.06152787499013
+    },
+    {
+      "run_id": "2a7a0eb18c9666f23a5115a2",
+      "seconds": 174.25088787499408
+    },
+    {
+      "run_id": "6f8ced5c81b3bcfdfeeca26a",
+      "seconds": 173.79037862499536
+    },
+    {
+      "run_id": "b8c10d4a71aea6b0196b4e43",
+      "seconds": 96.03008175001014
+    },
+    {
+      "run_id": "3672fe52bbec44e2fb2003a6",
+      "seconds": 97.47224091598764
+    },
+    {
+      "run_id": "ce78100339c8eeb378a5feb1",
+      "seconds": 194.7088455419871
+    },
+    {
+      "run_id": "e301fd8437d674e2a5798ecc",
+      "seconds": 319.82882670799154
+    },
+    {
+      "run_id": "9b9640abc22707391c2b207f",
+      "seconds": 385.26324691700574
+    },
+    {
+      "run_id": "5721851303ed6b54fd881381",
+      "seconds": 441.69860404200153
+    },
+    {
+      "run_id": "5cfe4fb2dbc5faba81a151c0",
+      "seconds": 444.57982404100767
+    },
+    {
+      "run_id": "f3a4699edf394cbec7eb32f2",
+      "seconds": 518.9598498330015
+    },
+    {
+      "run_id": "1e257bfbe26250200b3c30f5",
+      "seconds": 263.65914445900125
+    },
+    {
+      "run_id": "0b253dc9f7341f9660667e64",
+      "seconds": 406.98320416599745
+    },
+    {
+      "run_id": "388947a36713565eb8c88eec",
+      "seconds": 293.29532474999723
+    },
+    {
+      "run_id": "627f2f7ab6511f2022222d20",
+      "seconds": 263.91768170899013
+    },
+    {
+      "run_id": "5b3056f0961bdf76eba08c45",
+      "seconds": 393.5591892920056
+    },
+    {
+      "run_id": "323a696ffe69fd48ddcb26bd",
+      "seconds": 271.3508018749999
+    },
+    {
+      "run_id": "c3e54bf8029c4a62171e97e7",
+      "seconds": 347.5424434999877
+    },
+    {
+      "run_id": "4187a942e1ecc9f86f0921b5",
+      "seconds": 294.24211083400587
+    },
+    {
+      "run_id": "b6f6b6d1090bb41396031362",
+      "seconds": 277.9788190419931
+    },
+    {
+      "run_id": "c65da18b65339583bfb7b042",
+      "seconds": 309.8350939590018
+    },
+    {
+      "run_id": "cd68419d4b6b364305e0f5fa",
+      "seconds": 232.31962004199158
+    },
+    {
+      "run_id": "afb7b38c71115d597e4c0bd4",
+      "seconds": 380.2150605420029
+    },
+    {
+      "run_id": "7e56cc6b92020ca1a3c4613b",
+      "seconds": 251.5859068330028
+    },
+    {
+      "run_id": "5b105552374cf7acdd044c9a",
+      "seconds": 273.8874402500078
+    },
+    {
+      "run_id": "b197556f9ff6b558510bcf79",
+      "seconds": 372.69167445799394
+    },
+    {
+      "run_id": "fc5ecbd3099adb6ea1e12af8",
+      "seconds": 235.2896049580013
+    },
+    {
+      "run_id": "5600b790c648fd02ddbd9a91",
+      "seconds": 369.72539774999314
+    },
+    {
+      "run_id": "34b1eeac79aeee801f7c81f7",
+      "seconds": 217.73250733400346
+    },
+    {
+      "run_id": "533a694b79d656ee65e06525",
+      "seconds": 219.61553541600006
+    },
+    {
+      "run_id": "8dfd4d38f38ea67fc666675c",
+      "seconds": 236.39467170799617
+    },
+    {
+      "run_id": "0f430bdfa4b326c5076d9c46",
+      "seconds": 377.8055143340025
+    },
+    {
+      "run_id": "9da03c1f1813d70818a29d39",
+      "seconds": 443.42966370900103
+    },
+    {
+      "run_id": "f78d2f58b32fd84da1f7106f",
+      "seconds": 480.0047837919992
+    },
+    {
+      "run_id": "b7fa74d9da3a0e1fdaec9ae6",
+      "seconds": 517.4266644580057
+    },
+    {
+      "run_id": "d6806aa9ff786e1f3ce03ae3",
+      "seconds": 448.67961529199965
+    },
+    {
+      "run_id": "d25f1a374d05dc8a78d128f9",
+      "seconds": 221.41681374999462
+    },
+    {
+      "run_id": "fda1e993b656b2711dfb3f68",
+      "seconds": 421.7680997080024
+    },
+    {
+      "run_id": "1fb8a4d742c89f7437b35346",
+      "seconds": 256.12811166699976
+    },
+    {
+      "run_id": "1e45e7333647ffd0cfba33c5",
+      "seconds": 260.59802099999797
+    },
+    {
+      "run_id": "b237c1924deed0a860a7f442",
+      "seconds": 279.8541854590003
+    },
+    {
+      "run_id": "3bc065ddfdb8e634f036300c",
+      "seconds": 234.2641867499915
+    },
+    {
+      "run_id": "b716ea74f4a99aba05572fbc",
+      "seconds": 400.6511859170132
+    },
+    {
+      "run_id": "0d344afcd9596104cc8236ba",
+      "seconds": 269.00331570800336
+    },
+    {
+      "run_id": "669220df5910059643c62619",
+      "seconds": 275.1094544999942
+    },
+    {
+      "run_id": "67c6dc10de6f7da6859b6634",
+      "seconds": 289.461001417003
+    },
+    {
+      "run_id": "b3f43498b46d12d1502bb7fb",
+      "seconds": 157.89795541700732
+    },
+    {
+      "run_id": "69eed129396f98d2881eb253",
+      "seconds": 374.89403100000345
+    },
+    {
+      "run_id": "27ce6a215d997be8e2b2a74e",
+      "seconds": 324.0466282910056
+    },
+    {
+      "run_id": "d6614a41dfc049428c932937",
+      "seconds": 232.14341725000122
+    },
+    {
+      "run_id": "20b66f87dd5c3db9a3611640",
+      "seconds": 233.2103588750033
+    },
+    {
+      "run_id": "13b537ff712e6695610a36f6",
+      "seconds": 164.65532195899868
+    },
+    {
+      "run_id": "5003661ec356bd2054efbb47",
+      "seconds": 375.2541366249934
+    },
+    {
+      "run_id": "085260d96e0d79f066694ba2",
+      "seconds": 305.33490750000055
+    },
+    {
+      "run_id": "68c3cc52163771b1240fac53",
+      "seconds": 200.96798683299858
+    },
+    {
+      "run_id": "7532a4126949cd4318bde846",
+      "seconds": 199.04434304199822
+    },
+    {
+      "run_id": "4f33a5ff2f0bc2ded3c4f9a9",
+      "seconds": 332.69938441600243
+    },
+    {
+      "run_id": "bef659fc0a3480df2eb23adb",
+      "seconds": 419.42862354099634
+    },
+    {
+      "run_id": "7111da123dac16f928225c80",
+      "seconds": 455.0081292499963
+    },
+    {
+      "run_id": "f69b4bbbab68d2e9c24d19bc",
+      "seconds": 499.5228720840096
+    },
+    {
+      "run_id": "f1222376a3bbb96d3efb968d",
+      "seconds": 534.5776599579985
+    },
+    {
+      "run_id": "e17791650415f96f1a4994a7",
+      "seconds": 266.3244171250117
+    },
+    {
+      "run_id": "d94562b1dba136441d085499",
+      "seconds": 390.5212707499886
+    },
+    {
+      "run_id": "560bb3d82dabe4e02517be0a",
+      "seconds": 299.295589500005
+    },
+    {
+      "run_id": "5b012f9b496d6393898446a1",
+      "seconds": 306.555159874988
+    },
+    {
+      "run_id": "f0fa76f0fb3beb46770e0be6",
+      "seconds": 327.7828628330026
+    },
+    {
+      "run_id": "7799b52810947c4bfc874e9c",
+      "seconds": 279.2255418329878
+    },
+    {
+      "run_id": "73b9fc52c8f9c5fb118f68ca",
+      "seconds": 370.19987504200253
+    },
+    {
+      "run_id": "6dc71612722c06fe27c6c580",
+      "seconds": 316.44515908299945
+    },
+    {
+      "run_id": "ac0217ae84ba152a883e1830",
+      "seconds": 314.4137991250027
+    },
+    {
+      "run_id": "cd5455e6015267bf1c63b600",
+      "seconds": 330.99075079199974
+    },
+    {
+      "run_id": "696b7ef748278e4a3f43d309",
+      "seconds": 323.22643708300893
+    },
+    {
+      "run_id": "ffc15ef3627d046db5b0ad7a",
+      "seconds": 353.5438764159917
+    },
+    {
+      "run_id": "4fe5bc70ad21a792898f0e91",
+      "seconds": 280.48288187499566
+    },
+    {
+      "run_id": "0c75574b648caaf2811248e4",
+      "seconds": 284.42571466699883
+    },
+    {
+      "run_id": "66cff7da433d346289a6dcd6",
+      "seconds": 286.17848162500013
+    },
+    {
+      "run_id": "ba295e42ac87ebd037c3764c",
+      "seconds": 315.90348929200263
+    },
+    {
+      "run_id": "a76f6d98bf622a1ce9ddb4e0",
+      "seconds": 310.8046483329963
+    },
+    {
+      "run_id": "8e1792db60eb42bc1e3e3832",
+      "seconds": 219.70832879199588
+    },
+    {
+      "run_id": "344421b997b9da0217934455",
+      "seconds": 180.44910220899328
+    },
+    {
+      "run_id": "b431668ef9d7c1322916ff28",
+      "seconds": 139.7637266249949
+    }
+  ],
+  "family_wall_runtime_seconds": {
+    "Ridge": 10.2,
+    "LightGBM": 8607.402822208998
+  },
+  "family_worker_runtime_seconds_sum": {
+    "Ridge": 36.48430658696452,
+    "LightGBM": 55723.409952129005
+  },
+  "family_inner_runtime_seconds_sum": {
+    "Ridge": 19.261617148673395,
+    "LightGBM": 52442.512067253454
+  },
+  "family_final_runtime_seconds_sum": {
+    "Ridge": 2.049946875908063,
+    "LightGBM": 3261.9074082920415
+  },
+  "analysis_wall_runtime_seconds": 3.2,
+  "validation_wall_runtime_seconds": 11.4,
+  "total_recorded_wall_seconds": 8632.202822209
+}
