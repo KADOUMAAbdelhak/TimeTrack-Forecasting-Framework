@@ -1,0 +1,196 @@
+{
+  "basis": "Measured five-epoch CPU train/validation seconds per sample at L=64, scaled by exact neural-v2 support sizes and linear history cost; PatchTST scales by patch count.",
+  "fit_counts": {
+    "final": 840,
+    "final_metric_rows": 6720,
+    "inner": 2520,
+    "total": 3360
+  },
+  "scenarios": {
+    "central": {
+      "assumptions": {
+        "mean_epochs": 25,
+        "per_fit_overhead_seconds": 0.08,
+        "selected_context_assumption": 64
+      },
+      "by_model_feature": {
+        "DLinear/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.09054351383360282,
+          "projected_seconds": 325.9566498009701
+        },
+        "DLinear/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.1092638762910667,
+          "projected_seconds": 393.3499546478401
+        },
+        "LSTM/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 6.45783819497774,
+          "projected_seconds": 23248.217501919866
+        },
+        "LSTM/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 6.491474342427975,
+          "projected_seconds": 23369.30763274071
+        },
+        "PatchTST/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 4.398820113185082,
+          "projected_seconds": 15835.752407466298
+        },
+        "PatchTST/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 7.93774818401963,
+          "projected_seconds": 28575.893462470667
+        },
+        "TCN-v2/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 25.861802358549287,
+          "projected_seconds": 93102.48849077744
+        },
+        "TCN-v2/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 26.339690732662923,
+          "projected_seconds": 94822.88663758652
+        }
+      },
+      "total_days": 3.236965888164471,
+      "total_hours": 77.6871813159473,
+      "total_seconds": 279673.8527374103
+    },
+    "conservative": {
+      "assumptions": {
+        "mean_epochs": 50,
+        "per_fit_overhead_seconds": 0.15,
+        "selected_context_assumption": 128
+      },
+      "by_model_feature": {
+        "DLinear/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.22044753270192505,
+          "projected_seconds": 793.6111177269302
+        },
+        "DLinear/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.2667359888514975,
+          "projected_seconds": 960.2495598653911
+        },
+        "LSTM/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 16.051429261714528,
+          "projected_seconds": 57785.1453421723
+        },
+        "LSTM/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 16.140483549862797,
+          "projected_seconds": 58105.74077950607
+        },
+        "PatchTST/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 11.078015506860195,
+          "projected_seconds": 39880.8558246967
+        },
+        "PatchTST/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 19.982143443177133,
+          "projected_seconds": 71935.71639543767
+        },
+        "TCN-v2/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 63.9625114590457,
+          "projected_seconds": 230265.04125256452
+        },
+        "TCN-v2/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 65.1557384338059,
+          "projected_seconds": 234560.6583617012
+        }
+      },
+      "total_days": 8.035729382334154,
+      "total_hours": 192.85750517601969,
+      "total_seconds": 694287.0186336709
+    },
+    "optimistic": {
+      "assumptions": {
+        "mean_epochs": 10,
+        "per_fit_overhead_seconds": 0.04,
+        "selected_context_assumption": 32
+      },
+      "by_model_feature": {
+        "DLinear/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.033098021696635845,
+          "projected_seconds": 119.15287810788905
+        },
+        "DLinear/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 0.03970139355615693,
+          "projected_seconds": 142.92501680216495
+        },
+        "LSTM/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 2.270376657481857,
+          "projected_seconds": 8173.355966934685
+        },
+        "LSTM/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 2.2816529171371713,
+          "projected_seconds": 8213.950501693816
+        },
+        "PatchTST/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 1.5323071838916975,
+          "projected_seconds": 5516.305862010111
+        },
+        "PatchTST/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 2.7652512327607317,
+          "projected_seconds": 9954.904437938634
+        },
+        "TCN-v2/F0_LOCAL": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 9.12164693589167,
+          "projected_seconds": 32837.928969210014
+        },
+        "TCN-v2/F1_THROUGHPUT": {
+          "final_fits": 105,
+          "inner_fits": 315,
+          "projected_hours": 9.28905726288383,
+          "projected_seconds": 33440.60614638179
+        }
+      },
+      "total_days": 1.1388788168874895,
+      "total_hours": 27.33309160529975,
+      "total_seconds": 98399.1297790791
+    }
+  },
+  "support_summary": {
+    "average_outer_test_samples_at_L64": 1830.4,
+    "machine_fold_cells_per_context": 35
+  },
+  "uncertainty": "Epoch count and selected context are unknown before scientific inner selection; hardware contention, cache effects, and nonlinear sequence cost can change realized time."
+}
