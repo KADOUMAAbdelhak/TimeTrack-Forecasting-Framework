@@ -1,0 +1,70 @@
+{
+  "artifact_counts": {
+    "figures": 4,
+    "final_runs": 210,
+    "inner_fits": 630,
+    "metric_rows": 1680,
+    "prediction_files": 210,
+    "selected_context_records": 70
+  },
+  "checkpoint_integrity": {
+    "deterministic_tag_target": "bdc7c9243cb33cbb3fadee7b911810a164d8da43",
+    "head_contains_neural_freeze": true,
+    "neural_tag_target": "08697069cf54f4c94cbd2a449b3e2050405328fb"
+  },
+  "comparison": {
+    "compatible_support_only": true,
+    "lead_macro_rows": 8,
+    "machine_fold_rows": 280
+  },
+  "decision_sha256": "9cec1dc25dc20dd1bf20ac3d7d495f731d41106935a66726d79a182fd058a08c",
+  "failures": [],
+  "frozen_integrity": {
+    "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "corrected_deterministic_checked": 1070,
+    "corrected_deterministic_failures": [],
+    "neural_v2_checked": 29,
+    "neural_v2_failures": [],
+    "original_deterministic_checked": 632,
+    "original_deterministic_failures": [],
+    "phase2a_checked": 33,
+    "phase2a_failures": [],
+    "raw_hashes_unchanged": true
+  },
+  "identity_coverage": {
+    "all_leads_present": true,
+    "all_seeds_present": true,
+    "duplicate_run_ids": 0,
+    "missing_metric_keys": 0,
+    "missing_run_keys": 0
+  },
+  "maximum_differences": {
+    "inner_mean_mae_abs_difference": 8.344650268554688e-07,
+    "metric_abs_difference": 0.0,
+    "target_abs_difference": 0.0
+  },
+  "other_model_output_directories": [],
+  "scientific_scope": "DLinear only",
+  "selection_and_fit": {
+    "final_refit_has_no_test_or_validation_api": true,
+    "outer_test_loaded_after_fit": true,
+    "per_seed_epoch_reproduced": true,
+    "selected_L_from_inner_validation_only": true,
+    "smaller_L_tie_break_reproduced": true,
+    "train_only_transformation": true
+  },
+  "status": "PASS",
+  "structural_counts": {
+    "inner_target_time_leakage": 0,
+    "outer_target_time_leakage": 0,
+    "prediction_hash_mismatches": 0,
+    "run_id_mismatches": 0,
+    "sample_id_mismatches": 0,
+    "segment_crossing_histories": 0,
+    "segment_crossing_targets": 0,
+    "selected_L_mismatches": 0,
+    "selected_epoch_mismatches": 0,
+    "support_hash_mismatches": 0,
+    "timestamp_mismatches": 0
+  }
+}
