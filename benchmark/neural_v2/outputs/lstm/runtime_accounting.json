@@ -1,0 +1,446 @@
+{
+  "actual_minus_pilot_seconds": 5329.526552818446,
+  "actual_to_pilot_runtime_ratio": 1.1143245278985412,
+  "analysis_wall_seconds": 4.319468874993618,
+  "config_sha256": "39f511e1a09f5e466aab89cee0164be29b04ec0745d1ff5e4422b5556011272e",
+  "criteria_sha256": "ac5630eb55e4034a60ee32f778e5c0c1f251a8877d1216c2f3b21bbc1a13a4f6",
+  "current_invocation_wall_seconds": 9.398262749993592,
+  "decision_counts": {
+    "negative_folds": 0,
+    "negative_leads": 0,
+    "negative_machines": 3,
+    "negative_seeds": 0,
+    "overall_mean_gain_pct": 3.0873780755251907,
+    "positive_folds": 5,
+    "positive_leads": 8,
+    "positive_machines": 4,
+    "positive_seeds": 3
+  },
+  "decision_sha256": "9cec1dc25dc20dd1bf20ac3d7d495f731d41106935a66726d79a182fd058a08c",
+  "device": "cpu",
+  "dlinear_inventory_sha256": "fd4e0fe3a1413c6f9a0b942627858354e736e4beb479f77ef71ae2c3aa46d41a",
+  "environment": {
+    "logical_cpu_count": 8,
+    "python": "3.13.2",
+    "torch": "2.14.0",
+    "torch_threads": 4
+  },
+  "epochs_executed_distribution": [
+    {
+      "count": 20,
+      "training_epochs_executed": 9
+    },
+    {
+      "count": 21,
+      "training_epochs_executed": 10
+    },
+    {
+      "count": 17,
+      "training_epochs_executed": 11
+    },
+    {
+      "count": 17,
+      "training_epochs_executed": 12
+    },
+    {
+      "count": 15,
+      "training_epochs_executed": 13
+    },
+    {
+      "count": 14,
+      "training_epochs_executed": 14
+    },
+    {
+      "count": 21,
+      "training_epochs_executed": 15
+    },
+    {
+      "count": 12,
+      "training_epochs_executed": 16
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 17
+    },
+    {
+      "count": 23,
+      "training_epochs_executed": 18
+    },
+    {
+      "count": 14,
+      "training_epochs_executed": 19
+    },
+    {
+      "count": 17,
+      "training_epochs_executed": 20
+    },
+    {
+      "count": 9,
+      "training_epochs_executed": 21
+    },
+    {
+      "count": 7,
+      "training_epochs_executed": 22
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 23
+    },
+    {
+      "count": 7,
+      "training_epochs_executed": 24
+    },
+    {
+      "count": 11,
+      "training_epochs_executed": 25
+    },
+    {
+      "count": 10,
+      "training_epochs_executed": 26
+    },
+    {
+      "count": 7,
+      "training_epochs_executed": 27
+    },
+    {
+      "count": 3,
+      "training_epochs_executed": 28
+    },
+    {
+      "count": 8,
+      "training_epochs_executed": 29
+    },
+    {
+      "count": 9,
+      "training_epochs_executed": 30
+    },
+    {
+      "count": 11,
+      "training_epochs_executed": 31
+    },
+    {
+      "count": 10,
+      "training_epochs_executed": 32
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 33
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 34
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 35
+    },
+    {
+      "count": 4,
+      "training_epochs_executed": 36
+    },
+    {
+      "count": 4,
+      "training_epochs_executed": 37
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 38
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 39
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 40
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 41
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 42
+    },
+    {
+      "count": 3,
+      "training_epochs_executed": 43
+    },
+    {
+      "count": 4,
+      "training_epochs_executed": 44
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 45
+    },
+    {
+      "count": 6,
+      "training_epochs_executed": 46
+    },
+    {
+      "count": 11,
+      "training_epochs_executed": 47
+    },
+    {
+      "count": 4,
+      "training_epochs_executed": 48
+    },
+    {
+      "count": 5,
+      "training_epochs_executed": 49
+    },
+    {
+      "count": 245,
+      "training_epochs_executed": 50
+    }
+  ],
+  "execution_wall_seconds": 51947.05168747902,
+  "final_fit_wall_seconds_sum": 27516.929132921054,
+  "final_refit_phase_wall_seconds": 14671.802099227905,
+  "final_runs": 210,
+  "finished_at": "2026-09-24T20:20:12.401135+03:00",
+  "frozen_inventory_sha256": "5af4ae5bc9f275cd658ca0a8ee3a075a4abcd6bbba145ea14ef3e78075d58681",
+  "inner_fit_wall_seconds_sum": 72437.26064473699,
+  "inner_fits": 630,
+  "inner_selection_phase_wall_seconds": 37203.07430267334,
+  "lstm_throughput_decision": "CONDITIONALLY_POSITIVE",
+  "mean_best_epoch_all_inner_fits": 29.16031746031746,
+  "mean_process_cpu_percent": 100.02352941176471,
+  "median_best_epoch_all_inner_fits": 30.0,
+  "metric_rows": 1680,
+  "new_final_fits_this_invocation": 0,
+  "new_inner_fits_this_invocation": 0,
+  "peak_rss_bytes": 704839680,
+  "pilot_central_lstm_projection_hours": 12.949312537405715,
+  "prediction_artifact_bytes": 49964838,
+  "reused_final_fits_this_invocation": 210,
+  "reused_inner_fits_this_invocation": 630,
+  "selected_L_distribution": [
+    {
+      "count": 8,
+      "feature_set": "F0_LOCAL",
+      "selected_L": 32
+    },
+    {
+      "count": 14,
+      "feature_set": "F0_LOCAL",
+      "selected_L": 64
+    },
+    {
+      "count": 13,
+      "feature_set": "F0_LOCAL",
+      "selected_L": 128
+    },
+    {
+      "count": 10,
+      "feature_set": "F1_THROUGHPUT",
+      "selected_L": 32
+    },
+    {
+      "count": 14,
+      "feature_set": "F1_THROUGHPUT",
+      "selected_L": 64
+    },
+    {
+      "count": 11,
+      "feature_set": "F1_THROUGHPUT",
+      "selected_L": 128
+    }
+  ],
+  "selected_context_records": 70,
+  "selected_epoch_distribution": [
+    {
+      "count": 5,
+      "selected_epoch": 2
+    },
+    {
+      "count": 7,
+      "selected_epoch": 3
+    },
+    {
+      "count": 5,
+      "selected_epoch": 4
+    },
+    {
+      "count": 5,
+      "selected_epoch": 5
+    },
+    {
+      "count": 5,
+      "selected_epoch": 6
+    },
+    {
+      "count": 4,
+      "selected_epoch": 7
+    },
+    {
+      "count": 7,
+      "selected_epoch": 8
+    },
+    {
+      "count": 3,
+      "selected_epoch": 9
+    },
+    {
+      "count": 3,
+      "selected_epoch": 10
+    },
+    {
+      "count": 9,
+      "selected_epoch": 11
+    },
+    {
+      "count": 2,
+      "selected_epoch": 12
+    },
+    {
+      "count": 5,
+      "selected_epoch": 13
+    },
+    {
+      "count": 4,
+      "selected_epoch": 14
+    },
+    {
+      "count": 3,
+      "selected_epoch": 15
+    },
+    {
+      "count": 1,
+      "selected_epoch": 16
+    },
+    {
+      "count": 1,
+      "selected_epoch": 17
+    },
+    {
+      "count": 3,
+      "selected_epoch": 18
+    },
+    {
+      "count": 4,
+      "selected_epoch": 19
+    },
+    {
+      "count": 1,
+      "selected_epoch": 20
+    },
+    {
+      "count": 1,
+      "selected_epoch": 21
+    },
+    {
+      "count": 3,
+      "selected_epoch": 22
+    },
+    {
+      "count": 3,
+      "selected_epoch": 23
+    },
+    {
+      "count": 3,
+      "selected_epoch": 24
+    },
+    {
+      "count": 4,
+      "selected_epoch": 25
+    },
+    {
+      "count": 1,
+      "selected_epoch": 26
+    },
+    {
+      "count": 1,
+      "selected_epoch": 27
+    },
+    {
+      "count": 1,
+      "selected_epoch": 28
+    },
+    {
+      "count": 2,
+      "selected_epoch": 29
+    },
+    {
+      "count": 1,
+      "selected_epoch": 30
+    },
+    {
+      "count": 3,
+      "selected_epoch": 31
+    },
+    {
+      "count": 1,
+      "selected_epoch": 32
+    },
+    {
+      "count": 1,
+      "selected_epoch": 33
+    },
+    {
+      "count": 4,
+      "selected_epoch": 34
+    },
+    {
+      "count": 1,
+      "selected_epoch": 35
+    },
+    {
+      "count": 1,
+      "selected_epoch": 36
+    },
+    {
+      "count": 4,
+      "selected_epoch": 39
+    },
+    {
+      "count": 4,
+      "selected_epoch": 40
+    },
+    {
+      "count": 2,
+      "selected_epoch": 41
+    },
+    {
+      "count": 2,
+      "selected_epoch": 42
+    },
+    {
+      "count": 1,
+      "selected_epoch": 43
+    },
+    {
+      "count": 2,
+      "selected_epoch": 44
+    },
+    {
+      "count": 6,
+      "selected_epoch": 45
+    },
+    {
+      "count": 6,
+      "selected_epoch": 46
+    },
+    {
+      "count": 3,
+      "selected_epoch": 47
+    },
+    {
+      "count": 14,
+      "selected_epoch": 48
+    },
+    {
+      "count": 19,
+      "selected_epoch": 49
+    },
+    {
+      "count": 39,
+      "selected_epoch": 50
+    }
+  ],
+  "started_at": "2026-09-24T05:52:17.110481+03:00",
+  "status": "COMPLETE",
+  "total_recorded_wall_seconds": 51956.104787937016,
+  "validation_wall_seconds": 4.733631583003444
+}
