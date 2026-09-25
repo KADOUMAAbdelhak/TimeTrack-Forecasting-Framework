@@ -101,9 +101,25 @@ def main() -> None:
     rows: list[dict[str, object]] = []
     for model in ("Ridge", "LightGBM"):
         rows.extend(summarize(model, deterministic_cells(model), ["machine", "fold", "lead"]))
-    for model in ("DLinear", "LSTM"):
+    neural_models = ["DLinear", "LSTM"]
+    if (ROOT / "benchmark/neural_v2/outputs/patchtst/metrics.parquet").exists():
+        neural_models.append("PatchTST")
+    for model in neural_models:
         rows.extend(summarize(model, neural_cells(model), ["machine", "fold", "lead"]))
     summary = pd.DataFrame(rows)
+    # PatchTST prospectively defines pooled MAE on the stored predictions
+    # themselves.  Use its independently generated direct-pooling table rather
+    # than reconstructing pooled values from rounded per-run MAEs.
+    patch_aggregation = ROOT / "benchmark/neural_v2/outputs/patchtst/aggregation_summary.csv"
+    if patch_aggregation.exists():
+        direct = pd.read_csv(patch_aggregation, dtype={"lead": str})
+        summary["lead_key"] = summary.lead.astype(str)
+        for row in direct.itertuples(index=False):
+            mask = summary.model.eq("PatchTST") & summary.lead_key.eq(str(row.lead))
+            summary.loc[mask, ["pooled_f0_mae", "pooled_f1_mae", "pooled_gain_pct"]] = [
+                row.pooled_f0_mae, row.pooled_f1_mae, row.pooled_gain_pct
+            ]
+        summary = summary.drop(columns="lead_key")
     overall = summary[summary.lead.eq("OVERALL")].set_index("model")
     for model, expected in EXPECTED.items():
         actual = (
@@ -123,6 +139,14 @@ def main() -> None:
     ]
     overall_display = summary[summary.lead.eq("OVERALL")][display_columns]
     lstm_display = summary[summary.model.eq("LSTM") & ~summary.lead.eq("OVERALL")][display_columns]
+    patchtst_lines: list[str] = []
+    if "PatchTST" in set(summary.model):
+        patch = summary[summary.model.eq("PatchTST") & ~summary.lead.eq("OVERALL")][display_columns]
+        patchtst_lines = [
+            "## PatchTST lead-level aggregation semantics", "", markdown_table(patch), "",
+            "PatchTST was executed after this reporting convention was frozen; its",
+            "prospective primary decision statistic is therefore the ratio of macro MAEs.", "",
+        ]
     report = [
         "# Cross-Model Context Summary", "",
         "**POST-AUDIT REPORTING STANDARD.** This table is descriptive reporting, not a",
@@ -141,6 +165,7 @@ def main() -> None:
         "(+2.3506%) but negative under both the primary macro-MAE ratio (-2.4070%) and",
         "pooled-prediction gain (-2.8834%). Leads 2 through 128 are positive under all",
         "three summaries.", "",
+        *patchtst_lines,
         "## Interpretation", "",
         "- Ridge: throughput is detrimental.",
         "- DLinear: throughput is detrimental.",
@@ -152,7 +177,7 @@ def main() -> None:
         "performance is a separate question: LSTM did not beat accepted LightGBM absolute",
         "performance at any of the eight evaluated leads, and is not claimed to be the best",
         "forecasting model.", "",
-        "The complete 36-row machine-readable table is `CROSS_MODEL_CONTEXT_SUMMARY.csv`.",
+        f"The complete {len(summary)}-row machine-readable table is `CROSS_MODEL_CONTEXT_SUMMARY.csv`.",
     ]
     MD_PATH.write_text("\n".join(report) + "\n")
     print(f"rows={len(summary)}")

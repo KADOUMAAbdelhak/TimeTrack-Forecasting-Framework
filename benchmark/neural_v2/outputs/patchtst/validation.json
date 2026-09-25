@@ -1,0 +1,80 @@
+{
+  "aggregation_recomputation": {
+    "cell_relative_exact": true,
+    "pooled_exact_with_float_tolerance": true,
+    "primary_exact": true
+  },
+  "all_leads_present": true,
+  "all_seeds_present": true,
+  "artifact_counts": {
+    "figures": 6,
+    "inner": 630,
+    "metrics": 1680,
+    "predictions": 210,
+    "runs": 210,
+    "selected": 70
+  },
+  "comparison_support_valid": true,
+  "duplicate_run_ids": 0,
+  "failures": [],
+  "frozen_integrity": {
+    "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "corrected_deterministic": [
+      1070,
+      0
+    ],
+    "dlinear": [
+      1347,
+      0
+    ],
+    "lstm": [
+      1349,
+      0
+    ],
+    "neural_v2": [
+      29,
+      0
+    ],
+    "original_deterministic": [
+      632,
+      0
+    ],
+    "phase2a": [
+      33,
+      0
+    ],
+    "raw_hashes_unchanged": true
+  },
+  "maximum_differences": {
+    "aggregation_abs_difference": 4.440892098500626e-16,
+    "metric_abs_difference": 0.0,
+    "pooled_direct_abs_difference": 4.440892098500626e-16,
+    "target_abs_difference": 0.0
+  },
+  "missing_metric_keys": 0,
+  "missing_run_keys": 0,
+  "scientific_scope": "PatchTST only",
+  "selection_and_fit": {
+    "final_refit_no_test_api": true,
+    "outer_test_loaded_after_fit": true,
+    "per_seed_fixed_epoch": true,
+    "selected_L_inner_only": true,
+    "smaller_L_tie_break": true,
+    "train_only_preprocessing": true
+  },
+  "status": "PASS",
+  "structural_counts": {
+    "inner_target_time_leakage": 0,
+    "outer_target_time_leakage": 0,
+    "prediction_hash_mismatches": 0,
+    "run_id_mismatches": 0,
+    "sample_id_mismatches": 0,
+    "segment_crossing_histories": 0,
+    "segment_crossing_targets": 0,
+    "selected_L_mismatches": 0,
+    "selected_epoch_mismatches": 0,
+    "support_hash_mismatches": 0,
+    "timestamp_mismatches": 0
+  },
+  "unexpected_model_output_directories": []
+}

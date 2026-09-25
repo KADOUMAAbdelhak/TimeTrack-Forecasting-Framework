@@ -20,6 +20,7 @@ Cell-relative summaries retain the original matched-cell percentage definition.
 | LightGBM | OVERALL | 1.344404 | 1.344203 | 0.014935 | 1.427921 | 1.429156 | -0.086515 | 0.719205 | 0.838148 | 0.728571 |
 | DLinear | OVERALL | 1.861556 | 1.910045 | -2.604757 | 1.908509 | 1.957925 | -2.589275 | -2.867954 | -1.617576 | 0.321429 |
 | LSTM | OVERALL | 1.944550 | 1.920200 | 1.252207 | 1.990639 | 1.973732 | 0.849314 | 3.087378 | 2.397566 | 0.657143 |
+| PatchTST | OVERALL | 1.842608 | 1.865182 | -1.225078 | 1.893934 | 1.920582 | -1.407016 | -2.499026 | -0.794166 | 0.454762 |
 
 ## LSTM lead-level aggregation semantics
 
@@ -39,6 +40,22 @@ LSTM lead 1 is positive under the prospective mean cell-relative metric
 pooled-prediction gain (-2.8834%). Leads 2 through 128 are positive under all
 three summaries.
 
+## PatchTST lead-level aggregation semantics
+
+| model | lead | macro_f0_mae | macro_f1_mae | primary_ratio_macro_mae_gain_pct | pooled_f0_mae | pooled_f1_mae | pooled_gain_pct | mean_cell_relative_gain_pct | median_cell_relative_gain_pct | positive_cell_fraction |
+|---|---|---|---|---|---|---|---|---|---|---|
+| PatchTST | 1 | 1.348908 | 1.462756 | -8.440064 | 1.375866 | 1.495318 | -8.681950 | -6.653319 | -2.245327 | 0.400000 |
+| PatchTST | 2 | 1.541915 | 1.599020 | -3.703514 | 1.582584 | 1.643431 | -3.844765 | -3.363532 | -1.371409 | 0.409524 |
+| PatchTST | 4 | 1.799564 | 1.805180 | -0.312121 | 1.865166 | 1.870998 | -0.312712 | -2.406693 | 0.174228 | 0.514286 |
+| PatchTST | 8 | 1.890924 | 1.895441 | -0.238882 | 1.950195 | 1.959106 | -0.456965 | -2.314501 | -0.490249 | 0.438095 |
+| PatchTST | 16 | 1.929108 | 1.942017 | -0.669155 | 1.982670 | 2.002331 | -0.991625 | -2.417446 | -1.133340 | 0.419048 |
+| PatchTST | 32 | 1.978855 | 1.977098 | 0.088763 | 2.030954 | 2.032533 | -0.077733 | -1.319214 | 0.405359 | 0.514286 |
+| PatchTST | 64 | 2.040326 | 2.026881 | 0.658975 | 2.098128 | 2.088430 | 0.462220 | -0.588988 | -0.186339 | 0.485714 |
+| PatchTST | 128 | 2.211267 | 2.213060 | -0.081060 | 2.265909 | 2.272508 | -0.291240 | -0.928518 | -0.585568 | 0.457143 |
+
+PatchTST was executed after this reporting convention was frozen; its
+prospective primary decision statistic is therefore the ratio of macro MAEs.
+
 ## Interpretation
 
 - Ridge: throughput is detrimental.
@@ -53,4 +70,4 @@ performance is a separate question: LSTM did not beat accepted LightGBM absolute
 performance at any of the eight evaluated leads, and is not claimed to be the best
 forecasting model.
 
-The complete 36-row machine-readable table is `CROSS_MODEL_CONTEXT_SUMMARY.csv`.
+The complete 45-row machine-readable table is `CROSS_MODEL_CONTEXT_SUMMARY.csv`.
