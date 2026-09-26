@@ -1,0 +1,44 @@
+{
+  "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+  "definition": "all canonical rows strictly before the earliest first outer-test origin across the seven frozen CPU benchmark machine splits",
+  "earliest_first_test_timestamp": "2024-07-07 16:52:59.474465",
+  "end_index_inclusive": 16877,
+  "end_timestamp": "2024-07-07 16:52:17.183763",
+  "excluded_first_test_or_later_start_index": 16878,
+  "frozen_machine_first_test_boundaries": {
+    "machine01": {
+      "first_test_origin_index": 19740,
+      "first_test_origin_timestamp": "2024-07-09 02:30:00.781211"
+    },
+    "machine02": {
+      "first_test_origin_index": 22946,
+      "first_test_origin_timestamp": "2024-07-10 16:10:42.487782"
+    },
+    "machine03": {
+      "first_test_origin_index": 23401,
+      "first_test_origin_timestamp": "2024-07-10 21:31:22.728414"
+    },
+    "machine04": {
+      "first_test_origin_index": 19740,
+      "first_test_origin_timestamp": "2024-07-09 02:30:00.781211"
+    },
+    "machine05": {
+      "first_test_origin_index": 23549,
+      "first_test_origin_timestamp": "2024-07-10 23:15:40.260407"
+    },
+    "machine06": {
+      "first_test_origin_index": 16878,
+      "first_test_origin_timestamp": "2024-07-07 16:52:59.474465"
+    },
+    "machine07": {
+      "first_test_origin_index": 22883,
+      "first_test_origin_timestamp": "2024-07-10 15:26:17.880576"
+    }
+  },
+  "hash_encoding": "little-endian int64 row indices + timestamp nanoseconds + segment ids",
+  "membership_sha256": "9980b51cd09ed865bc87b01de074d20413c853cfa5e67d96832e69557acb9e03",
+  "name": "MULTIRESOURCE_DESIGN_REGION",
+  "row_count": 16878,
+  "start_index": 0,
+  "start_timestamp": "2024-06-24 13:37:06.164306"
+}
