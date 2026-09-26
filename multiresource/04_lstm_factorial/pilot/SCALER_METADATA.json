@@ -1,0 +1,26 @@
+{
+  "fit_partition": "inner_train_only",
+  "resources": {
+    "CPU": {
+      "native_iqr": 0.7481481479825796,
+      "transformed_iqr": 0.7481481479825796,
+      "transformed_median": 1.9888888884128797
+    },
+    "DISK_WRITE": {
+      "native_iqr": 80008.53333333338,
+      "transformed_iqr": 0.2961742098958364,
+      "transformed_median": 12.517099837745658
+    },
+    "MEMORY": {
+      "native_iqr": 310947840.0,
+      "transformed_iqr": 310947840.0,
+      "transformed_median": 16971706368.0
+    },
+    "THROUGHPUT": {
+      "native_iqr": 7.599444444444446,
+      "transformed_iqr": 0.5728206354246148,
+      "transformed_median": 2.49641425663948
+    }
+  },
+  "support_hash": "a694afda3cbbf49b0978a9f3014be0dd0874807b6df93a9716e0a4992387279c"
+}

@@ -1,0 +1,19 @@
+{
+  "protocol_version": "phase3b-lstm-factorial-v1-preflight",
+  "phase3a_commit": "70eea336302aebfaaa20c79b1972b1ebb835442c",
+  "decision_sha256": "2bfb2610bd8e869dc038bccd6b18656cd2c968b9d548c758487cae500cbf5677",
+  "machines": ["machine01", "machine02", "machine03", "machine04", "machine05", "machine06", "machine07"],
+  "resources": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+  "future_leads": [1, 2, 4, 8, 16, 32, 64, 128],
+  "context_lengths": [32, 64, 128],
+  "maximum_support_context": 128,
+  "seeds": [0, 1, 2],
+  "outer_folds": 5,
+  "inner_validation_fraction": 0.15,
+  "transforms": {"CPU": "identity", "THROUGHPUT": "log1p", "MEMORY": "identity", "DISK_WRITE": "log1p"},
+  "scaling": "training-partition median/IQR after resource transform; zero IQR is fatal",
+  "physical_projection": {"THROUGHPUT": "max(0, expm1(x))", "DISK_WRITE": "max(0, expm1(x))"},
+  "model": {"hidden_size": 64, "layers": 2, "dropout": 0.1, "bidirectional": false, "representation": "final recurrent output"},
+  "training": {"optimizer": "Adam", "learning_rate": 0.001, "batch_size": 256, "maximum_epochs": 50, "early_stopping_patience": 7, "gradient_clip": 1.0},
+  "pilot": {"machine": "machine01", "outer_fold": 1, "seed": 0, "context_length": 64, "epochs": 5, "models": 9, "scientific": false, "outer_test_access": false}
+}

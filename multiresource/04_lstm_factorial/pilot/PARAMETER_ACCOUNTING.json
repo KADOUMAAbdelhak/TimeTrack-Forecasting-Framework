@@ -1,0 +1,24 @@
+{
+  "M1": {
+    "four_head_parameters": 2080,
+    "inference_models_per_cell": 1,
+    "serialized_state_bytes_per_model": 218163,
+    "shared_encoder_parameters": 51200,
+    "total_shared_system_parameters": 53280,
+    "training_models_per_cell": 1
+  },
+  "S1": {
+    "inference_models_per_cell": 4,
+    "parameters_per_resource_model": 50952,
+    "serialized_state_bytes_per_model": 207301,
+    "total_parameters_four_models": 203808,
+    "training_models_per_cell": 4
+  },
+  "S2": {
+    "inference_models_per_cell": 4,
+    "parameters_per_target_model": 51720,
+    "serialized_state_bytes_per_model": 210373,
+    "total_parameters_four_models": 206880,
+    "training_models_per_cell": 4
+  }
+}

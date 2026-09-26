@@ -1,0 +1,185 @@
+{
+  "context_length": 64,
+  "epochs_each": 5,
+  "fold": 1,
+  "inner_train_support_hash": "a694afda3cbbf49b0978a9f3014be0dd0874807b6df93a9716e0a4992387279c",
+  "inner_validation_support_hash": "e74b78cf44a0383558f778204b610994de8588da569399d5f8520ebed9eb2445",
+  "machine": "machine01",
+  "models": [
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S1",
+      "input_channels": 1,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 50952,
+      "peak_rss_bytes": 1327742976,
+      "resource": "CPU",
+      "samples_per_second": 5724.423366614078,
+      "scientific": false,
+      "seconds_per_epoch": 1.0193166413984727,
+      "total_5_epoch_training_seconds": 5.096583206992364,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.2878479569917545
+    },
+    {
+      "best_epoch_for_diagnostic_only": 2,
+      "epochs_completed": 5,
+      "formulation": "S1",
+      "input_channels": 1,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 50952,
+      "peak_rss_bytes": 1328349184,
+      "resource": "THROUGHPUT",
+      "samples_per_second": 5741.762578978658,
+      "scientific": false,
+      "seconds_per_epoch": 1.0162384668015876,
+      "total_5_epoch_training_seconds": 5.0811923340079375,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.2871923320053611
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S1",
+      "input_channels": 1,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 50952,
+      "peak_rss_bytes": 1328398336,
+      "resource": "MEMORY",
+      "samples_per_second": 5736.185364192002,
+      "scientific": false,
+      "seconds_per_epoch": 1.0172265416011215,
+      "total_5_epoch_training_seconds": 5.086132708005607,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.28632937496877275
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S1",
+      "input_channels": 1,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 50952,
+      "peak_rss_bytes": 1328447488,
+      "resource": "DISK_WRITE",
+      "samples_per_second": 5745.528757714407,
+      "scientific": false,
+      "seconds_per_epoch": 1.0155723252042663,
+      "total_5_epoch_training_seconds": 5.077861626021331,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.2871663340483792
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S2",
+      "input_channels": 4,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 51720,
+      "peak_rss_bytes": 1328447488,
+      "resource": "CPU",
+      "samples_per_second": 5709.526634236021,
+      "scientific": false,
+      "seconds_per_epoch": 1.0219761415966786,
+      "total_5_epoch_training_seconds": 5.109880707983393,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.27955316795851104
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S2",
+      "input_channels": 4,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 51720,
+      "peak_rss_bytes": 1328447488,
+      "resource": "THROUGHPUT",
+      "samples_per_second": 5686.857642733049,
+      "scientific": false,
+      "seconds_per_epoch": 1.0260499500029254,
+      "total_5_epoch_training_seconds": 5.130249750014627,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.28315804002340883
+    },
+    {
+      "best_epoch_for_diagnostic_only": 4,
+      "epochs_completed": 5,
+      "formulation": "S2",
+      "input_channels": 4,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 51720,
+      "peak_rss_bytes": 1328447488,
+      "resource": "MEMORY",
+      "samples_per_second": 5707.012959140464,
+      "scientific": false,
+      "seconds_per_epoch": 1.02242627479136,
+      "total_5_epoch_training_seconds": 5.1121313739567995,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.27932087404769845
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "S2",
+      "input_channels": 4,
+      "output_dimensions": [
+        8
+      ],
+      "parameter_count": 51720,
+      "peak_rss_bytes": 1328447488,
+      "resource": "DISK_WRITE",
+      "samples_per_second": 5690.4974970755,
+      "scientific": false,
+      "seconds_per_epoch": 1.0253936502034775,
+      "total_5_epoch_training_seconds": 5.126968251017388,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.28009475194267
+    },
+    {
+      "best_epoch_for_diagnostic_only": 5,
+      "epochs_completed": 5,
+      "formulation": "M1",
+      "input_channels": 4,
+      "output_dimensions": [
+        4,
+        8
+      ],
+      "parameter_count": 53280,
+      "peak_rss_bytes": 1328447488,
+      "resource": "ALL",
+      "samples_per_second": 5675.763475936009,
+      "scientific": false,
+      "seconds_per_epoch": 1.028055524994852,
+      "total_5_epoch_training_seconds": 5.14027762497426,
+      "training_samples": 5835,
+      "validation_samples": 1044,
+      "validation_seconds": 0.2805475000059232
+    }
+  ],
+  "outer_test_accessed": false,
+  "pilot_models": 9,
+  "seed": 0
+}
