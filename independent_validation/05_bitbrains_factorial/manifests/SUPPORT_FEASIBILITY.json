@@ -1,0 +1,23 @@
+{
+  "environments": {
+    "GWA-T-12_Bitbrains_Rnd": {
+      "selected_vms": 35,
+      "total_legal_origins_across_vms": 818879
+    },
+    "GWA-T-12_Bitbrains_fastStorage": {
+      "selected_vms": 35,
+      "total_legal_origins_across_vms": 284882
+    }
+  },
+  "expected_support_record_count": 1050,
+  "formulation_resource_support_mismatches": 0,
+  "status": "PASS",
+  "support_failures": [],
+  "support_minima": {
+    "inner_train": 512,
+    "inner_validation": 128,
+    "outer_test": 256,
+    "outer_train": 1024
+  },
+  "support_record_count": 1050
+}

@@ -1,0 +1,42 @@
+"""Frozen plain external S1/S2/M1 LSTM definitions with five horizons."""
+
+from __future__ import annotations
+
+import torch
+from torch import nn
+
+
+class SingleTargetLSTM(nn.Module):
+    def __init__(self, input_channels: int, hidden_size: int = 64, layers: int = 2, dropout: float = 0.1) -> None:
+        super().__init__()
+        if input_channels not in {1, 4}:
+            raise ValueError("S1/S2 input channels must be one or four")
+        self.input_channels = input_channels
+        self.encoder = nn.LSTM(
+            input_channels, hidden_size, layers, dropout=dropout,
+            batch_first=True, bidirectional=False,
+        )
+        self.head = nn.Linear(hidden_size, 5)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        sequence, _ = self.encoder(x)
+        return self.head(sequence[:, -1, :])
+
+
+class MultiTargetLSTM(nn.Module):
+    def __init__(self, input_channels: int = 4, hidden_size: int = 64, layers: int = 2, dropout: float = 0.1) -> None:
+        super().__init__()
+        if input_channels != 4:
+            raise ValueError("M1 requires four ordered inputs")
+        self.input_channels = input_channels
+        self.encoder = nn.LSTM(
+            input_channels, hidden_size, layers, dropout=dropout,
+            batch_first=True, bidirectional=False,
+        )
+        self.heads = nn.ModuleList([nn.Linear(hidden_size, 5) for _ in range(4)])
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        sequence, _ = self.encoder(x)
+        representation = sequence[:, -1, :]
+        return torch.stack([head(representation) for head in self.heads], dim=1)
+

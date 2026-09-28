@@ -1,0 +1,63 @@
+{
+  "architecture_and_workload": {
+    "parameters": {
+      "M1_encoder_parameters": 51200,
+      "M1_head_parameters": 1300,
+      "M1_total_parameters": 52500,
+      "S1_four_model_total": 203028,
+      "S1_parameters_per_model": 50757,
+      "S2_four_model_total": 206100,
+      "S2_parameters_per_model": 51525
+    },
+    "per_environment_workload": {
+      "M1_final": 525,
+      "M1_inner": 1575,
+      "S1_final": 2100,
+      "S1_inner": 6300,
+      "S2_final": 2100,
+      "S2_inner": 6300,
+      "final_total": 4725,
+      "fit_total": 18900,
+      "inner_total": 14175,
+      "metric_rows": 31500
+    }
+  },
+  "archives": {
+    "GWA-T-12_Bitbrains_Rnd": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+    "GWA-T-12_Bitbrains_fastStorage": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671"
+  },
+  "config_sha256": "deedcd31616861f1f6ee4517cc0552a05d54d0b334364f9674b06a1dcab6dc1a",
+  "decision_sha256": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+  "external_predictive_outcomes_inspected": 0,
+  "external_scientific_fits": 0,
+  "external_test_predictions": 0,
+  "failures": [],
+  "h1_h2_h3_results_produced": 0,
+  "new_architectures": 0,
+  "phase4a": {
+    "inventory_entries": 27,
+    "inventory_sha256": "b3fb2186d16fcdd28862a2ba6dd6c76c701d66dc5387ce9aa57bf04b3e1f7cc3",
+    "tree_sha256": "a22bb756fed1fff2ad04cf1e0155f70df1f4682390cf54a0877490d4d3132194"
+  },
+  "pilot": {
+    "epochs_each": [
+      5
+    ],
+    "inner_validation_sanity_rows": 120,
+    "m1_loss_balance_rows": 40,
+    "outer_test_predictions": 0,
+    "outer_test_targets_accessed": false,
+    "pilot_models": 18,
+    "scientific_context_selections": 0,
+    "scientific_final_refits": 0
+  },
+  "status": "PASS",
+  "support": {
+    "formulation_resource_support_mismatches": 0,
+    "selected_duplicate_timestamps": 0,
+    "selected_invalid_rows": 125,
+    "selected_segments": 1329,
+    "support_records": 1050,
+    "support_records_reproduced": 1050
+  }
+}

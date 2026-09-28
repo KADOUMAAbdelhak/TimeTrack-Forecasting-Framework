@@ -1,0 +1,50 @@
+{
+  "archives": {
+    "GWA-T-12_Bitbrains_Rnd": {
+      "filename": "gwa_t_12_rnd.zip",
+      "sha256": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06"
+    },
+    "GWA-T-12_Bitbrains_fastStorage": {
+      "filename": "gwa_t_12_fastStorage.zip",
+      "sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671"
+    }
+  },
+  "batch_size": 256,
+  "cohort_hashes": {
+    "GWA-T-12_Bitbrains_Rnd": "5674f15382d5efb795cbda46a34f1f766e859413857475212023afc36ffcdc1a",
+    "GWA-T-12_Bitbrains_fastStorage": "97742a6e10858c9b8a021d3142419d66f41b2ac67e5944f95c2a4b8931f4632d"
+  },
+  "contexts": [4, 9, 18],
+  "dropout": 0.1,
+  "folds": 5,
+  "gradient_clip": 1.0,
+  "hidden_size": 64,
+  "horizon_minutes": [5, 10, 20, 45, 90],
+  "inner_validation_fraction": 0.15,
+  "layers": 2,
+  "learning_rate": 0.001,
+  "max_epochs": 50,
+  "outer_initial_train_fraction": 0.5,
+  "outer_test_fraction": 0.1,
+  "patience": 7,
+  "pilot": {
+    "context": 9,
+    "epochs": 5,
+    "fold": 1,
+    "seed": 0,
+    "vm_by_environment": {
+      "GWA-T-12_Bitbrains_Rnd": "99",
+      "GWA-T-12_Bitbrains_fastStorage": "697"
+    }
+  },
+  "resource_order": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+  "sample_leads": [1, 2, 4, 9, 18],
+  "seeds": [0, 1, 2],
+  "segment_gap_seconds": 450,
+  "support_minima": {
+    "inner_train": 512,
+    "inner_validation": 128,
+    "outer_test": 256,
+    "outer_train": 1024
+  }
+}
