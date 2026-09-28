@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "bootstrap_rows": 108,
+    "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "cell_matrix_rows": 3360,
+    "descriptor_origin_mismatches": 0,
+    "descriptor_segment_crossings": 0,
+    "figure_count": 10,
+    "frozen_history": {
+      "corrected": {
+        "count": 1070,
+        "expected": 1070,
+        "pass": true
+      },
+      "dlinear": {
+        "count": 1347,
+        "expected": 1347,
+        "pass": true
+      },
+      "lstm": {
+        "count": 1349,
+        "expected": 1349,
+        "pass": true
+      },
+      "neural_v2": {
+        "count": 29,
+        "expected": 29,
+        "pass": true
+      },
+      "original": {
+        "count": 632,
+        "expected": 632,
+        "pass": true
+      },
+      "patchtst": {
+        "count": 1352,
+        "expected": 1352,
+        "pass": true
+      },
+      "phase2a": {
+        "count": 33,
+        "expected": 33,
+        "pass": true
+      },
+      "phase3a": {
+        "count": 25,
+        "expected": 25,
+        "pass": true
+      },
+      "phase3b": {
+        "count": 31,
+        "expected": 31,
+        "pass": true
+      }
+    },
+    "frozen_prediction_files_verified": 945,
+    "future_descriptor_access": 0,
+    "memory_decomposition_rows": 840,
+    "phase3c_artifact_mismatches": 0,
+    "phase3c_inventory_bytes": 651721110,
+    "phase3c_inventory_entries": 5706,
+    "phase3c_inventory_sha256": "95bbb842f60bbc8c2c1bc11704c413e8e654594476d16c40850a217913c5155e",
+    "phase3c_scientific_tree_sha256": "ec35446710f90a7b1e1a86cdbca6bedd4face31ec68ea56e83fd682addd89a65",
+    "phase3d_forecasting_fits": 0,
+    "post_phase3c_architecture_implementations": 0,
+    "primary_reproduction_mismatches": 0,
+    "primary_reproduction_rows": 12,
+    "protocol_sha256": "c1ed2d6ae3ee3afe20c70b8561cc58d340c0ee70e0686e642f461b7e0f702da8",
+    "raw_hashes_unchanged": true,
+    "sample_delta_max_abs_error": 0.0,
+    "sample_error_rows": 8857920,
+    "training_source_violations": [],
+    "training_threshold_mismatches": 0
+  },
+  "failures": [],
+  "figure_count": 10,
+  "no_model_execution": true,
+  "phase3c_artifacts_unchanged": true,
+  "posthoc_only": true,
+  "status": "PASS"
+}
