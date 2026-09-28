@@ -1,0 +1,243 @@
+{
+  "context_analysis": {
+    "m1_differs_from_s2": 85,
+    "s2_differs_from_s1": 62,
+    "s2_s1_cells": 140
+  },
+  "global_cross_resource_input_decision": "CROSS_RESOURCE_INPUT_NOT_SUPPORTED",
+  "global_shared_representation_decision": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+  "global_summaries": {
+    "m1_vs_s1": {
+      "broad_negative_resources": 2,
+      "broad_positive_resources": 0,
+      "comparison": "m1_vs_s1",
+      "conditionally_positive_resources": 0,
+      "equal_resource_mean_primary_gain_pct": -5.665830570172801,
+      "median_resource_gain_pct": -2.0598692514031787,
+      "positive_resources": 0
+    },
+    "m1_vs_s2": {
+      "broad_negative_resources": 1,
+      "broad_positive_resources": 0,
+      "comparison": "m1_vs_s2",
+      "conditionally_positive_resources": 0,
+      "equal_resource_mean_primary_gain_pct": -4.910744923145371,
+      "median_resource_gain_pct": -0.8178280448520012,
+      "positive_resources": 0
+    },
+    "s2_vs_s1": {
+      "broad_negative_resources": 0,
+      "broad_positive_resources": 0,
+      "comparison": "s2_vs_s1",
+      "conditionally_positive_resources": 0,
+      "equal_resource_mean_primary_gain_pct": -0.7971829219458157,
+      "median_resource_gain_pct": -0.36753571794597484,
+      "positive_resources": 0
+    }
+  },
+  "loss_diagnostic": {
+    "cpu_majority_persists": false,
+    "selected_inner_cpu_mean_share": 0.48236189349242137
+  },
+  "phase3c_decision": "MULTI_RESOURCE_FORECASTING_PREMISE_WEAK",
+  "resource_comparisons": {
+    "m1_vs_s1": [
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 1.8083835564000543,
+        "macro_mae_candidate": 1.8595233849551875,
+        "mean_cell_gain_pct": -5.20970326023529,
+        "median_cell_gain_pct": -1.9293797762093754,
+        "pooled_gain_pct": -2.6693686512046058,
+        "positive_cell_fraction": 0.42142857142857143,
+        "positive_folds": 2.0,
+        "positive_leads": 0.0,
+        "positive_machines": 2.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -2.8279304118943203,
+        "resource": "CPU"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 29.798086141051048,
+        "macro_mae_candidate": 30.121358280325264,
+        "mean_cell_gain_pct": -1.0969787198798715,
+        "median_cell_gain_pct": -0.1202733201253805,
+        "pooled_gain_pct": -1.2344834626316987,
+        "positive_cell_fraction": 0.4666666666666667,
+        "positive_folds": 3.0,
+        "positive_leads": 2.0,
+        "positive_machines": 3.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -1.0848755109438508,
+        "resource": "THROUGHPUT"
+      },
+      {
+        "classification": "BROAD_NEGATIVE",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 318123366.4276315,
+        "macro_mae_candidate": 373663596.9012034,
+        "mean_cell_gain_pct": -40.123489078977094,
+        "median_cell_gain_pct": -18.838854333044424,
+        "pooled_gain_pct": -17.276457050283728,
+        "positive_cell_fraction": 0.175,
+        "positive_folds": 0.0,
+        "positive_leads": 0.0,
+        "positive_machines": 0.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -17.458708266940995,
+        "resource": "MEMORY"
+      },
+      {
+        "classification": "BROAD_NEGATIVE",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 3131645.646770224,
+        "macro_mae_candidate": 3172100.4986138963,
+        "mean_cell_gain_pct": -1.5383926147403875,
+        "median_cell_gain_pct": -0.3760132996106519,
+        "pooled_gain_pct": -1.361347613550532,
+        "positive_cell_fraction": 0.3619047619047619,
+        "positive_folds": 0.0,
+        "positive_leads": 0.0,
+        "positive_machines": 1.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -1.2918080909120369,
+        "resource": "DISK_WRITE"
+      }
+    ],
+    "m1_vs_s2": [
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 1.8682961968376952,
+        "macro_mae_candidate": 1.8595233849551875,
+        "mean_cell_gain_pct": -3.324229638269675,
+        "median_cell_gain_pct": -1.614793810043483,
+        "pooled_gain_pct": 1.3349865071165796,
+        "positive_cell_fraction": 0.40595238095238095,
+        "positive_folds": 3.0,
+        "positive_leads": 7.0,
+        "positive_machines": 1.0,
+        "positive_seeds": 2.0,
+        "primary_gain_pct": 0.4695621549386364,
+        "resource": "CPU"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 29.870421590890224,
+        "macro_mae_candidate": 30.121358280325264,
+        "mean_cell_gain_pct": -0.8353781517353153,
+        "median_cell_gain_pct": -0.27782449582144153,
+        "pooled_gain_pct": -0.9923044545075569,
+        "positive_cell_fraction": 0.39880952380952384,
+        "positive_folds": 1.0,
+        "positive_leads": 1.0,
+        "positive_machines": 3.0,
+        "positive_seeds": 1.0,
+        "primary_gain_pct": -0.8400841905477818,
+        "resource": "THROUGHPUT"
+      },
+      {
+        "classification": "BROAD_NEGATIVE",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 315389448.76136076,
+        "macro_mae_candidate": 373663596.9012034,
+        "mean_cell_gain_pct": -38.43989747062575,
+        "median_cell_gain_pct": -19.615919110163823,
+        "pooled_gain_pct": -17.38711880500012,
+        "positive_cell_fraction": 0.15714285714285714,
+        "positive_folds": 1.0,
+        "positive_leads": 0.0,
+        "positive_machines": 0.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -18.476885757816117,
+        "resource": "MEMORY"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 3147063.3469767044,
+        "macro_mae_candidate": 3172100.4986138963,
+        "mean_cell_gain_pct": -0.6913394527806394,
+        "median_cell_gain_pct": -0.27308859598991303,
+        "pooled_gain_pct": -0.8367911270432782,
+        "positive_cell_fraction": 0.35833333333333334,
+        "positive_folds": 2.0,
+        "positive_leads": 5.0,
+        "positive_machines": 1.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -0.7955718991562205,
+        "resource": "DISK_WRITE"
+      }
+    ],
+    "s2_vs_s1": [
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 1.8083835564000543,
+        "macro_mae_candidate": 1.8682961968376952,
+        "mean_cell_gain_pct": -2.4139214413174948,
+        "median_cell_gain_pct": -0.651347749309281,
+        "pooled_gain_pct": -4.058536067204829,
+        "positive_cell_fraction": 0.4607142857142857,
+        "positive_folds": 3.0,
+        "positive_leads": 0.0,
+        "positive_machines": 3.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -3.3130493929567058,
+        "resource": "CPU"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 29.798086141051048,
+        "macro_mae_candidate": 29.870421590890224,
+        "mean_cell_gain_pct": -0.40635137902037954,
+        "median_cell_gain_pct": 0.09462913491625408,
+        "pooled_gain_pct": -0.23979946732796117,
+        "positive_cell_fraction": 0.5333333333333333,
+        "positive_folds": 3.0,
+        "positive_leads": 5.0,
+        "positive_machines": 3.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -0.24275199922831336,
+        "resource": "THROUGHPUT"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 318123366.4276315,
+        "macro_mae_candidate": 315389448.76136076,
+        "mean_cell_gain_pct": -5.202199941836545,
+        "median_cell_gain_pct": -1.5443962653169834,
+        "pooled_gain_pct": 0.09427078187362407,
+        "positive_cell_fraction": 0.44285714285714284,
+        "positive_folds": 2.0,
+        "positive_leads": 5.0,
+        "positive_machines": 2.0,
+        "positive_seeds": 2.0,
+        "primary_gain_pct": 0.8593891410653923,
+        "resource": "MEMORY"
+      },
+      {
+        "classification": "NEUTRAL_OR_MIXED",
+        "lead": "OVERALL",
+        "macro_mae_baseline": 3131645.646770224,
+        "macro_mae_candidate": 3147063.3469767044,
+        "mean_cell_gain_pct": -0.9942760275768023,
+        "median_cell_gain_pct": -0.016641148020700883,
+        "pooled_gain_pct": -0.5202034700274927,
+        "positive_cell_fraction": 0.4880952380952381,
+        "positive_folds": 1.0,
+        "positive_leads": 2.0,
+        "positive_machines": 3.0,
+        "positive_seeds": 0.0,
+        "primary_gain_pct": -0.49231943666363626,
+        "resource": "DISK_WRITE"
+      }
+    ]
+  }
+}

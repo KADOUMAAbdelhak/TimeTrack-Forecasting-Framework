@@ -1,0 +1,83 @@
+{
+  "analysis_seconds": 0.625709125015419,
+  "config_sha256": "fe985007ebd72417dcab8e8a1851c358d3d9a3da26f372595ac7ff6b499eedd6",
+  "counts": {
+    "M1": {
+      "final": 105,
+      "inner": 315,
+      "metrics": 3360
+    },
+    "S1": {
+      "final": 420,
+      "inner": 1260,
+      "metrics": 3360
+    },
+    "S2": {
+      "final": 420,
+      "inner": 1260,
+      "metrics": 3360
+    }
+  },
+  "criteria_sha256": "3157a233c3c76b126ff939f7e0588c9c2d21f98bb7d3e6355f13a5d1bc470d57",
+  "model_artifact_bytes": 199249995,
+  "peak_rss_bytes": 1889026048,
+  "prediction_artifact_bytes": 421418197,
+  "scientific_tree_bytes_pre_analysis": 650145323,
+  "stage_runtime": {
+    "M1_final": {
+      "executed": 105,
+      "fit_seconds": 11107.958568581671,
+      "peak_rss_bytes": 1687044096,
+      "prediction_seconds": 25.452757246152032,
+      "seconds": 0.0,
+      "skipped": 0
+    },
+    "M1_inner": {
+      "executed": 315,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0,
+      "prediction_seconds": 0.0,
+      "seconds": 35087.36990263563,
+      "skipped": 0
+    },
+    "S1_final": {
+      "executed": 420,
+      "fit_seconds": 39003.12003809359,
+      "peak_rss_bytes": 1844035584,
+      "prediction_seconds": 122.79960683529498,
+      "seconds": 0.0,
+      "skipped": 0
+    },
+    "S1_inner": {
+      "executed": 1225,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0,
+      "prediction_seconds": 0.0,
+      "seconds": 108516.71949970163,
+      "skipped": 35
+    },
+    "S2_final": {
+      "executed": 420,
+      "fit_seconds": 31641.283449668263,
+      "peak_rss_bytes": 1889026048,
+      "prediction_seconds": 123.94350226351526,
+      "seconds": 0.0,
+      "skipped": 0
+    },
+    "S2_inner": {
+      "executed": 1260,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0,
+      "prediction_seconds": 0.0,
+      "seconds": 102589.13207527043,
+      "skipped": 0
+    }
+  },
+  "status": "VALIDATED_PASS",
+  "summed_final_fit_seconds": 81752.36205634353,
+  "summed_inner_fit_seconds": 247528.9684703914,
+  "summed_prediction_seconds": 272.19586634496227,
+  "total_wall_seconds_current_invocation": 84797.35813533302,
+  "validation_path": "multiresource/04_lstm_factorial/outputs/scientific/validation/validation.json",
+  "validation_seconds": 42.162293041998055
+}
