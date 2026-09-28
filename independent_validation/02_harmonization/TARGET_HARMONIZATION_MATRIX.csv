@@ -1,0 +1,25 @@
+dataset,frozen_resource,external_field_or_construction,external_unit,classification,documented_difference,prospective_transform
+TimeTrack,CPU,machineXX__cpu_utilization,percent-like,EXACT_OR_CLOSE_SEMANTIC_MATCH,frozen reference,identity
+TimeTrack,THROUGHPUT,machineXX__network_tx + machineXX__network_rx,raw rate unit unknown,EXACT_OR_CLOSE_SEMANTIC_MATCH,frozen reference,log1p
+TimeTrack,MEMORY,machineXX__memory_used,bytes inferred,EXACT_OR_CLOSE_SEMANTIC_MATCH,frozen reference,identity
+TimeTrack,DISK_WRITE,machineXX__disk_write,raw rate unit unknown,EXACT_OR_CLOSE_SEMANTIC_MATCH,frozen reference,log1p
+GWA-T-12 Bitbrains,CPU,CPU usage [%],percent,EXACT_OR_CLOSE_SEMANTIC_MATCH,direct utilization analogue,identity
+GWA-T-12 Bitbrains,THROUGHPUT,network received throughput + network transmitted throughput,KB/s,EXACT_OR_CLOSE_SEMANTIC_MATCH,direction sum exactly matches total construction,log1p
+GWA-T-12 Bitbrains,MEMORY,memory usage [KB],KB,EXACT_OR_CLOSE_SEMANTIC_MATCH,active used memory with different unit scale,identity
+GWA-T-12 Bitbrains,DISK_WRITE,disk write throughput [KB/s],KB/s,EXACT_OR_CLOSE_SEMANTIC_MATCH,write throughput is the closest physical analogue; TimeTrack raw rate unit is unknown,log1p
+GWA-T-13 Materna,CPU,CPU usage [%],percent,EXACT_OR_CLOSE_SEMANTIC_MATCH,direct utilization analogue,identity
+GWA-T-13 Materna,THROUGHPUT,network received throughput + network transmitted throughput,KB/s,EXACT_OR_CLOSE_SEMANTIC_MATCH,direction sum exactly matches total construction,log1p
+GWA-T-13 Materna,MEMORY,memory usage [KB],KB,EXACT_OR_CLOSE_SEMANTIC_MATCH,used memory with different unit scale,identity
+GWA-T-13 Materna,DISK_WRITE,disk write throughput [KB/s],KB/s,EXACT_OR_CLOSE_SEMANTIC_MATCH,write throughput is the closest physical analogue; TimeTrack raw rate unit is unknown,log1p
+Alibaba 2018,CPU,machine CPU usage,percent,EXACT_OR_CLOSE_SEMANTIC_MATCH,documented sentinels require structural filtering,identity
+Alibaba 2018,THROUGHPUT,normalized network in + out,normalized utilization,USABLE_WITH_DOCUMENTED_DIFFERENCE,not physical throughput units,log1p only if nonnegative assumption passes
+Alibaba 2018,MEMORY,memory utilization,normalized utilization,USABLE_WITH_DOCUMENTED_DIFFERENCE,utilization is not the frozen used-memory level,identity
+Alibaba 2018,DISK_WRITE,disk I/O utilization,percent,NOT_COMPARABLE,not write-specific activity or throughput,NOT_APPLICABLE
+Google 2019,CPU,CPU usage histograms/allocations,normalized resource units,USABLE_WITH_DOCUMENTED_DIFFERENCE,task/cell semantics differ from per-VM utilization,identity
+Google 2019,THROUGHPUT,no comparable released target,,NOT_COMPARABLE,absent,NOT_APPLICABLE
+Google 2019,MEMORY,memory usage/request measures,normalized resource units,USABLE_WITH_DOCUMENTED_DIFFERENCE,task/request semantics differ from VM active memory,identity
+Google 2019,DISK_WRITE,no comparable released target,,NOT_COMPARABLE,absent,NOT_APPLICABLE
+Azure VM traces,CPU,VM CPU utilization series,percent,EXACT_OR_CLOSE_SEMANTIC_MATCH,CPU-only time-series release,identity
+Azure VM traces,THROUGHPUT,no comparable released dynamic target,,NOT_COMPARABLE,absent,NOT_APPLICABLE
+Azure VM traces,MEMORY,VM memory capacity metadata,capacity,NOT_COMPARABLE,provisioned capacity is not active/used memory,NOT_APPLICABLE
+Azure VM traces,DISK_WRITE,no comparable released dynamic target,,NOT_COMPARABLE,absent,NOT_APPLICABLE

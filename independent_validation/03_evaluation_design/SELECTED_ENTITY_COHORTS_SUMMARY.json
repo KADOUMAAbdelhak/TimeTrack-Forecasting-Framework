@@ -1,0 +1,27 @@
+{
+  "cohorts": {
+    "GWA-T-12_Bitbrains_Rnd": {
+      "candidate_count": 416,
+      "selected_count": 35,
+      "selected_ids_sha256": "5674f15382d5efb795cbda46a34f1f766e859413857475212023afc36ffcdc1a",
+      "selection_records_sha256": "5cfbd93103881a8af258ed9ecc6e317601c7b6b44825d2f790a1a81ed1731f9c"
+    },
+    "GWA-T-12_Bitbrains_fastStorage": {
+      "candidate_count": 916,
+      "selected_count": 35,
+      "selected_ids_sha256": "97742a6e10858c9b8a021d3142419d66f41b2ac67e5944f95c2a4b8931f4632d",
+      "selection_records_sha256": "3ccbdb4d3615d323d54127f63eb72f588893d9bd48593a82dcccc10754a60b38"
+    },
+    "GWA-T-13_Materna_shared_all_three": {
+      "candidate_count": 398,
+      "selected_count": 35,
+      "selected_ids_sha256": "08705c602ca13ab47fd5b245fac5369f038c79747d9d079c61358d4ea5f45763",
+      "selection_records_sha256": "c9dcb3e0ad4ced836f865099ab16824ac1f33eb1659872f3be10e5025cd902fa"
+    }
+  },
+  "outcome_dependent_inputs": 0,
+  "policy_version": "phase4a-v1",
+  "selection_basis": "ascending SHA-256 over policy version, environment, and exact VM ID",
+  "selection_count_per_cohort": 35,
+  "status": "PASS"
+}

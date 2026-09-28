@@ -1,0 +1,8 @@
+dataset_group,resource,frozen_transform,structural_assumption,status,prospective_handling
+Bitbrains_and_Materna,CPU,identity,finite utilization after invalid-row filtering,COMPATIBLE,retain identity and fit scaler on training partition only
+Bitbrains_and_Materna,THROUGHPUT,log1p,nonnegative RX plus TX,COMPATIBLE,retain log1p and exact expm1 inversion
+Bitbrains_and_Materna,MEMORY,identity,finite nonnegative used memory,COMPATIBLE,retain identity and fit scaler on training partition only
+Bitbrains_and_Materna,DISK_WRITE,log1p,nonnegative write throughput,COMPATIBLE,retain log1p and exact expm1 inversion
+Alibaba_2018,DISK_WRITE,log1p,write-specific nonnegative activity,INCOMPATIBLE,disk utilization cannot be substituted
+Google_2019,THROUGHPUT_AND_DISK_WRITE,log1p,required targets present,INCOMPATIBLE,do not use for four-target replication
+Azure_VM_traces,THROUGHPUT_MEMORY_DISK_WRITE,mixed,required dynamic targets present,INCOMPATIBLE,do not use for four-target replication

@@ -1,0 +1,8 @@
+dataset,role,replication_category,rationale
+GWA-T-12 Bitbrains fastStorage,PRIMARY_EXTERNAL_CONFIRMATION,CONCEPTUAL_REPLICATION,pristine for this question; all four close semantic targets; separate storage environment; 5-minute grid requires elapsed-time adaptation
+GWA-T-12 Bitbrains Rnd,PRIMARY_EXTERNAL_CONFIRMATION,CONCEPTUAL_REPLICATION,pristine for this question; all four close semantic targets; separate randomized-storage environment; 5-minute grid requires elapsed-time adaptation
+GWA-T-13 Materna,SECONDARY_EXTERNAL_REPLICATION,CONCEPTUAL_REPLICATION,all four close semantic targets and three overlapping monthly traces but prior DynAPM exposure prevents pristine status
+Alibaba cluster trace 2018,STRUCTURALLY_INCOMPATIBLE,NOT_APPLICABLE,disk I/O utilization cannot substitute for disk-write throughput and the trace is short
+Google cluster trace 2019,STRUCTURALLY_INCOMPATIBLE,NOT_APPLICABLE,required comparable network and disk-write targets are absent
+Azure public VM traces,STRUCTURALLY_INCOMPATIBLE,NOT_APPLICABLE,CPU time series only for the required dynamic tuple; active memory network and disk-write are absent
+Later TimeTrack telemetry,NOT_NEEDED_UNLESS_OBTAINED,POTENTIAL_EXACT_TEMPORAL_CONFIRMATION,no later data or collector is locally available; contact is required

@@ -1,0 +1,30 @@
+{
+  "actual_head": "f9b11adb5dc3a0c2802703ceb1cbafb060c6f341",
+  "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+  "decision": "EXTERNAL_CONFIRMATION_FEASIBLE_WITH_PROTOCOL_ADAPTATION",
+  "eligible_entities": {
+    "GWA-T-12_Bitbrains_Rnd": 416,
+    "GWA-T-12_Bitbrains_fastStorage": 916,
+    "GWA-T-13_Materna_trace_1": 475,
+    "GWA-T-13_Materna_trace_2": 483,
+    "GWA-T-13_Materna_trace_3": 495
+  },
+  "entity_records": 3343,
+  "expected_prefreeze_head": "f9b11adb5dc3a0c2802703ceb1cbafb060c6f341",
+  "external_predictive_performance_inspected": false,
+  "failures": [],
+  "forecasting_models_trained": 0,
+  "frozen_history_validation": "PASS",
+  "new_architectures_implemented": 0,
+  "official_archives_verified": 3,
+  "phase3d_tag_target": "f9b11adb5dc3a0c2802703ceb1cbafb060c6f341",
+  "raw_dataset_partitions": 5,
+  "raw_hashes_unchanged": true,
+  "selected_entities": {
+    "GWA-T-12_Bitbrains_Rnd": 35,
+    "GWA-T-12_Bitbrains_fastStorage": 35,
+    "GWA-T-13_Materna_shared_all_three": 35
+  },
+  "selected_entity_reproduction": true,
+  "status": "PASS"
+}
