@@ -1,0 +1,74 @@
+{
+  "checks": {
+    "aborted_artifact_identity_failures": [],
+    "aborted_pre_amendment_runs": 154,
+    "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+    "changed_frozen_setting_keys": [],
+    "external_archive_hashes": {
+      "gwa_t_12_fastStorage.zip": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671",
+      "gwa_t_12_rnd.zip": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+      "gwa_t_13_materna.zip": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+    },
+    "new_valid_scientific_fit_count": 0,
+    "optimizer_executions_during_amendment": 0,
+    "outer_test_predictions_generated": 0,
+    "outer_test_target_values_accessed": 0,
+    "phase4a_inventory_entries": 27,
+    "phase4a_modified_artifacts": [],
+    "phase4b_config_sha256": "deedcd31616861f1f6ee4517cc0552a05d54d0b334364f9674b06a1dcab6dc1a",
+    "phase4b_inventory_entries": 43,
+    "phase4b_modified_artifacts": [],
+    "phase4b_tag_target": "b162b8907f5f063ef969c02bd5d175edd3471028",
+    "phase4c_criteria_sha256": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+    "phase4c_v2_config_sha256": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+    "runner_missing_v2_identity_tokens": [],
+    "scientific_predictive_outcomes_inspected": 0,
+    "scientific_semantics": {
+      "H1_H2_H3_unchanged": true,
+      "M1_equal_loss": true,
+      "aggregation_unchanged": true,
+      "architecture_unchanged": true,
+      "bootstrap_unchanged": true,
+      "context_selection_unchanged": true,
+      "contexts_unchanged": true,
+      "epoch_lifecycle_unchanged": true,
+      "folds_unchanged": true,
+      "four_resources": true,
+      "horizons_unchanged": true,
+      "no_scaler_fallback": true,
+      "optimizer_Adam": true,
+      "transforms_unchanged": true
+    },
+    "timetrack_raw_hashes_unchanged": true,
+    "training_scale_audit_validation_sha256": "033a81db0059f5084298de1cc8649f480144fbe6eca2386bca4fedb88e365458",
+    "training_scale_audit_validation_status": "PASS",
+    "v2_S1_S2_M1_support_mismatches": 0,
+    "v2_cohort_counts": {
+      "GWA-T-12_Bitbrains_Rnd": 35,
+      "GWA-T-12_Bitbrains_fastStorage": 35
+    },
+    "v2_cohort_hashes": {
+      "GWA-T-12_Bitbrains_Rnd": {
+        "id_list": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+        "selection_records": "09f6b782a8cc5df7683e1dccf6a05551b0bf91daa64fde7868c1c145f48f0357"
+      },
+      "GWA-T-12_Bitbrains_fastStorage": {
+        "id_list": "ff2d65ff43bedae076f913e4b9e175e7762d835eafe5efc8c2a2590e487fc07c",
+        "selection_records": "168ccae403488cc06a60b5a2d6da1c57a88f32f793c4356bcecdfa4bf445d648"
+      }
+    },
+    "v2_scaler_partitions": 2100,
+    "v2_scaler_partitions_per_vm_unique": [
+      30
+    ],
+    "v2_support_failures": 0,
+    "v2_support_records": 1050,
+    "v2_support_records_by_environment": {
+      "GWA-T-12_Bitbrains_Rnd": 525,
+      "GWA-T-12_Bitbrains_fastStorage": 525
+    },
+    "v2_zero_iqr_failures": 0
+  },
+  "failures": [],
+  "status": "PASS"
+}

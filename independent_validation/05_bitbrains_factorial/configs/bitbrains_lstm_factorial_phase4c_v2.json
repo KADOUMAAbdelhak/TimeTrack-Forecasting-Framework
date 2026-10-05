@@ -1,0 +1,123 @@
+{
+  "aggregation": {
+    "environment_synthesis": "equal_environment_mean_after_independent_environment_validation",
+    "native_mae_cross_resource_pooling": false,
+    "order": "seed_mean_then_equal_weight_vm_fold_cells",
+    "primary_effect": "matched_macro_mae_ratio_percent_reduction"
+  },
+  "amendment": {
+    "decision": "REVISE_ENTITY_ELIGIBILITY_AND_RESELECT",
+    "decision_path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_PROTOCOL_AMENDMENT_DECISION.md",
+    "original_phase4b_config_sha256": "deedcd31616861f1f6ee4517cc0552a05d54d0b334364f9674b06a1dcab6dc1a",
+    "phase4b_commit": "b162b8907f5f063ef969c02bd5d175edd3471028",
+    "phase4b_tag": "phase4b-bitbrains-factorial-protocol-freeze-v1",
+    "phase4c_criteria_path": "independent_validation/05_bitbrains_factorial/EXTERNAL_SCIENTIFIC_DECISION_CRITERIA.md",
+    "phase4c_criteria_sha256": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+    "scale_audit_report_sha256": "561a90e29e19464e6ebd6134c0ce180c2335a3eae8e39ab69c172fd5d1f0b95b",
+    "scale_audit_validation_sha256": "033a81db0059f5084298de1cc8649f480144fbe6eca2386bca4fedb88e365458",
+    "training_scale_eligibility_path": "independent_validation/05_bitbrains_factorial/protocol_amendment/TRAINING_SCALE_ELIGIBILITY.csv",
+    "training_scale_eligibility_sha256": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+    "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1"
+  },
+  "architecture": {
+    "M1": "four-input shared two-layer unidirectional LSTM encoder with four independent five-output heads",
+    "S1": "one-input separate two-layer unidirectional LSTM per resource with five outputs",
+    "S2": "four-input separate two-layer unidirectional LSTM per target resource with five outputs",
+    "final_recurrent_state": true
+  },
+  "archives": {
+    "GWA-T-12_Bitbrains_Rnd": {
+      "filename": "gwa_t_12_rnd.zip",
+      "sha256": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06"
+    },
+    "GWA-T-12_Bitbrains_fastStorage": {
+      "filename": "gwa_t_12_fastStorage.zip",
+      "sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671"
+    }
+  },
+  "batch_size": 256,
+  "bootstrap": {
+    "cluster": "VM_with_all_five_folds_and_paired_formulations",
+    "confidence_interval_percentiles": [2.5, 97.5],
+    "replicates": 10000,
+    "sample_size_per_environment": 35
+  },
+  "cohort_hashes": {
+    "GWA-T-12_Bitbrains_Rnd": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+    "GWA-T-12_Bitbrains_fastStorage": "ff2d65ff43bedae076f913e4b9e175e7762d835eafe5efc8c2a2590e487fc07c"
+  },
+  "cohort_selection_record_hashes": {
+    "GWA-T-12_Bitbrains_Rnd": "09f6b782a8cc5df7683e1dccf6a05551b0bf91daa64fde7868c1c145f48f0357",
+    "GWA-T-12_Bitbrains_fastStorage": "168ccae403488cc06a60b5a2d6da1c57a88f32f793c4356bcecdfa4bf445d648"
+  },
+  "cohort_source": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv",
+  "context_selection": {
+    "M1_objective": "equal_mean_NMAE_over_four_resources_five_horizons_three_seeds",
+    "S1_S2_objective": "mean_NMAE_over_five_horizons_three_seeds_per_target",
+    "tie_break": "smaller_L"
+  },
+  "contexts": [4, 9, 18],
+  "dropout": 0.1,
+  "epoch_lifecycle": {
+    "final_refit": "from_scratch_complete_outer_train_fixed_seed_specific_selected_epoch",
+    "inner_early_stopping": "inner_validation_only",
+    "outer_test_evaluations": 1
+  },
+  "folds": 5,
+  "gradient_clip": 1.0,
+  "hidden_size": 64,
+  "horizon_minutes": [5, 10, 20, 45, 90],
+  "hypotheses": {
+    "H1": "unchanged_original_phase4c_criteria",
+    "H2": "unchanged_original_phase4c_criteria",
+    "H3": "unchanged_original_phase4c_criteria"
+  },
+  "inner_validation_fraction": 0.15,
+  "layers": 2,
+  "learning_rate": 0.001,
+  "loss": {
+    "M1": "equal_arithmetic_mean_of_four_resource_MSEs",
+    "S1_S2": "target_resource_MSE",
+    "adaptive_or_learned_weights": false
+  },
+  "max_epochs": 50,
+  "optimizer": "Adam",
+  "outer_initial_train_fraction": 0.5,
+  "outer_test_fraction": 0.1,
+  "patience": 7,
+  "resource_order": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+  "sample_leads": [1, 2, 4, 9, 18],
+  "scaling": {
+    "alternate_statistic": false,
+    "epsilon": false,
+    "fallback": false,
+    "rule": "training_only_median_IQR_with_strictly_positive_IQR_for_all_four_transformed_resources"
+  },
+  "seeds": [0, 1, 2],
+  "segment_gap_seconds": 450,
+  "support": {
+    "common_four_resource_maximum_history": true,
+    "lead_18_target_time_purge": true,
+    "shorter_contexts_reuse_L18_origins": true,
+    "split_type": "five_chronological_expanding_outer_folds"
+  },
+  "support_minima": {
+    "inner_train": 512,
+    "inner_validation": 128,
+    "outer_test": 256,
+    "outer_train": 1024
+  },
+  "training_scale_eligibility": {
+    "definition": "structurally eligible and transformed training IQR greater than zero for every resource in every unique scaler-fit partition",
+    "partition_key": ["environment", "VM_ID", "fold", "phase", "L"],
+    "partitions_per_VM": 30,
+    "phases": ["inner", "final"],
+    "version": "phase4c-training-scale-eligibility-v1"
+  },
+  "transforms": {
+    "CPU": "identity",
+    "DISK_WRITE": "log1p",
+    "MEMORY": "identity",
+    "THROUGHPUT": "log1p"
+  }
+}
