@@ -44,7 +44,8 @@ from src.validation import atomic_json_write, canonical_hash
 
 BASE = Path(__file__).resolve().parent
 ROOT = BASE.parents[1]
-OUT = BASE / "outputs/scientific_v2"
+SCIENTIFIC_RELATIVE_ROOT = Path("outputs/scientific_v2")
+OUT = BASE / SCIENTIFIC_RELATIVE_ROOT
 CRITERIA = BASE / "EXTERNAL_SCIENTIFIC_DECISION_CRITERIA.md"
 AMENDMENT = BASE / "protocol_amendment"
 CONFIG_PATH = BASE / "configs/bitbrains_lstm_factorial_phase4c_v2.json"
@@ -60,6 +61,7 @@ CRITERIA_HASH = "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f1
 AMENDMENT_DECISION_HASH = "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57"
 TRAINING_SCALE_ELIGIBILITY_VERSION = "phase4c-training-scale-eligibility-v1"
 TRAINING_SCALE_ELIGIBILITY_HASH = "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4"
+EXECUTION_CORRECTION_HASH = "bd0a51380409290dd9deefd2cf25bbc783b018b559121bd21ba37fdfcb07e86d"
 ENVIRONMENTS = {
     "fastStorage": "GWA-T-12_Bitbrains_fastStorage",
     "Rnd": "GWA-T-12_Bitbrains_Rnd",
@@ -116,6 +118,38 @@ def worker_init() -> None:
 
 def environment_dir(environment_key: str) -> Path:
     return OUT / environment_key
+
+
+def scientific_relative_path(*parts: str) -> Path:
+    """Return a canonical repository-relative path inside the V2 namespace."""
+    path = SCIENTIFIC_RELATIVE_ROOT.joinpath(*parts)
+    if not path.is_relative_to(SCIENTIFIC_RELATIVE_ROOT):
+        raise ValueError("V2 artifact escaped the scientific_v2 namespace")
+    return path
+
+
+def completion_access_metadata(
+    phase: str,
+    *,
+    evaluation_completed: bool = False,
+    prediction_persisted: bool = False,
+    metric_record_count: int = 0,
+) -> dict[str, Any]:
+    """Encode test access only after a successful authorized final evaluation."""
+    if phase == "inner":
+        if evaluation_completed or prediction_persisted or metric_record_count:
+            raise ValueError("Inner completion cannot record outer-test activity")
+        accessed = False
+    elif phase == "final":
+        if not evaluation_completed or not prediction_persisted or metric_record_count <= 0:
+            raise RuntimeError("Final completion requires completed test evaluation and artifacts")
+        accessed = True
+    else:
+        raise ValueError(f"Unknown completion phase: {phase}")
+    return {
+        "outer_test_accessed": accessed,
+        "execution_correction_sha256": EXECUTION_CORRECTION_HASH,
+    }
 
 
 def vm_data(environment_key: str, vm_id: str) -> tuple[CleanVM, list[ExternalFold]]:
@@ -186,6 +220,8 @@ def valid_inner(path: Path, expected: dict[str, Any]) -> bool:
     return (
         payload.get("status") == "complete"
         and payload.get("identity") == expected
+        and payload.get("outer_test_accessed") is False
+        and payload.get("execution_correction_sha256") == EXECUTION_CORRECTION_HASH
         and isinstance(payload.get("best_epoch"), int)
         and isinstance(payload.get("validation_nmae"), list)
     )
@@ -196,7 +232,12 @@ def valid_final(path: Path, expected: dict[str, Any]) -> bool:
         payload = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError):
         return False
-    if payload.get("status") != "complete" or payload.get("identity") != expected:
+    if (
+        payload.get("status") != "complete"
+        or payload.get("identity") != expected
+        or payload.get("outer_test_accessed") is not True
+        or payload.get("execution_correction_sha256") != EXECUTION_CORRECTION_HASH
+    ):
         return False
     for key in ("model", "prediction"):
         artifact = BASE / payload.get(f"{key}_path", "missing")
@@ -281,7 +322,7 @@ def inner_worker(task: dict[str, Any]) -> dict[str, float]:
             "scaler_fit_split": "inner_train_only",
             "scaler": scaler_payload(scaler),
             "epoch_logs": result.epoch_logs if formulation == "M1" else [],
-            "outer_test_accessed": False,
+            **completion_access_metadata("inner"),
             "peak_rss_bytes": int(result.peak_rss_bytes),
         }
         atomic_json_write(completion_path(environment_key, "inner", identity["run_id"]), payload)
@@ -482,8 +523,8 @@ def final_worker(task: dict[str, Any]) -> dict[str, float]:
         )
         fit_seconds += seconds
         peak_rss = max(peak_rss, rss)
-        relative_model = Path(
-            f"outputs/scientific/{environment_key}/{formulation.lower()}/models/{identity['run_id']}.pt"
+        relative_model = scientific_relative_path(
+            environment_key, formulation.lower(), "models", f"{identity['run_id']}.pt"
         )
         model_path = BASE / relative_model
         atomic_torch(model_path, model.state_dict())
@@ -557,8 +598,8 @@ def final_worker(task: dict[str, Any]) -> dict[str, float]:
                 truth, scaled_part, native_prediction, unclipped,
             ))
 
-        relative_prediction = Path(
-            f"outputs/scientific/{environment_key}/{formulation.lower()}/predictions/{identity['run_id']}.parquet"
+        relative_prediction = scientific_relative_path(
+            environment_key, formulation.lower(), "predictions", f"{identity['run_id']}.parquet"
         )
         prediction_path = BASE / relative_prediction
         atomic_parquet(prediction_path, pd.concat(prediction_frames, ignore_index=True))
@@ -584,6 +625,12 @@ def final_worker(task: dict[str, Any]) -> dict[str, float]:
             "peak_rss_bytes": rss,
             "epoch_logs": loss_logs if formulation == "M1" else [],
             "test_evaluations": 1,
+            **completion_access_metadata(
+                "final",
+                evaluation_completed=True,
+                prediction_persisted=prediction_path.is_file(),
+                metric_record_count=len(metric_rows),
+            ),
         }
         atomic_json_write(completion, payload)
         executed += 1

@@ -1,0 +1,38 @@
+{
+  "allowed_change_categories": [
+    "artifact_path_conformance",
+    "completion_provenance_metadata",
+    "validator_enforcement",
+    "regression_tests",
+    "correction_documentation_and_inventory"
+  ],
+  "base_commit": "5a643567f466c66a5134e41d8c0ae05f8b971763",
+  "changed_paths": [
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_DECISION.md",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_DIFF_AUDIT.json",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_FREEZE_MANIFEST.md",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_SHA256.csv",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_PROTOCOL_VALIDATION.json",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/audit_phase4c_v2_execution_correction_diff.py",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/build_phase4c_v2_execution_correction_inventory.py",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/validate_phase4c_v2_protocol.py",
+    "independent_validation/05_bitbrains_factorial/run_phase4c_scientific.py",
+    "independent_validation/05_bitbrains_factorial/tests/test_phase4c_v2_execution_conformance.py",
+    "independent_validation/05_bitbrains_factorial/validate_phase4c_environment.py"
+  ],
+  "classification": "IMPLEMENTATION_CONFORMANCE_CORRECTION",
+  "manual_source_diff_review": "PASS",
+  "missing_expected_artifacts": [],
+  "protected_git_differences": [],
+  "protected_hash_failures": [],
+  "protected_hashes": {
+    "independent_validation/05_bitbrains_factorial/EXTERNAL_SCIENTIFIC_DECISION_CRITERIA.md": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+    "independent_validation/05_bitbrains_factorial/configs/bitbrains_lstm_factorial_phase4c_v2.json": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv": "a56192c6d0f7c3274b0899a18cc6b2748586d5a3950ca79a40692358e9617ccf",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SUPPORT_MANIFEST.parquet": "690677c99d4e7cb3b790bf4ef60041282d28877deaa75d5cc53ced400490ce22",
+    "independent_validation/05_bitbrains_factorial/protocol_amendment/TRAINING_SCALE_ELIGIBILITY.csv": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4"
+  },
+  "scientific_setting_differences": [],
+  "status": "PASS",
+  "unexpected_changed_paths": []
+}

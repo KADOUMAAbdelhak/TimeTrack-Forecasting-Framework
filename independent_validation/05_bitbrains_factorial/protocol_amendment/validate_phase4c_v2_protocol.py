@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import io
 import json
 import subprocess
 from pathlib import Path
@@ -22,6 +23,11 @@ CONFIG_HASH = "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e"
 DECISION_HASH = "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57"
 ELIGIBILITY_HASH = "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4"
 AUDIT_VALIDATION_HASH = "033a81db0059f5084298de1cc8649f480144fbe6eca2386bca4fedb88e365458"
+AMENDMENT_TAG = "phase4c-bitbrains-training-scale-amendment-freeze-v1"
+AMENDMENT_COMMIT = "5a643567f466c66a5134e41d8c0ae05f8b971763"
+AMENDMENT_INVENTORY_HASH = "323b5a0ca9ba1a7c0180a4faf973f74676dd6a40f99106ab497ebf51baeb4dc0"
+AMENDMENT_TREE_HASH = "3fa66a780e4e87553325ae8bb136d31289f560c37fce20f1f3a2be514bb6de74"
+EXECUTION_CORRECTION_HASH = "bd0a51380409290dd9deefd2cf25bbc783b018b559121bd21ba37fdfcb07e86d"
 EXPECTED_COHORTS = {
     "GWA-T-12_Bitbrains_fastStorage": {
         "id": "ff2d65ff43bedae076f913e4b9e175e7762d835eafe5efc8c2a2590e487fc07c",
@@ -69,6 +75,39 @@ def record_hash(frame: pd.DataFrame) -> str:
     return sha_text(payload)
 
 
+def verify_historical_amendment() -> dict[str, object]:
+    tag_target = subprocess.check_output(
+        ["git", "rev-parse", f"{AMENDMENT_TAG}^{{}}"], cwd=ROOT, text=True
+    ).strip()
+    inventory_path = "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_ARTIFACT_SHA256.csv"
+    inventory_bytes = subprocess.check_output(["git", "show", f"{AMENDMENT_TAG}:{inventory_path}"], cwd=ROOT)
+    inventory = pd.read_csv(io.BytesIO(inventory_bytes))
+    bad = []
+    for row in inventory.itertuples(index=False):
+        try:
+            payload = subprocess.check_output(["git", "show", f"{AMENDMENT_TAG}:{row.relative_path}"], cwd=ROOT)
+        except subprocess.CalledProcessError:
+            bad.append(str(row.relative_path))
+            continue
+        if len(payload) != int(row.byte_size) or hashlib.sha256(payload).hexdigest() != row.sha256:
+            bad.append(str(row.relative_path))
+    tree_payload = "".join(
+        f"{row.relative_path},{row.byte_size},{row.sha256}\n"
+        for row in inventory.sort_values("relative_path").itertuples(index=False)
+    )
+    return {
+        "tag_target": tag_target,
+        "inventory_entries": len(inventory),
+        "inventory_sha256": hashlib.sha256(inventory_bytes).hexdigest(),
+        "tree_sha256": hashlib.sha256(tree_payload.encode()).hexdigest(),
+        "artifact_failures": bad,
+        "pass": tag_target == AMENDMENT_COMMIT
+        and hashlib.sha256(inventory_bytes).hexdigest() == AMENDMENT_INVENTORY_HASH
+        and hashlib.sha256(tree_payload.encode()).hexdigest() == AMENDMENT_TREE_HASH
+        and not bad,
+    }
+
+
 def main() -> None:
     failures: list[str] = []
     checks: dict[str, object] = {}
@@ -86,6 +125,9 @@ def main() -> None:
     tag = subprocess.check_output(["git", "rev-parse", "phase4b-bitbrains-factorial-protocol-freeze-v1^{}"], cwd=ROOT, text=True).strip()
     checks["phase4b_tag_target"] = tag
     if tag != PHASE4B_COMMIT: failures.append("phase4b_tag")
+    historical = verify_historical_amendment()
+    checks["historical_phase4c_v2_amendment"] = historical
+    if not historical["pass"]: failures.append("historical_phase4c_v2_amendment")
 
     criteria_hash = sha256(BASE / "EXTERNAL_SCIENTIFIC_DECISION_CRITERIA.md")
     audit_validation_hash = sha256(HERE / "TRAINING_SCALE_ELIGIBILITY_VALIDATION.json")
@@ -204,7 +246,24 @@ def main() -> None:
     ]
     missing_identity_tokens = [token for token in identity_tokens if token not in runner_source]
     checks["runner_missing_v2_identity_tokens"] = missing_identity_tokens
-    if missing_identity_tokens or 'OUT = BASE / "outputs/scientific_v2"' not in runner_source: failures.append("runner_v2_identity")
+    runner_literals = {
+        node.value for node in ast.walk(ast.parse(runner_source))
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    }
+    routing_checks = {
+        "canonical_root_defined": 'SCIENTIFIC_RELATIVE_ROOT = Path("outputs/scientific_v2")' in runner_source,
+        "model_uses_canonical_builder": 'relative_model = scientific_relative_path(' in runner_source,
+        "prediction_uses_canonical_builder": 'relative_prediction = scientific_relative_path(' in runner_source,
+        "no_legacy_scientific_path_literal": not any(
+            value == "outputs/scientific" or value.startswith("outputs/scientific/")
+            for value in runner_literals
+        ),
+        "inner_access_false_enforced": 'completion_access_metadata("inner")' in runner_source,
+        "final_access_true_guarded": 'completion_access_metadata(' in runner_source and 'evaluation_completed=True' in runner_source,
+        "correction_identity_present": EXECUTION_CORRECTION_HASH in runner_source,
+    }
+    checks["corrected_runner_routing_and_access"] = routing_checks
+    if missing_identity_tokens or not all(routing_checks.values()): failures.append("runner_v2_identity_or_conformance")
 
     v2_output = BASE / "outputs/scientific_v2"
     valid_fit_files = list(v2_output.glob("*/runtime/completions/**/*.json")) if v2_output.exists() else []

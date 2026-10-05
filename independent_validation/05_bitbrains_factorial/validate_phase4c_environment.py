@@ -23,9 +23,11 @@ from run_phase4c_scientific import (
     CONTEXTS,
     CRITERIA_HASH,
     ENVIRONMENTS,
+    EXECUTION_CORRECTION_HASH,
     OUT,
     PHASE4B_DECISION_HASH,
     RESOURCE_ORDER,
+    SCIENTIFIC_RELATIVE_ROOT,
     SEEDS,
     TRAINING_SCALE_ELIGIBILITY_HASH,
     TRAINING_SCALE_ELIGIBILITY_VERSION,
@@ -152,6 +154,7 @@ def main() -> None:
             or identity.get("training_scale_eligibility_version") != TRAINING_SCALE_ELIGIBILITY_VERSION
             or identity.get("training_scale_eligibility_hash") != TRAINING_SCALE_ELIGIBILITY_HASH
             or row.get("outer_test_accessed") is not False
+            or row.get("execution_correction_sha256") != EXECUTION_CORRECTION_HASH
             or row.get("scaler_fit_split") != "inner_train_only"
         ):
             failures.append(f"inner_identity_or_leakage:{identity.get('run_id')}")
@@ -243,12 +246,18 @@ def main() -> None:
         if (
             row.get("scaler_fit_split") != "complete_legal_outer_train_only"
             or row.get("test_evaluations") != 1
+            or row.get("outer_test_accessed") is not True
+            or row.get("execution_correction_sha256") != EXECUTION_CORRECTION_HASH
             or row.get("outer_train_hash") != fold.hashes["outer_train"]
             or row.get("outer_test_hash") != fold.hashes["outer_test"]
+            or not row.get("metrics")
         ):
             failures.append(f"final_lifecycle:{identity.get('run_id')}")
         for artifact_name in ("model", "prediction"):
-            path, observed_hash = relative_hash(row.get(f"{artifact_name}_path", "missing"))
+            relative = Path(row.get(f"{artifact_name}_path", "missing"))
+            if not relative.is_relative_to(SCIENTIFIC_RELATIVE_ROOT):
+                failures.append(f"artifact_namespace:{artifact_name}:{identity.get('run_id')}")
+            path, observed_hash = relative_hash(relative.as_posix())
             if observed_hash != row.get(f"{artifact_name}_sha256"):
                 artifact_failures += 1
                 failures.append(f"artifact_hash:{artifact_name}:{identity.get('run_id')}")
