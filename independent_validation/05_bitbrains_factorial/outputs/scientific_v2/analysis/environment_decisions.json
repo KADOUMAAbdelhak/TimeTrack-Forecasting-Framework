@@ -1,0 +1,34 @@
+{
+  "Rnd": {
+    "M1_vs_S2": {
+      "broad_negative_resources": 4,
+      "equal_resource_mean_gain_percent": -11.323974455962384,
+      "label": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+      "positive_resources": 0,
+      "raw_positive_resources": 0,
+      "reason": "at most one positive resource and nonpositive equal-resource mean"
+    },
+    "S2_vs_S1": {
+      "broad_negative_resources": 0,
+      "equal_resource_mean_gain_percent": -0.9920355689206943,
+      "label": "CROSS_RESOURCE_INPUT_MIXED",
+      "positive_resources": 2
+    }
+  },
+  "fastStorage": {
+    "M1_vs_S2": {
+      "broad_negative_resources": 3,
+      "equal_resource_mean_gain_percent": -8.997073486882728,
+      "label": "SHARED_REPRESENTATION_NEGATIVE_TRANSFER",
+      "positive_resources": 0,
+      "raw_positive_resources": 1,
+      "reason": "conservative overlap rule: positive target evidence coexists with at least two broad negatives or strong trade-offs"
+    },
+    "S2_vs_S1": {
+      "broad_negative_resources": 0,
+      "equal_resource_mean_gain_percent": 0.488350950372616,
+      "label": "CROSS_RESOURCE_INPUT_MIXED",
+      "positive_resources": 2
+    }
+  }
+}

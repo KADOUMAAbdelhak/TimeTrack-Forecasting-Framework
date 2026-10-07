@@ -1,0 +1,44 @@
+{
+  "checks": {
+    "bootstrap_replicates": 10000,
+    "bootstrap_rows": 144,
+    "checkpoint": {
+      "head": "549020a1a0b19d3c633d21cd13d2c8ff007225f1",
+      "tag_target": "549020a1a0b19d3c633d21cd13d2c8ff007225f1"
+    },
+    "execution_inventory": {
+      "compact_entries": 35,
+      "compact_failures": [],
+      "heavy_entries": 56723,
+      "heavy_failures": []
+    },
+    "figure_count": 12,
+    "forbidden_training_tokens": [],
+    "input_hashes": {
+      "EXTERNAL_SCIENTIFIC_DECISION_CRITERIA.md": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+      "configs/bitbrains_lstm_factorial_phase4c_v2.json": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+      "outputs/scientific_v2/Rnd/metrics.parquet": "4072332fde01457e7d1fc89086d840a730844d8a25366c0abaaf6d69c472de4c",
+      "outputs/scientific_v2/Rnd/persistence_metrics.parquet": "151d3f12030c31ab42c2fad068ac1d9de6fd8d8afb2303ec1934e768f7bd1d59",
+      "outputs/scientific_v2/fastStorage/metrics.parquet": "3edbbe0d74a76b4a99ee110ef9f42919700cf4b88273b568924816e828a05309",
+      "outputs/scientific_v2/fastStorage/persistence_metrics.parquet": "729d66bff8f16160968270d35e7908f62eaa3ff654d00ba72311621b4628b8ef",
+      "protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_DECISION.md": "bd0a51380409290dd9deefd2cf25bbc783b018b559121bd21ba37fdfcb07e86d"
+    },
+    "metric_rows": 63000,
+    "model_training_during_analysis": 0,
+    "no_timetrack_bitbrains_pooling": true,
+    "primary_lead_cells": 120,
+    "seed_averaged_cells": 21000
+  },
+  "failures": [],
+  "status": "PASS",
+  "validated_decisions": {
+    "H1": "H1_BOUNDARY_PARTIALLY_REPLICATED",
+    "H2": "H2_BOUNDARY_CONFIRMED",
+    "H3": "HETEROGENEITY_CONFIRMED",
+    "final_phase4c_outcome": "BOUNDARY_PARTIALLY_REPLICATED",
+    "materna_gate": "MATERNA_USEFUL_SECONDARY_REPLICATION",
+    "model_training_during_analysis": 0,
+    "new_architecture_gate": "NO",
+    "publication_scope_gate": "MULTIDATASET_BOUNDARY_STUDY_SUPPORTED_WITH_MIXED_REPLICATION"
+  }
+}
