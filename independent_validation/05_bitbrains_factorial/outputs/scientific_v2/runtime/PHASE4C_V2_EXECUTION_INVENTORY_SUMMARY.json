@@ -1,0 +1,50 @@
+{
+  "combined_storage": {
+    "completion_bytes": 267140824,
+    "file_count": 56723,
+    "loss_history_bytes": 15059575,
+    "metric_bytes": 3703431,
+    "model_bytes": 1982823150,
+    "other_bytes": 48540638,
+    "prediction_bytes": 2977637056,
+    "runtime_bytes": 15568,
+    "selection_bytes": 854086,
+    "total_bytes": 5295782138,
+    "validation_bytes": 7810
+  },
+  "execution_tree_sha256": "deeea76548071f08915d2c80944da4a196e1032e62a918c6e5753dd887e0c1c0",
+  "file_count": 56723,
+  "generated_seconds": 19.823843717575073,
+  "inventory_sha256": "42e085403d331bc903afd484582bf4d57c68477513ef6a948c3d40c2c5cf4377",
+  "legacy_outputs_scientific_included": false,
+  "scope": "all files under outputs/scientific_v2 excluding this summary and its inventory CSV",
+  "storage_by_environment": {
+    "Rnd": {
+      "completion_bytes": 129277439,
+      "file_count": 28360,
+      "loss_history_bytes": 7071260,
+      "metric_bytes": 1852673,
+      "model_bytes": 991411575,
+      "other_bytes": 30472484,
+      "prediction_bytes": 2211240507,
+      "runtime_bytes": 2252,
+      "selection_bytes": 375573,
+      "total_bytes": 3371705716,
+      "validation_bytes": 1953
+    },
+    "fastStorage": {
+      "completion_bytes": 137863385,
+      "file_count": 28360,
+      "loss_history_bytes": 7988315,
+      "metric_bytes": 1850758,
+      "model_bytes": 991411575,
+      "other_bytes": 18068154,
+      "prediction_bytes": 766396549,
+      "runtime_bytes": 2274,
+      "selection_bytes": 478513,
+      "total_bytes": 1924061492,
+      "validation_bytes": 1969
+    }
+  },
+  "total_bytes": 5295782138
+}

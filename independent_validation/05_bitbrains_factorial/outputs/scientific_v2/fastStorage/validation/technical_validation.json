@@ -1,0 +1,72 @@
+{
+  "checks": {
+    "analysis_artifacts": {
+      "comparisons": 0,
+      "figures": 0,
+      "synthesis": 0
+    },
+    "artifact_hash_failures": 0,
+    "context_selections_recomputed": 1575,
+    "counts": {
+      "final": {
+        "M1": 525,
+        "S1": 2100,
+        "S2": 2100
+      },
+      "inner": {
+        "M1": 1575,
+        "S1": 6300,
+        "S2": 6300
+      },
+      "metrics": {
+        "M1": 10500,
+        "S1": 10500,
+        "S2": 10500
+      },
+      "total_fits": 18900
+    },
+    "environment": "GWA-T-12_Bitbrains_fastStorage",
+    "environment_key": "fastStorage",
+    "final_api_parameters": [
+      "formulation",
+      "resource",
+      "seed",
+      "X_train",
+      "y_train",
+      "epoch_count"
+    ],
+    "identities": {
+      "amendment_decision_sha256": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+      "archive_sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671",
+      "cohort_sha256": "ff2d65ff43bedae076f913e4b9e175e7762d835eafe5efc8c2a2590e487fc07c",
+      "config_sha256": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+      "criteria_sha256": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+      "phase4b_decision_sha256": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+      "training_scale_eligibility_sha256": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4"
+    },
+    "inner_api_parameters": [
+      "formulation",
+      "resource",
+      "seed",
+      "X_train",
+      "y_train",
+      "X_validation",
+      "y_validation",
+      "fixed_epochs",
+      "max_epochs",
+      "patience",
+      "batch_size",
+      "device"
+    ],
+    "prediction_schema_failures": 0,
+    "scientific_analysis_performed": false,
+    "scientific_metric_values_inspected": false,
+    "selected_context_counts": {
+      "M1": 175,
+      "S1": 700,
+      "S2": 700
+    }
+  },
+  "failures": [],
+  "status": "PASS"
+}

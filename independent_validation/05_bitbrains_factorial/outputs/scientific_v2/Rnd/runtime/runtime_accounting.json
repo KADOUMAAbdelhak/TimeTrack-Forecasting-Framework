@@ -1,0 +1,83 @@
+{
+  "config_sha256": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+  "counts": {
+    "M1": {
+      "final": 525,
+      "inner": 1575,
+      "metrics": 10500
+    },
+    "S1": {
+      "final": 2100,
+      "inner": 6300,
+      "metrics": 10500
+    },
+    "S2": {
+      "final": 2100,
+      "inner": 6300,
+      "metrics": 10500
+    }
+  },
+  "criteria_sha256": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+  "environment": "GWA-T-12_Bitbrains_Rnd",
+  "environment_key": "Rnd",
+  "failed_retried_fits": 0,
+  "final_total": 4725,
+  "fit_total": 18900,
+  "inner_total": 14175,
+  "invocation_wall_seconds": 57714.89996433299,
+  "metric_rows": 31500,
+  "model_artifact_bytes": 991411575,
+  "newly_executed_fits": 9689,
+  "peak_rss_bytes": 801947648,
+  "prediction_artifact_bytes": 2211240507,
+  "resumed_skipped_valid_fits": 9211,
+  "selected_context_records": 1575,
+  "stage_runtime": {
+    "M1_final": {
+      "executed": 525.0,
+      "fit_seconds": 12140.252884847025,
+      "peak_rss_bytes": 785334272,
+      "prediction_seconds": 31.308572498441208,
+      "skipped": 0.0
+    },
+    "M1_inner": {
+      "executed": 1575.0,
+      "fit_seconds": 39032.014612077764,
+      "peak_rss_bytes": 801947648,
+      "prediction_seconds": 0.0,
+      "skipped": 0.0
+    },
+    "S1_final": {
+      "executed": 2100.0,
+      "fit_seconds": 58335.991122096515,
+      "peak_rss_bytes": 794951680,
+      "prediction_seconds": 172.76186270223116,
+      "skipped": 0.0
+    },
+    "S1_inner": {
+      "executed": 0.0,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0.0,
+      "prediction_seconds": 0.0,
+      "skipped": 6300.0
+    },
+    "S2_final": {
+      "executed": 2100.0,
+      "fit_seconds": 44566.25236022167,
+      "peak_rss_bytes": 764592128,
+      "prediction_seconds": 150.01604793674778,
+      "skipped": 0.0
+    },
+    "S2_inner": {
+      "executed": 3389.0,
+      "fit_seconds": 74051.37696407203,
+      "peak_rss_bytes": 798654464,
+      "prediction_seconds": 0.0,
+      "skipped": 2911.0
+    }
+  },
+  "status": "EXECUTION_COMPLETE_TECHNICAL_VALIDATION_PENDING",
+  "summed_final_fit_seconds": 115042.49636716521,
+  "summed_inner_fit_seconds": 310099.5902628682,
+  "summed_prediction_seconds": 354.08648313742015
+}
