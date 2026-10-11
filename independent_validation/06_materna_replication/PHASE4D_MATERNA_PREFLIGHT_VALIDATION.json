@@ -1,0 +1,88 @@
+{
+  "checks": {
+    "architecture": {
+      "M1": 52500,
+      "S1": 50757,
+      "S2": 51525
+    },
+    "frozen_inventories": {
+      "benchmark/neural_v2/DLINEAR_SCIENTIFIC_ARTIFACT_SHA256.csv": 1347,
+      "benchmark/neural_v2/LSTM_SCIENTIFIC_ARTIFACT_SHA256.csv": 1349,
+      "benchmark/neural_v2/NEURAL_V2_ARTIFACT_SHA256.csv": 29,
+      "benchmark/neural_v2/PATCHTST_SCIENTIFIC_ARTIFACT_SHA256.csv": 1352,
+      "benchmark/phase2b1_corrected/CORRECTION_ARTIFACT_SHA256.csv": 1070,
+      "independent_validation/05_bitbrains_factorial/PHASE4B_ARTIFACT_SHA256.csv": 43,
+      "independent_validation/05_bitbrains_factorial/PHASE4C_V2_SCIENTIFIC_CHECKPOINT_SHA256.csv": 50,
+      "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/runtime/PHASE4C_V2_EXECUTION_ARTIFACT_SHA256.csv": 56723,
+      "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_ARTIFACT_SHA256.csv": 29,
+      "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_EXECUTION_CORRECTION_SHA256.csv": 10,
+      "independent_validation/PHASE4A_ARTIFACT_SHA256.csv": 27,
+      "multiresource/04_lstm_factorial/PHASE3B_ARTIFACT_SHA256.csv": 31,
+      "multiresource/04_lstm_factorial/PHASE3C_SCIENTIFIC_ARTIFACT_SHA256.csv": 5706,
+      "multiresource/05_posthoc_audit/PHASE3D_ARTIFACT_SHA256.csv": 37,
+      "multiresource/PHASE3A_ARTIFACT_SHA256.csv": 25
+    },
+    "frozen_tags": {
+      "count": 16,
+      "status": "PASS"
+    },
+    "pilot": {
+      "epochs_each": 5,
+      "models": 27,
+      "outer_test_accesses": 0,
+      "scientific_predictive_metrics": 0
+    },
+    "raw_integrity": {
+      "canonical_panel_sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a",
+      "external_archives": {
+        "gwa_t_12_fastStorage.zip": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671",
+        "gwa_t_12_rnd.zip": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+        "gwa_t_13_materna.zip": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "timetrack_raw": "6/6 PASS"
+    },
+    "scale_eligibility": {
+      "eligible": 74,
+      "partitions_recomputed": 35820,
+      "structural_common_pool": 398
+    },
+    "support": {
+      "leakage_violations": 0,
+      "minimum_failures": 0,
+      "mismatches": 0,
+      "records": 1575,
+      "reproduced": 1575,
+      "scale_failures": 0
+    },
+    "workload": {
+      "combined_three_trace": {
+        "final_total": 14175,
+        "fit_total": 56700,
+        "inner_total": 42525,
+        "metric_rows": 94500,
+        "selected_contexts": 4725
+      },
+      "per_trace": {
+        "M1_final": 525,
+        "M1_inner": 1575,
+        "S1_final": 2100,
+        "S1_inner": 6300,
+        "S2_final": 2100,
+        "S2_inner": 6300,
+        "final_total": 4725,
+        "fit_total": 18900,
+        "inner_total": 14175,
+        "metric_rows": 31500,
+        "selected_contexts": 1575
+      }
+    }
+  },
+  "failures": [],
+  "materna_scientific_forecasting_fits": 0,
+  "new_architectures": 0,
+  "outer_test_accesses": 0,
+  "persistence_forecasting_comparisons": 0,
+  "phase4c_decisions_modified": 0,
+  "scientific_predictive_outcomes_inspected": 0,
+  "status": "PASS"
+}

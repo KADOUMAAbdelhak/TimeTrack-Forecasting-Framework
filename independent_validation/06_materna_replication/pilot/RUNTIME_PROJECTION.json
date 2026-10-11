@@ -1,0 +1,151 @@
+{
+  "combined_scenarios": {
+    "10": {
+      "combined_fit_hours": 22.169752963987605,
+      "combined_four_worker_wall_hours": 5.542438240996901,
+      "combined_one_worker_wall_hours": 22.169752963987605,
+      "effective_epochs": 10
+    },
+    "25": {
+      "combined_fit_hours": 55.42438240996901,
+      "combined_four_worker_wall_hours": 13.856095602492253,
+      "combined_one_worker_wall_hours": 55.42438240996901,
+      "effective_epochs": 25
+    },
+    "50": {
+      "combined_fit_hours": 110.84876481993803,
+      "combined_four_worker_wall_hours": 27.712191204984506,
+      "combined_one_worker_wall_hours": 110.84876481993803,
+      "effective_epochs": 50
+    }
+  },
+  "method": "pilot formulation/trace throughput applied to exact candidate support sample counts; inner validation overhead retained",
+  "per_trace": {
+    "Materna-T1": {
+      "samples_per_second": {
+        "M1": 39691.871177942725,
+        "S1": 40862.157229535136,
+        "S2": 41724.47285510422
+      },
+      "scenarios": {
+        "10": {
+          "M1_final_fit_hours": 0.21121789133469285,
+          "M1_inner_fit_hours": 0.5610997690248238,
+          "S1_final_fit_hours": 0.8206745704824071,
+          "S1_inner_fit_hours": 2.184182473240663,
+          "S2_final_fit_hours": 0.8037137688902163,
+          "S2_inner_fit_hours": 2.1392691731223428,
+          "aggregate_fit_hours": 6.720157646095146,
+          "four_worker_wall_hours": 1.6800394115237864,
+          "one_worker_wall_hours": 6.720157646095146
+        },
+        "25": {
+          "M1_final_fit_hours": 0.5280447283367321,
+          "M1_inner_fit_hours": 1.4027494225620596,
+          "S1_final_fit_hours": 2.0516864262060177,
+          "S1_inner_fit_hours": 5.460456183101658,
+          "S2_final_fit_hours": 2.0092844222255404,
+          "S2_inner_fit_hours": 5.348172932805857,
+          "aggregate_fit_hours": 16.800394115237868,
+          "four_worker_wall_hours": 4.200098528809467,
+          "one_worker_wall_hours": 16.800394115237868
+        },
+        "50": {
+          "M1_final_fit_hours": 1.0560894566734642,
+          "M1_inner_fit_hours": 2.805498845124119,
+          "S1_final_fit_hours": 4.103372852412035,
+          "S1_inner_fit_hours": 10.920912366203316,
+          "S2_final_fit_hours": 4.018568844451081,
+          "S2_inner_fit_hours": 10.696345865611715,
+          "aggregate_fit_hours": 33.600788230475736,
+          "four_worker_wall_hours": 8.400197057618934,
+          "one_worker_wall_hours": 33.600788230475736
+        }
+      }
+    },
+    "Materna-T2": {
+      "samples_per_second": {
+        "M1": 39643.98049522282,
+        "S1": 40528.55608175058,
+        "S2": 41291.91138681007
+      },
+      "scenarios": {
+        "10": {
+          "M1_final_fit_hours": 0.22401446295409608,
+          "M1_inner_fit_hours": 0.5953136476948101,
+          "S1_final_fit_hours": 0.8765005081440744,
+          "S1_inner_fit_hours": 2.3297663647061957,
+          "S2_final_fit_hours": 0.8602968186003436,
+          "S2_inner_fit_hours": 2.2877338039856627,
+          "aggregate_fit_hours": 7.173625606085182,
+          "four_worker_wall_hours": 1.7934064015212956,
+          "one_worker_wall_hours": 7.173625606085182
+        },
+        "25": {
+          "M1_final_fit_hours": 0.5600361573852402,
+          "M1_inner_fit_hours": 1.4882841192370253,
+          "S1_final_fit_hours": 2.191251270360186,
+          "S1_inner_fit_hours": 5.824415911765489,
+          "S2_final_fit_hours": 2.150742046500859,
+          "S2_inner_fit_hours": 5.719334509964156,
+          "aggregate_fit_hours": 17.934064015212954,
+          "four_worker_wall_hours": 4.4835160038032384,
+          "one_worker_wall_hours": 17.934064015212954
+        },
+        "50": {
+          "M1_final_fit_hours": 1.1200723147704803,
+          "M1_inner_fit_hours": 2.9765682384740506,
+          "S1_final_fit_hours": 4.382502540720372,
+          "S1_inner_fit_hours": 11.648831823530978,
+          "S2_final_fit_hours": 4.301484093001718,
+          "S2_inner_fit_hours": 11.438669019928312,
+          "aggregate_fit_hours": 35.86812803042591,
+          "four_worker_wall_hours": 8.967032007606477,
+          "one_worker_wall_hours": 35.86812803042591
+        }
+      }
+    },
+    "Materna-T3": {
+      "samples_per_second": {
+        "M1": 39864.14285308702,
+        "S1": 41469.81806026142,
+        "S2": 41737.75679649817
+      },
+      "scenarios": {
+        "10": {
+          "M1_final_fit_hours": 0.2613081394572952,
+          "M1_inner_fit_hours": 0.6932709400135183,
+          "S1_final_fit_hours": 1.004762064290989,
+          "S1_inner_fit_hours": 2.667362470287823,
+          "S2_final_fit_hours": 0.9983119170289458,
+          "S2_inner_fit_hours": 2.650954180728704,
+          "aggregate_fit_hours": 8.275969711807276,
+          "four_worker_wall_hours": 2.068992427951819,
+          "one_worker_wall_hours": 8.275969711807276
+        },
+        "25": {
+          "M1_final_fit_hours": 0.653270348643238,
+          "M1_inner_fit_hours": 1.7331773500337957,
+          "S1_final_fit_hours": 2.5119051607274723,
+          "S1_inner_fit_hours": 6.668406175719558,
+          "S2_final_fit_hours": 2.4957797925723644,
+          "S2_inner_fit_hours": 6.627385451821761,
+          "aggregate_fit_hours": 20.689924279518188,
+          "four_worker_wall_hours": 5.172481069879547,
+          "one_worker_wall_hours": 20.689924279518188
+        },
+        "50": {
+          "M1_final_fit_hours": 1.306540697286476,
+          "M1_inner_fit_hours": 3.4663547000675914,
+          "S1_final_fit_hours": 5.0238103214549445,
+          "S1_inner_fit_hours": 13.336812351439116,
+          "S2_final_fit_hours": 4.991559585144729,
+          "S2_inner_fit_hours": 13.254770903643522,
+          "aggregate_fit_hours": 41.379848559036375,
+          "four_worker_wall_hours": 10.344962139759094,
+          "one_worker_wall_hours": 41.379848559036375
+        }
+      }
+    }
+  }
+}

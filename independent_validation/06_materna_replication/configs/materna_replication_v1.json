@@ -1,0 +1,209 @@
+{
+  "protocol_version": "materna-replication-v1",
+  "scientific_execution_authorized_by_this_freeze": false,
+  "archive": {
+    "filename": "gwa_t_13_materna.zip",
+    "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+  },
+  "population": {
+    "rule": "structurally eligible in all three Materna traces AND nonzero transformed-resource IQR in every scientific scaler-fit partition across Materna-T1, Materna-T2, and Materna-T3",
+    "structural_common_pool": 398,
+    "training_scale_eligible": 74,
+    "training_scale_rejected": 324,
+    "retention_percent": 18.592964824120603,
+    "selected_count": 35,
+    "selection_key": "phase4a-v1|Materna-shared|<exact-VM-ID>",
+    "selected_ids_in_rank_order": [
+      "74", "134", "397", "266", "380", "281", "393", "227", "128", "299",
+      "272", "08", "75", "133", "440", "306", "343", "305", "26", "302",
+      "498", "103", "303", "76", "493", "416", "478", "442", "246", "345",
+      "04", "98", "105", "92", "508"
+    ],
+    "cohort_sha256": "4c9e8f4cfa5cf26c4188924c486cdfbe9d78972eec1f84f5e0f23b1e94353140",
+    "selection_record_sha256": "63c1a7266057c4344bfd6211ee7d3fd2deba283e4b41797fc4e412483469b24b",
+    "replacement_after_freeze_permitted": false
+  },
+  "traces": ["Materna-T1", "Materna-T2", "Materna-T3"],
+  "trace_semantics": "separate_temporal_replication_blocks_from_the_same_source",
+  "target_mapping": {
+    "resource_order": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+    "CPU": "CPU usage %",
+    "THROUGHPUT": "network received KB/s + network transmitted KB/s",
+    "MEMORY": "memory usage KB",
+    "DISK_WRITE": "disk-write throughput KB/s"
+  },
+  "transformations": {
+    "CPU": "identity",
+    "THROUGHPUT": "log1p",
+    "MEMORY": "identity",
+    "DISK_WRITE": "log1p"
+  },
+  "scaler": {
+    "rule": "training_only_median_IQR_robust_scaling",
+    "required_IQR": ">0",
+    "fallback": false,
+    "epsilon": false,
+    "partition_key": ["trace", "VM_ID", "fold", "phase", "L"]
+  },
+  "cadence_seconds": 300,
+  "horizons": {
+    "sample_leads": [1, 2, 4, 9, 18],
+    "minutes": [5, 10, 20, 45, 90]
+  },
+  "contexts": {
+    "sample_lengths": [4, 9, 18],
+    "approximate_minutes": [20, 45, 90],
+    "common_support_length": 18,
+    "shorter_context_support_expansion": false
+  },
+  "folds": {
+    "count": 5,
+    "scheme": "chronological_expanding_outer_folds_per_trace",
+    "outer_initial_train_fraction": 0.5,
+    "outer_test_fraction": 0.1,
+    "inner_validation_fraction": 0.15,
+    "inner_validation_position": "latest_legal_outer_training_support",
+    "purge": "max_horizon_target_time",
+    "cross_trace_train_validation_test_chain": false
+  },
+  "seeds": [0, 1, 2],
+  "architecture": {
+    "family": "external_Bitbrains_plain_LSTM_factorial",
+    "hidden_size": 64,
+    "layers": 2,
+    "dropout": 0.1,
+    "S1": {
+      "input": "[N,L,1]",
+      "output": "[N,5]",
+      "organization": "one_model_per_resource",
+      "parameters_per_model": 50757
+    },
+    "S2": {
+      "input": "[N,L,4]",
+      "output": "[N,5]",
+      "organization": "one_independent_model_per_target_resource",
+      "parameters_per_model": 51525
+    },
+    "M1": {
+      "input": "[N,L,4]",
+      "output": "[N,4,5]",
+      "organization": "shared_encoder_with_four_resource_heads",
+      "parameters_total": 52500
+    }
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "M1_loss": "equal_mean_of_CPU_THROUGHPUT_MEMORY_DISK_WRITE_MSE",
+    "adaptive_weighting": false
+  },
+  "selection": {
+    "S1_S2_unit": ["trace", "VM_ID", "fold", "resource"],
+    "S1_S2_objective": "mean inner-validation NMAE across 5 horizons and 3 seeds",
+    "M1_unit": ["trace", "VM_ID", "fold"],
+    "M1_objective": "equal resource mean inner-validation NMAE across 4 resources, 5 horizons, and 3 seeds",
+    "context_tie_break": "smaller_L",
+    "epoch_rule": "each_seed_retains_its_own_best_epoch",
+    "final_refit": "from_scratch_on_full_legal_outer_train_at_fixed_selected_epoch_then_one_outer_test_evaluation"
+  },
+  "support": {
+    "common_four_resource_support": true,
+    "matched_across_S1_S2_M1": true,
+    "expected_records": 1575,
+    "observed_records": 1575,
+    "support_mismatches": 0,
+    "support_minimum_failures": 0,
+    "selected_cohort_scaler_failures": 0,
+    "leakage_violations": 0
+  },
+  "classification_rules": {
+    "unit": "per_trace_and_comparison",
+    "BROAD_POSITIVE": {
+      "overall_gain_minimum": 0.01,
+      "positive_horizons_minimum": 4,
+      "positive_VMs_minimum": 25,
+      "positive_folds_minimum": 4,
+      "positive_seeds_minimum": 2,
+      "all_required": true
+    },
+    "CONDITIONALLY_POSITIVE": {
+      "overall_gain_strictly_positive": true,
+      "positive_horizons_minimum": 3,
+      "positive_VMs_minimum": 15,
+      "positive_folds_minimum": 3,
+      "positive_seeds_minimum": 2,
+      "exclude_BROAD_POSITIVE": true,
+      "all_required": true
+    },
+    "BROAD_NEGATIVE": {
+      "overall_gain_maximum": -0.01,
+      "positive_horizons_maximum": 1,
+      "positive_VMs_maximum": 10,
+      "positive_folds_maximum": 1,
+      "positive_seeds_maximum": 1,
+      "all_required": true
+    },
+    "otherwise": "NEUTRAL_OR_MIXED",
+    "change_after_execution_permitted": false
+  },
+  "temporal_synthesis": {
+    "label": "EQUAL_TEMPORAL_BLOCK_SYNTHESIS",
+    "report_each_trace_first": true,
+    "formula": "(gain_T1 + gain_T2 + gain_T3) / 3",
+    "weighting": "none",
+    "independent_dataset_meta_analysis": false
+  },
+  "bootstrap": {
+    "procedure": "paired_VM_cluster_bootstrap_separately_within_each_trace",
+    "unit": "VM",
+    "replicates": 10000,
+    "retain_all_five_folds": true,
+    "preserve_matched_formulation_structure": true,
+    "traces_are_independent_bootstrap_units": false,
+    "rng_policy": "same_deterministic_policy_as_Phase4C"
+  },
+  "replication_questions": {
+    "R1": "Is S2 benefit resource/time-block dependent rather than broadly beneficial?",
+    "R2": "Does M1 again fail to provide broad improvement over S2?",
+    "R3": "Does M1 again fail to outperform S1 broadly?",
+    "R4": "Do effects vary across Materna T1/T2/T3?",
+    "new_hypotheses_permitted": false
+  },
+  "workload": {
+    "per_trace": {
+      "S1_inner": 6300,
+      "S1_final": 2100,
+      "S2_inner": 6300,
+      "S2_final": 2100,
+      "M1_inner": 1575,
+      "M1_final": 525,
+      "fits_total": 18900,
+      "metric_rows": 31500,
+      "selected_contexts": 1575
+    },
+    "combined": {
+      "inner": 42525,
+      "final": 14175,
+      "fits_total": 56700,
+      "metric_rows": 94500,
+      "selected_contexts": 4725
+    }
+  },
+  "publication_role": {
+    "label": "SECONDARY_TEMPORAL_REPLICATION",
+    "immutable_after_results": true,
+    "not_pristine_primary_confirmation": true,
+    "reasons": ["prior DynAPM exposure", "same source across three temporal traces"],
+    "purposes": [
+      "temporal robustness",
+      "generalizability constraint",
+      "clarify mixed H1",
+      "independently probe H2 negative-sharing boundary",
+      "test temporal heterogeneity"
+    ]
+  }
+}

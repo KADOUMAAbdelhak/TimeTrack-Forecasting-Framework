@@ -1,0 +1,76 @@
+{
+  "archive": {
+    "filename": "gwa_t_13_materna.zip",
+    "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+  },
+  "role": "SECONDARY_TEMPORAL_REPLICATION",
+  "temporal_environments": {
+    "Materna-T1": "Materna-Trace-1",
+    "Materna-T2": "Materna-Trace-2",
+    "Materna-T3": "Materna-Trace-3"
+  },
+  "resource_order": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+  "transforms": {
+    "CPU": "identity",
+    "THROUGHPUT": "log1p",
+    "MEMORY": "identity",
+    "DISK_WRITE": "log1p"
+  },
+  "cadence_seconds": 300,
+  "sample_leads": [1, 2, 4, 9, 18],
+  "horizon_minutes": [5, 10, 20, 45, 90],
+  "contexts": [4, 9, 18],
+  "folds": 5,
+  "inner_validation_fraction": 0.15,
+  "outer_initial_train_fraction": 0.5,
+  "outer_test_fraction": 0.1,
+  "support_minima": {
+    "inner_train": 512,
+    "inner_validation": 128,
+    "outer_train": 1024,
+    "outer_test": 256
+  },
+  "scaling": {
+    "rule": "training_only_median_IQR",
+    "fallback": false,
+    "epsilon": false,
+    "partition_key": ["trace", "VM_ID", "fold", "phase", "L"],
+    "phases": ["inner", "final"],
+    "partitions_per_vm": 90
+  },
+  "cohort": {
+    "structural_common_pool": 398,
+    "selected_count": 35,
+    "policy_version": "phase4a-v1",
+    "selection_environment": "Materna-shared",
+    "selection_key": "phase4a-v1|Materna-shared|<exact-VM-ID>"
+  },
+  "architecture": {
+    "S1": "one-input separate two-layer unidirectional LSTM per resource with five outputs",
+    "S2": "four-input separate two-layer unidirectional LSTM per target resource with five outputs",
+    "M1": "four-input shared two-layer unidirectional LSTM encoder with four independent five-output heads",
+    "hidden_size": 64,
+    "layers": 2,
+    "dropout": 0.1,
+    "parameters": {"S1_per_model": 50757, "S2_per_model": 51525, "M1_total": 52500}
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "seeds": [0, 1, 2],
+    "M1_loss": "equal_mean_of_four_resource_MSE_losses"
+  },
+  "bootstrap": {
+    "unit": "paired_VM_cluster_with_all_folds",
+    "replicates": 10000,
+    "rng_policy": "same_deterministic_policy_as_Phase4C",
+    "traces_are_independent_bootstrap_units": false
+  },
+  "synthesis": "EQUAL-TEMPORAL-BLOCK_SYNTHESIS",
+  "timing_pilot": {"fold": 1, "seed": 0, "L": 9, "epochs": 5, "models_per_trace": 9},
+  "scientific_execution_authorized": false
+}

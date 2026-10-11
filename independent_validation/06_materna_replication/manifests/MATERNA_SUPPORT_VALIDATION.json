@@ -1,0 +1,19 @@
+{
+  "expected_scaler_partitions": 3150,
+  "expected_support_records": 1575,
+  "formulation_support_mismatches": 0,
+  "outer_test_predictions_generated": 0,
+  "outer_test_target_values_accessed": 0,
+  "records_by_trace": {
+    "Materna-T1": 525,
+    "Materna-T2": 525,
+    "Materna-T3": 525
+  },
+  "scaler_partitions": 3150,
+  "segment_count": 268,
+  "selected_common_vms": 35,
+  "status": "PASS",
+  "support_minimum_failures": 0,
+  "support_records": 1575,
+  "zero_iqr_failures": 0
+}
