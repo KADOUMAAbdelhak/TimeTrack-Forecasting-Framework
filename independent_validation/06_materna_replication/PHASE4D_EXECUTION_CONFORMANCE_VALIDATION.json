@@ -1,0 +1,91 @@
+{
+  "archive_sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4",
+  "atomic_completion_lifecycle": {
+    "inner_outer_test_accessed": false,
+    "inner_reusable": true
+  },
+  "classification": "IMPLEMENTATION_CONFORMANCE_CHECKPOINT",
+  "cohort_sha256": "4c9e8f4cfa5cf26c4188924c486cdfbe9d78972eec1f84f5e0f23b1e94353140",
+  "config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+  "current_protected_protocol_paths": 14,
+  "decision_sha256": "3f5a780128f0d7931a44078d2f55f8168e3b444d51d2eb03cd635266b6bd368b",
+  "dry_run_plan": {
+    "by_formulation_phase": {
+      "M1_final": 1575,
+      "M1_inner": 4725,
+      "S1_final": 6300,
+      "S1_inner": 18900,
+      "S2_final": 6300,
+      "S2_inner": 18900
+    },
+    "duplicate_run_ids": 0,
+    "final_L_semantics": "SELECTED_L placeholder; numeric L is inserted after inner selection",
+    "final_total": 14175,
+    "identity_fields": [
+      "run_kind",
+      "trace",
+      "environment",
+      "formulation",
+      "resource",
+      "vm_id",
+      "fold",
+      "L",
+      "seed",
+      "phase",
+      "config_sha256",
+      "archive_sha256",
+      "cohort_sha256",
+      "support_sha256",
+      "execution_conformance_sha256",
+      "run_id"
+    ],
+    "inner_total": 42525,
+    "optimizer_executions": 0,
+    "per_trace": {
+      "Materna-T1": 18900,
+      "Materna-T2": 18900,
+      "Materna-T3": 18900
+    },
+    "pilot_scientific_collisions": 0,
+    "real_outer_test_accesses": 0,
+    "run_kind": "scientific",
+    "status": "PASS",
+    "total_run_ids": 56700,
+    "unique_run_ids": 56700
+  },
+  "failures": [],
+  "historical_protocol_integrity": "PASS",
+  "run_identity_fields": [
+    "run_kind",
+    "trace",
+    "environment",
+    "formulation",
+    "resource",
+    "vm_id",
+    "fold",
+    "L",
+    "seed",
+    "phase",
+    "config_sha256",
+    "archive_sha256",
+    "cohort_sha256",
+    "support_sha256",
+    "execution_conformance_sha256",
+    "run_id"
+  ],
+  "scientific_analysis_performed": false,
+  "scientific_output_root": "independent_validation/06_materna_replication/outputs/scientific_v1",
+  "scientific_state": {
+    "optimizer_executions": 0,
+    "predictive_outcomes_inspected": 0,
+    "scientific_figures": 0,
+    "scientific_fits": 0,
+    "scientific_outer_test_accesses": 0,
+    "scientific_predictions": 0,
+    "scientific_v1_real_execution_artifacts": 0
+  },
+  "status": "PASS",
+  "support_manifest_sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239",
+  "test_result": ".........................................                                [100%]\n41 passed in 2.86s",
+  "test_returncode": 0
+}

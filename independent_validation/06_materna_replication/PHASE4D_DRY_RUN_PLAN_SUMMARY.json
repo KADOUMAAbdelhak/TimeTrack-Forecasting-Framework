@@ -1,0 +1,44 @@
+{
+  "by_formulation_phase": {
+    "M1_final": 1575,
+    "M1_inner": 4725,
+    "S1_final": 6300,
+    "S1_inner": 18900,
+    "S2_final": 6300,
+    "S2_inner": 18900
+  },
+  "duplicate_run_ids": 0,
+  "final_L_semantics": "SELECTED_L placeholder; numeric L is inserted after inner selection",
+  "final_total": 14175,
+  "identity_fields": [
+    "run_kind",
+    "trace",
+    "environment",
+    "formulation",
+    "resource",
+    "vm_id",
+    "fold",
+    "L",
+    "seed",
+    "phase",
+    "config_sha256",
+    "archive_sha256",
+    "cohort_sha256",
+    "support_sha256",
+    "execution_conformance_sha256",
+    "run_id"
+  ],
+  "inner_total": 42525,
+  "optimizer_executions": 0,
+  "per_trace": {
+    "Materna-T1": 18900,
+    "Materna-T2": 18900,
+    "Materna-T3": 18900
+  },
+  "pilot_scientific_collisions": 0,
+  "real_outer_test_accesses": 0,
+  "run_kind": "scientific",
+  "status": "PASS",
+  "total_run_ids": 56700,
+  "unique_run_ids": 56700
+}

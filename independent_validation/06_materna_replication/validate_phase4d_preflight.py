@@ -10,6 +10,7 @@ import json
 import os
 import subprocess
 import sys
+from io import StringIO
 from collections import Counter
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -35,11 +36,15 @@ from src.training import build_model, parameter_count  # noqa: E402
 from src.transforms import transform_resource  # noqa: E402
 
 
-EXPECTED_HEAD = "d9c8ed80a90085d989d1dacc40f1c27377a4a76f"
+PROTOCOL_COMMIT = "c4077318bfbb02e112b439baa3ae7a0e35db0dc5"
+PROTOCOL_TAG = "phase4d-materna-secondary-replication-protocol-freeze-v1"
 EXPECTED_ARCHIVE = "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
 EXPECTED_CONFIG = "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27"
+EXPECTED_PREFLIGHT_INVENTORY = "fc440dcb3dc9039a919b1e38136f1567c239a7609bac3d01ec08c93c3a1d293b"
+EXPECTED_PREFLIGHT_TREE = "981dfef4b90e8056897bf91c0ad4643c012efc3110d5a348ecfac37bf8dbdc72"
 TAGS = {
-    "phase4c-v2-bitbrains-external-confirmation-freeze-v1": EXPECTED_HEAD,
+    PROTOCOL_TAG: PROTOCOL_COMMIT,
+    "phase4c-v2-bitbrains-external-confirmation-freeze-v1": "d9c8ed80a90085d989d1dacc40f1c27377a4a76f",
     "phase4c-v2-dual-environment-execution-freeze-v1": "549020a1a0b19d3c633d21cd13d2c8ff007225f1",
     "phase4c-v2-execution-conformance-freeze-v1": "30cb7b042726b6e6db8c6bf5ed43324b620ca42e",
     "phase4c-bitbrains-training-scale-amendment-freeze-v1": "5a643567f466c66a5134e41d8c0ae05f8b971763",
@@ -56,6 +61,23 @@ TAGS = {
     "phase2a-benchmark-protocol-freeze-v1": "0b4269270b0a121f0ba1e19355c6cd24b72abeb5",
     "phase2b1-corrected-deterministic-freeze-v1": "bdc7c9243cb33cbb3fadee7b911810a164d8da43",
 }
+
+PROTECTED_PROTOCOL_PATHS = (
+    "independent_validation/06_materna_replication/configs/materna_phase4d_preflight.json",
+    "independent_validation/06_materna_replication/configs/materna_replication_v1.json",
+    "independent_validation/06_materna_replication/TRAINING_SCALE_ELIGIBILITY.csv",
+    "independent_validation/06_materna_replication/ZERO_IQR_PREVALENCE.csv",
+    "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+    "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT_SUMMARY.json",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SCALER_PARTITIONS.csv",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SEGMENT_SUMMARY.csv",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_FAILURES.csv",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_SUMMARY.csv",
+    "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_VALIDATION.json",
+    "independent_validation/06_materna_replication/outputs/SCIENTIFIC_WORKLOAD.json",
+    "independent_validation/06_materna_replication/outputs/TRAINING_SCALE_ELIGIBILITY_SUMMARY.json",
+)
 INVENTORIES = {
     "independent_validation/05_bitbrains_factorial/PHASE4C_V2_SCIENTIFIC_CHECKPOINT_SHA256.csv": "07102b449e3a5e6222f206c4509322a74ddadc1cbafed3dd1341b1ce26f7992b",
     "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/runtime/PHASE4C_V2_EXECUTION_ARTIFACT_SHA256.csv": "42e085403d331bc903afd484582bf4d57c68477513ef6a948c3d40c2c5cf4377",
@@ -105,6 +127,36 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def git_bytes(ref: str, relative: str) -> bytes:
+    return subprocess.check_output(["git", "show", f"{ref}:{relative}"], cwd=ROOT)
+
+
+def verify_historical_protocol() -> list[str]:
+    failures = []
+    config_relative = "independent_validation/06_materna_replication/configs/materna_replication_v1.json"
+    inventory_relative = "independent_validation/06_materna_replication/PHASE4D_MATERNA_PREFLIGHT_ARTIFACT_SHA256.csv"
+    if hashlib.sha256(git_bytes(PROTOCOL_COMMIT, config_relative)).hexdigest() != EXPECTED_CONFIG:
+        failures.append("historical_protocol_config")
+    inventory_bytes = git_bytes(PROTOCOL_COMMIT, inventory_relative)
+    if hashlib.sha256(inventory_bytes).hexdigest() != EXPECTED_PREFLIGHT_INVENTORY:
+        failures.append("historical_preflight_inventory")
+    rows = list(csv.DictReader(StringIO(inventory_bytes.decode("utf-8"))))
+    tree = hashlib.sha256()
+    for row in rows:
+        relative = row["relative_path"]
+        payload = git_bytes(PROTOCOL_COMMIT, relative)
+        if len(payload) != int(row["byte_size"]) or hashlib.sha256(payload).hexdigest() != row["sha256"]:
+            failures.append(f"historical_preflight_entry:{relative}")
+        tree.update(f"{relative},{row['byte_size']},{row['sha256']}\n".encode())
+    if tree.hexdigest() != EXPECTED_PREFLIGHT_TREE:
+        failures.append("historical_preflight_tree")
+    for relative in PROTECTED_PROTOCOL_PATHS:
+        current = ROOT / relative
+        if not current.is_file() or current.read_bytes() != git_bytes(PROTOCOL_COMMIT, relative):
+            failures.append(f"protected_protocol_content:{relative}")
+    return failures
+
+
 def verify_inventory(relative: str, expected_hash: str) -> tuple[int, list[str]]:
     path = ROOT / relative
     failures = []
@@ -149,14 +201,21 @@ def main() -> None:
     failures = []
     checks: dict[str, object] = {}
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    if head != EXPECTED_HEAD:
-        failures.append(f"head:{head}")
+    failures.extend(verify_historical_protocol())
     tag_results = {}
     for tag, expected in TAGS.items():
         observed = subprocess.check_output(["git", "rev-parse", f"{tag}^{{}}"], cwd=ROOT, text=True).strip()
         tag_results[tag] = observed
         if observed != expected:
             failures.append(f"tag:{tag}")
+    checks["current_head"] = head
+    checks["historical_protocol"] = {
+        "commit": PROTOCOL_COMMIT,
+        "tag": PROTOCOL_TAG,
+        "preflight_inventory_sha256": EXPECTED_PREFLIGHT_INVENTORY,
+        "preflight_tree_sha256": EXPECTED_PREFLIGHT_TREE,
+        "protected_current_tree_paths": len(PROTECTED_PROTOCOL_PATHS),
+    }
     checks["frozen_tags"] = {"count": len(tag_results), "status": "PASS" if not any(item.startswith("tag:") for item in failures) else "FAIL"}
     inventory_counts = {}
     for relative, expected_hash in INVENTORIES.items():
@@ -291,16 +350,6 @@ def main() -> None:
     forbidden_outputs = [path.relative_to(HERE).as_posix() for path in HERE.rglob("*") if path.is_file() and any(token in path.as_posix().lower() for token in ("scientific_predictions", "scientific_metrics", "model_checkpoints", "outer_test_predictions"))]
     if forbidden_outputs:
         failures.append("scientific_outputs_present")
-    inventory = HERE / "PHASE4D_MATERNA_PREFLIGHT_ARTIFACT_SHA256.csv"
-    if inventory.exists():
-        inventory_result = subprocess.run(
-            [sys.executable, str(HERE / "build_phase4d_preflight_inventory.py"), "--verify"],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-        )
-        if inventory_result.returncode:
-            failures.append("phase4d_artifact_inventory")
     result = {
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,

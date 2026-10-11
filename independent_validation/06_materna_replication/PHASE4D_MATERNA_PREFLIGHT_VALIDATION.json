@@ -5,6 +5,7 @@
       "S1": 50757,
       "S2": 51525
     },
+    "current_head": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5",
     "frozen_inventories": {
       "benchmark/neural_v2/DLINEAR_SCIENTIFIC_ARTIFACT_SHA256.csv": 1347,
       "benchmark/neural_v2/LSTM_SCIENTIFIC_ARTIFACT_SHA256.csv": 1349,
@@ -23,8 +24,15 @@
       "multiresource/PHASE3A_ARTIFACT_SHA256.csv": 25
     },
     "frozen_tags": {
-      "count": 16,
+      "count": 17,
       "status": "PASS"
+    },
+    "historical_protocol": {
+      "commit": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5",
+      "preflight_inventory_sha256": "fc440dcb3dc9039a919b1e38136f1567c239a7609bac3d01ec08c93c3a1d293b",
+      "preflight_tree_sha256": "981dfef4b90e8056897bf91c0ad4643c012efc3110d5a348ecfac37bf8dbdc72",
+      "protected_current_tree_paths": 14,
+      "tag": "phase4d-materna-secondary-replication-protocol-freeze-v1"
     },
     "pilot": {
       "epochs_each": 5,
