@@ -1,0 +1,245 @@
+{
+  "schema_version": "phase4d-materna-scientific-analysis-criteria-v1",
+  "freeze_scope": {
+    "statement": "THESE ANALYSIS AND DECISION RULES WERE FROZEN AFTER TECHNICAL EXECUTION BUT BEFORE FIRST SCIENTIFIC INSPECTION OF MATERNA PREDICTIVE RESULTS.",
+    "execution_checkpoint_commit": "dba05d2505e91170f7d4de69027f4692e5b30584",
+    "execution_checkpoint_tag": "phase4d-materna-three-trace-execution-freeze-v1",
+    "execution_conformance_commit": "5e7a42acf47dc0f14a73e7188c17831629f2229d",
+    "execution_conformance_tag": "phase4d-materna-execution-conformance-freeze-v1",
+    "scientific_protocol_commit": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5",
+    "scientific_protocol_tag": "phase4d-materna-secondary-replication-protocol-freeze-v1",
+    "predictive_results_inspected": false,
+    "gains_calculated": 0,
+    "bootstrap_executed": 0,
+    "R1_R2_R3_R4_evaluated": false,
+    "scientific_figures": 0
+  },
+  "protected_execution": {
+    "materna_config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+    "heavy_inventory_entries": 141785,
+    "heavy_inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+    "execution_tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+    "compact_checkpoint_entries": 42,
+    "compact_checkpoint_inventory_sha256": "ba7e4e3cc39b6d3a9318db6e27573a41edc115e654ef82866ec9a080b5065d84",
+    "execution_checkpoint_tree_sha256": "abb816d612d9ab84d9bd118536e74793d4556b1258995c612efc6382c977248d"
+  },
+  "dimensions": {
+    "traces": ["Materna-T1", "Materna-T2", "Materna-T3"],
+    "formulations": ["S1", "S2", "M1"],
+    "comparisons": ["S2_vs_S1", "M1_vs_S2", "M1_vs_S1"],
+    "resources": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+    "leads": [1, 2, 4, 9, 18],
+    "folds": 5,
+    "seeds": [0, 1, 2],
+    "VMs_per_trace": 35
+  },
+  "primary_aggregation": {
+    "trace_handling": "analyze_each_trace_independently",
+    "stochastic_order": "average_native_MAE_across_three_seeds_within_trace_VM_fold_resource_lead_formulation",
+    "cell_weighting": "equal_weight_for_each_VM_fold_cell",
+    "lead_macro_mae": "equal_mean_across_seed_averaged_VM_fold_cells",
+    "resource_overall_macro_mae": "equal_mean_across_five_lead_macro_maes",
+    "gain_unit": "percent",
+    "gain_formula": "100 * (baseline_MacroMAE - candidate_MacroMAE) / baseline_MacroMAE",
+    "comparison_formulas": {
+      "S2_vs_S1": "100 * (S1 - S2) / S1",
+      "M1_vs_S2": "100 * (S2 - M1) / S2",
+      "M1_vs_S1": "100 * (S1 - M1) / S1"
+    },
+    "pool_individual_predictions": false
+  },
+  "secondary_aggregation": {
+    "diagnostic_only": true,
+    "measures": [
+      "pooled_prediction_level_MAE_gain",
+      "mean_matched_VM_fold_cell_relative_gain",
+      "median_matched_VM_fold_cell_relative_gain",
+      "positive_VM_fold_fraction"
+    ],
+    "primary_conclusion_basis": "ratio_of_separately_macro_aggregated_matched_MAEs",
+    "report_primary_secondary_sign_reversal": true
+  },
+  "positive_count_semantics": {
+    "scope": ["trace", "comparison", "resource"],
+    "positive_horizons_range": [0, 5],
+    "positive_VMs_range": [0, 35],
+    "positive_folds_range": [0, 5],
+    "positive_seed_aggregate_signs_range": [0, 3],
+    "VM_positivity": "aggregate_over_folds_and_horizons_first",
+    "fold_positivity": "aggregate_over_VMs_and_horizons_first",
+    "seed_positivity": "aggregate_over_VMs_folds_and_horizons_for_that_seed",
+    "matching": "matched_formulation_comparisons"
+  },
+  "resource_classification": {
+    "BROAD_POSITIVE": {
+      "all_required": true,
+      "overall_gain_minimum_percent": 1.0,
+      "positive_horizons_minimum": 4,
+      "positive_VMs_minimum": 25,
+      "positive_folds_minimum": 4,
+      "positive_seeds_minimum": 2
+    },
+    "CONDITIONALLY_POSITIVE": {
+      "all_required": true,
+      "precedence_exclusion": "not_BROAD_POSITIVE",
+      "overall_gain_strictly_greater_than_percent": 0.0,
+      "positive_horizons_minimum": 3,
+      "positive_VMs_minimum": 15,
+      "positive_folds_minimum": 3,
+      "positive_seeds_minimum": 2
+    },
+    "BROAD_NEGATIVE": {
+      "all_required": true,
+      "overall_gain_maximum_percent": -1.0,
+      "positive_horizons_maximum": 1,
+      "positive_VMs_maximum": 10,
+      "positive_folds_maximum": 1,
+      "positive_seeds_maximum": 1
+    },
+    "otherwise": "NEUTRAL_OR_MIXED",
+    "threshold_changes_permitted": false
+  },
+  "mechanical_definitions": {
+    "positive_resource": "resource_classification_is_BROAD_POSITIVE_or_CONDITIONALLY_POSITIVE",
+    "negative_resource_for_M1_vs_S1_trace_summary": "overall_primary_gain_strictly_less_than_zero",
+    "materially_negative_resource": "overall_primary_gain_less_than_or_equal_to_minus_1_percent",
+    "strong_target_specific_tradeoffs": "maximum_resource_overall_primary_gain_at_least_plus_1_percent_and_minimum_resource_overall_primary_gain_at_most_minus_1_percent",
+    "material_positive_and_negative_synthesis": "at_least_one_synthesized_resource_gain_at_least_plus_1_percent_and_at_least_one_at_most_minus_1_percent",
+    "sign": "positive_if_gain_greater_than_zero_negative_if_less_than_zero_zero_otherwise"
+  },
+  "trace_decisions": {
+    "S2_vs_S1": {
+      "precedence": ["CROSS_RESOURCE_INPUT_SUPPORTED", "CROSS_RESOURCE_INPUT_NOT_SUPPORTED", "CROSS_RESOURCE_INPUT_MIXED"],
+      "CROSS_RESOURCE_INPUT_SUPPORTED": "positive_resource_count >= 3 and equal_resource_mean_primary_gain > 0 and BROAD_NEGATIVE_count <= 1",
+      "CROSS_RESOURCE_INPUT_NOT_SUPPORTED": "(positive_resource_count <= 1 and equal_resource_mean_primary_gain <= 0) or BROAD_NEGATIVE_count >= 2",
+      "CROSS_RESOURCE_INPUT_MIXED": "otherwise"
+    },
+    "M1_vs_S2": {
+      "conservative_precedence": ["SHARED_REPRESENTATION_NEGATIVE_TRANSFER", "SHARED_REPRESENTATION_NOT_SUPPORTED", "SHARED_REPRESENTATION_SUPPORTED", "SHARED_REPRESENTATION_CONDITIONALLY_SUPPORTED"],
+      "SHARED_REPRESENTATION_SUPPORTED": "positive_resource_count >= 3 and equal_resource_mean_primary_gain > 0 and BROAD_NEGATIVE_count == 0",
+      "SHARED_REPRESENTATION_CONDITIONALLY_SUPPORTED": "equal_resource_mean_primary_gain > 0 and positive_resource_count >= 2 and full_supported_criteria_fail",
+      "SHARED_REPRESENTATION_NEGATIVE_TRANSFER": "(positive_resource_count >= 1 and count_of_resources_that_are_BROAD_NEGATIVE_or_materially_negative >= 2) or strong_target_specific_tradeoffs",
+      "SHARED_REPRESENTATION_NOT_SUPPORTED": "positive_resource_count <= 1 and equal_resource_mean_primary_gain <= 0",
+      "residual_rule": "if_no_named_predicate_applies_assign_SHARED_REPRESENTATION_NOT_SUPPORTED_and_persist_reason_residual_no_support"
+    },
+    "M1_vs_S1": {
+      "JOINT_SYSTEM_BROADLY_BENEFICIAL": "positive_overall_gain_resource_count >= 3 and equal_resource_mean_primary_gain > 0",
+      "JOINT_SYSTEM_BROADLY_HARMFUL": "negative_overall_gain_resource_count >= 3 and equal_resource_mean_primary_gain < 0",
+      "JOINT_SYSTEM_MIXED": "otherwise",
+      "use": "R3_only"
+    }
+  },
+  "temporal_synthesis": {
+    "label": "EQUAL_TEMPORAL_BLOCK_SYNTHESIS",
+    "formula": "(T1_primary_gain + T2_primary_gain + T3_primary_gain) / 3",
+    "scopes": ["comparison_resource_lead", "comparison_resource_overall"],
+    "weighting": "equal_trace_weight_only",
+    "forbidden_weights": ["rows", "origins", "predictions", "duration", "fit_count"],
+    "independent_dataset_meta_analysis": false,
+    "adjacent_reporting": ["T1_gain", "T2_gain", "T3_gain", "temporal_synthesis", "sign_pattern", "max_minus_min_temporal_spread"]
+  },
+  "bootstrap": {
+    "procedure": "paired_VM_cluster_bootstrap_separately_within_each_trace",
+    "resampling_unit": "VM",
+    "VM_draws_with_replacement": 35,
+    "retain_all_five_folds": true,
+    "preserve_paired_formulation_structure": true,
+    "input": "seed_averaged_matched_MAEs",
+    "replicates": 10000,
+    "interval": "percentile_95_percent",
+    "percentiles": [2.5, 97.5],
+    "scopes": ["trace_comparison_resource_lead", "trace_comparison_resource_overall"],
+    "rng_seed": 20261007,
+    "rng_seed_provenance": "Phase_4C_scientific_analysis_provenance",
+    "bootstrap_traces_as_independent_observations": false,
+    "temporal_synthesis_nominal_CI": false,
+    "inferential_uncertainty_result": "trace_specific_intervals"
+  },
+  "persistence_interpretation": {
+    "role": "separate_absolute_forecasting_sanity_check",
+    "summary_dimensions": ["trace", "resource", "lead"],
+    "metrics": ["MAE", "RMSE", "R2", "NMAE"],
+    "calculate_skill_for": ["S1", "S2", "M1"],
+    "may_redefine_R1_R2_R3_R4": false,
+    "required_statement": "relative formulation improvements do not imply absolute superiority over persistence"
+  },
+  "R1": {
+    "question": "Is cross-resource S2 benefit resource/time-block dependent rather than broadly beneficial?",
+    "precedence": ["R1_BROAD_CROSS_RESOURCE_BENEFIT", "R1_RESOURCE_TEMPORAL_DEPENDENCE_CONFIRMED", "R1_CROSS_RESOURCE_INPUT_NOT_SUPPORTED", "R1_MIXED_OR_INCONCLUSIVE"],
+    "R1_BROAD_CROSS_RESOURCE_BENEFIT": "supported_trace_count >= 2 and mean_of_four_synthesized_resource_gains > 0 and positive_synthesized_resource_count >= 3",
+    "R1_RESOURCE_TEMPORAL_DEPENDENCE_CONFIRMED": "broad_benefit_fails and (trace_level_cross_resource_decisions_not_identical or resource_sign_change_count >= 2 or resource_classification_change_count >= 2)",
+    "R1_CROSS_RESOURCE_INPUT_NOT_SUPPORTED": "supported_trace_count == 0 and mean_of_four_synthesized_resource_gains <= 0 and positive_synthesized_resource_count <= 1 and temporal_dependence_does_not_apply",
+    "R1_MIXED_OR_INCONCLUSIVE": "otherwise"
+  },
+  "R2": {
+    "question": "Does naive M1 sharing again fail to provide broad improvement over S2?",
+    "precedence": ["R2_NEGATIVE_SHARING_REPLICATED", "R2_MIXED_SHARING_EFFECT", "R2_SHARING_BENEFIT_REPLICATED", "R2_INCONCLUSIVE"],
+    "R2_NEGATIVE_SHARING_REPLICATED": "supported_trace_count == 0 and conditionally_supported_trace_count <= 1 and mean_of_four_synthesized_resource_gains <= 0 and positive_synthesized_resource_count <= 1",
+    "R2_MIXED_SHARING_EFFECT": "supported_trace_count == 0 and material_positive_and_negative_synthesis",
+    "R2_SHARING_BENEFIT_REPLICATED": "supported_or_conditionally_supported_trace_count >= 2 and mean_of_four_synthesized_resource_gains > 0 and positive_synthesized_resource_count >= 3",
+    "R2_INCONCLUSIVE": "otherwise"
+  },
+  "R3": {
+    "question": "Does the complete shared M1 system again fail to outperform separate local S1 models broadly?",
+    "precedence": ["R3_JOINT_SYSTEM_UNDERPERFORMANCE_REPLICATED", "R3_JOINT_SYSTEM_PARTIAL_UNDERPERFORMANCE", "R3_JOINT_SYSTEM_BENEFIT", "R3_MIXED_OR_INCONCLUSIVE"],
+    "R3_JOINT_SYSTEM_UNDERPERFORMANCE_REPLICATED": "all_four_synthesized_resource_gains_negative and broadly_harmful_trace_count >= 2",
+    "R3_JOINT_SYSTEM_PARTIAL_UNDERPERFORMANCE": "mean_of_four_synthesized_resource_gains <= 0 and positive_synthesized_resource_count <= 2 and full_replicated_criterion_fails",
+    "R3_JOINT_SYSTEM_BENEFIT": "positive_synthesized_resource_count >= 3 and mean_of_four_synthesized_resource_gains > 0 and broadly_beneficial_trace_count >= 2",
+    "R3_MIXED_OR_INCONCLUSIVE": "otherwise"
+  },
+  "R4": {
+    "question": "Do effects vary across Materna T1/T2/T3?",
+    "primary_heterogeneity_basis": "frozen_resource_classifications",
+    "TEMPORALLY_CLASSIFICATION_VARIABLE": "resource_comparison_classification_not_identical_across_T1_T2_T3",
+    "report_raw_sign_reversal_separately": true,
+    "precedence": ["R4_TEMPORAL_HETEROGENEITY_CONFIRMED", "R4_TEMPORAL_HETEROGENEITY_WEAK", "R4_TEMPORAL_HETEROGENEITY_NOT_SUPPORTED"],
+    "R4_TEMPORAL_HETEROGENEITY_CONFIRMED": "classification_variable_resource_comparison_count >= 2 or S2_vs_S1_global_trace_decisions_differ or M1_vs_S2_global_trace_decisions_differ",
+    "R4_TEMPORAL_HETEROGENEITY_WEAK": "classification_variable_resource_comparison_count == 1 and global_trace_decisions_identical",
+    "R4_TEMPORAL_HETEROGENEITY_NOT_SUPPORTED": "classification_variable_resource_comparison_count == 0 and global_trace_decisions_identical",
+    "post_hoc_regime_mining": false
+  },
+  "cross_study_synthesis": {
+    "sources": {
+      "A": "TimeTrack",
+      "B": ["Bitbrains_fastStorage", "Bitbrains_Rnd", "Bitbrains_equal_environment_synthesis"],
+      "C": ["Materna_T1", "Materna_T2", "Materna_T3", "Materna_equal_temporal_block_synthesis"]
+    },
+    "pooled_numeric_score_across_all_sources": false,
+    "method": "descriptive_plus_direction_and_classification_consistency",
+    "reasons": ["dataset_roles_differ", "Materna_temporal_blocks_are_dependent", "sample_structures_differ"]
+  },
+  "cross_study_claim_gates": {
+    "cross_resource_context": {
+      "conservative_precedence": ["CROSS_RESOURCE_BOUNDARY_NOT_SUPPORTED", "CROSS_RESOURCE_BOUNDARY_MIXED", "CROSS_RESOURCE_BOUNDARY_STRENGTHENED"],
+      "CROSS_RESOURCE_BOUNDARY_STRENGTHENED": "Phase4C_H1_is_partial_or_confirmed_and_Materna_not_R1_BROAD_CROSS_RESOURCE_BENEFIT_and_resource_environment_time_dependence_remains",
+      "CROSS_RESOURCE_BOUNDARY_MIXED": "Materna_materially_broader_S2_benefit_than_Bitbrains_or_TimeTrack_but_not_consistently_positive_across_all_sources",
+      "CROSS_RESOURCE_BOUNDARY_NOT_SUPPORTED": "Materna_broad_replicated_benefit_materially_overturns_existing_multi_dataset_boundary"
+    },
+    "shared_representation": {
+      "conservative_precedence": ["SHARED_REPRESENTATION_BOUNDARY_NOT_SUPPORTED", "SHARED_REPRESENTATION_BOUNDARY_MIXED", "SHARED_REPRESENTATION_BOUNDARY_STRENGTHENED"],
+      "SHARED_REPRESENTATION_BOUNDARY_STRENGTHENED": "Phase4C_H2_BOUNDARY_CONFIRMED_and_Materna_R2_NEGATIVE_SHARING_REPLICATED",
+      "SHARED_REPRESENTATION_BOUNDARY_MIXED": "Materna_sharing_result_mixed",
+      "SHARED_REPRESENTATION_BOUNDARY_NOT_SUPPORTED": "Materna_R2_SHARING_BENEFIT_REPLICATED"
+    },
+    "joint_system": {
+      "conservative_precedence": ["JOINT_SYSTEM_UNDERPERFORMANCE_NOT_REPLICATED", "JOINT_SYSTEM_UNDERPERFORMANCE_PARTIAL", "JOINT_SYSTEM_UNDERPERFORMANCE_STRENGTHENED"],
+      "JOINT_SYSTEM_UNDERPERFORMANCE_STRENGTHENED": "M1_vs_S1_negative_for_every_resource_across_TimeTrack_and_both_Bitbrains_environments_and_Materna_R3_UNDERPERFORMANCE_REPLICATED",
+      "JOINT_SYSTEM_UNDERPERFORMANCE_PARTIAL": "Materna_R3_partial_or_mixed",
+      "JOINT_SYSTEM_UNDERPERFORMANCE_NOT_REPLICATED": "Materna_broad_joint_system_benefit"
+    }
+  },
+  "final_paper_scope_gate": {
+    "conservative_precedence": ["MULTIDATASET_BOUNDARY_STUDY_NOT_SUPPORTED", "MULTIDATASET_BOUNDARY_STUDY_REQUIRES_QUALIFICATION", "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_STRONGLY_SUPPORTED", "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_SUPPORTED"],
+    "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_STRONGLY_SUPPORTED": "shared_representation_boundary_strengthened and joint_system_underperformance_strengthened_or_partial and cross_resource_effects_bounded_mixed_or_resource_time_dependent and no_source_universal_cross_resource_or_shared_benefit",
+    "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_SUPPORTED": "central_boundary_survives_but_Materna_introduces_meaningful_mixed_replication",
+    "MULTIDATASET_BOUNDARY_STUDY_REQUIRES_QUALIFICATION": "one_major_boundary_contradicted_while_others_supported",
+    "MULTIDATASET_BOUNDARY_STUDY_NOT_SUPPORTED": "Materna_materially_overturns_central_empirical_story",
+    "optimize_for_publication": false
+  },
+  "experimentation_stop_gate": {
+    "STOP_EXPERIMENTATION_AND_WRITE": "Materna_yields_coherent_R1_R2_R3_R4_and_execution_and_analysis_validate_and_no_unresolved_protocol_defect",
+    "ADDITIONAL_EXPERIMENT_REQUIRED": "analysis_validation_exposes_genuine_methodological_defect_that_invalidates_required_conclusion",
+    "poor_or_inconvenient_results_are_methodological_defect": false,
+    "additional_work_to_improve_story_permitted": false
+  }
+}

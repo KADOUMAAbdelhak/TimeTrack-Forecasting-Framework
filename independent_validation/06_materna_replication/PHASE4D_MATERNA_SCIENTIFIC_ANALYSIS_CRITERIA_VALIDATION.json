@@ -1,0 +1,120 @@
+{
+  "analysis_lock": {
+    "R1_evaluated": false,
+    "R2_evaluated": false,
+    "R3_evaluated": false,
+    "R4_evaluated": false,
+    "bootstrap_executed": 0,
+    "gains_calculated": 0,
+    "predictive_metric_values_scientifically_inspected": false,
+    "scientific_figures": 0
+  },
+  "checks": {
+    "compact_execution_checkpoint": {
+      "entries": 42,
+      "failures": [],
+      "inventory_sha256": "ba7e4e3cc39b6d3a9318db6e27573a41edc115e654ef82866ec9a080b5065d84",
+      "status": "PASS",
+      "summary_matches": true,
+      "total_bytes": 69026592,
+      "tree_sha256": "abb816d612d9ab84d9bd118536e74793d4556b1258995c612efc6382c977248d",
+      "verified": 42
+    },
+    "criteria_schema": {
+      "exact_constants": true,
+      "missing_keys": [],
+      "status": "PASS"
+    },
+    "decision_rule_consistency": {
+      "all_labels_reachable": true,
+      "deterministic_precedence": true,
+      "observed_labels": {
+        "R1": [
+          "R1_BROAD_CROSS_RESOURCE_BENEFIT",
+          "R1_CROSS_RESOURCE_INPUT_NOT_SUPPORTED",
+          "R1_MIXED_OR_INCONCLUSIVE",
+          "R1_RESOURCE_TEMPORAL_DEPENDENCE_CONFIRMED"
+        ],
+        "R2": [
+          "R2_INCONCLUSIVE",
+          "R2_MIXED_SHARING_EFFECT",
+          "R2_NEGATIVE_SHARING_REPLICATED",
+          "R2_SHARING_BENEFIT_REPLICATED"
+        ],
+        "R3": [
+          "R3_JOINT_SYSTEM_BENEFIT",
+          "R3_JOINT_SYSTEM_PARTIAL_UNDERPERFORMANCE",
+          "R3_JOINT_SYSTEM_UNDERPERFORMANCE_REPLICATED",
+          "R3_MIXED_OR_INCONCLUSIVE"
+        ],
+        "R4": [
+          "R4_TEMPORAL_HETEROGENEITY_CONFIRMED",
+          "R4_TEMPORAL_HETEROGENEITY_NOT_SUPPORTED",
+          "R4_TEMPORAL_HETEROGENEITY_WEAK"
+        ],
+        "cross": [
+          "CROSS_RESOURCE_INPUT_MIXED",
+          "CROSS_RESOURCE_INPUT_NOT_SUPPORTED",
+          "CROSS_RESOURCE_INPUT_SUPPORTED"
+        ],
+        "joint": [
+          "JOINT_SYSTEM_BROADLY_BENEFICIAL",
+          "JOINT_SYSTEM_BROADLY_HARMFUL",
+          "JOINT_SYSTEM_MIXED"
+        ],
+        "resource": [
+          "BROAD_NEGATIVE",
+          "BROAD_POSITIVE",
+          "CONDITIONALLY_POSITIVE",
+          "NEUTRAL_OR_MIXED"
+        ],
+        "shared": [
+          "SHARED_REPRESENTATION_CONDITIONALLY_SUPPORTED",
+          "SHARED_REPRESENTATION_NEGATIVE_TRANSFER",
+          "SHARED_REPRESENTATION_NOT_SUPPORTED",
+          "SHARED_REPRESENTATION_SUPPORTED"
+        ]
+      },
+      "residual_shared_states_have_frozen_fallback": true,
+      "status": "PASS"
+    },
+    "frozen_identities": {
+      "config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+      "conformance_tag_target": "5e7a42acf47dc0f14a73e7188c17831629f2229d",
+      "execution_checkpoint_is_ancestor": true,
+      "execution_tag_target": "dba05d2505e91170f7d4de69027f4692e5b30584",
+      "protocol_tag_target": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5",
+      "status": "PASS"
+    },
+    "heavy_execution_inventory": {
+      "entries": 141785,
+      "failures": [],
+      "inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+      "status": "PASS",
+      "summary_matches": true,
+      "total_bytes": 6381741517,
+      "tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+      "verified": 141785
+    },
+    "resource_thresholds": {
+      "status": "PASS",
+      "unchanged": true
+    },
+    "result_artifact_absence": {
+      "bootstrap_artifacts": 0,
+      "formulation_comparison_artifacts": 0,
+      "matching_forbidden_files": [],
+      "present_forbidden_roots": [],
+      "scientific_figures": 0,
+      "status": "PASS"
+    }
+  },
+  "failures": [],
+  "inspection_boundary": {
+    "method": "criteria, Git identities, technical summaries, file names, byte sizes, and SHA-256 hashes only",
+    "prediction_parser_used": false,
+    "predictive_values_read": false,
+    "scientific_table_parser_used": false
+  },
+  "status": "PASS"
+}
