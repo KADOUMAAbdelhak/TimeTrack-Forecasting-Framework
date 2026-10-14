@@ -1,0 +1,74 @@
+{
+  "Materna-T1": {
+    "M1_vs_S1": {
+      "equal_resource_mean_gain_percent": -14.721018567994925,
+      "label": "JOINT_SYSTEM_BROADLY_HARMFUL",
+      "negative_resources": 4,
+      "positive_resources": 0
+    },
+    "M1_vs_S2": {
+      "broad_negative_resources": 3,
+      "equal_resource_mean_gain_percent": -11.775440493270567,
+      "label": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+      "materially_negative_resources": 3,
+      "positive_resources": 0,
+      "reason": "at most one positive resource and nonpositive equal-resource mean",
+      "strong_target_specific_tradeoffs": false
+    },
+    "S2_vs_S1": {
+      "broad_negative_resources": 0,
+      "equal_resource_mean_gain_percent": -2.512594133599892,
+      "label": "CROSS_RESOURCE_INPUT_NOT_SUPPORTED",
+      "positive_resources": 1,
+      "reason": "frozen non-support predicate applied"
+    }
+  },
+  "Materna-T2": {
+    "M1_vs_S1": {
+      "equal_resource_mean_gain_percent": -5.167883535355307,
+      "label": "JOINT_SYSTEM_BROADLY_HARMFUL",
+      "negative_resources": 3,
+      "positive_resources": 1
+    },
+    "M1_vs_S2": {
+      "broad_negative_resources": 4,
+      "equal_resource_mean_gain_percent": -7.103112655416808,
+      "label": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+      "materially_negative_resources": 4,
+      "positive_resources": 0,
+      "reason": "at most one positive resource and nonpositive equal-resource mean",
+      "strong_target_specific_tradeoffs": false
+    },
+    "S2_vs_S1": {
+      "broad_negative_resources": 0,
+      "equal_resource_mean_gain_percent": 1.8324822808095473,
+      "label": "CROSS_RESOURCE_INPUT_MIXED",
+      "positive_resources": 2,
+      "reason": "neither frozen support nor non-support predicate applied"
+    }
+  },
+  "Materna-T3": {
+    "M1_vs_S1": {
+      "equal_resource_mean_gain_percent": -23.087818317996827,
+      "label": "JOINT_SYSTEM_BROADLY_HARMFUL",
+      "negative_resources": 4,
+      "positive_resources": 0
+    },
+    "M1_vs_S2": {
+      "broad_negative_resources": 3,
+      "equal_resource_mean_gain_percent": -24.00274530573558,
+      "label": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+      "materially_negative_resources": 4,
+      "positive_resources": 0,
+      "reason": "at most one positive resource and nonpositive equal-resource mean",
+      "strong_target_specific_tradeoffs": false
+    },
+    "S2_vs_S1": {
+      "broad_negative_resources": 0,
+      "equal_resource_mean_gain_percent": 0.5633470655748694,
+      "label": "CROSS_RESOURCE_INPUT_MIXED",
+      "positive_resources": 2,
+      "reason": "neither frozen support nor non-support predicate applied"
+    }
+  }
+}

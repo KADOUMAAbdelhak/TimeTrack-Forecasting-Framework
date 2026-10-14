@@ -1,0 +1,105 @@
+{
+  "checks": {
+    "R1_R2_R3_R4_and_final_gates": {
+      "expected": {
+        "R1": "R1_RESOURCE_TEMPORAL_DEPENDENCE_CONFIRMED",
+        "R2": "R2_NEGATIVE_SHARING_REPLICATED",
+        "R3": "R3_JOINT_SYSTEM_UNDERPERFORMANCE_REPLICATED",
+        "R4": "R4_TEMPORAL_HETEROGENEITY_CONFIRMED",
+        "cross_resource_boundary": "CROSS_RESOURCE_BOUNDARY_STRENGTHENED",
+        "joint_system_boundary": "JOINT_SYSTEM_UNDERPERFORMANCE_STRENGTHENED",
+        "paper_scope_gate": "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_STRONGLY_SUPPORTED",
+        "shared_representation_boundary": "SHARED_REPRESENTATION_BOUNDARY_STRENGTHENED",
+        "stop_experimentation_gate": "STOP_EXPERIMENTATION_AND_WRITE"
+      },
+      "status": "PASS"
+    },
+    "VM_fold_MacroMAE_and_equal_horizon": {
+      "status": "PASS"
+    },
+    "bootstrap_pairing_VM_resampling_replicates_seed": {
+      "replicates": 10000,
+      "rows": 216,
+      "seed": 20261007,
+      "status": "PASS"
+    },
+    "cross_study_no_pooled_global_score": {
+      "forbidden_columns": [],
+      "rows": 12,
+      "status": "PASS"
+    },
+    "diagnostic_figures": {
+      "count": 12,
+      "files": [
+        "01_materna-t1_s2_vs_s1.png",
+        "02_materna-t2_s2_vs_s1.png",
+        "03_materna-t3_s2_vs_s1.png",
+        "04_s2_temporal_synthesis.png",
+        "05_materna-t1_m1_vs_s2.png",
+        "06_materna-t2_m1_vs_s2.png",
+        "07_materna-t3_m1_vs_s2.png",
+        "08_m1_temporal_synthesis.png",
+        "09_m1_vs_s1_cross_trace.png",
+        "10_vm_temporal_heterogeneity.png",
+        "11_persistence_skill_summary.png",
+        "12_full_cross_study_boundary.png"
+      ],
+      "status": "PASS"
+    },
+    "equal_temporal_block_synthesis": {
+      "rows": 72,
+      "status": "PASS"
+    },
+    "exact_source_hashes": {
+      "failures": [],
+      "source_count": 15,
+      "status": "PASS"
+    },
+    "frozen_execution_artifacts_unchanged": {
+      "entries": 141785,
+      "execution_tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+      "failures": [],
+      "inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+      "status": "PASS",
+      "verified": 141785
+    },
+    "model_training_during_analysis": {
+      "count": 0,
+      "forbidden_tokens": [],
+      "status": "PASS"
+    },
+    "positive_counts_and_resource_classifications": {
+      "rows": 36,
+      "status": "PASS"
+    },
+    "seed_averaging": {
+      "status": "PASS"
+    },
+    "three_primary_gains_and_secondary_diagnostics": {
+      "rows": 216,
+      "status": "PASS"
+    },
+    "trace_level_decisions": {
+      "expected": {
+        "Materna-T1": {
+          "M1_vs_S1": "JOINT_SYSTEM_BROADLY_HARMFUL",
+          "M1_vs_S2": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+          "S2_vs_S1": "CROSS_RESOURCE_INPUT_NOT_SUPPORTED"
+        },
+        "Materna-T2": {
+          "M1_vs_S1": "JOINT_SYSTEM_BROADLY_HARMFUL",
+          "M1_vs_S2": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+          "S2_vs_S1": "CROSS_RESOURCE_INPUT_MIXED"
+        },
+        "Materna-T3": {
+          "M1_vs_S1": "JOINT_SYSTEM_BROADLY_HARMFUL",
+          "M1_vs_S2": "SHARED_REPRESENTATION_NOT_SUPPORTED",
+          "S2_vs_S1": "CROSS_RESOURCE_INPUT_MIXED"
+        }
+      },
+      "status": "PASS"
+    }
+  },
+  "failures": [],
+  "status": "PASS"
+}

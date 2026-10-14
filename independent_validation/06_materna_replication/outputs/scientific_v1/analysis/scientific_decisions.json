@@ -1,0 +1,30 @@
+{
+  "R1": "R1_RESOURCE_TEMPORAL_DEPENDENCE_CONFIRMED",
+  "R1_mechanics": {
+    "positive_synthesized_resources": 2,
+    "resource_classification_changes": 4,
+    "resource_sign_changes": 3,
+    "supported_traces": 0,
+    "synthesized_equal_resource_mean_gain_percent": -0.03892159573849169,
+    "trace_decisions_differ": true
+  },
+  "R1_reason": "broad benefit failed and frozen temporal-dependence criteria applied",
+  "R2": "R2_NEGATIVE_SHARING_REPLICATED",
+  "R2_reason": "zero supported traces, at most one conditional trace, nonpositive synthesized mean, and at most one positive synthesized resource",
+  "R3": "R3_JOINT_SYSTEM_UNDERPERFORMANCE_REPLICATED",
+  "R3_reason": "all four synthesized gains are negative and at least two traces are broadly harmful",
+  "R4": "R4_TEMPORAL_HETEROGENEITY_CONFIRMED",
+  "R4_mechanics": {
+    "M1_trace_decisions_differ": false,
+    "S2_trace_decisions_differ": true,
+    "raw_sign_reversals": 5,
+    "resource_comparison_class_changes": 7
+  },
+  "R4_reason": "at least two resource/comparison classes vary or a frozen global trace decision differs",
+  "cross_resource_boundary": "CROSS_RESOURCE_BOUNDARY_STRENGTHENED",
+  "joint_system_boundary": "JOINT_SYSTEM_UNDERPERFORMANCE_STRENGTHENED",
+  "model_training_during_analysis": 0,
+  "paper_scope_gate": "MULTIDATASET_TEMPORAL_BOUNDARY_STUDY_STRONGLY_SUPPORTED",
+  "shared_representation_boundary": "SHARED_REPRESENTATION_BOUNDARY_STRENGTHENED",
+  "stop_experimentation_gate": "STOP_EXPERIMENTATION_AND_WRITE"
+}
