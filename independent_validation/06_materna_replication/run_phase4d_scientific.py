@@ -64,6 +64,7 @@ TRACE_ALIASES = {"T1": "Materna-T1", "T2": "Materna-T2", "T3": "Materna-T3"}
 _VM_CACHE: dict[tuple[str, str], tuple[Any, list[Any]]] = {}
 _ORIGINAL_ATOMIC_JSON = core.atomic_json_write
 _ORIGINAL_BUILD_WINDOWS = core.build_windows
+_ORIGINAL_PREDICTION_FRAME = core.prediction_frame
 _OUTER_TEST_ACCESSED = False
 
 
@@ -108,6 +109,17 @@ def _tracked_build_windows(frame: pd.DataFrame, origins: np.ndarray, length: int
             _OUTER_TEST_ACCESSED = True
             break
     return _ORIGINAL_BUILD_WINDOWS(frame, origins, length)
+
+
+def _prediction_frame_adapter(identity: dict[str, Any], *args: Any, **kwargs: Any) -> pd.DataFrame:
+    """Map the Phase 4D support label to the inherited artifact schema.
+
+    The canonical scientific identity remains unchanged; only the prediction
+    table's established ``support_hash`` column name is populated.
+    """
+    artifact_identity = dict(identity)
+    artifact_identity["support_hash"] = identity["support_sha256"]
+    return _ORIGINAL_PREDICTION_FRAME(artifact_identity, *args, **kwargs)
 
 
 def _completion_writer(path: Path, payload: dict[str, Any]) -> None:
@@ -253,6 +265,7 @@ def configure_core() -> None:
     core.completion_access_metadata = _completion_metadata
     core.atomic_json_write = _completion_writer
     core.build_windows = _tracked_build_windows
+    core.prediction_frame = _prediction_frame_adapter
     core.verify_frozen_identities = verify_frozen_identities
 
 

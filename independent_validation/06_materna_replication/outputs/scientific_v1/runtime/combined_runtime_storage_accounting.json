@@ -1,0 +1,81 @@
+{
+  "combined": {
+    "failed_attempt_records": 1,
+    "peak_rss_bytes": 628736000,
+    "permanently_failed_fits": 0,
+    "retried_fits": 1,
+    "total_elapsed_accounting_seconds": 247006.54205656052,
+    "total_fit_hours": 181.30250912645283,
+    "unique_completed_fits": 56700,
+    "valid_skipped_resumed_fit_encounters": 14175
+  },
+  "status": "PASS",
+  "traces": {
+    "Materna-T1": {
+      "execution_elapsed_seconds": 100429.78139972687,
+      "failed_attempt_records": 1,
+      "four_worker_utilization_over_elapsed": 0.5134987327992322,
+      "mean_fit_seconds": 10.914405393452622,
+      "median_fit_seconds": 8.484284108009888,
+      "new_fits_in_last_invocation": 4725,
+      "peak_rss_bytes": 577011712,
+      "permanently_failed_fits": 0,
+      "retried_fits": 1,
+      "stage_fit_hours": {
+        "M1_final": 1.5976232151545993,
+        "M1_inner": 4.484400792199578,
+        "S1_final": 8.468749176396393,
+        "S1_inner": 19.134378656052206,
+        "S2_final": 6.908583277602366,
+        "S2_inner": 16.706893198221128
+      },
+      "total_fit_hours": 57.30062831562627,
+      "unique_completed_fits": 18900,
+      "valid_skipped_resumed_fit_encounters": 14175
+    },
+    "Materna-T2": {
+      "execution_elapsed_seconds": 87697.66152215004,
+      "failed_attempt_records": 0,
+      "four_worker_utilization_over_elapsed": 0.6060833602379927,
+      "mean_fit_seconds": 11.24912029213943,
+      "median_fit_seconds": 8.797102498618187,
+      "new_fits_in_last_invocation": 18900,
+      "peak_rss_bytes": 585383936,
+      "permanently_failed_fits": 0,
+      "retried_fits": 0,
+      "stage_fit_hours": {
+        "M1_final": 1.9479179651559226,
+        "M1_inner": 5.069522746777544,
+        "S1_final": 8.193476718970278,
+        "S1_inner": 18.67015146861068,
+        "S2_final": 7.536232846376079,
+        "S2_inner": 17.640579787841514
+      },
+      "total_fit_hours": 59.057881533732015,
+      "unique_completed_fits": 18900,
+      "valid_skipped_resumed_fit_encounters": 0
+    },
+    "Materna-T3": {
+      "execution_elapsed_seconds": 58879.09913468361,
+      "failed_attempt_records": 0,
+      "four_worker_utilization_over_elapsed": 0.9927053947561922,
+      "mean_fit_seconds": 12.370285576589433,
+      "median_fit_seconds": 9.762381878623273,
+      "new_fits_in_last_invocation": 18900,
+      "peak_rss_bytes": 628736000,
+      "permanently_failed_fits": 0,
+      "retried_fits": 0,
+      "stage_fit_hours": {
+        "M1_final": 2.107254773450032,
+        "M1_inner": 5.1983634775864225,
+        "S1_final": 9.74817272901231,
+        "S1_inner": 21.37931091491951,
+        "S2_final": 7.582386357084599,
+        "S2_inner": 18.928511025041647
+      },
+      "total_fit_hours": 64.94399927709452,
+      "unique_completed_fits": 18900,
+      "valid_skipped_resumed_fit_encounters": 0
+    }
+  }
+}

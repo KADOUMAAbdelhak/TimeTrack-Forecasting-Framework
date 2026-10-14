@@ -1,0 +1,96 @@
+{
+  "combined_validator": "PASS",
+  "counts": {
+    "final": 14175,
+    "fits": 56700,
+    "inner": 42525,
+    "metrics": 94500,
+    "models": 14175,
+    "predictions": 14175,
+    "selected_contexts": 4725
+  },
+  "execution_conformance_validator": "PASS in isolated empty scientific namespace",
+  "execution_mutation": {
+    "completion_records_changed": 0,
+    "models_changed": 0,
+    "predictions_changed": 0,
+    "scientific_outer_test_evaluations_added": 0,
+    "scientific_training_runs_added": 0,
+    "source_metrics_changed": 0,
+    "source_selections_changed": 0
+  },
+  "failures": [],
+  "frozen_identities": {
+    "archive_sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4",
+    "cohort_sha256": "4c9e8f4cfa5cf26c4188924c486cdfbe9d78972eec1f84f5e0f23b1e94353140",
+    "config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+    "execution_commit": "5e7a42acf47dc0f14a73e7188c17831629f2229d",
+    "execution_conformance_sha256": "3f5a780128f0d7931a44078d2f55f8168e3b444d51d2eb03cd635266b6bd368b",
+    "execution_tag_target": "5e7a42acf47dc0f14a73e7188c17831629f2229d",
+    "protocol_commit": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5",
+    "protocol_tag_target": "c4077318bfbb02e112b439baa3ae7a0e35db0dc5"
+  },
+  "heavy_inventory": {
+    "entries": 141785,
+    "execution_tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+    "failures": 0,
+    "inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+    "summary_execution_tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+    "summary_inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+    "total_bytes": 6381741517,
+    "verified": 141785
+  },
+  "historical_chain": {
+    "status": "PASS",
+    "tag_count": 18
+  },
+  "outer_test_provenance": {
+    "failed_attempt_outer_access": {
+      "true": 1
+    },
+    "final_successes_without_outer_access": 0,
+    "inner_successes_with_outer_access": 0,
+    "successful_final_lifecycle_failures": 0
+  },
+  "persistence_rows": {
+    "Materna-T1": 31500,
+    "Materna-T2": 31500,
+    "Materna-T3": 31500,
+    "combined": 94500
+  },
+  "preflight_validator": "PASS",
+  "regression_tests": "42 passed",
+  "resumability": {
+    "failed_attempt_records": 1,
+    "peak_rss_bytes": 628736000,
+    "permanently_failed_fits": 0,
+    "retried_fits": 1,
+    "total_elapsed_accounting_seconds": 247006.54205656052,
+    "total_fit_hours": 181.30250912645283,
+    "unique_completed_fits": 56700,
+    "valid_skipped_resumed_fit_encounters": 14175
+  },
+  "resumed_trace_invocations": 1,
+  "scientific_analysis_lock": {
+    "R1_R2_R3_R4_evaluated": false,
+    "bootstrap_run": false,
+    "gains_calculated": false,
+    "scientific_comparison_figures": 0
+  },
+  "status": "PASS",
+  "trace_isolation": {
+    "cross_trace_run_id_collisions": 0,
+    "same_exact_35_vm_ids": true,
+    "trace_mixing_violations": 0,
+    "vm_count_each": [
+      35,
+      35,
+      35
+    ]
+  },
+  "trace_validators": {
+    "Materna-T1": "PASS",
+    "Materna-T2": "PASS",
+    "Materna-T3": "PASS"
+  }
+}

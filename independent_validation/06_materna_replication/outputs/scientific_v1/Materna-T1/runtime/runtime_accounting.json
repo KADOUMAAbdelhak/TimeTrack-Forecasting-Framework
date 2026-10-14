@@ -1,0 +1,83 @@
+{
+  "config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+  "counts": {
+    "M1": {
+      "final": 525,
+      "inner": 1575,
+      "metrics": 10500
+    },
+    "S1": {
+      "final": 2100,
+      "inner": 6300,
+      "metrics": 10500
+    },
+    "S2": {
+      "final": 2100,
+      "inner": 6300,
+      "metrics": 10500
+    }
+  },
+  "criteria_sha256": "3f5a780128f0d7931a44078d2f55f8168e3b444d51d2eb03cd635266b6bd368b",
+  "environment": "Materna-T1",
+  "environment_key": "Materna-T1",
+  "failed_retried_fits": 0,
+  "final_total": 4725,
+  "fit_total": 18900,
+  "inner_total": 14175,
+  "invocation_wall_seconds": 15407.68981125002,
+  "metric_rows": 31500,
+  "model_artifact_bytes": 996476775,
+  "newly_executed_fits": 4725,
+  "peak_rss_bytes": 577011712,
+  "prediction_artifact_bytes": 790156337,
+  "resumed_skipped_valid_fits": 14175,
+  "selected_context_records": 1575,
+  "stage_runtime": {
+    "M1_final": {
+      "executed": 525.0,
+      "fit_seconds": 5751.443574556557,
+      "peak_rss_bytes": 561332224,
+      "prediction_seconds": 11.292787073296495,
+      "skipped": 0.0
+    },
+    "M1_inner": {
+      "executed": 0.0,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0.0,
+      "prediction_seconds": 0.0,
+      "skipped": 1575.0
+    },
+    "S1_final": {
+      "executed": 2100.0,
+      "fit_seconds": 30487.497035027016,
+      "peak_rss_bytes": 493518848,
+      "prediction_seconds": 61.87614416819997,
+      "skipped": 0.0
+    },
+    "S1_inner": {
+      "executed": 0.0,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0.0,
+      "prediction_seconds": 0.0,
+      "skipped": 6300.0
+    },
+    "S2_final": {
+      "executed": 2100.0,
+      "fit_seconds": 24870.89979936852,
+      "peak_rss_bytes": 577011712,
+      "prediction_seconds": 53.79771662846906,
+      "skipped": 0.0
+    },
+    "S2_inner": {
+      "executed": 0.0,
+      "fit_seconds": 0.0,
+      "peak_rss_bytes": 0.0,
+      "prediction_seconds": 0.0,
+      "skipped": 6300.0
+    }
+  },
+  "status": "EXECUTION_COMPLETE_TECHNICAL_VALIDATION_PENDING",
+  "summed_final_fit_seconds": 61109.84040895209,
+  "summed_inner_fit_seconds": 145172.42152730247,
+  "summed_prediction_seconds": 126.96664786996553
+}

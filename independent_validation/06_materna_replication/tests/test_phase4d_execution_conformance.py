@@ -17,6 +17,7 @@ sys.path.insert(0, str(BASE))
 sys.path.insert(0, str(BITBRAINS))
 
 import phase4d_execution as execution  # noqa: E402
+import run_phase4d_scientific as runner  # noqa: E402
 from src.selection import select_context  # noqa: E402
 from src.training import fit_final_fixed_epochs, fit_inner  # noqa: E402
 
@@ -101,6 +102,21 @@ def test_plan_formulation_phase_counts():
 
 def test_plan_has_no_pilot_collision():
     assert execution.plan_summary()["pilot_scientific_collisions"] == 0
+
+
+def test_prediction_adapter_maps_support_sha_without_changing_identity(monkeypatch):
+    expected = identity(phase="final", selected_epoch=3)
+    captured = {}
+
+    def fake_prediction_frame(adapted, *args, **kwargs):
+        captured.update(adapted)
+        return adapted
+
+    monkeypatch.setattr(runner, "_ORIGINAL_PREDICTION_FRAME", fake_prediction_frame)
+    result = runner._prediction_frame_adapter(expected)
+    assert result["support_hash"] == expected["support_sha256"]
+    assert expected.get("support_hash") is None
+    assert result["run_id"] == expected["run_id"]
 
 
 def test_inner_completion_records_no_outer_access(tmp_path):

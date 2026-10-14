@@ -1,0 +1,80 @@
+{
+  "counts": {
+    "final": {
+      "M1": 525,
+      "S1": 2100,
+      "S2": 2100
+    },
+    "inner": {
+      "M1": 1575,
+      "S1": 6300,
+      "S2": 6300
+    },
+    "metrics": {
+      "M1": 10500,
+      "S1": 10500,
+      "S2": 10500
+    },
+    "models": 4725,
+    "predictions": 4725,
+    "selected_contexts": {
+      "M1": 175,
+      "S1": 700,
+      "S2": 700
+    },
+    "selected_epochs": 4725,
+    "total_fits": 18900
+  },
+  "failures": [],
+  "frozen_identity": {
+    "archive_sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4",
+    "cohort_sha256": "4c9e8f4cfa5cf26c4188924c486cdfbe9d78972eec1f84f5e0f23b1e94353140",
+    "config_sha256": "064ef5a4864f5590b8149242c4011c37a49aee35cf60a4690f6aa126b98fce27",
+    "execution_conformance_sha256": "3f5a780128f0d7931a44078d2f55f8168e3b444d51d2eb03cd635266b6bd368b"
+  },
+  "grid": {
+    "contexts": [
+      4,
+      9,
+      18
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "predictive_metric_values_inspected": false,
+  "scientific_analysis_performed": false,
+  "status": "PASS",
+  "trace": "Materna-T3",
+  "violations": {
+    "artifact": 0,
+    "context_selection_mismatch": 0,
+    "epoch_selection_mismatch": 0,
+    "final_refit_lifecycle_mismatch": 0,
+    "history_segment_crossing": 0,
+    "horizon_order_mismatch": 0,
+    "identity": 0,
+    "inner_leakage": 0,
+    "invalid_resumability": 0,
+    "inverse_transform_mismatch": 0,
+    "metric_recomputation_mismatch": 0,
+    "namespace": 0,
+    "outer_access": 0,
+    "outer_leakage": 0,
+    "outer_test_access_metadata": 0,
+    "pilot_reuse": 0,
+    "prediction_schema": 0,
+    "projection_mismatch": 0,
+    "resource_order_mismatch": 0,
+    "scaler_fallback": 0,
+    "scaler_leakage": 0,
+    "support_mismatch": 0,
+    "target_id_mismatch": 0,
+    "target_segment_crossing": 0,
+    "trace_mixing": 0,
+    "transform_leakage": 0,
+    "zero_iqr_scaler_fit": 0
+  }
+}

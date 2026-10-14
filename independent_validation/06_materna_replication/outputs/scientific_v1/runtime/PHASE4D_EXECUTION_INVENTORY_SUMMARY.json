@@ -1,0 +1,66 @@
+{
+  "combined_storage": {
+    "completion_bytes": 419200192,
+    "file_count": 141785,
+    "loss_history_bytes": 183840884,
+    "metric_bytes": 125572510,
+    "model_bytes": 2989430325,
+    "other_bytes": 44722334,
+    "persistence_bytes": 683745,
+    "prediction_bytes": 2617203098,
+    "runtime_bytes": 46327,
+    "selection_bytes": 1035812,
+    "total_bytes": 6381741517,
+    "validation_bytes": 6290
+  },
+  "execution_tree_sha256": "3d9a6ffe1b7d520bc5ca0e3f36e147f39e87590c88f8289a26c962a09e6756e1",
+  "file_count": 141785,
+  "generated_seconds": 35.480664014816284,
+  "inventory_sha256": "8484e62b2dae596ece90308c18ea617ec904ea55ceb4fbfc76e2fcaa55dd1718",
+  "scope": "all files under outputs/scientific_v1 excluding this summary and its inventory CSV",
+  "storage_by_trace": {
+    "Materna-T1": {
+      "completion_bytes": 139010378,
+      "file_count": 47261,
+      "loss_history_bytes": 60642236,
+      "metric_bytes": 41823403,
+      "model_bytes": 996476775,
+      "other_bytes": 14717431,
+      "persistence_bytes": 221514,
+      "prediction_bytes": 790156337,
+      "runtime_bytes": 3158,
+      "selection_bytes": 345203,
+      "total_bytes": 2043398348,
+      "validation_bytes": 1913
+    },
+    "Materna-T2": {
+      "completion_bytes": 143737795,
+      "file_count": 47260,
+      "loss_history_bytes": 64999702,
+      "metric_bytes": 41848019,
+      "model_bytes": 996476775,
+      "other_bytes": 14912845,
+      "persistence_bytes": 235557,
+      "prediction_bytes": 837009548,
+      "runtime_bytes": 2256,
+      "selection_bytes": 345311,
+      "total_bytes": 2099569721,
+      "validation_bytes": 1913
+    },
+    "Materna-T3": {
+      "completion_bytes": 136452019,
+      "file_count": 47260,
+      "loss_history_bytes": 58198946,
+      "metric_bytes": 41901088,
+      "model_bytes": 996476775,
+      "other_bytes": 15092058,
+      "persistence_bytes": 226674,
+      "prediction_bytes": 990037213,
+      "runtime_bytes": 2257,
+      "selection_bytes": 345298,
+      "total_bytes": 2238734241,
+      "validation_bytes": 1913
+    }
+  },
+  "total_bytes": 6381741517
+}
