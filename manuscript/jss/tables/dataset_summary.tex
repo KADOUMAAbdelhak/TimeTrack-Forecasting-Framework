@@ -1,0 +1,48 @@
+\begin{table*}[t]
+  \caption{Evidence sources, study roles and frozen protocol adaptations,
+  distinguishing eligible populations from executed cohorts. Materna T1--T3
+  are dependent temporal blocks.}
+  \label{tab:dataset-summary}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}
+    >{\raggedright\arraybackslash}p{0.110\textwidth}
+    >{\raggedright\arraybackslash}p{0.110\textwidth}
+    >{\raggedright\arraybackslash}p{0.195\textwidth}
+    >{\raggedright\arraybackslash}p{0.225\textwidth}
+    >{\raggedright\arraybackslash}p{0.100\textwidth}
+    >{\raggedright\arraybackslash}p{0.195\textwidth}@{}}
+    \toprule
+    Source / block & Study role & Temporal structure / cadence
+      & Eligibility & Executed cohort & Forecast protocol \\
+    \midrule
+    TimeTrack & Framework development
+      & 42.285 s median; 9 gap-bounded segments
+      & Seven machines; 41,356-row canonical panel
+      & 7 machines & 0.705--90.208 min (eight leads) \\
+    \addlinespace
+    Bitbrains fastStorage & External confirmation
+      & Separate environment; 5 min; per-VM segments
+      & 916/1,250 structural; 596/916 scale eligible
+      & 35 VMs & 5, 10, 20, 45, 90 min (five leads) \\
+    \addlinespace
+    Bitbrains Rnd & External confirmation
+      & Separate environment; 5 min; per-VM segments
+      & 416/500 structural; 272/416 scale eligible
+      & 35 VMs & 5, 10, 20, 45, 90 min (five leads) \\
+    \addlinespace
+    Materna T1--T3 & Secondary replication
+      & 5 min; blocks analysed separately
+      & 398 common structural; 74/398 all-block scale
+      & 35 shared VMs & 5, 10, 20, 45, 90 min (five leads) \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{2pt}
+  \parbox{\textwidth}{\footnotesize
+    All experiments forecast CPU utilisation, throughput, memory usage and
+    disk-write activity. Materna provides secondary temporal replication:
+    T1--T3 are consecutive dependent blocks from the same source and selected
+    cohort, not independent datasets.}
+\end{table*}

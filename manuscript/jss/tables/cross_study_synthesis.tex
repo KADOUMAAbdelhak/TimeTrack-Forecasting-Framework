@@ -1,0 +1,43 @@
+% Frozen cross-study descriptive synthesis from the Phase 4D final freeze.
+% Bitbrains and Materna columns are equal-block summaries; no source pooling.
+\begin{table*}[t]
+  \caption{Frozen descriptive source summaries of primary overall MacroMAE
+  gain (\%).}
+  \label{tab:cross-study-synthesis}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l*{9}{r}@{}}
+    \toprule
+    & \multicolumn{3}{c}{S2 versus S1}
+      & \multicolumn{3}{c}{M1 versus S2}
+      & \multicolumn{3}{c}{M1 versus S1} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}
+    Resource & TimeTrack & Bitbrains & Materna
+      & TimeTrack & Bitbrains & Materna
+      & TimeTrack & Bitbrains & Materna \\
+    \midrule
+    CPU & $-3.31$ & $-0.89$ & $-0.97$
+      & $0.47$ & $-8.23$ & $-3.26$
+      & $-2.83$ & $-9.01$ & $-4.25$ \\
+    Throughput & $-0.24$ & $-3.60$ & $0.44$
+      & $-0.84$ & $-20.71$ & $-7.97$
+      & $-1.08$ & $-24.82$ & $-7.50$ \\
+    Memory & $0.86$ & $2.06$ & $2.34$
+      & $-18.48$ & $-6.89$ & $-10.40$
+      & $-17.46$ & $-4.70$ & $-7.85$ \\
+    Disk write & $-0.49$ & $1.42$ & $-1.97$
+      & $-0.80$ & $-4.81$ & $-35.55$
+      & $-1.29$ & $-3.33$ & $-37.71$ \\
+    \bottomrule
+  \end{tabular*}
+
+  \vspace{2pt}
+  \parbox{\textwidth}{\footnotesize
+    Positive values indicate lower MacroMAE for the candidate formulation;
+    negative values indicate higher MacroMAE. TimeTrack: development summary.
+    Bitbrains: equal-environment synthesis of fastStorage and Rnd.
+    Materna: equal-temporal-block synthesis of T1--T3, consecutive dependent
+    temporal blocks rather than independent replications. Comparisons are
+    descriptive, without cross-source aggregation.}
+\end{table*}

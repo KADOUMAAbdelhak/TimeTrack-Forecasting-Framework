@@ -1,0 +1,61 @@
+% Bounded organisational comparison from the Stage 6B full-text clearance.
+% Codes concern reported experimental arms, not unpublished capabilities.
+\begin{table*}[t]
+  \caption{Bounded comparison of the closest inspected studies. Organisational
+  analogues do not imply identical architectures; codes are defined below.
+  No priority claim is implied.}
+  \label{tab:related-work-comparison}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}
+    >{\raggedright\arraybackslash}p{0.120\textwidth}
+    >{\raggedright\arraybackslash}p{0.235\textwidth}
+    >{\raggedright\arraybackslash}p{0.130\textwidth}
+    *{2}{>{\centering\arraybackslash}p{0.095\textwidth}}
+    >{\raggedright\arraybackslash}p{0.265\textwidth}@{}}
+    \toprule
+    Study & Input / target organisation & Reported S1/S2/M1 analogues
+      & S1--S2 contextual comparison & S2--M1 sharing comparison
+      & Scope relative to this study \\
+    \midrule
+    \citet{Ullah2023CloudBiLSTM}
+      & Ten-channel histories to joint ten-channel forecasts through a common
+        multivariate BiLSTM.
+      & S1: NO\newline S2: NO\newline M1: PARTIAL & NO & NO
+      & fastStorage/Rnd joint forecasting; no independent all-input target
+        bridge. Common dense output differs from our resource-head topology. \\
+    \addlinespace
+    \citet{DiMenna2026RuntimeForecasting}
+      & Per-series classical/neural fits; foundation models forecast individual
+        runtime histories zero-shot.
+      & S1: YES\newline S2: NO\newline M1: NO & NO & NO
+      & Independent-series/model-family evaluation, not multivariate runtime
+        forecasting. Pretrained weight reuse is not M1. \\
+    \addlinespace
+    \citet{Tripathi2025MMRP} (MMRP)
+      & Univariate or multivariate histories to one target series; CPU/memory
+        evaluated separately.
+      & S1: YES\newline S2: PARTIAL\newline M1: NO & PARTIAL & NO
+      & Alibaba/Google contextual comparison; no reported joint resource-sharing
+        arm. Feature/independent-fit matching is partially specified. \\
+    \addlinespace
+    This study
+      & S1: own-resource history, independent target model.
+        S2: all-resource histories, independent target model.
+        M1: all-resource histories, shared representation and resource-specific
+        outputs.
+      & S1: YES\newline S2: YES\newline M1: YES & YES & YES
+      & Development, external environments and dependent temporal replication;
+        both operational bridges, not parameter-matched causal interventions
+        or complete factorial isolation. \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{2pt}
+  \parbox{\textwidth}{\footnotesize
+    YES: explicitly represented in the inspected reported experiment.
+    NO: not part of the inspected reported experiment; this does not assert
+    that an unpublished or technically possible implementation does not exist.
+    PARTIAL: related but non-equivalent or incompletely specified.}
+\end{table*}

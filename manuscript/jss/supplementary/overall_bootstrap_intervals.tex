@@ -1,0 +1,82 @@
+% Frozen resource-level overall VM-cluster bootstrap intervals.
+% This fragment is not compiled at Stage 4. A future supplementary wrapper
+% should load booktabs and longtable.
+\begin{longtable}{@{}lllrrr@{}}
+  \caption{Overall resource-level paired VM-cluster bootstrap intervals. All
+  entries use 10,000 replicates and random seed 20261007. The centre column is
+  the bootstrap median; limits are the 2.5th and 97.5th percentiles.}
+  \label{tab:overall-bootstrap-intervals}\\
+  \toprule
+  Environment or trace & Comparison & Resource & Median & 2.5th & 97.5th \\
+  \midrule
+  \endfirsthead
+  \toprule
+  Environment or trace & Comparison & Resource & Median & 2.5th & 97.5th \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{6}{r}{Continued on next page}\\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+  fastStorage & S2--S1 & CPU & $-3.05$ & $-6.90$ & $ 0.16$ \\
+  fastStorage & S2--S1 & Throughput & $ 0.03$ & $-0.20$ & $ 2.88$ \\
+  fastStorage & S2--S1 & Memory & $ 2.37$ & $ 0.76$ & $ 4.12$ \\
+  fastStorage & S2--S1 & Disk write & $ 2.54$ & $-0.65$ & $ 6.61$ \\
+  fastStorage & M1--S2 & CPU & $ 0.10$ & $-10.74$ & $ 3.52$ \\
+  fastStorage & M1--S2 & Throughput & $-26.79$ & $-29.16$ & $-1.88$ \\
+  fastStorage & M1--S2 & Memory & $-4.65$ & $-10.42$ & $-1.16$ \\
+  fastStorage & M1--S2 & Disk write & $-4.10$ & $-7.84$ & $-1.43$ \\
+  fastStorage & M1--S1 & CPU & $-3.15$ & $-13.48$ & $ 0.32$ \\
+  fastStorage & M1--S1 & Throughput & $-26.75$ & $-29.35$ & $-0.62$ \\
+  fastStorage & M1--S1 & Memory & $-2.08$ & $-7.67$ & $ 2.00$ \\
+  fastStorage & M1--S1 & Disk write & $-1.39$ & $-5.98$ & $ 1.36$ \\
+  Rnd & S2--S1 & CPU & $ 1.35$ & $-3.19$ & $ 3.75$ \\
+  Rnd & S2--S1 & Throughput & $-6.83$ & $-49.98$ & $ 4.13$ \\
+  Rnd & S2--S1 & Memory & $ 1.61$ & $-2.10$ & $ 4.61$ \\
+  Rnd & S2--S1 & Disk write & $ 0.04$ & $-4.23$ & $ 2.53$ \\
+  Rnd & M1--S2 & CPU & $-15.95$ & $-24.74$ & $-3.50$ \\
+  Rnd & M1--S2 & Throughput & $-14.14$ & $-26.17$ & $-6.41$ \\
+  Rnd & M1--S2 & Memory & $-8.79$ & $-12.24$ & $-4.04$ \\
+  Rnd & M1--S2 & Disk write & $-5.64$ & $-15.71$ & $-4.24$ \\
+  Rnd & M1--S1 & CPU & $-14.59$ & $-21.53$ & $-3.87$ \\
+  Rnd & M1--S1 & Throughput & $-22.03$ & $-88.87$ & $-3.37$ \\
+  Rnd & M1--S1 & Memory & $-6.98$ & $-10.80$ & $-3.04$ \\
+  Rnd & M1--S1 & Disk write & $-5.61$ & $-19.65$ & $-2.80$ \\
+  Materna T1 & S2--S1 & CPU & $-4.22$ & $-8.51$ & $-0.18$ \\
+  Materna T1 & S2--S1 & Throughput & $ 0.87$ & $-1.96$ & $ 5.21$ \\
+  Materna T1 & S2--S1 & Memory & $ 0.29$ & $-5.53$ & $ 4.51$ \\
+  Materna T1 & S2--S1 & Disk write & $-6.04$ & $-28.00$ & $ 3.98$ \\
+  Materna T1 & M1--S2 & CPU & $ 0.73$ & $-2.57$ & $ 4.50$ \\
+  Materna T1 & M1--S2 & Throughput & $-7.24$ & $-10.41$ & $-3.99$ \\
+  Materna T1 & M1--S2 & Memory & $-12.73$ & $-23.57$ & $-4.87$ \\
+  Materna T1 & M1--S2 & Disk write & $-25.39$ & $-119.73$ & $-0.77$ \\
+  Materna T1 & M1--S1 & CPU & $-3.29$ & $-6.44$ & $-0.98$ \\
+  Materna T1 & M1--S1 & Throughput & $-6.21$ & $-9.44$ & $-2.07$ \\
+  Materna T1 & M1--S1 & Memory & $-12.89$ & $-22.23$ & $-4.21$ \\
+  Materna T1 & M1--S1 & Disk write & $-33.53$ & $-132.79$ & $-3.16$ \\
+  Materna T2 & S2--S1 & CPU & $ 4.19$ & $ 0.59$ & $ 7.41$ \\
+  Materna T2 & S2--S1 & Throughput & $ 0.18$ & $-5.10$ & $ 4.63$ \\
+  Materna T2 & S2--S1 & Memory & $ 3.92$ & $ 0.35$ & $ 6.95$ \\
+  Materna T2 & S2--S1 & Disk write & $-0.96$ & $-5.68$ & $ 1.71$ \\
+  Materna T2 & M1--S2 & CPU & $-2.61$ & $-5.30$ & $-0.29$ \\
+  Materna T2 & M1--S2 & Throughput & $-8.48$ & $-13.36$ & $-2.42$ \\
+  Materna T2 & M1--S2 & Memory & $-9.07$ & $-17.04$ & $-4.19$ \\
+  Materna T2 & M1--S2 & Disk write & $-7.79$ & $-12.41$ & $-4.00$ \\
+  Materna T2 & M1--S1 & CPU & $ 1.68$ & $-3.52$ & $ 6.07$ \\
+  Materna T2 & M1--S1 & Throughput & $-8.27$ & $-12.78$ & $-3.45$ \\
+  Materna T2 & M1--S1 & Memory & $-4.93$ & $-13.59$ & $ 1.07$ \\
+  Materna T2 & M1--S1 & Disk write & $-9.11$ & $-14.73$ & $-4.14$ \\
+  Materna T3 & S2--S1 & CPU & $-2.15$ & $-14.65$ & $ 3.81$ \\
+  Materna T3 & S2--S1 & Throughput & $-0.08$ & $-2.25$ & $ 4.72$ \\
+  Materna T3 & S2--S1 & Memory & $ 3.08$ & $-0.19$ & $ 6.56$ \\
+  Materna T3 & S2--S1 & Disk write & $ 1.95$ & $-1.92$ & $ 6.48$ \\
+  Materna T3 & M1--S2 & CPU & $-7.88$ & $-16.41$ & $-2.28$ \\
+  Materna T3 & M1--S2 & Throughput & $-7.72$ & $-12.55$ & $-1.97$ \\
+  Materna T3 & M1--S2 & Memory & $-8.60$ & $-14.68$ & $-4.11$ \\
+  Materna T3 & M1--S2 & Disk write & $-66.89$ & $-239.63$ & $-5.94$ \\
+  Materna T3 & M1--S1 & CPU & $-10.13$ & $-31.11$ & $-0.61$ \\
+  Materna T3 & M1--S1 & Throughput & $-7.64$ & $-11.94$ & $-2.20$ \\
+  Materna T3 & M1--S1 & Memory & $-5.39$ & $-11.00$ & $ 0.02$ \\
+  Materna T3 & M1--S1 & Disk write & $-63.81$ & $-226.24$ & $-4.62$ \\
+\end{longtable}

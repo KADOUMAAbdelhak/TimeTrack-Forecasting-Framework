@@ -1,0 +1,39 @@
+% Primary overall MacroMAE gains from the frozen Phase 3C, 4C, and 4D artifacts.
+% Manuscript-visible values are rounded to two decimal places.
+\begin{table*}[t]
+  \caption{Primary overall MacroMAE gain by controlled formulation comparison.
+  Positive values indicate lower MacroMAE for the candidate formulation.}
+  \label{tab:primary-gains}
+  \centering
+  \small
+  \setlength{\tabcolsep}{9pt}
+  \begin{tabular}{@{}lrrrr@{}}
+    \toprule
+    Environment or trace & CPU & Throughput & Memory & Disk write \\
+    \midrule
+    \multicolumn{5}{@{}l}{\textit{Panel A: S2 versus S1 (\%)}} \\
+    TimeTrack              & $-3.31$ & $-0.24$ & $ 0.86$ & $ -0.49$ \\
+    Bitbrains fastStorage  & $-3.20$ & $ 0.01$ & $ 2.45$ & $  2.69$ \\
+    Bitbrains Rnd          & $ 1.41$ & $-7.21$ & $ 1.67$ & $  0.16$ \\
+    Materna T1             & $-4.32$ & $ 0.99$ & $-0.02$ & $ -6.70$ \\
+    Materna T2             & $ 4.21$ & $ 0.29$ & $ 3.95$ & $ -1.12$ \\
+    Materna T3             & $-2.79$ & $ 0.04$ & $ 3.09$ & $  1.91$ \\
+    \addlinespace
+    \multicolumn{5}{@{}l}{\textit{Panel B: M1 versus S2 (\%)}} \\
+    TimeTrack              & $ 0.47$ & $ -0.84$ & $-18.48$ & $ -0.80$ \\
+    Bitbrains fastStorage  & $ 0.05$ & $-27.09$ & $ -4.87$ & $ -4.07$ \\
+    Bitbrains Rnd          & $-16.51$ & $-14.32$ & $ -8.92$ & $ -5.55$ \\
+    Materna T1             & $ 0.88$ & $ -7.31$ & $-13.22$ & $-27.46$ \\
+    Materna T2             & $-2.56$ & $ -8.69$ & $ -9.27$ & $ -7.89$ \\
+    Materna T3             & $-8.10$ & $ -7.91$ & $ -8.70$ & $-71.30$ \\
+    \addlinespace
+    \multicolumn{5}{@{}l}{\textit{Panel C: M1 versus S1 (\%)}} \\
+    TimeTrack              & $ -2.83$ & $ -1.08$ & $-17.46$ & $ -1.29$ \\
+    Bitbrains fastStorage  & $ -3.15$ & $-27.08$ & $ -2.30$ & $ -1.27$ \\
+    Bitbrains Rnd          & $-14.86$ & $-22.57$ & $ -7.09$ & $ -5.38$ \\
+    Materna T1             & $ -3.40$ & $ -6.25$ & $-13.24$ & $-36.00$ \\
+    Materna T2             & $  1.75$ & $ -8.37$ & $ -4.95$ & $ -9.10$ \\
+    Materna T3             & $-11.11$ & $ -7.87$ & $ -5.34$ & $-68.03$ \\
+    \bottomrule
+  \end{tabular}
+\end{table*}

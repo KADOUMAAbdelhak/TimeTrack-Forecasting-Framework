@@ -1,0 +1,100 @@
+% Frozen prospective decision criteria for the Phase 4D Materna analysis.
+% This is a supplementary fragment and is not compiled as a separate PDF at Stage 3.
+\section*{Prospectively Frozen Decision Criteria}
+
+All resource-classification conditions are conjunctive.  A positive horizon,
+VM, fold, or seed aggregate has gain strictly greater than zero.  A positive
+resource is classified as either \textsc{Broad Positive} or
+\textsc{Conditionally Positive}.
+
+\begin{description}
+  \item[\textsc{Broad Positive}.] Overall gain is at least $+1\%$; at least
+    $4/5$ horizons, $25/35$ VMs, $4/5$ folds, and $2/3$ seed aggregates are
+    positive.
+  \item[\textsc{Conditionally Positive}.] The resource is not \textsc{Broad
+    Positive}; overall gain is strictly positive; and at least $3/5$ horizons,
+    $15/35$ VMs, $3/5$ folds, and $2/3$ seed aggregates are positive.
+  \item[\textsc{Broad Negative}.] Overall gain is at most $-1\%$; and at most
+    $1/5$ horizons, $10/35$ VMs, $1/5$ folds, and $1/3$ seed aggregates are
+    positive.
+  \item[\textsc{Neutral or Mixed}.] Every case not assigned to one of the three
+    classes above.
+\end{description}
+
+The equal-temporal-block synthesis is the unweighted arithmetic mean of the T1,
+T2, and T3 primary gains.  A materially negative resource has overall gain at
+most $-1\%$.  Strong target-specific trade-offs exist when the maximum
+resource-level gain is at least $+1\%$ and the minimum is at most $-1\%$.
+Material positive-and-negative synthesis exists when at least one synthesised
+resource gain is at least $+1\%$ and another is at most $-1\%$.
+
+\subsection*{Trace-level comparison decisions}
+
+For S2 versus S1, \textsc{Cross-Resource Input Supported} requires at least
+three positive resources, positive equal-resource mean primary gain, and at
+most one \textsc{Broad Negative} resource.  \textsc{Cross-Resource Input Not
+Supported} applies when at most one resource is positive and the equal-resource
+mean is non-positive, or when at least two resources are \textsc{Broad
+Negative}.  All other cases are \textsc{Cross-Resource Input Mixed}.
+
+For M1 versus S2, conservative precedence is: \textsc{Negative Transfer},
+\textsc{Not Supported}, \textsc{Supported}, then \textsc{Conditionally
+Supported}.  \textsc{Supported} requires at least three positive resources,
+positive equal-resource mean primary gain, and no \textsc{Broad Negative}
+resource.  \textsc{Conditionally Supported} requires a positive equal-resource
+mean and at least two positive resources when the full support criterion fails.
+\textsc{Negative Transfer} applies when at least one resource is positive and
+at least two resources are either \textsc{Broad Negative} or materially
+negative, or when strong target-specific trade-offs occur.  \textsc{Not
+Supported} applies when at most one resource is positive and the equal-resource
+mean is non-positive; a residual case with no named predicate is also assigned
+\textsc{Not Supported} with the recorded residual-no-support reason.
+
+For M1 versus S1, \textsc{Joint System Broadly Beneficial} requires positive
+overall gain for at least three resources and a positive equal-resource mean.
+\textsc{Joint System Broadly Harmful} requires negative overall gain for at
+least three resources and a negative equal-resource mean.  All other cases are
+\textsc{Joint System Mixed}.
+
+\subsection*{RQ1--RQ4 synthesis decisions}
+
+RQ1 uses the following precedence.  \textsc{Broad Cross-Resource Benefit}
+requires supported decisions in at least two traces, a positive mean of the
+four synthesised resource gains, and at least three positive synthesised
+resources.  If broad benefit fails, \textsc{Resource--Temporal Dependence
+Confirmed} applies when trace-level cross-resource decisions are not identical,
+at least two resources change sign, or at least two resources change
+classification.  \textsc{Cross-Resource Input Not Supported} requires zero
+supported traces, a non-positive four-resource synthesis mean, at most one
+positive synthesised resource, and no temporal-dependence decision.  Otherwise
+the decision is \textsc{Mixed or Inconclusive}.
+
+RQ2 uses conservative precedence.  \textsc{Negative Sharing Replicated}
+requires zero supported traces, at most one conditionally supported trace, a
+non-positive four-resource synthesis mean, and at most one positive synthesised
+resource.  \textsc{Mixed Sharing Effect} requires zero supported traces and
+material positive-and-negative synthesis.  \textsc{Sharing Benefit Replicated}
+requires at least two supported or conditionally supported traces, a positive
+four-resource synthesis mean, and at least three positive synthesised
+resources.  Otherwise the decision is \textsc{Inconclusive}.
+
+RQ3 uses the following precedence.  \textsc{Joint System Underperformance
+Replicated} requires all four synthesised resource gains to be negative and at
+least two broadly harmful trace decisions.  \textsc{Joint System Partial
+Underperformance} applies when the four-resource synthesis mean is non-positive,
+at most two synthesised resources are positive, and the full replicated
+criterion fails.  \textsc{Joint System Benefit} requires at least three
+positive synthesised resources, a positive four-resource synthesis mean, and at
+least two broadly beneficial trace decisions.  Otherwise the decision is
+\textsc{Mixed or Inconclusive}.
+
+For RQ4, a resource--comparison pair is temporally classification-variable when
+its frozen classification is not identical across T1, T2, and T3; raw sign
+reversals are reported separately.  \textsc{Temporal Heterogeneity Confirmed}
+applies when at least two resource--comparison pairs are classification-variable
+or when the global trace decisions differ for S2 versus S1 or M1 versus S2.
+\textsc{Temporal Heterogeneity Weak} applies when exactly one pair is
+classification-variable and global trace decisions are identical.
+\textsc{Temporal Heterogeneity Not Supported} applies when no pair is
+classification-variable and global trace decisions are identical.  Post-hoc
+regime mining is not permitted.
