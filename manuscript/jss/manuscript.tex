@@ -1,5 +1,4 @@
 %% Journal of Systems and Software regular research article
-%% Stage 1 structural skeleton only; no substantive manuscript prose.
 
 \documentclass[a4paper,fleqn]{cas-dc}
 
@@ -9,22 +8,12 @@
 % No ORCID identifiers were supplied in the authoritative previous manuscript.
 \let\printorcid\relax
 
-% Future figure constraints:
-% - PDF/vector artwork is preferred.
-% - Use figure or figure*; number and cite figures in order.
-% - Retain separate artwork under figures/.
-%
-% Future table constraints:
-% - Use editable LaTeX tables with booktabs.
-% - Do not use vertical rules or shading.
-% - Use table or table* as appropriate.
-
 \begin{document}
 
-\shorttitle{Information Sharing in Multi-Metric Runtime Forecasting}
+\shorttitle{Contextual Input and Shared Representation}
 \shortauthors{A. Kadouma et al.}
 
-\title[mode=title]{Disentangling Information Sharing in Multi-Metric Runtime Forecasting for Cloud Software Systems}
+\title[mode=title]{Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems}
 
 \author[1]{Abdelhak Kadouma}
 \cormark[1]
@@ -48,26 +37,31 @@
 \cortext[1]{Corresponding author}
 
 \begin{abstract}
-Multi-metric runtime forecasting involves two distinct choices: using histories
-from other resources and sharing a predictive representation across resource
-targets. We compare S1 (own-resource input, independent target model), S2
-(all-resource input, independent target model) and M1 (all-resource input,
-shared multi-resource model). Operational contrasts evaluate contextual-input
-value (S2 versus S1) and implemented representation sharing (M1 versus S2).
-A conventional long short-term memory (LSTM) design is examined through a
-TimeTrack development study, Bitbrains fastStorage and Rnd external
-environments, and Materna T1--T3 dependent temporal replication. The resources
-are central processing unit (CPU) utilisation, throughput, memory usage and
-disk-write activity. Cross-resource context is selective, varying by resource,
-environment and time. Memory shows the clearest repeated contextual benefit,
-but not in every block. M1 versus S2 is adverse for throughput, memory and
-disk write in all six evidence blocks; CPU has limited positive exceptions.
-M1 generally underperforms S1. In the five-horizon external instantiation, M1
-uses approximately $74.5\%$ fewer parameters and $75\%$ fewer models than S2,
-establishing an accuracy--efficiency boundary. For the evaluated resources,
-eligible populations and conventional shared-LSTM formulation, additional
-telemetry and predictive representation sharing should be evaluated as
-separate design decisions.
+Multi-metric runtime forecasting requires decisions about other-resource
+telemetry and cross-target representation sharing, with consequences for
+accuracy and per-entity model consolidation. Our frozen experiment compares
+conventional long short-term memory (LSTM) formulations: S1 uses own-resource
+input and independent target models; S2 uses all-resource input and
+independent target models; M1 uses all-resource input and a shared
+multi-resource model. We evaluate central processing unit (CPU) utilisation,
+throughput, memory and disk-write activity across TimeTrack development data,
+Bitbrains fastStorage and Rnd external environments, and Materna T1--T3
+dependent temporal blocks. Separate post-hoc controls constrain S2 to
+M1-selected contexts and increase M1's hidden size from H64 to H129 to
+approximately match S2's aggregate parameter count. A matched-context
+comparison of Ridge autoregression (AR) and autoregression with cross-resource
+inputs (ARX) examines contextual value beyond LSTMs. Contextual value is
+selective and model- and environment-dependent; memory benefits recur but
+are not universal. Adverse M1:S2 throughput, memory and disk-write point
+estimates persist across all six blocks under both controls, without
+identifying sharing alone as the cause. Yet M1 matched-cell median MAE ratios
+are close to one in many comparisons, and some larger MacroMAE penalties are
+tail-concentrated. Per-entity consolidation therefore presents a
+target-specific accuracy--consolidation trade-off. Ridge indicates
+model-family dependence. Effects can change sign across the recorded seeds,
+and sign stability need not imply magnitude stability. Relative gains do not
+ensure superiority to persistence. Contextual input and representation
+sharing require separate, resource-specific evaluation.
 \end{abstract}
 
 \begin{keywords}
@@ -75,7 +69,7 @@ runtime forecasting \sep
 cloud telemetry \sep
 multi-metric forecasting \sep
 multi-task learning \sep
-negative transfer \sep
+contextual input \sep
 shared representations
 \end{keywords}
 
@@ -84,102 +78,88 @@ shared representations
 \section{Introduction}
 \label{sec:introduction}
 
-Cloud software systems expose multiple streams of runtime telemetry.
-Monitoring records past and present resource use; forecasting can supply
-advance information for adaptation and resource management
+Cloud telemetry forecasting can inform adaptation and resource management
 \citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}.
-For software engineers, choosing a forecaster therefore involves deciding
-which observations it should use and how its predictions should be organised,
-not merely selecting an algorithm. Prediction-based provisioning and
-autoscaling research also distinguish forecast quality from the consequences
-of acting on a forecast \citep{Calheiros2015ARIMA,Qu2018Autoscaling}.
-Better predictions may inform proactive decisions, but their operational value
-depends on decision policies and system constraints. We examine the
-forecast-design choices supplying such systems, without deploying an
-autoscaler or claiming improved SLA compliance, reduced cloud cost, energy
-savings or failure prevention.
+Engineers must decide whether a target's forecaster should include other
+resources' telemetry and whether several targets should share a predictive
+representation. These choices change input information and model organisation,
+respectively. Consolidation reduces the models to manage but need not improve
+every resource's forecast. We evaluate accuracy and model consolidation,
+not downstream control effectiveness.
 
-Established forecasting research already covers several ways of learning from
-runtime and resource telemetry. Independent runtime-series benchmarking spans
+Established runtime-series benchmarking spans
 classical statistical, neural and zero-shot foundation models
 \citep{DiMenna2026RuntimeForecasting}. Cloud studies include multivariate
 resource inputs, recurrent architectures, joint multi-output prediction and
 hybrid models evaluated across multiple provider environments
 \citep{Ullah2023CloudBiLSTM,Tripathi2025MMRP}. Global forecasting also learns
 parameters across collections of series \citep{Salinas2020DeepAR}.
-These capabilities are established. We ask how information sharing affects
-particular resource targets, not whether multi-resource prediction is
-possible. More inputs, joint outputs and fewer models require separate
-evaluation; our contribution is experimental evidence, not another recurrent
-architecture.
+These precedents motivate empirical design choices for particular resource
+targets, not a new forecasting architecture.
 
-We distinguish \emph{input information sharing} from \emph{predictive
-representation sharing}: a target-specific model may use other resources'
-histories without sharing learned parameters across targets. A common
-representation instead learns several targets jointly. Multi-task learning
+\emph{Contextual input} supplies other resources' histories to a target model
+without requiring shared parameters. \emph{Representation sharing} learns
+several targets jointly. Multi-task learning
 offers inductive transfer through related tasks \citep{Caruana1997Multitask},
 but task combinations and sharing arrangements require evaluation
 \citep{Standley2020TaskGrouping,Fifty2021TaskGroupings,Nochumsohn2025MTLinear}.
-Independent all-input target models therefore provide an intermediate control,
-making contextual-input and implemented sharing outcomes separately observable
-without presuming that either improves accuracy.
-
-The closest examined designs span shared ten-channel prediction
-\citep{Ullah2023CloudBiLSTM}, independently forecast runtime series and
-zero-shot foundation models \citep{DiMenna2026RuntimeForecasting}, and MMRP's
+Independent all-input target models provide an intermediate comparison
+between own-resource and shared forecasting. MMRP already compares
 univariate/multivariate single-target CPU and memory forecasting
-\citep{Tripathi2025MMRP}. MMRP is meaningful S1--S2-related prior art, not a
-comparison introduced by our study. Among these closest examined designs,
-none reports the complete within-study contrast between own-resource
-forecasting, independently trained target models receiving cross-resource histories,
-and joint resource forecasting through a shared representation. The
-independent-to-shared all-input bridge is the important missing operational
-comparison. This bounded finding concerns these reported designs, not an
-absence throughout the literature.
+\citep{Tripathi2025MMRP}; our bounded contribution is the within-study
+comparison including this intermediate organisation and joint resource
+forecasting (Section~\ref{sec:rw-gap}).
 
 We evaluate conventional LSTM formulations with independent target models
 using own-resource histories (S1) or all-resource histories (S2), and a shared
 representation with resource-specific heads using all-resource histories
-(M1). S2 versus S1 evaluates contextual information, M1
-versus S2 the implemented sharing transition, and M1 versus S1 the complete
-joint system. These are matched operational contrasts, not pure causal
-interventions: capacities and selected settings differ, and the arms are not
-a complete $2\times2$ factorial. The evaluated resources are CPU utilisation,
-throughput, memory usage and disk-write activity. TimeTrack supplies
-development evidence, Bitbrains fastStorage and Rnd provide external
-environments, and Materna T1--T3 provide dependent temporal replication.
-Eligible-population restrictions delimit applicability. Sections~\ref{sec:framework}
-and~\ref{sec:methodology} define the formulations and evaluation; persistence
-also distinguishes formulation-relative gains from absolute forecasting skill.
+(M1). S2 versus S1 evaluates contextual information, M1 versus S2 the
+implemented shared-LSTM transition, and M1 versus S1 the complete joint
+system. The evaluated resources are CPU utilisation, throughput, memory usage
+and disk-write activity. TimeTrack supplies development evidence, Bitbrains
+fastStorage and Rnd provide external environments, and Materna T1--T3 provide
+dependent temporal replication. The comparisons retain source-specific
+eligible populations and evaluation protocols.
+Sections~\ref{sec:framework} and~\ref{sec:methodology} define the original
+formulations and evaluation.
 
-The evidence in Section~\ref{sec:cross-dataset-synthesis} identifies selective
-contextual value: S2 versus S1 varies with resource, environment and temporal
-block. Memory has the clearest repeated positive pattern, but not universally.
-For M1 versus S2, throughput, memory and disk write have negative primary gains
-in all six evidence blocks; CPU has limited positive exceptions. M1 versus S1
-is negative in every displayed resource/block combination except Materna T2
-CPU. In the five-horizon external instantiation, M1 nevertheless uses
-approximately $74.5\%$ fewer parameters and $75\%$ fewer models than S2.
-Consolidation therefore accompanies predictive degradation within the
-evaluated shared-LSTM design, rather than establishing a general verdict on
-multi-task forecasting. We make four contributions:
+The four questions in Section~\ref{sec:research-questions} address contextual
+input (RQ1), the operational shared-LSTM contrast (RQ2), the complete joint
+system (RQ3), and heterogeneity and accuracy--efficiency trade-offs (RQ4).
+
+Post-hoc sensitivity controls impose M1-selected contexts on S2, increase M1
+from H64 to H129 to approximately match S2's aggregate capacity, and compare
+Ridge autoregression (AR) with cross-resource autoregression (ARX) at matched
+contexts. Section~\ref{sec:posthoc-controls} details their separate selection
+procedures and limits; they qualify, rather than replace, the frozen results.
+
+Contextual value is selective: memory shows recurring benefits, but directions
+depend on model family and environment. M1:S2 throughput, memory and disk-write
+point estimates remain adverse in all six blocks under both separate LSTM
+controls, without identifying sharing alone as the cause. Matched-cell median
+M1/S2 MAE ratios are close to one in many comparisons, whereas some much larger
+MacroMAE penalties are tail-concentrated (Section~\ref{sec:results-rq2}).
+Per-entity consolidation can therefore offer a target-specific trade-off,
+subject to assessment of adverse tails. Original external
+H64 M1 uses approximately $74.5\%$ fewer parameters and $75\%$ fewer models per
+target set. Seed sensitivity and poor persistence skill in some settings bound
+this accuracy--consolidation trade-off, which establishes no production savings
+(Section~\ref{sec:cross-dataset-synthesis}). We make four contributions:
 
 \begin{enumerate}
-  \item We formulate explicit matched S1/S2/M1 operational contrasts,
-    including shared versus independent all-input prediction, while
-    acknowledging existing univariate/contextual comparisons and unequal
-    capacity and selection settings.
-  \item We provide evidence on how contextual-input value varies by resource,
-    environment and time across development, external environments and
-    dependent temporal replication within eligible populations.
-  \item We provide replicated adverse shared-representation evidence for the
-    evaluated conventional shared-LSTM implementation relative to independent
-    all-input target models, without claiming discovery of negative transfer
-    or identifying its mechanism.
-  \item We jointly characterise model/parameter consolidation, observed
-    fitting workload, predictive accuracy and applicability boundaries for
-    the evaluated implementation, without extrapolating to unmeasured
-    production savings or excluded populations.
+  \item We evaluate S1/S2/M1 operational contrasts that distinguish
+    contextual-input value from the accuracy consequences of the implemented
+    shared-LSTM design and its model consolidation.
+  \item We characterise resource-, environment- and model-dependent contextual
+    value using the original LSTM comparison and a post-hoc matched-context
+    Ridge AR/ARX comparison across all six evidence blocks.
+  \item We test the robustness of the shared-LSTM contrast with separate
+    common-context and H129 approximate aggregate-capacity controls,
+    distinguishing persistent adverse point estimates from causal claims
+    about representation sharing alone.
+  \item We relate forecasting accuracy to model-management choices while
+    bounding conclusions by matched-cell behaviour, existing-seed sensitivity,
+    persistence skill and the eligible populations studied.
 \end{enumerate}
 
 \section{Related Work}
@@ -188,170 +168,132 @@ multi-task forecasting. We make four contributions:
 \subsection{Runtime and Cloud-Resource Forecasting}
 \label{sec:rw-runtime}
 
-Runtime monitoring supplies observations about software behaviour and the
-resources supporting it. In self-adaptive and cloud systems, these observations
-inform decisions about configuration, capacity and resource allocation
-\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. Forecasting extends this
-information beyond the current state, potentially allowing adaptation before
-demand changes take effect. However, predictive accuracy is only one component
-of a management loop: allocation policies, actuation delays and uncertainty
-also affect operational outcomes \citep{Qu2018Autoscaling}. Forecast quality
-and controller effectiveness therefore require distinct evaluation.
+Runtime telemetry supports configuration and resource-management decisions in
+cloud and self-adaptive software systems
+\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. Prediction-based
+provisioning and service-quality forecasting already connect forecast accuracy
+with software design
+\citep{Calheiros2015ARIMA,Syu2017DynamicQoS}. Forecast quality nevertheless
+differs from controller effectiveness: policies, actuation delays and
+uncertainty also affect operational outcomes \citep{Qu2018Autoscaling}.
+Here the engineering question concerns input selection and model management,
+not a measured autoscaling or service-level benefit.
 
-This distinction is reflected in prediction-based provisioning and
-software-service research. ARIMA workload prediction has been investigated
-together with its consequences for cloud application quality of service,
-whereas empirical service-quality forecasting compares the accuracy and cost
-of prediction methods \citep{Calheiros2015ARIMA,Syu2017DynamicQoS}. These
-studies establish forecasting as a software-engineering concern rather than
-solely an algorithmic benchmark. They do not imply that a lower forecasting
-error automatically improves service levels. The present study evaluates
-telemetry forecasts, not an autoscaling controller, service-level compliance or
-deployed resource-allocation policy.
+The relevant literature spans different prediction organisations.
+\citet{DiMenna2026RuntimeForecasting} compare model families on application
+runtime metrics, fitting conventional models independently per series and
+applying foundation models zero-shot to individual histories. In contrast,
+\citet{Ullah2023CloudBiLSTM} use ten-channel histories and joint ten-channel
+forecasts with a common BiLSTM representation on fastStorage and Rnd.
+Multivariate covariates, hybrid resource predictors, joint outputs and
+multi-provider evaluation are established capabilities
+\citep{Tran2018MultivariateFuzzy,Xu2022esDNN,Tripathi2025MMRP,
+Rossi2025CloudUncertainty,Zhang2025SWTCLSTM}, alongside online resource and
+microservice-indicator forecasting \citep{Gao2026OMCR,Gao2026MaMiClif}.
+These precedents motivate comparing design choices, not claiming a new
+forecasting architecture.
 
-Recent runtime forecasting also extends beyond infrastructure utilisation.
-\citet{DiMenna2026RuntimeForecasting} compare classical statistical, neural
-and foundation models on 110 daily runtime series from 29 applications,
-including crash rates and several application-time measurements. Forecasts
-extend to 14 days. The experiments operate independently on each metric:
-conventional models are fitted per series, while foundation models are used
-zero-shot on individual histories. Multivariate forecasting is left for future
-work. This model-family comparison informs runtime prediction, but does not
-evaluate sharing among jointly predicted resource tasks.
-
-Cloud-resource forecasting already includes correlated multivariate inputs,
-deep recurrent predictors and joint resource outputs
-\citep{Tran2018MultivariateFuzzy,Xu2022esDNN,Ullah2023CloudBiLSTM}.
-These capabilities establish the resource-forecasting problem addressed here,
-rather than an architectural contribution of the present study.
-
-Hybrid architectures, uncertainty-aware predictions and evaluations on multiple
-cloud providers further broaden this evidence
-\citep{Tripathi2025MMRP,Rossi2025CloudUncertainty,Zhang2025SWTCLSTM}.
-Online multivariate resource forecasting and microservice-indicator forecasting
-address additional operational settings \citep{Gao2026OMCR,Gao2026MaMiClif}.
-Thus multivariate inputs, recurrent resource models, joint forecasting and
-multi-provider evaluation are established capabilities, not architectural
-contributions of this study.
-
-The TimeTrack dataset places these questions in an OAI CI/CD setting.
-\citet{Meliani2025TimeTrack} document its computing and network telemetry and
-report contemporaneous cross-resource associations, including CPU--memory
-relationships on some machines. Such associations motivate considering other
-resource histories, but do not establish incremental predictive value after
-conditioning on the target's own history. That distinction requires a
-forecasting comparison rather than an inference from correlation alone.
+TimeTrack provides OAI CI/CD telemetry with reported resource correlations
+\citep{Meliani2025TimeTrack}. These motivate contextual inputs, but do not
+establish predictive value conditional on the target's own history.
+That value requires a forecasting comparison, not correlation alone.
 
 \subsection{Information Scope and Sharing in Forecasting}
 \label{sec:rw-information-sharing}
 
-Three design choices must be distinguished: which channels supply historical
-inputs, which variables form the prediction targets, and which learned
-parameters are common to those targets. A multichannel input can support a
-single target; multiple future values can instead represent different horizons
-of that target. Neither arrangement by itself establishes resource-task
-sharing. Conversely, sharing parameters does not require mixing channels in
-each input window.
+Input channels, output targets and parameter sharing are separate choices.
+A model may use several resource histories for one target; a vector output
+may represent several horizons of that same target rather than several
+resources. Independent target models require separate fitted parameters,
+not merely separate output values or separately processed channels.
 
-The closest studies instantiate different parts of this design space
-(Table~\ref{tab:related-work-comparison}). In particular, MMRP's
-univariate/multivariate single-target comparisons
-\citep{Tripathi2025MMRP} are a meaningful contextual-input precedent
-related to S1--S2, not evidence of cross-target sharing.
-
-Other designs reinforce the distinction between covariates and targets.
-The esDNN study forecasts CPU usage from several resource covariates.
-Models that account for uncertainty instead compare predictions for one
-resource with joint processing-unit and memory forecasts, alongside transfer
-learning
-\citep{Xu2022esDNN,Rossi2025CloudUncertainty}. These are different ways of
-using several resource series, rather than interchangeable definitions of
-multivariate forecasting.
+MMRP directly compares univariate and multivariate single-target forecasts
+\citep{Tripathi2025MMRP}. Its CPU and memory results are reported separately;
+the exact all-channel assignment and independent-fit inventory are not fully
+specified. It is a substantive S1--S2-related precedent, not a reported joint
+resource-sharing arm. Likewise, esDNN uses resource covariates for CPU
+prediction \citep{Xu2022esDNN}. Neither multichannel input nor multi-head
+attention by itself establishes cross-target parameter sharing. Ullah's joint
+BiLSTM does share a representation, but its reported architecture comparisons
+do not include an independent all-input target-model bridge.
 
 The distinction also matters outside cloud telemetry. PatchTST processes
 channels independently while reusing embedding and Transformer weights across
 them \citep{Nie2023PatchTST}. Channel independence therefore does not mean
 independently fitted models. In contrast, iTransformer represents individual
 variates as tokens and models relationships between them through attention
-\citep{Liu2024iTransformer}. The relevant difference here is how information
-is combined, not a general comparison of Transformer architectures.
-
-Sharing can also occur across series. DeepAR learns recurrent parameters
-across collections of related series, while the local/global
-forecasting framework distinguishes separately fitted functions from a common
-function learned across series
-\citep{Salinas2020DeepAR,MonteroManso2021GlobalForecasting}. Such sharing need
-not provide every series as simultaneous input channels. Together, these
-designs show why input availability, output organisation and shared predictive
-representation require separate experimental controls.
+\citep{Liu2024iTransformer}.
+DeepAR and local/global forecasting share functions across series rather than
+necessarily presenting all series as simultaneous covariates
+\citep{Salinas2020DeepAR,MonteroManso2021GlobalForecasting}.
+These distinctions matter when deciding whether telemetry should be added to
+a predictor or target models should be consolidated.
 
 \subsection{Multi-Task Learning, Task Relatedness, and Adverse Transfer}
 \label{sec:rw-multitask}
 
-Multi-task learning uses relationships among prediction tasks to provide an
-inductive bias through shared learning \citep{Caruana1997Multitask}.
-Common representations can transfer useful information, but the benefit
-depends on task relationships, data and the chosen sharing structure
-\citep{Yu2025MultitaskFundamentals}. Learning all available tasks together is
-therefore not an unconditional improvement over separate models. Task-grouping
-research makes this dependence explicit by selecting combinations under
-accuracy and computational constraints, or by estimating how learning one task
-affects another \citep{Standley2020TaskGrouping,Fifty2021TaskGroupings}.
+Shared learning can provide an inductive bias \citep{Caruana1997Multitask},
+but its value depends on tasks, data and sharing structure
+\citep{Yu2025MultitaskFundamentals}. Task grouping explicitly examines which
+tasks should learn together under accuracy and computational constraints
+\citep{Standley2020TaskGrouping,Fifty2021TaskGroupings}.
+Multi-objective and gradient-modification methods address conflicting updates
+\citep{Sener2018MultiObjective,Yu2020GradientSurgery}. These are established
+responses to adverse transfer, not evidence of a measured mechanism in our
+resource forecasters.
 
-Optimisation research addresses a related but distinct issue: joint objectives
-can favour different updates. Multi-objective formulations and gradient
-modification methods provide alternatives to an unexamined fixed combination
-of task losses \citep{Sener2018MultiObjective,Yu2020GradientSurgery}. These
-results motivate testing sharing rather than assuming that nominally related
-outputs should always use one representation. They do not establish that
-gradient conflict, task interference or competition for capacity occurs in a
-particular resource forecaster without corresponding measurements.
+\citet{Nikentari2022NARMAXLSTM} provide a forecasting precedent:
+NARMAX-LSTM combines lagged station inputs, shared LSTM layers and
+station-specific outputs, compares single-task baselines and discusses
+negative transfer. Its network-reduction argument is qualitative,
+and an independent all-input target-model bridge is not established.
+MTLinear assigns temporal weights to variate groups, analyses gradient
+conflicts and balance, and evaluates grouping, parameter size and computation
+\citep{Nochumsohn2025MTLinear}. Applying common temporal weights to each
+variate's own history differs from mixing contextual channels. Its grouping
+endpoints inform independent-versus-shared learning without reproducing our
+all-input S2--M1 contrast.
 
-Forecasting-specific multi-task work already investigates such questions.
-NARMAX-LSTM shares LSTM layers across station-level forecasting tasks,
-compares single-task baselines and explicitly discusses negative transfer
-\citep{Nikentari2022NARMAXLSTM}. MTLinear treats variates or groups as tasks,
-analyses gradient relationships and balance, and evaluates grouping and
-efficiency \citep{Nochumsohn2025MTLinear}. Cloud workload forecasting has
-also been formulated through multi-task learning, with a task construction
-different from our resource-head formulation \citep{Bi2019CloudMultitask}.
-Negative transfer and selective sharing are thus established concepts. For the
-present comparison, degradation after introducing M1 relative to independent
-all-input S2 models is operationally consistent with adverse transfer; it does
-not by itself identify an optimisation or capacity mechanism.
-Neither task grouping nor gradient modification is evaluated in the present
-experiment.
+Cloud multi-task forecasting also predates this study:
+\citet{Bi2019CloudMultitask} combine workload decomposition with stochastic
+configuration networks and report training-speed comparisons. The inspected
+evidence does not establish equivalence to resource-target sharing or an
+all-input independent baseline. Efficiency evidence must therefore be
+distinguished from a measured target-model consolidation trade-off.
+MMRP's inference-throughput measurements and Di Menna's model-size and
+adaptation-cost discussion likewise provide efficiency-related evidence,
+without the same target-consolidation analysis.
+Table~\ref{tab:related-work-comparison} distinguishes these forms.
+Negative transfer and forecasting efficiency are not novel topics introduced here.
 
 \subsection{Evaluation Gap and Study Scope}
 \label{sec:rw-gap}
 
-The closest inspected designs cover individual parts of the
-information-sharing design space, but not the complete within-study S1/S2/M1
-operational comparison (Table~\ref{tab:related-work-comparison}). This
-bounded observation is not a literature-wide absence or priority claim.
+The contribution concerns the within-study comparison, not an architecture
+or literature-wide priority claim. The inspected studies establish contextual
+single-target forecasting, shared forecasting, adverse-transfer analysis and
+efficiency evaluation in different designs. Table~\ref{tab:related-work-comparison}
+records their overlap and evidence limits rather than certifying an absence
+across the literature.
 
 \input{tables/related_work_comparison}
 
-S2 serves as the intermediate experimental control, rather than introducing
-multivariate single-target forecasting. It allows the value of additional
-resource histories to be examined separately from the implemented transition
-to cross-target representation sharing. S1--S2 and S2--M1 are matched
-operational contrasts under common resource, horizon and temporal support,
-not pure causal interventions. S1/S2 differ in input width, parameter count
-and selected settings; S2/M1 also differ in aggregate capacity, model count,
-optimisation and target-specific versus common context selection. The
-decomposition therefore characterises the evaluated implementations, not a
-parameter-matched or complete factorial effect.
+S2 is the intermediate operational control: each target model receives all
+resource histories but retains separate fitted parameters. S1--S2 examines
+additional contextual input; S2--M1 examines the implemented move to a shared
+resource predictor. Capacity, optimisation and selected settings also differ,
+so these are not pure causal interventions or a complete $2\times2$ design.
+Separate post-hoc common-context and H129 capacity controls qualify that
+contrast, while matched-context Ridge AR/ARX checks contextual directions in
+another model family (Section~\ref{sec:posthoc-controls}).
 
-The study retains these contrasts through TimeTrack development evidence,
-separate Bitbrains fastStorage and Rnd external environments, and Materna
-T1--T3 as dependent temporal replication. Explicit eligible-population
-restrictions delimit applicability, while forecasting accuracy and
-model-consolidation evidence remain separate outcomes. This scope supports
-resource-, environment- and time-dependent assessment without treating
-consecutive blocks as independent datasets or extending conclusions to all
-shared architectures. Section~\ref{sec:framework} defines the formulations
-and the matched comparisons used to address this question.
+The same operational contrasts are retained through TimeTrack development,
+the separate fastStorage and Rnd external environments, and dependent Materna
+T1--T3 temporal blocks. Resource-wise accuracy, local model consolidation and
+eligible-population limits define the evidence contribution. This supports
+runtime forecasting and model-management choices without claiming independent
+Materna datasets, a universal transfer mechanism or superiority to untested
+architectures. Section~\ref{sec:framework} defines the formulations.
 
 \section{Multi-Metric Runtime Forecasting Framework}
 \label{sec:framework}
@@ -369,8 +311,10 @@ operational contrasts.
   M1 uses all histories with a shared LSTM representation and resource-specific
   heads. S2 versus S1 assesses contextual input; M1 versus S2 the implemented
   move to representation sharing; M1 versus S1 the complete joint-system
-  change. These are matched operational contrasts, not a complete
-  $2\times2$ factorial, parameter-matched interventions or pure causal
+  change. Models are fitted separately for each entity, outer fold and seed;
+  S1/S2 use four networks per target set and M1 uses one joint network.
+  These are matched operational comparisons, not a complete
+  $2\times2$ design, parameter-matched interventions or pure causal
   isolation of either design choice.}
   \label{fig:sharing-framework}
 \end{figure*}
@@ -403,19 +347,18 @@ multi-horizon target vector. A forecaster produces
 where $\mathcal{I}_{t,L}$ denotes the formulation-dependent information set
 and $\boldsymbol{\theta}$ denotes the relevant model parameters.
 
-The context contains only observations available at or before $t$, whereas
-each target lies strictly after the forecasting origin. Resource channels are
-aligned within a context, and the horizon index is interpreted on the time
-grid of the dataset under study. This notation does not require one universal
-sampling interval: elapsed-time mappings can differ across datasets provided
-that the ordering of observations, origins, and future targets is preserved.
-An eligible origin must supply the information required by every formulation
-and the complete target vector used in their comparison.
+Models are entity-specific: for each TimeTrack machine or external VM,
+outer fold and seed, S1/S2 fit four target-specific networks and M1 one joint
+four-resource network. M1 shares across that entity's targets, never across
+entities. These local model-complement counts exclude the separate
+candidate-context inner fits and final refits; they do not describe a
+globally deployed four-versus-one system.
 
-Comparisons among the three formulations use matched forecasting origins,
-targets, horizons, and data
-partitions. Consequently, the contrasts concern changes in information and
-parameter sharing rather than changes in the evaluated sample.
+Contexts contain aligned observations available at or before $t$; targets lie
+strictly afterwards. Horizons use each dataset's time grid, preserving temporal
+order without requiring a universal sampling interval. Eligible origins supply
+every formulation's inputs and complete targets. Matched origins, targets,
+horizons and partitions prevent sample differences from changing a contrast.
 
 \subsection{Resource Metrics and Multi-Horizon Forecasting}
 \label{sec:resource-horizons}
@@ -424,37 +367,18 @@ The resource vector comprises CPU utilisation, aggregate throughput, memory
 usage, and disk-write activity. CPU utilisation represents processor demand;
 throughput represents the aggregate rate of data transferred through the
 runtime environment; memory usage represents occupied memory; and disk-write
-activity represents write traffic to persistent storage. These channel
-definitions are intentionally independent of dataset-specific field names,
-units, and sampling intervals. Their concrete mappings are specified with the
-experimental data in Section~4.
+activity represents write traffic to persistent storage. Dataset-specific
+fields, units and sampling intervals are mapped in Section~\ref{sec:datasets}.
 
-Every forecasting origin yields one prediction for each
-$h\in\mathcal{H}$. The horizon set is therefore a property of an experimental
-instantiation rather than a restriction of the framework: $\mathcal{H}$ may be
-any finite set of positive offsets supported by the data. The same distinction
-applies to $L$. Candidate context lengths and horizon values are fixed before
-model evaluation, but their numerical values may vary with sampling cadence
-without changing the S1, S2, or M1 definitions. Each formulation predicts its
-full horizon vector jointly, rather than fitting a separate model for every
-horizon.
-
-The four channels have distinct operational meanings and are not treated as
-interchangeable measurements. A resource may nevertheless carry
-contemporaneous or lagged information relevant to another target. The
-framework makes this a testable modelling question by varying access to the
-channel histories while holding the target definition fixed. Joint horizon
-prediction similarly holds the output organisation fixed across S1, S2, and
-M1, so that information sharing is not confounded with a change from single-
-to multiple-horizon training.
-
-Resource channels may differ substantially in scale and distribution. Model
-training therefore operates on resource-specific transformed and scaled
-targets, while evaluation can return forecasts to their native resource
-scales. The transformations and training-partition scaling rules belong to the
-experimental instantiation. At the framework level, their purpose is to place
-resource errors on comparable optimisation scales, particularly when a single
-objective combines several target resources.
+Each formulation jointly predicts its full horizon vector, so output
+organisation is fixed rather than changed from single- to multi-horizon
+training. Contexts $L$ and finite positive offsets $\mathcal{H}$ are fixed
+before evaluation but may vary with source cadence without changing the
+formulation definitions. Distinct resources may supply predictive context;
+varying access to their histories tests this while keeping targets fixed.
+Resource-specific training transforms and scaling accommodate different
+distributions and optimisation scales; evaluation returns forecasts to native
+units (Section~\ref{sec:preprocessing}).
 
 \subsection{S1 Local-Resource Forecasting}
 \label{sec:s1}
@@ -475,14 +399,10 @@ and its output is
   \in\mathbb{R}^{|\mathcal{H}|}.
   \label{eq:s1-forecast}
 \end{equation}
-A distinct parameter set $\boldsymbol{\theta}_r^{\mathrm{S1}}$ is learned for
-each resource; no learned representation is shared across targets. Each S1
-model has its own temporal encoder, prediction mapping and optimisation
-objective for the selected target resource and horizons. S1 remains
-multi-horizon and provides the local-history baseline. Using the same model
-family across formulations focuses the comparison on information structure.
-S1 withholds non-target channels; it does not assume that resources are
-independent.
+A distinct parameter set $\boldsymbol{\theta}_r^{\mathrm{S1}}$ gives each
+resource its own encoder, prediction mapping and objective. S1 is the
+multi-horizon local-history baseline within the common model family;
+withholding non-target channels does not assume resource independence.
 
 \subsection{S2 Cross-Resource Contextual Forecasting}
 \label{sec:s2}
@@ -504,11 +424,9 @@ specific to $r$: gradients from one target cannot update another model's
 representation. Thus all-resource input does not establish shared learning
 across targets.
 
-Under matched support, S2 versus S1 is a controlled contrast between
-all-resource and own-resource histories while preserving the separate-model
-organisation. It isolates the empirical contribution of cross-resource
-context under the specified design; it does not presume that every additional
-channel is informative, nor that the contribution has a particular sign.
+Under matched support, S2 versus S1 evaluates contextual input while retaining
+separate models, without presuming that extra channels are informative or
+that their contribution has a particular sign.
 
 \subsection{M1 Shared Multi-Resource Forecasting}
 \label{sec:m1}
@@ -552,23 +470,17 @@ scaled-space objective
     \right)^2.
   \label{eq:m1-loss}
 \end{equation}
-This is equivalently the arithmetic mean of the resource-specific mean squared
-errors, with horizons weighted equally within each resource. It prevents a
-resource from receiving greater nominal weight merely because its native unit
-has a larger numerical scale. S1 and S2 use the corresponding single-resource
-scaled mean squared error. M1 versus S2 can therefore examine representation
-sharing while both formulations receive the same multichannel input.
-
-The objective fixes the nominal contribution of every resource and horizon; it
-does not learn task weights or suppress a resource conditionally. Scaling and
-equal weighting are consequently part of the controlled multi-task definition,
-whereas the numerical scaling parameters are fitted within the experimental
-data partitions described later.
+This is the arithmetic mean of four transformed/robust-scaled resource MSEs,
+with equally weighted horizons. S1/S2 use the corresponding single-resource
+MSE. Equal coefficients do not imply equal realised losses or gradients:
+residual distributions and derivatives differ. No task weights are learned
+and no resource is conditionally suppressed. Scaling is training-only
+(Section~\ref{sec:preprocessing}).
 
 \subsection{Controlled Information-Sharing Decomposition}
 \label{sec:decomposition}
 
-The factorial structure defines three comparisons, each evaluated for the same
+The three matched operational formulations define three comparisons, each evaluated for the same
 resource, horizon, and matched support. Let $Q(F)$ denote a lower-is-better
 error functional for formulation $F$ under such a fixed evaluation unit. For
 a baseline $A$ and candidate $B$, define the signed error reduction
@@ -591,59 +503,35 @@ experimental methodology. The framework-level contrasts are
   \label{eq:controlled-contrasts}
 \end{equation}
 
-$\mathcal{C}_{\mathrm{context}}$ compares cross-resource with local-resource
-input while retaining independently trained target models.
-$\mathcal{C}_{\mathrm{sharing}}$ compares shared with separate predictive
-representations while holding all-resource input available to both
-formulations. $\mathcal{C}_{\mathrm{joint}}$ compares the complete joint
-multi-metric system with the local-information baseline and therefore combines
-both changes. The first two contrasts prevent the usefulness of additional
-resource streams from being conflated with the usefulness of a shared learned
-representation. All three remain empirical matched comparisons: the framework
-defines what changes between formulations but imposes no expected ordering or
-sign on their observed errors.
-
-Matching requires the same eligible origins, future targets, resource and
-horizon coordinates, and evaluation partitions for the formulations entering
-a contrast. Results are interpreted resource by resource rather than by
-averaging errors expressed in heterogeneous native units. Because the three raw
-contrasts are differences of the same error functional $Q$ evaluated on matched
-support, the S1-to-M1 raw error difference equals the sum of the S1-to-S2 and
-S2-to-M1 raw differences under the sign convention above. This algebraic
-identity does not imply that the underlying modelling effects are
-mechanistically additive or causally isolated. In particular, the
-baseline-normalised percentage gains used for empirical reporting are not
-generally additive because each comparison is normalised by its own reference
-error. Its role is
-to characterise the complete change from local, separate forecasting to the
-shared multi-resource system, while the two intermediate contrasts identify
-which modelling decision differs.
+The context contrast retains separate target models; the sharing contrast
+retains all-resource inputs; the joint contrast combines both changes.
+None presumes an error ordering. Comparisons match eligible origins, targets,
+resource/horizon coordinates and partitions, and never average heterogeneous
+native-unit resource errors. On this support the S1-to-M1 raw difference in
+$Q$ equals the sum of its two intermediate differences. This algebra does
+not imply mechanistic additivity or causal isolation. Reported percentages
+are not generally additive because each uses its own reference error.
 
 \section{Experimental Methodology}
 \label{sec:methodology}
 
-This section instantiates the controlled formulations from
-Section~\ref{sec:framework} across one development dataset, two external
-confirmation environments, and three temporal replication blocks.  The design
-keeps the information-sharing contrasts fixed while adapting only those
-quantities, such as sample offsets and raw field names, that necessarily depend
-on the telemetry source.
+The formulations in Section~\ref{sec:framework} are retained across one
+development dataset, two external environments and three dependent temporal
+blocks, adapting source-specific fields and sample offsets.
 
 \subsection{Research Questions}
 \label{sec:research-questions}
 
-The evaluation addresses exactly four research questions.  Each question is
-operationalised by the matched formulation contrasts defined in
-Section~\ref{sec:decomposition}; it is not answered by comparing unrelated
-model families or unmatched samples.
+Four research questions use the original matched contrasts in
+Section~\ref{sec:decomposition}.
 
 \begin{description}
   \item[RQ1:] Does cross-resource context improve forecasting relative to
     local-resource forecasting?  This question is evaluated by comparing S2
     with S1, which changes the input from the target resource alone to all four
     resource histories while retaining separate target-specific models.
-  \item[RQ2:] Does sharing a predictive representation improve forecasting
-    relative to separate contextual models?  This question is evaluated by
+  \item[RQ2:] How does the implemented shared-LSTM formulation compare with
+    separate contextual target models? This question is evaluated by
     comparing M1 with S2, for which both formulations receive all-resource
     input but only M1 shares a temporal encoder across target tasks.
   \item[RQ3:] Does the complete shared multi-metric system outperform
@@ -657,9 +545,8 @@ model families or unmatched samples.
     errors.
 \end{description}
 
-The questions specify estimands rather than expected outcomes.  In particular,
-neither access to additional channels nor parameter sharing is assumed to be
-beneficial, and efficiency is assessed separately from forecasting accuracy.
+These specify estimands, not expected benefits; efficiency is assessed
+separately from accuracy.
 
 \subsection{Datasets}
 \label{sec:datasets}
@@ -829,20 +716,23 @@ grids.
 \subsection{Model Architecture and Training}
 \label{sec:architecture-training}
 
-All three formulations use the same plain recurrent backbone: a two-layer
+In the original frozen experiment, all formulations use a plain LSTM
+\citep{Hochreiter1997LSTM}: a two-layer
 unidirectional LSTM with hidden size 64, dropout 0.1, and the final recurrent
 output as its temporal representation.  S1 has one input channel and one
 resource-specific horizon head; S2 has four input channels but remains one
 independent model per target; M1 has four inputs, one shared encoder, and four
 independent resource heads.  S1 and S2 minimise target-specific scaled mean
 squared error, whereas M1 minimises the arithmetic mean of the four
-resource-specific scaled mean squared errors.
+resource-specific scaled mean squared errors. Inner early stopping minimises
+validation MSE in this transformed/robust-scaled space and records a best
+epoch separately for each seed.
 
 Training uses Adam with learning rate 0.001, batch size 256, at most 50 epochs,
 early-stopping patience 7 during inner fitting, gradient-norm clipping at 1.0,
 and seeds 0, 1, and 2.  No architecture or optimiser search is performed.  The
-plain backbone is deliberately simple because the experiment isolates the
-information-sharing structure rather than proposing an architecture-specific
+plain backbone is deliberately simple because the experiment compares the
+operational formulations rather than proposing an architecture-specific
 innovation.
 
 Output width affects parameter counts.  For the five-horizon external design,
@@ -850,35 +740,46 @@ S1 contains 50,757 parameters per resource model (203,028 across four), S2
 contains 51,525 per target model (206,100 across four), and M1 contains 52,500
 in its single shared model.  For eight-horizon TimeTrack, the corresponding
 counts are 50,952 per S1 model (203,808 across four), 51,720 per S2 model
-(206,880 across four), and 53,280 for M1.  The models are therefore not
-parameter-equal; accuracy and system footprint are reported as separate
-properties.
+(206,880 across four), and 53,280 for M1. These H64 counts refer to one
+entity/fold/seed target complement, not parameters pooled across the corpus.
+Model-complement and total training-fit counts differ as defined in
+Section~\ref{sec:problem}; original parameter budgets are unequal.
+
+Reported fitting time is the sum of successful unique worker fit-hours across
+inner candidate fits and final refits. Inner durations include training-loop
+and validation-forward time; final durations cover the training loop.
+Unsuccessful attempts, skipped/resumed encounters, model and window
+construction, preprocessing, checkpoint serialisation, final prediction and
+inversion, and orchestration are excluded. Summed worker fit-hours are not
+elapsed wall time, energy, deployment cost or production latency. Differences
+between S1 and S2 can reflect executed epochs and selected context lengths;
+input dimensionality alone does not explain their timing order.
 
 \subsection{Context and Model Selection}
 \label{sec:model-selection}
 
-Context length is the only selected model setting.  For S1 and S2, one context
+In the original LSTM experiment, context length is selected from the frozen
+candidate grid while architecture and optimiser settings remain fixed.
+For S1 and S2, one context
 is selected independently for each environment or trace, machine or VM, outer
-fold, and target resource.  The objective is the mean inner-validation NMAE
-over all horizons and the three seeds.  M1 selects one context per environment
-or trace, machine or VM, and fold by taking the equal mean of validation NMAE
-over the four resources, all horizons, and all seeds.  Exact ties are resolved
+fold, and target resource. The selection score is validation MAE of the
+transformed/robust-scaled targets and predictions, evaluated at each seed's
+MSE-selected best epoch, then averaged equally over horizons and the three
+seeds. M1 selects one context per environment or trace, machine or VM, and
+fold by taking the equal mean of the same scaled-space validation MAE over
+the four resources, all horizons and all seeds. Exact ties are resolved
 in favour of the shorter context.
 
-Early stopping during each inner fit records a best epoch separately for every
-seed.  Once a context has been selected, the final fit uses that context, the
-same seed, and its own fixed selected epoch.  It starts from a fresh
-initialisation, refits the resource scalers on all legal outer-training data,
-and performs no test-based early stopping.  Thus context selection does not
-stand in for broad architecture or hyperparameter tuning, and the final model
-does not inherit inner-fit weights.
-
-The selection units differ deliberately between independent and shared
-formulations.  S1 and S2 may choose target-specific context lengths because
-each target has its own model.  M1 must choose one common context because a
-single shared encoder serves all four targets.  In both cases, the selection
-criterion is computed before outer-test evaluation and retains equal horizon
-and seed contributions.
+Early stopping and context selection consequently use different error
+functionals in the same training space: scaled MSE chooses the epoch, and
+scaled MAE scores the context at that epoch. This context score is not native
+evaluation NMAE. For log-transformed targets, inverse transformation and
+non-negativity projection need not preserve candidate rankings.
+The selected context, same seed and seed-specific fixed epoch determine the
+fresh final refit in Section~\ref{sec:leakage-control}; inner weights are not
+inherited. Selection precedes outer-test evaluation. Target-specific S1/S2
+contexts and M1's common context reflect their separate-model and shared-encoder
+organisations, not broad architecture or hyperparameter tuning.
 
 \subsection{Evaluation Metrics and Statistical Analysis}
 \label{sec:evaluation}
@@ -894,11 +795,14 @@ Evaluation uses
     R^2 &= 1-
       \frac{\sum_{i=1}^{n}(y_i-\widehat{y}_i)^2}
            {\sum_{i=1}^{n}(y_i-\overline{y})^2}, \\
-    \operatorname{NMAE}_r &= \frac{\operatorname{MAE}_r}{q_r},
+    \operatorname{NMAE}_r &= \frac{\operatorname{MAE}_r}{q_r^{\mathrm{native}}},
   \end{aligned}
   \label{eq:evaluation-metrics}
 \end{equation}
-where $q_r$ is the native-unit training IQR for resource $r$.  MAE and RMSE are
+where $q_r^{\mathrm{native}}$ is the native-unit outer-training IQR for resource
+$r$, distinct from the transformed training IQR $q_r$ in
+Equation~\ref{eq:robust-scaling}. Primary evaluation follows inverse
+transformation and the prescribed non-negativity projection. MAE and RMSE are
 reported in each resource's native units; $R^2$ and NMAE are unitless.  Native
 errors are never averaged across different resources.
 
@@ -913,12 +817,17 @@ Persistence supplies a separate absolute forecasting sanity check:
 \end{equation}
 Persistence skill does not replace the controlled formulation comparisons:
 relative improvement over another learned formulation does not imply absolute
-superiority over persistence.
+superiority over persistence. Reported overall skill averages the existing
+per-cell relative skills over entity--fold cells and then horizons; it is not
+$1-\operatorname{MacroMAE}_{\mathrm{model}}/
+\operatorname{MacroMAE}_{\mathrm{pers}}$. Undefined zero-denominator skills
+are excluded from this ancillary mean with their counts retained, not
+replaced by zero.
 
 The primary aggregation begins by averaging stochastic-model MAE across the
-three seeds within each matched environment or trace, VM, fold, resource,
+three seeds within each matched environment or trace, entity, fold, resource,
 horizon, and formulation cell.  For a fixed resource and horizon, those
-seed-averaged VM--fold cells receive equal weight to form MacroMAE.  A
+seed-averaged entity--fold cells receive equal weight to form MacroMAE. A
 resource-overall MacroMAE then gives equal weight to every horizon.  For
 candidate $C$ and baseline $B$, the reported gain is
 \begin{equation}
@@ -932,10 +841,35 @@ versus S1, M1 versus S2, and M1 versus S1.  Secondary diagnostics include
 pooled prediction-level gain, mean and median matched-cell relative gain, and
 the fractions or counts of positive VMs, folds, horizons, and seed aggregates.
 
-Prospectively frozen directional classifications combine overall gain magnitude
-with horizon, VM, fold, and seed consistency.  Their exact thresholds and the
-high-level RQ1--RQ4 decision logic are preserved in the supplementary
-decision-criteria source; thresholds are not adapted after observing outcomes.
+Prospectively frozen directional classifications combine overall gain
+magnitude with horizon, entity, fold and seed consistency. A positive
+aggregate has gain strictly greater than zero; exact zero is not positive.
+Entity signs aggregate over folds and horizons, fold signs over entities and
+horizons, and seed signs over entities, folds and horizons. The following
+conditions are conjunctive, with overall gain expressed in percent:
+\begin{description}
+  \item[\textsc{Broad Positive}.] Overall gain is at least $+1\%$, with at
+    least $6/8$ horizons, $5/7$ machines, $4/5$ folds and $2/3$ seeds positive
+    in TimeTrack. Externally, the horizon and entity thresholds are $4/5$
+    and $25/35$ VMs; fold and seed thresholds are unchanged.
+  \item[\textsc{Conditionally Positive}.] The broad-positive rule fails,
+    overall gain is strictly positive, and at least $4/8$ horizons, $3/7$
+    machines, $3/5$ folds and $2/3$ seeds are positive in TimeTrack.
+    Externally, the horizon and entity thresholds are $3/5$ and $15/35$ VMs.
+  \item[\textsc{Broad Negative}.] Overall gain is at most $-1\%$, with at
+    most $2/8$ horizons, $2/7$ machines, $1/5$ folds and $1/3$ seeds positive
+    in TimeTrack. Externally, the horizon and entity limits are $1/5$
+    and $10/35$ VMs.
+  \item[\textsc{Neutral or Mixed}.] Every remaining case, including point
+    gains whose magnitude or lower-level consistency fails these rules.
+\end{description}
+These classes are not labels assigned solely by the sign of the primary
+point estimate. Bootstrap intervals quantify a separate form of uncertainty:
+neither interval exclusion of zero nor a significance test enters the
+classification predicates. Full trace-level and RQ1--RQ4 predicates,
+including precedence and temporal classification-change rules, remain in the
+supplementary decision criteria and frozen protocol. No threshold is adapted
+after observing outcomes.
 For external uncertainty, a paired VM-cluster bootstrap samples 35 VMs with
 replacement, retains all five folds and the paired formulation structure, and
 operates on seed-averaged matched MAEs.  It uses 10,000 replicates, percentile
@@ -948,31 +882,21 @@ exploratory TimeTrack analyses.
 \subsection{External and Temporal Replication Design}
 \label{sec:replication-design}
 
-The study assigns distinct prospective roles to each source.  TimeTrack is the
-framework and development study.  Bitbrains fastStorage and Rnd are separate
-external confirmation environments; each is analysed before any
-equal-environment synthesis.  Materna is a secondary temporal replication in
-which T1, T2, and T3 probe stability across consecutive blocks from one source.
-This progression holds the S1/S2/M1 factorial, semantic resource mapping,
-controlled contrasts, matched-support principle, and approximately comparable
-real-time forecast range constant while allowing source-specific field names,
-units, and sample offsets.
-
-No numeric score pools all dataset roles.  Estimates for each Bitbrains
-environment precede an unweighted equal-environment summary where applicable.
-Materna likewise reports each trace first.  Its descriptive synthesis for any
-fixed comparison and resource is
+The source roles in Section~\ref{sec:datasets} retain the formulations,
+resource semantics, matched support and comparable real-time forecast range,
+while allowing source-specific fields, units and offsets. No score pools all
+roles. Bitbrains environments are analysed before their unweighted
+equal-environment summary; Materna traces precede their descriptive synthesis,
+for a fixed comparison and resource:
 \begin{equation}
   G_{\mathrm{temporal}}
   = \frac{G_{\mathrm{T1}}+G_{\mathrm{T2}}+G_{\mathrm{T3}}}{3}.
   \label{eq:temporal-synthesis}
 \end{equation}
-This equal-temporal-block estimate is not weighted by rows, origins,
-predictions, duration, or fit count.  It is explicitly not an
-independent-dataset meta-analysis.  Cross-source synthesis is therefore
-descriptive and based on direction and frozen classification consistency,
-rather than a pooled error or nominal interval that would erase the sources'
-different roles and dependence structures.
+Equal temporal-block weights replace weighting by rows, origins, predictions,
+duration or fit count. Cross-source synthesis describes directions and frozen
+class consistency, not a pooled error, global interval or independent-dataset
+meta-analysis.
 
 \subsection{Population Restrictions}
 \label{sec:population-restrictions}
@@ -985,39 +909,77 @@ training phase, and candidate context; for Materna the same requirement also
 holds in every temporal block.  There is no epsilon, fallback, resource mask,
 or formulation-specific exemption.
 
-Table~\ref{tab:dataset-summary} reports the structural, scale-eligible and
-executed populations. Deterministic hash ranking follows eligibility
-filtering; selection is neither random nor performance-ranked. Accordingly, external
-conclusions concern eligible dynamic, scale-estimable, multi-resource VM
-populations.  They do not automatically generalise to excluded idle,
-quiescent, resource-constant, intermittently observed, or otherwise
-structurally invalid VMs, nor to every VM in the source archives.  This
-qualification is part of the estimand itself: deterministic selection makes the
-executed cohort reproducible, but it does not convert the cohort into a
-probability sample of the rejected or unobserved populations.
+Table~\ref{tab:dataset-summary} reports structural, scale-eligible and executed
+populations. Deterministic hash ranking follows eligibility, not random or
+performance-ranked selection. The estimand concerns eligible dynamic,
+scale-estimable multi-resource VMs; reproducibility does not make the cohort
+a probability sample of all archived VMs. Excluded idle, quiescent, constant,
+intermittently observed or structurally invalid workloads remain outside scope.
+
+\subsection{Post-Hoc Sensitivity Analyses}
+\label{sec:posthoc-controls}
+
+Three completed analyses address reviewer challenges after the original
+experiment was frozen. They are explicitly \emph{post-hoc sensitivity
+controls}, not amendments to the original prospective design or replacements
+for its primary results. All retain the frozen cohorts, outer folds,
+forecast horizons, purging, legal support, source-specific transforms,
+training-only scalers and native-unit evaluation. Models remain
+entity-specific, with no cross-machine or cross-VM pooling. Results are
+reported separately by block and resource.
+
+\paragraph{S2 with common context.}
+For each entity and outer fold, the frozen original H64-M1 context is imposed
+on every independent S2 target. Each seed retains the S2 MSE-selected epoch
+from its existing inner fit at that imposed context. Exact matching final
+artifacts are reused only after identity, support, scaler and hash checks;
+otherwise the selected fixed-epoch outer-training refit is performed.
+This removes S2's target-specific context-selection freedom relative to
+H64 M1, but does not equalise parameter count, architecture or optimisation.
+
+\paragraph{M1 with approximately matched aggregate capacity.}
+The shared LSTM hidden size increases from H64 to H129, giving 206,420
+parameters externally and 207,980 for TimeTrack, approximately matching the
+corresponding four-network S2 complements of 206,100 and 206,880. All other
+scientific settings are retained. M1's original inner context and
+seed-specific epoch selection are repeated afresh, followed by fresh final
+refits; H64 choices and fitted weights are not reused. This controls the
+approximate aggregate parameter budget, not task-specific capacity,
+architecture or optimisation equivalence. Common-context S2 remains aligned
+to H64-M1 contexts, not necessarily the newly selected H129 contexts; the
+two LSTM controls are separate, not a jointly matched intervention.
+
+\paragraph{Matched-context Ridge AR/ARX.}
+AR uses only the target resource's lag window; ARX uses all four resource lag
+windows. Both use the same frozen H64-M1 context per entity and fold, without
+context tuning, and directly predict the complete horizon vector for one
+target. The existing multi-output Ridge implementation flattens each window
+and applies an additional lag-feature StandardScaler fitted only on training
+data. Targets retain the source-specific transformed/robust-scaled space.
+For each formulation and target, $\alpha\in\{0.01,0.1,1,10,100\}$ is selected
+strictly within the inner split using native-unit validation MAE after inverse
+transformation/projection, averaged equally over horizons; exact ties favour
+the smaller alpha. The selected model is refitted on outer-training data and
+evaluated once on outer test. Ridge is deterministic, so no artificial seed
+repetitions are introduced. This tests input-scope sensitivity within a
+second model family, not equality of LSTM/Ridge selection objectives or a
+causal isolation of model family from the specified context and model design.
+These post-hoc analyses introduce no additional significance test or pooled
+cross-block performance statistic.
 
 \section{Results}
 
-Results are reported as the primary overall MacroMAE gain defined in
-Section~4.8. Positive values mean that the candidate formulation has lower
-MacroMAE than its baseline; negative values therefore indicate degradation.
-Figure~\ref{fig:primary-gains} gives the complete resource-level primary result
-for every development, external, and temporal evidence block. The prospective
-VM-cluster intervals are used selectively below where they distinguish a
-directionally clear effect from an uncertain near-zero result. TimeTrack did
-not use the same prospective external bootstrap and is therefore reported
-without those intervals.
-
-The three evidence roles are kept distinct throughout this section. TimeTrack
-provides the development result, the two Bitbrains environments provide the
-external-environment results, and the three Materna traces provide the
-prospective temporal results. Each reported gain retains the aggregation and
-baseline fixed for its own evidence block. Comparisons between blocks are
-therefore descriptive: no prediction-level pooling is used, and the six blocks
-are not treated as statistically independent datasets. The frozen qualitative
-classes summarise consistency across the prescribed lower-level units, while
-the VM-cluster intervals quantify uncertainty for the external and temporal
-blocks. Neither replaces the primary resource-overall MacroMAE gain.
+Figure~\ref{fig:primary-gains} reports frozen resource-overall MacroMAE gains
+for each evidence block: positive favours the candidate, negative the baseline.
+Section~\ref{sec:evaluation} distinguishes these estimates from frozen
+consistency classes and prospective VM-cluster intervals; TimeTrack has no
+such external-bootstrap intervals. Block comparisons remain descriptive under
+the source roles in Section~\ref{sec:replication-design}.
+The \emph{POST-HOC} controls and existing-artifact diagnostics supplement,
+not replace, primary estimates, classes or intervals.
+Table~\ref{tab:posthoc-controls} uses the designs in
+Section~\ref{sec:posthoc-controls} beside unchanged reference gains.
+Supplementary Tables~S1--S2 provide the detailed diagnostics.
 
 \begin{figure*}[t]
 \centering
@@ -1025,9 +987,12 @@ blocks. Neither replaces the primary resource-overall MacroMAE gain.
 \caption{Primary overall MacroMAE percentage gains for (a) S2 versus S1,
 (b) M1 versus S2 and (c) M1 versus S1 across the evaluated evidence
 blocks. Positive values indicate lower MacroMAE for the candidate
-formulation; negative values indicate higher MacroMAE. Cell fills encode
-sign only, not magnitude. Values are point estimates, not significance
-classifications. Materna T1, T2 and T3 are dependent temporal blocks.
+formulation; negative values indicate higher MacroMAE. Continuous signed
+colour uses a symmetric $\operatorname{asinh}(G)$ mapping, with $G$ in
+percentage points, as a nonlinear visual aid only. No values are clipped;
+the printed raw percentages at the reported precision are authoritative.
+Legend ticks are raw percentages. Colour implies neither significance nor
+a consistency class. Materna T1, T2 and T3 are dependent temporal blocks.
 Comparisons are bounded to the evaluated implementation and eligible
 populations.}
 \label{fig:primary-gains}
@@ -1036,8 +1001,8 @@ populations.}
 \subsection{RQ1 Cross-Resource Context}
 \label{sec:results-rq1}
 
-RQ1 compares S2 with S1 and changes only the histories available to each
-target-specific model. Figure~\ref{fig:primary-gains}(a) shows selective
+RQ1 compares independent all-resource S2 models with own-resource S1
+models. Figure~\ref{fig:primary-gains}(a) shows selective
 contextual value, not uniform improvement. In TimeTrack, memory was the sole
 positive resource-level effect, while all four frozen classifications remained
 neutral or mixed because the required consistency thresholds were not met.
@@ -1058,15 +1023,36 @@ were broadly positive with intervals above zero; throughput and disk write
 remained neutral or mixed. T3 memory and disk write were conditionally
 positive, but all four T3 intervals crossed zero.
 
-Memory therefore has the clearest repeated positive contextual pattern, but
-not universally. CPU, throughput and disk write change direction across
-blocks. The resource ordering also changes: the strongest contextual benefit
-does not remain attached to one resource, while Rnd throughput and T1 disk
-write illustrate adverse effects on resources that are near zero or positive
-elsewhere. Contextual value varies by resource, environment and time, not
-merely in magnitude around a stable ordering.
+Memory has the clearest recurring positive pattern; the strongest benefit is
+not always attached to one resource. Rnd throughput and T1 disk write illustrate
+adverse effects where other blocks are near zero or positive.
 
-\subsection{RQ2 Shared-Representation Transfer}
+\paragraph{Post-hoc cross-model and seed checks.}
+The matched-context Ridge ARX:AR comparison
+(Table~\ref{tab:posthoc-controls}B) also shows selective contextual value,
+but individual directions depend on model family and environment. Memory
+improves under Ridge in all five external blocks; fastStorage, Rnd and
+Materna T2/T3 have positive point gains in both model families. TimeTrack
+memory instead reverses under Ridge, and Materna T1's near-zero negative
+LSTM estimate contrasts with a positive Ridge gain. Memory S2:S1 gains in
+fastStorage, Rnd and Materna T2 and T3 are positive in all three recorded
+seeds (Supplementary Table~S2). External memory is thus
+the strongest recurring favourable contextual pattern, not a universal
+benefit. Existing-seed diagnostics find sign changes in 9/24 LSTM S2:S1
+block/resource summaries across the three fixed seeds (Supplementary
+Table~S2). Point gains or reversals with seed-varying signs should not be
+treated as seed-invariant improvements or temporal regime changes.
+
+The Ridge TimeTrack throughput gain of $-838.45\%$ is diagnosed as
+\textsc{Concentrated Degradation}, not broad Ridge failure. The saved-artifact
+audit attributes $99.93\%$ of positive excess error to machine06/fold3.
+ARX nevertheless improves 21/35 machine/fold pairs, with median ARX/AR MAE
+ratio approximately $0.9963$. Predictions and primary MAEs are finite, and
+transforms, scalers and support match the frozen design; no implementation
+defect is demonstrated. The aggregate penalty must be read with this
+concentration diagnosis rather than as a typical-machine effect.
+
+\subsection{RQ2 Operational Shared-Representation Comparison}
 \label{sec:results-rq2}
 
 RQ2 compares M1 with S2, holding the all-resource input scope fixed and changing
@@ -1090,12 +1076,58 @@ negative; CPU was neutral or mixed under the frozen consistency rule despite
 its negative primary gain. All four T3 intervals excluded zero, with the
 disk-write interval spanning $[-239.63\%,-5.94\%]$.
 
-Within the controlled shared-LSTM formulation, degradation therefore recurred
-outside the CPU exceptions, but its magnitude remained resource- and
-block-dependent. External and temporal effects for the other resources often
-combined sizeable degradation with a broadly negative class and an interval
-below zero. A negative point estimate and a consistently negative result
+Degradation recurred outside the CPU exceptions, with resource- and
+block-dependent magnitudes. Point signs, consistency classes and intervals
 remain distinct under the frozen protocol.
+
+\paragraph{Post-hoc sharing controls and matched cells.}
+Table~\ref{tab:posthoc-controls}A shows H64 M1 against S2 constrained to the
+frozen H64-M1 contexts, and H129 M1 against original S2. Throughput, memory
+and disk-write point estimates remain adverse in all six blocks under both
+separate controls. Context-selection freedom and the original aggregate
+capacity difference are therefore incomplete explanations within this
+pipeline. The controls do not identify sharing alone as the cause:
+architecture, optimisation and training objectives remain part of the
+implemented comparison, and common-S2 contexts align H64, not necessarily
+H129. Existing-seed diagnostics find sign changes in 4/24 original M1:S2
+block/resource summaries (Supplementary Table~S2), concentrated in small
+CPU exceptions and TimeTrack throughput. Adverse aggregate directions do not
+imply adverse outcomes for every seed. Here, ``stable'' means ``no sign flip
+across the three recorded seeds''. Sign stability does not imply magnitude
+stability: Materna T3 M1:S2 disk-write gains are $-54.65\%$, $-71.55\%$ and
+$-87.84\%$ (Supplementary Table~S2).
+
+The post-hoc matched-cell diagnostics further separate direction from
+magnitude. A cell is entity $\times$ outer fold $\times$ forecast lead, with
+MAE first averaged across existing seeds. In all 24 original M1:S2
+block/resource summaries (Supplementary Table~S1), the median candidate/reference MAE ratio exceeds
+one and the candidate win rate is below $50\%$. This includes the small
+positive CPU MacroMAE exceptions. Materna T1/T3 disk-write median ratios are
+approximately $1.0246/1.0347$, despite MacroMAE gains of
+$-27.46\%/-71.30\%$. The adverse typical-cell direction is widespread, but
+the much larger mean-error penalties do not describe every VM or the
+magnitude of degradation in a typical cell.
+
+Post-hoc attribution locates this uneven magnitude. In Materna T1/T3,
+28/35 and 32/35 VM-averaged disk-write errors worsen. VM266 dominates the T1
+tail and VM272 the T3 tail, contributing 82.10\% and 86.97\% of positive
+excess error, respectively; the top three VMs contribute 91.72\% and 92.93\%.
+No training or scaling defect was demonstrated. A post-hoc frozen-partition
+audit, using each VM's frozen M1-selected context within each fold, places
+their log-space training IQRs near the upper cohort tail: VM266 ranks
+33--34/35 at approximately 7.86--8.19 times the cohort median IQR, and VM272
+ranks 35/35 at 7.59--7.75 times it. Both have the largest native disk-write
+IQR in every fold. Unusually small training IQRs are therefore not supported as an
+explanation for these tails. This does not establish that the large scale
+caused the errors or that sharing is causal.
+For TimeTrack memory, all seven machine averages and 31/35 machine/fold
+pairs worsen, with median pair ratio $1.195276$. The largest pair contributes
+21.80\% and the top three 51.06\% of positive excess error at that same
+machine/fold level. Adverse direction is broad but magnitude uneven;
+pair-level attribution must not be
+conflated with the finer matched-cell medians in Supplementary Table~S1.
+
+\input{tables/posthoc_controls}
 
 \subsection{RQ3 Full Joint-System Performance}
 \label{sec:results-rq3}
@@ -1121,11 +1153,8 @@ memory interval narrowly crossed zero. These differences in classification
 and uncertainty remain important despite the nearly uniform negative sign
 pattern.
 
-The complete-system comparison incorporates both the move from local to
-all-resource inputs and the move from separate to shared representation. Its
-observed gain is therefore reported directly rather than reconstructed by
-adding the RQ1 and RQ2 percentages. The block-level evidence is not pooled or
-treated as six statistically independent datasets.
+RQ3 combines both design changes. Its gains are reported directly, not added
+from RQ1 and RQ2 percentages (Section~\ref{sec:decomposition}).
 
 \subsection{RQ4 Resource, Environment, and Temporal Heterogeneity}
 \label{sec:results-rq4}
@@ -1159,13 +1188,16 @@ trace rules alongside the raw gains.
 
 The frozen within-Materna RQ4 outcome was recorded as follows.
 
-\noindent\texttt{R4\_TEMPORAL\_HETEROGENEITY\_CONFIRMED}. Mechanically, seven of the 12
+\noindent The prespecified RQ4 criterion for temporal heterogeneity was met.
+Seven of the 12
 resource--comparison pairs changed frozen classification across T1--T3 and
 five changed raw sign. The S2-versus-S1 trace decision also changed: T1 met the
 frozen non-support rule, whereas T2 and T3 were mixed. The M1-versus-S2
 trace-level decision was consistently not supported, even though its CPU
-classification varied. These prespecified changes satisfy the RQ4 criterion;
-no post-hoc temporal regimes or causal mechanisms are inferred.
+classification varied. Several small S2 effects are seed-variable
+(Supplementary Table~S2). This is a descriptive criterion, not an IID or
+inferential claim; no post-hoc temporal regimes or causal mechanisms are
+inferred.
 
 \subsection{Persistence Boundary}
 \label{sec:results-persistence}
@@ -1200,172 +1232,89 @@ level, while S2 had no overall failures. These persistence results delimit
 absolute forecasting performance and remain separate from the controlled
 S1--S2--M1 comparisons.
 
-Three boundaries follow directly from these observations. First, a positive
-gain answers only whether one learned formulation improves on another; it does
-not answer whether either improves on persistence. Second, an overall positive
-skill does not require every horizon-level cell to be positive, as the Materna
-lead-level result demonstrates. Third, absolute skill remains resource
-dependent: memory and disk write were the stronger Bitbrains cases, whereas
-CPU remained below persistence despite some positive relative formulation
-gains. Reporting the persistence check beside the formulation comparison
-therefore prevents a relative improvement in an absolutely weak setting from
-being described as general forecasting superiority.
+Thus relative gain, overall persistence skill and horizon-level skill answer
+different questions (Section~\ref{sec:evaluation}); none establishes uniform
+absolute forecasting superiority.
 
 \subsection{Accuracy-Efficiency Trade-Off}
 \label{sec:results-efficiency}
 
-The shared M1 construction substantially consolidated the evaluated external
-system. In the five-horizon instantiation, S1 comprised four models and 203,028
-parameters, S2 four models and 206,100 parameters, and M1 one model and 52,500
-parameters. Relative to S2, M1 therefore used approximately $74.5\%$ fewer
-parameters and $75\%$ fewer models. These counts are not universal architecture
-constants: the eight-horizon TimeTrack instantiation contained 206,880 S2
-parameters and 53,280 M1 parameters.
+The original H64 M1 consolidates the target-model complement for one entity,
+outer fold and seed (Table~\ref{tab:efficiency}). In the five-horizon external design, S1 uses four
+networks and 203,028 parameters, S2 four networks and 206,100 parameters, and
+M1 one joint network and 52,500 parameters: approximately $74.5\%$ fewer
+parameters and $75\%$ fewer models than S2. TimeTrack's eight-horizon
+complements contain 206,880 S2 parameters and 53,280 M1 parameters. These
+are local architecture inventories, not a globally deployed four-versus-one
+system or total training-fit counts. The post-hoc H129 comparison changes
+the parameter budget and must not inherit H64's parameter-reduction claim.
 
 \input{tables/efficiency_summary}
 
-Observed Materna fitting time gave the same operational ordering. Across the
-three traces, S1 required 85.594240 fit-hours, S2 75.303186 fit-hours, and M1
-20.405083 fit-hours. These measurements are execution-cost evidence for the
-Materna workload, not a universal runtime benchmark. The consolidation is
-therefore substantial, but the RQ2 and RQ3 results show that, for the controlled
-M1 design, it was accompanied by predictive degradation across most evaluated
-resource--environment and resource--trace comparisons. Efficiency and
-forecasting accuracy remain distinct properties of the formulations.
-
-The two efficiency measures capture different consolidation mechanisms. The
-model-count change removes three separately trained target-specific models,
-whereas the parameter change compares the combined parameter inventories of
-the five-horizon external implementations. Materna fit-hours add observed
-execution accounting for the full frozen run, including the formulation-level
-training workload recorded by that protocol. All three measures favour M1 on
-resource use, but none modifies the accuracy estimand or offsets a negative
-MacroMAE gain. The trade-off is therefore stated as co-occurring consolidation
-and predictive degradation for this implementation, without extrapolating its
-timings to other hardware, horizon sets, or shared architectures.
+The frozen Materna totals are 85.594240 worker fit-hours for S1, 75.303186 for
+S2 and 20.405083 for M1. As defined in Section~\ref{sec:architecture-training},
+these sum successful inner-candidate and final-refit durations, including
+inner validation, across the three traces. They are not elapsed wall time,
+energy, deployment cost or production latency. Different executed epochs and
+selected contexts can contribute to the S1--S2 order; input width alone does
+not explain it. The measured training workload and local model consolidation
+coexist with the accuracy penalties above, without establishing production
+savings or an architecture-independent efficiency ranking.
 
 \section{Cross-Dataset Synthesis}
 \label{sec:cross-dataset-synthesis}
 
-The source summaries in Table~\ref{tab:cross-study-synthesis} preserve the
-distinct evidential roles defined in Section~4.9. They use the frozen
-equal-environment Bitbrains and equal-temporal-block Materna summaries,
-without averaging either with TimeTrack. Comparisons are descriptive,
-considering direction, magnitude and frozen classifications (Section~5), not
-a global cross-dataset score, cross-source confidence interval or pooled
-statistic. Agreement indicates replication at the displayed source-summary
-level; disagreement marks a conditional boundary. Neither changes the
-within-source estimand or prespecified block weights. The conclusions
-introduce no ranking, cross-source uncertainty calculation or new global
-effect estimate.
+Table~\ref{tab:cross-study-synthesis} retains frozen TimeTrack,
+equal-environment Bitbrains and equal-temporal-block Materna summaries under
+Section~\ref{sec:replication-design}, without a global score.
+The post-hoc evidence in Sections~\ref{sec:results-rq1}--\ref{sec:results-rq2}
+qualifies their interpretation; agreement concerns operational directions,
+not independent replication of a sharing mechanism.
 
 \input{tables/cross_study_synthesis}
 
 \subsection{TimeTrack}
 
-TimeTrack established the initial boundary between access to additional
-resource histories and sharing a predictive representation. For S2 versus S1,
-the contextual effect was mixed and mostly weak: memory was the sole positive
-resource-overall gain at $+0.86\%$, while CPU, throughput, and disk write were
-negative. This development result did not support a broad contextual advantage
-and instead motivated resource-specific external evaluation.
-
-Holding the all-resource input scope fixed, M1 did not improve broadly on S2.
-The small positive CPU gain was an exception, while throughput and disk write
-were negative and memory degraded by $-18.48\%$. The complete M1-versus-S1
-comparison was negative for all four resources. TimeTrack therefore supplied
-the initial evidence that having cross-resource information and learning one
-shared representation are empirically distinct design choices. Its role is
-framework development rather than independent confirmation; the external and
-temporal results below test whether those directional boundaries persist.
+TimeTrack's small positive S2:S1 memory and M1:S2 CPU estimates vary across
+seeds. Ridge reverses the contextual memory direction; its throughput penalty
+is concentrated in one machine/fold (Section~\ref{sec:results-rq1}).
+This is development evidence, not independent external confirmation.
 
 \subsection{Bitbrains External Confirmation}
 
-The frozen Bitbrains synthesis assigns equal weight to fastStorage and Rnd.
-The external evidence did not establish a universal contextual benefit:
-memory and disk write improved on average for S2 versus S1,
-whereas CPU and throughput did not. The separate environment results in
-Section~\ref{sec:results-rq1} further show that the direction was not invariant
-between fastStorage and Rnd.
-
-Representation sharing produced a more consistent external pattern:
-M1-versus-S2 and M1-versus-S1 gains were negative for all four resources.
-These summaries confirm that
-the evaluated shared-LSTM representation did not convert all-resource input
-access into broad external gains. They also retain the distinction between a
-mixed contextual-input result and a consistently unfavourable sharing result,
-rather than reducing both comparisons to one multivariate-model conclusion.
+Memory has favourable LSTM/Ridge contextual point agreement in both external
+environments, whereas throughput reverses direction between families in each.
+Their equal-environment summary must not erase these block-specific differences.
 
 \subsection{Materna Temporal Replication}
 
-The frozen Materna synthesis gives T1, T2, and T3 equal weight while preserving
-their status as consecutive dependent blocks. For S2 versus S1, memory again
-provided the clearest contextual
-benefit, throughput was only weakly positive, and CPU and disk write were
-negative. Together with the sign and classification changes documented in
-Section~\ref{sec:results-rq4}, these values confirm that the contextual effect
-depends on both resource and temporal block.
-
-M1-versus-S2 and M1-versus-S1 gains were negative for all four resources.
-Materna therefore replicated the negative
-shared-representation and complete-system results while also confirming
-temporal heterogeneity in the contextual effect. This conclusion concerns the
-prespecified equal-block synthesis; it neither treats the three traces as
-independent datasets nor averages their prediction rows.
+LSTM/Ridge memory gains agree favourably in T2/T3, but T1's near-zero,
+seed-variable LSTM estimate contrasts with positive Ridge gain. Other resource
+directions depend on block and family. These consecutive blocks retain the
+same selected VM identifiers; their dependence and the T1/T3 disk-write
+magnitude qualifications (Section~\ref{sec:results-rq2}) preclude independent
+replication or uniformly severe VM-degradation claims.
 
 \subsection{Generalisation Boundaries}
 
-\paragraph{Cross-resource context.}
-Across the evaluated sources, cross-resource context was selective. It was not
-universally beneficial. S2 versus S1 changed direction across resources,
-Bitbrains environments, and Materna blocks. Memory supplied the strongest
-repeated positive contextual result: its primary gain was positive in
-TimeTrack, fastStorage, Rnd, Materna T2, and Materna T3. Materna T1 was the
-exception at $-0.02\%$ before rounding, an effectively neutral negative value
-under the frozen classification. This pattern strengthens a resource-,
-environment-, and time-dependent benefit boundary. It does not establish
-memory as universally improved, nor does it imply that cross-resource inputs
-are generally harmful.
+\paragraph{Contextual inputs.}
+External memory recurs favourably, but cross-family reversals and seed-variable
+small effects require resource-, environment- and family-specific validation.
 
 \paragraph{Shared representation.}
-The evaluated M1 representation did not reliably turn access to all resource
-histories into predictive gains. Relative to S2, throughput, memory, and disk
-write were negative in TimeTrack, both Bitbrains environments, and all three
-Materna blocks. CPU contained limited positive exceptions, but its direction
-and classification were not stable. This repeated contrast strengthens the
-boundary between supplying cross-resource information to separate target
-models and sharing the learned representation itself. The conclusion is
-specific to the controlled M1 shared-LSTM design; it does not assert that all
-multi-task or shared-representation architectures must behave similarly.
+Both separate controls retain adverse throughput, memory and disk-write
+points. Median MAE ratios and win rates retain the adverse typical-cell
+direction despite small positive CPU MacroMAE gains. Capacity and selection
+are incomplete explanations, not eliminated causal factors
+(Section~\ref{sec:results-rq2}).
 
-\paragraph{Complete joint system.}
-M1 did not broadly outperform the local S1 baseline. Its disk-write gains
-relative to S1 were negative in TimeTrack, fastStorage, Rnd, T1, T2, and T3.
-Their frozen descriptive six-block arithmetic mean is $-20.18\%$
-($-20.178231\%$ before rounding). This quantity is not a pooled effect,
-confidence-weighted estimate, or mean of independent datasets; it is reported
-only as the prespecified descriptive summary of six displayed blocks. More
-broadly, every resource--block M1-versus-S1 gain in
-Figure~\ref{fig:primary-gains} was negative except Materna T2 CPU. The repeated
-pattern therefore strengthens the conclusion that the complete joint system
-underperformed its local-resource baseline within the evaluated design.
-
-The accuracy boundary coexists with a practically meaningful efficiency gain.
-As reported in Section~\ref{sec:results-efficiency}, M1 uses approximately
-$74.5\%$ fewer parameters and $75\%$ fewer models than S2 in the five-horizon
-external instantiation. Compactness therefore improved substantially, but it
-did not translate into broadly improved forecasting across the evaluated
-sources and temporal blocks.
-
-Taken together, the development, external, and temporal evidence strengthens
-the three frozen information-sharing boundaries and supports the study as a
-multi-dataset temporal boundary analysis. Its population scope remains the
-eligible dynamic multi-resource VMs defined in Section~4.10. In particular,
-the Bitbrains and Materna cohorts exclude VMs lacking nondegenerate
-four-resource training variability across required scaler-fit partitions, and
-the Materna blocks remain dependent observations from one source. The synthesis
-therefore does not claim unrestricted generalisation to all cloud systems,
-multivariate forecasters, or shared architectures.
+\paragraph{Complete joint system and consolidation.}
+M1:S1 gains are negative except Materna T2 CPU. Local model counts and worker
+fit-hours describe a consolidation/workload trade-off, not production benefit
+(Section~\ref{sec:results-efficiency}). Population, model-family, seed and
+persistence limits are assessed in Section~\ref{sec:threats}; the controls
+neither change the endpoints nor extend evidence to excluded VMs or untested
+shared architectures.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -1373,123 +1322,87 @@ multivariate forecasters, or shared architectures.
 \subsection{When Cross-Resource Context Helps}
 \label{sec:discussion-context}
 
-Section~\ref{sec:results-rq1} motivates validating contextual inputs per
-target, environment and time rather than assuming that additional telemetry
-helps. The practical question is whether other histories improve the chosen
-target in its operating context, not which resource should always receive them.
+Cross-family agreement for external memory, TimeTrack's reversal and T1's
+seed-variable estimate support selective contextual value, not a universal
+memory benefit (Section~\ref{sec:results-rq1}). Small seed-variable effects
+cannot establish stable improvements or temporal regimes.
 
-MMRP's univariate/multivariate single-target results likewise do not uniformly
-favour multivariate inputs \citep{Tripathi2025MMRP}. This is a meaningful
-precedent for the contextual comparison, although its reported feature and
-selection details do not establish equivalence to our matched protocol.
-Resource-forecasting and transfer experiments also make the evaluation
-environment an explicit design consideration \citep{Rossi2025CloudUncertainty}.
+This agrees with MMRP's non-uniform contextual gains \citep{Tripathi2025MMRP}
+and the relevance of environment-specific evaluation
+\citep{Rossi2025CloudUncertainty}. TimeTrack correlations
+\citep{Meliani2025TimeTrack} motivate inputs, not conditional predictive value
+or causal resource coupling.
 
-TimeTrack's contemporaneous associations \citep{Meliani2025TimeTrack}
-motivate candidate inputs but do not establish incremental predictive
-information conditional on the target's own history. The comparisons neither
-establish causal resource coupling nor explain observed directions through
-intrinsic memory behaviour, throughput noise or disk-write sparsity; these
-explanations require additional measurements.
+The concentrated Ridge throughput penalty in Section~\ref{sec:results-rq1}
+shows why a large aggregate loss must not be generalised to typical-machine
+failure; the saved-artifact checks demonstrated no implementation defect.
 
-\subsection{Shared Representation and Negative Transfer}
+\subsection{Shared Representation and Adverse Transfer}
 \label{sec:discussion-sharing}
 
-Without independent all-input S2 models, the complete M1-versus-S1 comparison
-changes input scope and representation sharing together. S2 is therefore an
-important intermediate comparator, making contextual-input outcomes separately
-observable from the implemented sharing transition under the matched
-operational contrasts (Section~\ref{sec:results-rq2}).
+The separate sensitivity controls retain adverse throughput, memory and
+disk-write points across all six blocks (Section~\ref{sec:results-rq2}).
+Context selection and aggregate capacity contribute to magnitudes but do not
+suffice to explain the pattern.
 
-Multi-task learning permits useful inductive transfer
-\citep{Caruana1997Multitask}, but task-grouping research evaluates which
-combinations benefit \citep{Standley2020TaskGrouping,Fifty2021TaskGroupings}.
-Forecasting studies already examine negative transfer and selective sharing
-\citep{Nikentari2022NARMAXLSTM,Nochumsohn2025MTLinear}; our contribution is a
-scoped runtime-resource comparison, not discovery of the phenomenon.
+Direction need not imply uniform severity. Materna T1/T3 disk-write median
+ratios are about $1.025/1.035$, despite much larger tail-sensitive MacroMAE penalties.
+Direction is broadly adverse but absolute-error magnitude concentrated,
+not equally severe in every VM (Section~\ref{sec:results-rq2}).
 
-The observed M1 degradation is operationally consistent with adverse transfer,
-but the experiment does not identify the mechanism. Aggregate capacity,
-model count, joint optimisation and common versus target-specific context
-selection also differ between M1 and S2. These are matched operational
-contrasts, not a parameter-matched causal test of sharing alone.
-Gradient conflict, representation
-interference, capacity competition and task covariance were not measured.
-Multi-objective and gradient-aware approaches offer alternative training
-designs \citep{Sener2018MultiObjective,Yu2020GradientSurgery}; their existence
-does not diagnose our models. M1 is deliberately a conventional shared-LSTM
-formulation. Its repeated adverse outcomes justify testing a common
-representation before adopting it, not rejecting multi-task forecasting or
-asserting that separate models are always preferable.
+The outcome is operationally consistent with adverse transfer, not a uniquely
+identified sharing mechanism. Useful task-dependent transfer is established
+\citep{Caruana1997Multitask,Standley2020TaskGrouping,Fifty2021TaskGroupings},
+including in forecasting \citep{Nikentari2022NARMAXLSTM,Nochumsohn2025MTLinear}.
+Gradient conflict, representation interference and capacity competition were
+not measured. Nominal loss weights do not establish realised contributions
+(Section~\ref{sec:m1}); architecture, optimisation and selection remain coupled.
+Multi-objective or gradient-aware designs
+\citep{Sener2018MultiObjective,Yu2020GradientSurgery} are alternatives, not
+diagnoses or demonstrated remedies for these models.
 
 \subsection{Implications for Runtime and Cloud Software Systems}
 \label{sec:discussion-systems}
 
-Monitoring and forecasting inform software adaptation and resource management
-\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. Here, telemetry
-selection and cross-target modelling should be separate decisions: additional
-channels require validation, and a target benefiting from context may still
-favour independently fitted prediction.
+Forecasting supports adaptation \citep{Taherizadeh2018Monitoring,Bauer2020SelfAware},
+but adding telemetry and consolidating predictors require separate resource-
+and horizon-specific validation on future-only support, including persistence
+(Section~\ref{sec:results-persistence}). A contextual benefit does not imply a
+sharing benefit. Controller outcomes depend on policy and platform
+\citep{Qu2018Autoscaling}; no autoscaler, scheduler or controller was deployed.
+Production latency, energy, monetary savings, SLA improvements and controller
+benefits were not measured.
 
-Evaluate local, contextual-independent and shared formulations separately
-rather than treating ``multivariate'' as one category. Assess intended
-resources and horizons under future-only validation, retaining environment-
-and time-specific results. Relative gains do not establish absolute skill
-(Section~\ref{sec:results-persistence}). This process neither prescribes one
-architecture for every resource nor replaces system-specific validation.
-
-Forecast-design evidence remains distinct from operational effectiveness.
-Autoscaling research places prediction within a wider control loop
-\citep{Qu2018Autoscaling}. We deployed no autoscaler, scheduler or controller
-and measured no SLA improvement, monetary saving, energy reduction,
-capacity-planning benefit or incident prevention. Those outcomes require
-separate evaluation of forecasts together with decision policies and their
-operating constraints.
-
-\subsection{Accuracy-Efficiency Trade-Off}
+\subsection{Accuracy-Consolidation Trade-Off}
 \label{sec:discussion-efficiency}
 
-Table~\ref{tab:efficiency} shows substantial consolidation: in the five-horizon
-external instantiation, M1 uses approximately $74.5\%$ fewer parameters and
-$75\%$ fewer models than S2, alongside lower observed Materna fitting workload.
-Section~\ref{sec:results-efficiency} nevertheless records co-occurring accuracy
-losses. Consolidation should therefore be evaluated as a trade-off, not a free
-accuracy gain. Joint consideration of predictive quality and computational
-requirements is established in task grouping and software-service forecasting
-\citep{Standley2020TaskGrouping,Syu2017DynamicQoS}.
+The local H64 model/parameter reductions and lower Materna worker fit-hours
+coexist with accuracy losses (Section~\ref{sec:results-efficiency}).
+H129 retains consolidation but not H64's parameter reduction. Compactness is
+therefore a trade-off, not a free predictive gain. Joint accuracy/computation
+assessment follows task-grouping and service-forecasting research
+\citep{Standley2020TaskGrouping,Syu2017DynamicQoS}; deployment still requires
+platform measurements and resource-specific error tolerances.
 
-Counts and fit-hours characterise this implementation and workload, not
-inference latency, deployed RAM consumption, energy or monetary cost.
-Parameter reductions need not yield proportionate savings. Choosing a compact
-model requires resource-specific error tolerances and direct measurements on
-the intended platform; model count alone cannot establish a production saving.
+Per-entity consolidation may still be attractive where modest target-specific
+accuracy penalties are acceptable. This requires distinguishing typical-cell
+magnitude from tail-sensitive MacroMAE penalties and checking adverse tails,
+not recommending M1 universally or treating concentrated excess as irrelevant.
 
 \subsection{Applicability and Generalisation Limits}
 \label{sec:discussion-applicability}
 
-These implications concern four resource semantics and a conventional
-two-layer LSTM, within particular runtime/cloud contexts. The external
-populations are eligible dynamic multi-resource VMs, not unrestricted archive
-samples. Bitbrains and Materna require nondegenerate training IQR across all
-required scale-fit partitions; only 74 of Materna's 398 structurally common
-VMs pass strict all-trace scale eligibility. The executed cohorts contain 35
-selected VMs per Bitbrains environment and 35 shared Materna identifiers.
-Section~\ref{sec:population-restrictions} explains why these findings do not
-automatically extend to excluded idle or resource-constant VMs. Materna
-T1--T3 remain dependent temporal blocks, not three independent datasets.
-
-The results motivate testing selective resource grouping, adaptive sharing and
-hybrid shared/task-specific representations. Task-grouping and gradient-aware
-methods provide concrete candidates
+The population and dependence limits in Sections~\ref{sec:population-restrictions}
+and~\ref{sec:threats-external} bound applicability. Cross-family reversals do not
+select a universal replacement. Selective grouping and adaptive or hybrid
+sharing remain untested alternatives
 \citep{Fifty2021TaskGroupings,Yu2020GradientSurgery,Nochumsohn2025MTLinear}.
-Global forecasting research and runtime foundation-model comparisons also
-motivate testing these alternatives
-\citep{MonteroManso2021GlobalForecasting,DiMenna2026RuntimeForecasting}.
-None of these alternatives, including
-mixture-of-experts methods, was tested here, and none can be assumed to repair
-M1's degradation. Future comparisons should retain independent all-input
-controls and resource-specific assessment while measuring the mechanisms
-they seek to explain.
+Global models remain outside this evaluation
+\citep{MonteroManso2021GlobalForecasting}.
+The same limit applies to foundation forecasters
+\citep{DiMenna2026RuntimeForecasting}. Future comparisons should retain
+independent all-input controls and resource-specific assessment while
+measuring proposed mechanisms.
 
 \section{Threats to Validity}
 \label{sec:threats}
@@ -1497,124 +1410,97 @@ they seek to explain.
 \subsection{Construct Validity}
 \label{sec:threats-construct}
 
-The three arms are not a complete $2\times2$ factorial. S1/S2 differ in input
-dimensionality and parameter count; S2/M1 differ in model count, aggregate
-capacity, optimisation and target-specific versus common context selection.
-The latter is therefore an operational shared-representation contrast, not a
-parameter-matched causal intervention
-(Section~\ref{sec:decomposition}). Its interpretation includes these
-implementation differences, rather than attributing every change to shared
-parameters alone.
+The three formulations are not a complete $2\times2$ design. Original
+capacity/context differences are addressed separately, not jointly, by the
+post-hoc controls (Section~\ref{sec:posthoc-controls}). H129's fresh selection
+and H64-aligned common-S2 contexts leave residual differences; parameter-count
+proximity is not architectural, task-capacity or optimisation equivalence.
 
-CPU utilisation, throughput, memory usage and disk-write activity are semantic
-mappings across datasets. Source definitions and native units differ, so the
-mapping does not establish perfect measurement equivalence
-(Section~\ref{sec:preprocessing}). Primary comparisons use MacroMAE-based
-gains; RMSE, $R^2$, NMAE and persistence supply complementary diagnostics.
-Metric choice may change apparent rankings \citep{Hyndman2006Accuracy}.
-Accordingly, the reported accuracy boundary concerns the specified measures,
-not every possible forecasting objective.
+CPU, throughput, memory and disk-write mappings have source-specific
+definitions and native units, not perfect measurement equivalence.
+MacroMAE gains describe the specified error estimand; RMSE, $R^2$, native
+NMAE and persistence provide complementary diagnostics. Metric choice can
+alter rankings \citep{Hyndman2006Accuracy}. Scaled-space training and selection
+objectives are distinct from native-unit evaluation
+(Sections~\ref{sec:model-selection}--\ref{sec:evaluation}), and a relative
+formulation gain need not establish useful absolute skill.
 
 \subsection{Internal Validity}
 \label{sec:threats-internal}
 
-Temporal evaluation design affects forecasting performance estimation
+The chronology, purging and training-only preprocessing in
+Section~\ref{sec:leakage-control} constrain leakage
 \citep{Cerqueira2020Evaluation,Hyndman2021Forecasting}.
-Section~\ref{sec:leakage-control} specifies chronological origins,
-gap-bounded legal segments, expanding outer folds and maximum-horizon purging.
-Inner validation remains inside outer-training support, scalers use training
-data only, and outer tests do not select contexts or epochs. Matched support
-across S1/S2/M1 reduces differences attributable to evaluation samples.
-External and temporal criteria were fixed prospectively. These controls cannot
-exclude every implementation or data-provenance error.
+Matched support and provenance cannot exclude all implementation/data errors.
+Original external criteria were prospective; reviewer-motivated controls are
+post-hoc, not prespecified confirmation.
 
-TimeTrack's large gap is handled through segmentation: windows and targets do
-not cross it, but available contiguous support is reduced.
-Three seeds limit dependence on one initialisation, while residual neural
-optimisation stochasticity remains. Selected contexts and epochs may interact
-with formulation. The models are not capacity matched, hyperparameter search
-is intentionally limited, and the plain LSTM may favour or disfavour particular
-sharing patterns (Sections~\ref{sec:architecture-training}
-and~\ref{sec:model-selection}).
+Only three neural seeds were recorded. Existing diagnostics identify 9/24
+S2:S1 and 4/24 M1:S2 block/resource summaries whose gains change sign across
+those seeds (Supplementary Table~S2). These counts do not establish a general noise floor or stability
+under arbitrary retraining. Contexts, epochs and optimisation can interact
+with formulation, and missing gradient/clipping histories limit mechanism
+attribution even after the separate controls.
+
+Ridge is deterministic but restricted to a finite five-alpha grid and frozen
+H64-M1 contexts, which were selected for the LSTM design rather than optimised
+for Ridge. Boundary alpha selections do not establish performance under a
+wider regularisation search. Its selection uses native-unit validation MAE,
+unlike the LSTM context score, so cross-family disagreement is conditional on
+these implemented designs, not an architecture-only intervention.
 
 \subsection{External Validity}
 \label{sec:threats-external}
 
-TimeTrack, Bitbrains fastStorage and Rnd, and Materna T1--T3 represent
-particular runtime/cloud contexts, not all workloads. Scale eligibility
-retains 596 of 916 structurally eligible fastStorage VMs, 272 of 416 Rnd VMs,
-and 74 of 398 structurally common Materna VMs. The strict rule requires
-nondegenerate training IQR across every required resource/scaler partition,
-including every Materna block. Only 35 VMs are selected per external
-environment or cohort (Section~\ref{sec:population-restrictions}).
-Deterministic hash selection is reproducible but is not probability sampling.
-Conclusions therefore concern eligible dynamic multi-resource VM populations,
-not every archived VM, particularly excluded idle or resource-constant cases.
+The sources represent particular runtime/cloud contexts, not probability
+samples of all VMs. Excluded workloads may differ
+(Section~\ref{sec:population-restrictions}). Materna's shared source and VM
+identifiers make temporal agreement repeated-within-source evidence, not
+independent-dataset replication.
 
-Materna's consecutive blocks share the source and selected VM population,
-providing repeated-within-source evidence rather than independent datasets
-(Section~\ref{sec:replication-design}).
-
-Only the controlled two-layer LSTM formulations are evaluated, including the
-conventional shared M1 design. This does not establish
-behaviour for Transformers, mixture-of-experts, selective task grouping,
-gradient surgery, adaptive sharing or foundation forecasters. Only four
-resource semantics are evaluated. Findings do not extend directly to latency,
-energy, queue lengths, request rates, application QoS or SLA outcomes.
+The evaluated model families comprise the conventional LSTM formulations,
+their width/context controls and the matched-context Ridge pair. Reversals
+across these designs preclude model-independent contextual claims.
+Transformers, mixture-of-experts, selective grouping, adaptive sharing,
+gradient surgery and foundation forecasters were not tested. Four resource
+semantics do not establish accuracy for application latency, queue lengths,
+QoS or downstream SLA outcomes.
 
 \subsection{Conclusion Validity}
 \label{sec:threats-conclusion}
 
-MAEs are averaged over seeds within matched cells
-before equal weighting of VM--fold cells and horizons
-(Section~\ref{sec:evaluation}). External uncertainty uses paired VM-cluster
-bootstrap intervals. These intervals condition on the evaluated cohorts and
-protocol; they do not establish universal population inference.
-Conclusions consider magnitude and frozen consistency criteria rather than
-one aggregate number. Nevertheless, multiple resource/horizon comparisons
-create many opportunities for variation. Intervals and classifications are
-not presented as classical null-hypothesis significance claims.
+MacroMAE weights seed-averaged entity--fold cells and horizons equally, but
+large native errors affect it differently from median ratios and win rates.
+The direction/magnitude distinction in Section~\ref{sec:results-rq2} precludes
+uniform VM-level interpretations; diagnostics do not replace primary estimates.
 
-Persistence distinguishes gains over another learned formulation from absolute
-forecasting skill (Section~\ref{sec:results-persistence}). Bitbrains and
-Materna syntheses are descriptive equal-environment and equal-temporal-block
-summaries, respectively. The six-block disk-write mean in
-Section~\ref{sec:cross-dataset-synthesis} is likewise descriptive only, not an
-effect estimated from independent datasets. No cross-dataset inferential
-meta-analysis is performed. This is formulation- and population-bounded
-evidence, not a universal statistical verdict on resource sharing.
+Paired VM-cluster bootstrap intervals condition on the evaluated external
+cohorts and protocol. They are separate from frozen consistency classes and
+point signs, not classical significance claims or intervals retrospectively
+assigned to every post-hoc control. Overlapping expanding folds, multiple
+horizons, repeated seeds and dependent Materna blocks are not IID replicates.
+No six-block global effect, independent-dataset meta-analysis or IID
+interpretation is used to strengthen these conclusions.
+
+Persistence failures in Section~\ref{sec:results-persistence} limit absolute
+skill claims. Neither relative gains nor descriptive source summaries support
+a universal verdict beyond the evaluated formulations and populations.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-Multi-metric runtime forecasting involves two distinct decisions: whether a
-predictor receives other resources' histories, and whether resource targets
-share a learned predictive representation. S2 versus S1 evaluates contextual
-information, M1 versus S2 implemented representation sharing, and M1 versus S1 the complete
-joint-system change. These operational contrasts were examined through
-TimeTrack development, Bitbrains external environments and Materna dependent
-temporal replication.
-
-Cross-resource context was selective, varying with resource, environment and
-time. Memory showed the clearest repeated contextual benefit, but not in every
-block. For the evaluated M1 shared-LSTM formulation, throughput, memory and disk write had
-adverse M1-versus-S2 effects across all six evidence blocks; CPU contained
-limited exceptions. The complete M1 system generally did not outperform local
-S1 forecasting, with Materna T2 CPU the exception. These accuracy losses
-coexisted with substantial consolidation: in the five-horizon external instantiation, M1 used
-approximately $74.5\%$ fewer parameters and $75\%$ fewer models than S2. The
-result is an accuracy--efficiency boundary for the evaluated implementation,
-not a general rejection of shared modelling.
-
-Cross-resource histories should be validated per target, and shared
-representations assessed separately against independently
-trained contextual models. The scope is the four evaluated resource semantics
-and conventional shared-LSTM formulation, with external conclusions restricted
-to eligible dynamic VM populations. The evidence does not establish
-performance for all cloud systems, alternative multi-task architectures or
-production controllers. Future work should test whether selective or adaptive
-sharing can retain consolidation benefits while avoiding the adverse transfer
-observed here.
+Contextual input and representation sharing require separate design decisions.
+External memory recurs favourably, but Ridge and seed sensitivity bound
+contextual value by model and environment. The evaluated shared-LSTM model
+generally loses throughput, memory and disk-write accuracy while consolidating
+per-entity models. Adverse point directions survive separate post-hoc common-context
+and H129 approximate-capacity controls, without identifying sharing alone as
+the mechanism. Typical-cell penalties can be more modest than tail-sensitive
+MacroMAE suggests: per-entity consolidation may be attractive when
+target-specific accuracy penalties are acceptable, provided adverse tails
+are assessed. These findings do not universally reject multi-task forecasting.
+Validate contextual input and consolidation by resource and design, within
+the eligible population and against absolute persistence skill.
 
 \section*{Data availability}
 

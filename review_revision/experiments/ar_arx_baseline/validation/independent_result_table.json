@@ -1,0 +1,201 @@
+{
+  "aggregation": "independent math.fsum equal-entity-fold per-lead, then equal horizons",
+  "persistence": "mean defined per-cell skills then equal horizons; not ratio of macroMAEs",
+  "rows": [
+    {
+      "ARX_MacroMAE": 2.105772682940576,
+      "AR_MacroMAE": 1.8471098062145344,
+      "block": "TimeTrack",
+      "frozen_gain": -3.3130493929567058,
+      "gain": -14.003654566489756,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 269.70943563886203,
+      "AR_MacroMAE": 28.739891294334274,
+      "block": "TimeTrack",
+      "frozen_gain": -0.2427519992283133,
+      "gain": -838.4497417776664,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 352294281.7206026,
+      "AR_MacroMAE": 285921753.3498441,
+      "block": "TimeTrack",
+      "frozen_gain": 0.8593891410653923,
+      "gain": -23.2135287340475,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 3349727.299316465,
+      "AR_MacroMAE": 3113844.5075335815,
+      "block": "TimeTrack",
+      "frozen_gain": -0.4923194366636362,
+      "gain": -7.575291290627799,
+      "resource": "DISK_WRITE"
+    },
+    {
+      "ARX_MacroMAE": 0.9429338209109526,
+      "AR_MacroMAE": 0.9034903927435438,
+      "block": "fastStorage",
+      "frozen_gain": -3.1985192105105176,
+      "gain": -4.365672118287238,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 218.14694967051588,
+      "AR_MacroMAE": 180.66608227934552,
+      "block": "fastStorage",
+      "frozen_gain": 0.0127305836584149,
+      "gain": -20.745934664824095,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 80479.89983210196,
+      "AR_MacroMAE": 82862.81206834453,
+      "block": "fastStorage",
+      "frozen_gain": 2.4499853710353565,
+      "gain": 2.875731799057416,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 12.347159466046701,
+      "AR_MacroMAE": 12.477961722557149,
+      "block": "fastStorage",
+      "frozen_gain": 2.68920705730721,
+      "gain": 1.0482662106102527,
+      "resource": "DISK_WRITE"
+    },
+    {
+      "ARX_MacroMAE": 1.6568971522853122,
+      "AR_MacroMAE": 1.6605980181296356,
+      "block": "Rnd",
+      "frozen_gain": 1.4128665430650702,
+      "gain": 0.22286343858772908,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 296.1247176919184,
+      "AR_MacroMAE": 297.21215399220074,
+      "block": "Rnd",
+      "frozen_gain": -7.21449131368454,
+      "gain": 0.3658788127186939,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 171467.31121818992,
+      "AR_MacroMAE": 179094.050028654,
+      "block": "Rnd",
+      "frozen_gain": 1.673082654319145,
+      "gain": 4.258510435854143,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 113.1881171697564,
+      "AR_MacroMAE": 115.12621852689003,
+      "block": "Rnd",
+      "frozen_gain": 0.1603998406175479,
+      "gain": 1.6834578447314763,
+      "resource": "DISK_WRITE"
+    },
+    {
+      "ARX_MacroMAE": 0.9704842769504772,
+      "AR_MacroMAE": 1.035421980753819,
+      "block": "Materna-T1",
+      "frozen_gain": -4.317957952266449,
+      "gain": 6.271617273960623,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 274.3358998491976,
+      "AR_MacroMAE": 240.85603434706098,
+      "block": "Materna-T1",
+      "frozen_gain": 0.9869354261349662,
+      "gain": -13.900364004953204,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 253935.1732057022,
+      "AR_MacroMAE": 273701.2081508721,
+      "block": "Materna-T1",
+      "frozen_gain": -0.0196923063556929,
+      "gain": 7.221756556614937,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 287.14061342853137,
+      "AR_MacroMAE": 293.1402195247717,
+      "block": "Materna-T1",
+      "frozen_gain": -6.699661701912392,
+      "gain": 2.0466676684511795,
+      "resource": "DISK_WRITE"
+    },
+    {
+      "ARX_MacroMAE": 1.0378375927901549,
+      "AR_MacroMAE": 1.1489173923190075,
+      "block": "Materna-T2",
+      "frozen_gain": 4.207624465636621,
+      "gain": 9.66821464027505,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 365.12142776454994,
+      "AR_MacroMAE": 368.4785648314325,
+      "block": "Materna-T2",
+      "frozen_gain": 0.2943153448863148,
+      "gain": 0.9110806943189067,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 266728.27328184486,
+      "AR_MacroMAE": 285176.34738059144,
+      "block": "Materna-T2",
+      "frozen_gain": 3.948170786252221,
+      "gain": 6.469005676030383,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 197.65879185164528,
+      "AR_MacroMAE": 219.79870923438094,
+      "block": "Materna-T2",
+      "frozen_gain": -1.120181473536967,
+      "gain": 10.072815013270576,
+      "resource": "DISK_WRITE"
+    },
+    {
+      "ARX_MacroMAE": 1.100090133684843,
+      "AR_MacroMAE": 1.1245350768819666,
+      "block": "Materna-T3",
+      "frozen_gain": -2.787547559692435,
+      "gain": 2.173782187826715,
+      "resource": "CPU"
+    },
+    {
+      "ARX_MacroMAE": 370.5567965692277,
+      "AR_MacroMAE": 362.7617574674089,
+      "block": "Materna-T3",
+      "frozen_gain": 0.0447658987164556,
+      "gain": -2.1488039853592,
+      "resource": "THROUGHPUT"
+    },
+    {
+      "ARX_MacroMAE": 286013.070342284,
+      "AR_MacroMAE": 291292.53703050147,
+      "block": "Materna-T3",
+      "frozen_gain": 3.089001588397735,
+      "gain": 1.8124277202696277,
+      "resource": "MEMORY"
+    },
+    {
+      "ARX_MacroMAE": 80.53072967138965,
+      "AR_MacroMAE": 79.97828738349585,
+      "block": "Materna-T3",
+      "frozen_gain": 1.9071683348777215,
+      "gain": -0.690740332116436,
+      "resource": "DISK_WRITE"
+    }
+  ],
+  "rows_checked": 24,
+  "status": "PASS",
+  "timestamp": "2026-10-23T12:21:44.843145+00:00"
+}

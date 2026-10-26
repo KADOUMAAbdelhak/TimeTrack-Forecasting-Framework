@@ -1,0 +1,148 @@
+{
+  "files": [
+    {
+      "path": "review_revision/stage19i2_portability/ENVIRONMENT.md",
+      "bytes": 2388,
+      "sha256": "24fa0543eb9644fa5648b1002c366b5fd5032ea6bfcd82bd010f9176a37613af"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/README.md",
+      "bytes": 7504,
+      "sha256": "65f2c8577aff1616abb4ad56addff9f18392ab0d534ec1ca0152187647e6ce00"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/STAGE19I2_REPRODUCIBILITY_PORTABILITY_REPORT.md",
+      "bytes": 9354,
+      "sha256": "f80c31f619fd49a83a563770d045178730f7fbcf0eb8848d9c04de4f0ac26288"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/build_source_manifest.py",
+      "bytes": 2073,
+      "sha256": "667cfc45eed1cdf491039e0c732e2d0f17ea7f386a3bae03e7dcadbbd1b273c9"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/check_preservation.py",
+      "bytes": 3211,
+      "sha256": "4e3851769c3193efa2fba77ea2c8773cb582c100f2872b741a16085c3fbf3caa"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/candidate_commit_delta.jsonl",
+      "bytes": 3052457,
+      "sha256": "9bbb3ca4c2b7fb825941ff59ae24253b92b462be25e10f8ceb1548b6991f99e5"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/candidate_commit_paths.txt",
+      "bytes": 1223528,
+      "sha256": "ab679e1033213b111b2d34487c81d688d9bbf56697fe053f9151968cfd778c4c"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/candidate_plan.json",
+      "bytes": 1192,
+      "sha256": "dbdeedd1f9a83dccb8e588b963c3bd1fe3a49e22e2eb5fbb58a26c5e92f17f12"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/candidate_requires_ignore_override.txt",
+      "bytes": 1515,
+      "sha256": "412ecb317f47623c077ab73e9e76f8fd6d525e0935bfaee027be0489aa230e14"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/candidate_tree_paths.txt",
+      "bytes": 1386476,
+      "sha256": "9b4ae0727946f99899bd5aba98d06a7a35b52333a8967b77c8a56e507901f30a"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/exclusion_summary.json",
+      "bytes": 740,
+      "sha256": "22c6d977c7fd51ec6237becfd15bb061fc956c71c59fe6e8cff37c4b010e28e1"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/checkpoint_candidate/files_excluded.jsonl",
+      "bytes": 119212955,
+      "sha256": "5a017044cb119aeb73b64c18490d4cc29c6f1b3ded3e4517fd4bce969ae08a50"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/environment.json",
+      "bytes": 417,
+      "sha256": "6b9d1897063135ec4e9f6a3262770a275f4281b15f84362a7c02c5436c8bc1fe"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/finalise.py",
+      "bytes": 3835,
+      "sha256": "cc3163c9a8ed63ddca743b1e658080f6fb4cc2fd5b081242bda47c634b31bcd4"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/preservation_after.json",
+      "bytes": 271475,
+      "sha256": "535b730f80a82432b6cd22c5a2e40af20b0bdd7b8062330b124fde9de61d1654"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/preservation_before.json",
+      "bytes": 271476,
+      "sha256": "d5a04eb83b1b93ab3fd7f06a179ade6b9b973c1811df88862834de59668a4a1a"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/refresh_checkpoint.py",
+      "bytes": 5454,
+      "sha256": "c294efe13b1832640a07e74e884b1dd9986232f9d5d3023fbbf5faf5ab595986"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/replay_derived.py",
+      "bytes": 11564,
+      "sha256": "6bf4c089dbd2107a49c0f1a9f0e074aed505e46b9f0513a50fd1776add42b289"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/replay_sources.json",
+      "bytes": 2740,
+      "sha256": "97fe4f8930f00604d2ada85f625dd7ff9b7017467d716b5e2ed875de7d6a5dad"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/requirements-derived.txt",
+      "bytes": 221,
+      "sha256": "6437277a320036e7a1a68ca0fe41afce6caf39dc5edddc6a89403d1998cf868b"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/test_replay.py",
+      "bytes": 8194,
+      "sha256": "73bf9d47a132f584376bd8244ee6fe49e764c92dc7694d75ddae79c734d7e8d2"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/validation/python312_checks.json",
+      "bytes": 2261,
+      "sha256": "e6910d3c7ff3eacec0d6e517df7534b998679d38182975727f6d3882a8431a82"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/validation/python312_tests.txt",
+      "bytes": 2419,
+      "sha256": "aecb16700b59d80f01c7b56dc01c0be18f1eed851735a94f3b1b26c6e2c8ed1e"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/validation/python39_checks.json",
+      "bytes": 2259,
+      "sha256": "0d57de916de753ea11b0e89bd867bf71e212df86ad1016a96eb8eea1de5dce6f"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/validation/python39_tests.txt",
+      "bytes": 1648,
+      "sha256": "9a30c3320c084d4b126de8f49b6c80fbdf639682b439756d43e7fcd2b6980479"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/validation_results.json",
+      "bytes": 2442,
+      "sha256": "bd5b84295c7f496dfba4c3edad7457f5c91416f61e980092bce6a5b536724c05"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/verification.json",
+      "bytes": 1200,
+      "sha256": "2e183861fe3e8c8b64f623f4a7ffe1a16a63b9e2a771920c6c5c5c0867443d97"
+    },
+    {
+      "path": "review_revision/stage19i2_portability/verify_portability.py",
+      "bytes": 2548,
+      "sha256": "2a1800e188837931f1a3faaf688c2b3acf5e7e6721fa42859446065335c9d9ef"
+    }
+  ],
+  "exclusions": [
+    "self-referential output inventory"
+  ],
+  "scope": "Portability code/documentation and validation, not a submission package"
+}

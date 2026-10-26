@@ -1,0 +1,10 @@
+--- before/manuscript/jss/supplementary/final_evidence_supplement.tex
++++ after/manuscript/jss/supplementary/final_evidence_supplement.tex
+@@ -4,6 +4,7 @@
+ \usepackage{stix}
+ \usepackage{booktabs,longtable}
+ \usepackage[hidelinks]{hyperref}
++\hypersetup{pdftitle={Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems}}
+ % The first argument preserves the source decimal; the second is display rounding.
+ \newcommand{\evidencevalue}[2]{#2}
+ \renewcommand{\thetable}{S\arabic{table}}

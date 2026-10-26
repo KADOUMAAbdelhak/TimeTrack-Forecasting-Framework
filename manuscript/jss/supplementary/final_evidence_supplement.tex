@@ -1,0 +1,182 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=20mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{stix}
+\usepackage{booktabs,longtable}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems}}
+% The first argument preserves the source decimal; the second is display rounding.
+\newcommand{\evidencevalue}[2]{#2}
+\renewcommand{\thetable}{S\arabic{table}}
+\setlength{\LTcapwidth}{\textwidth}
+\setlength{\tabcolsep}{4pt}
+\begin{document}
+\begin{center}
+{\Large Supplementary evidence}\par\medskip
+Evaluating Contextual Input and Shared Representation in Multi-Metric
+Runtime Forecasting for Cloud Software Systems
+\end{center}
+
+These post-hoc diagnostic tables accompany the original frozen experiment;
+they do not replace its primary estimates or prespecified classifications.
+All numeric inputs retain the existing result-file decimal strings in the
+LaTeX source; values are rounded to at most six decimal places for display.
+Positive gain means lower candidate MacroMAE. No additional fits, seeds,
+intervals or significance tests are introduced.
+
+\section*{Original sharing comparison: matched-cell robustness}
+In Table~\ref{tab:supp-m1-robustness}, the candidate is M1 and reference S2.
+A matched cell is entity $\times$ outer fold $\times$ forecast lead, with
+MAE first averaged over the three existing seeds. The median uses these
+cell-level MAE ratios, whereas the frozen gain uses MacroMAEs. M1 win
+percentage counts strictly lower cell MAE; exact ties are counted separately.
+All 24 median ratios exceed one and all M1 win percentages are below 50\%.
+Dependent temporal blocks, overlapping folds/leads and existing seeds are
+not IID replicates. These diagnostics describe direction and typical-cell
+magnitude, not an inferential test or a new effect-size threshold.
+
+\small
+\begin{longtable}{@{}lrrrr@{}}
+\caption{Post-hoc matched-cell robustness of the original frozen M1:S2 comparison.}
+\label{tab:supp-m1-robustness}\\
+\toprule
+Block / resource & \shortstack{Frozen gain\\(\%)} & \shortstack{Median\\M1/S2 MAE} & \shortstack{M1 win\\(\%)} & Ties \\
+\midrule
+\endfirsthead
+\multicolumn{5}{l}{Table~\thetable\ (continued)}\\
+\toprule
+Block / resource & \shortstack{Frozen gain\\(\%)} & \shortstack{Median\\M1/S2 MAE} & \shortstack{M1 win\\(\%)} & Ties \\
+\midrule
+\endhead
+\midrule\multicolumn{5}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+TimeTrack / CPU & \evidencevalue{0.4695621549386364}{0.469562} & \evidencevalue{1.0281449325156586}{1.028145} & \evidencevalue{35.35714285714285900}{35.357143} & 0 \\
+TimeTrack / Throughput & \evidencevalue{-0.84008419054778183}{-0.840084} & \evidencevalue{1.0021572826015652}{1.002157} & \evidencevalue{40.35714285714285800}{40.357143} & 0 \\
+TimeTrack / Memory & \evidencevalue{-18.476885757816117}{-18.476886} & \evidencevalue{1.1921353081989436}{1.192135} & \evidencevalue{14.64285714285714400}{14.642857} & 0 \\
+TimeTrack / Disk write & \evidencevalue{-0.79557189915622051}{-0.795572} & \evidencevalue{1.0020995218818003}{1.002100} & \evidencevalue{34.64285714285714200}{34.642857} & 0 \\
+\addlinespace
+fastStorage / CPU & \evidencevalue{0.045047386830640197}{0.045047} & \evidencevalue{1.026297469247722}{1.026297} & \evidencevalue{32.45714285714285700}{32.457143} & 0 \\
+fastStorage / Throughput & \evidencevalue{-27.094151549193931}{-27.094152} & \evidencevalue{1.055817312171516}{1.055817} & \evidencevalue{25.82857142857142900}{25.828571} & 0 \\
+fastStorage / Memory & \evidencevalue{-4.8670612275532292}{-4.867061} & \evidencevalue{1.0126534052340985}{1.012653} & \evidencevalue{23.99999999999999900}{24.000000} & 0 \\
+fastStorage / Disk write & \evidencevalue{-4.0721285576143913}{-4.072129} & \evidencevalue{1.0275156888715695}{1.027516} & \evidencevalue{28.91428571428571500}{28.914286} & 0 \\
+\addlinespace
+Rnd / CPU & \evidencevalue{-16.509940836792648}{-16.509941} & \evidencevalue{1.0490830721810198}{1.049083} & \evidencevalue{24.34285714285714400}{24.342857} & 0 \\
+Rnd / Throughput & \evidencevalue{-14.318986597264496}{-14.318987} & \evidencevalue{1.0152142078683666}{1.015214} & \evidencevalue{32.34285714285714500}{32.342857} & 0 \\
+Rnd / Memory & \evidencevalue{-8.9157372502915564}{-8.915737} & \evidencevalue{1.0251552443406977}{1.025155} & \evidencevalue{23.77142857142857100}{23.771429} & 0 \\
+Rnd / Disk write & \evidencevalue{-5.5512331395008401}{-5.551233} & \evidencevalue{1.0505927943791469}{1.050593} & \evidencevalue{18.28571428571428600}{18.285714} & 0 \\
+\addlinespace
+Materna-T1 / CPU & \evidencevalue{0.88269880087433972}{0.882699} & \evidencevalue{1.0104146649492611}{1.010415} & \evidencevalue{43.54285714285714400}{43.542857} & 0 \\
+Materna-T1 / Throughput & \evidencevalue{-7.3083550996110143}{-7.308355} & \evidencevalue{1.0221278874039845}{1.022128} & \evidencevalue{22.17142857142857200}{22.171429} & 0 \\
+Materna-T1 / Memory & \evidencevalue{-13.218359969887002}{-13.218360} & \evidencevalue{1.0332591436167728}{1.033259} & \evidencevalue{25.25714285714285600}{25.257143} & 0 \\
+Materna-T1 / Disk write & \evidencevalue{-27.457745704458592}{-27.457746} & \evidencevalue{1.0245646480568293}{1.024565} & \evidencevalue{22.51428571428571400}{22.514286} & 0 \\
+\addlinespace
+Materna-T2 / CPU & \evidencevalue{-2.5643630921002254}{-2.564363} & \evidencevalue{1.0207010505516614}{1.020701} & \evidencevalue{38.05714285714285600}{38.057143} & 0 \\
+Materna-T2 / Throughput & \evidencevalue{-8.6927611616674056}{-8.692761} & \evidencevalue{1.0153596247553125}{1.015360} & \evidencevalue{25.94285714285714500}{25.942857} & 0 \\
+Materna-T2 / Memory & \evidencevalue{-9.2668232551241552}{-9.266823} & \evidencevalue{1.0332585626370303}{1.033259} & \evidencevalue{25.82857142857142900}{25.828571} & 0 \\
+Materna-T2 / Disk write & \evidencevalue{-7.8885031127754459}{-7.888503} & \evidencevalue{1.014663915945661}{1.014664} & \evidencevalue{32.22857142857142900}{32.228571} & 0 \\
+\addlinespace
+Materna-T3 / CPU & \evidencevalue{-8.0990154629948368}{-8.099015} & \evidencevalue{1.0208682959281412}{1.020868} & \evidencevalue{34.9714285714285700}{34.971429} & 0 \\
+Materna-T3 / Throughput & \evidencevalue{-7.9142783649457202}{-7.914278} & \evidencevalue{1.0170487376717989}{1.017049} & \evidencevalue{26.17142857142857300}{26.171429} & 0 \\
+Materna-T3 / Memory & \evidencevalue{-8.7025928385511726}{-8.702593} & \evidencevalue{1.0210458498753259}{1.021046} & \evidencevalue{27.65714285714285800}{27.657143} & 0 \\
+Materna-T3 / Disk write & \evidencevalue{-71.295094556450593}{-71.295095} & \evidencevalue{1.0347428909757079}{1.034743} & \evidencevalue{20.79999999999999900}{20.800000} & 0 \\
+\end{longtable}
+\normalsize
+\clearpage
+\section*{Existing-seed sensitivity}
+Table~\ref{tab:supp-seed-sensitivity} retains the existing seed-specific
+MacroMAE gains and their stored range and population standard deviation
+(SD, divisor three), expressed in percentage points (pp). Neither range nor
+SD is a confidence interval or standard error. FLIP denotes both strictly
+positive and strictly negative seed gains; ``stable'' means ``no sign flip
+across the three recorded seeds'', not demonstrated reproducibility under
+arbitrary retraining. Sign stability does not imply magnitude stability:
+Materna T3 M1:S2 disk-write gains are $-54.65\%$, $-71.55\%$ and $-87.84\%$.
+There are 9/24
+FLIP summaries for S2:S1 and 4/24 for M1:S2. No meaningfulness threshold is
+imposed on small effects. Materna T1--T3 are dependent temporal blocks.
+
+\small
+\begin{longtable}{@{}lrrrrrl@{}}
+\caption{Post-hoc sensitivity across the three existing neural seeds.
+Panel A: S2:S1; Panel B: M1:S2. Stable means no sign flip across the three
+recorded seeds; it does not imply magnitude stability.}
+\label{tab:supp-seed-sensitivity}\\
+\toprule
+Block / resource & \shortstack{Seed 0\\gain (\%)} & \shortstack{Seed 1\\gain (\%)} & \shortstack{Seed 2\\gain (\%)} & \shortstack{Range\\(pp)} & \shortstack{SD\\(pp)} & Status \\
+\midrule
+\endfirsthead
+\multicolumn{7}{l}{Table~\thetable\ (continued)}\\
+\toprule
+Block / resource & \shortstack{Seed 0\\gain (\%)} & \shortstack{Seed 1\\gain (\%)} & \shortstack{Seed 2\\gain (\%)} & \shortstack{Range\\(pp)} & \shortstack{SD\\(pp)} & Status \\
+\midrule
+\endhead
+\midrule\multicolumn{7}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{7}{l}{\textbf{Panel A: S2:S1}}\\*
+TimeTrack / CPU & \evidencevalue{-1.9810929323464814}{-1.981093} & \evidencevalue{-2.0005681625273262}{-2.000568} & \evidencevalue{-5.9323578743727925}{-5.932358} & \evidencevalue{3.9512649420263113}{3.951265} & \evidencevalue{1.8580708114974951}{1.858071} & stable \\
+TimeTrack / Throughput & \evidencevalue{-0.4680459388605413}{-0.468046} & \evidencevalue{-0.1884272420802128}{-0.188427} & \evidencevalue{-0.07197811189919362}{-0.071978} & \evidencevalue{0.39606782696134768}{0.396068} & \evidencevalue{0.16620494011341316}{0.166205} & stable \\
+TimeTrack / Memory & \evidencevalue{-0.78569149177209185}{-0.785691} & \evidencevalue{0.89990124133602611}{0.899901} & \evidencevalue{2.433500918714508}{2.433501} & \evidencevalue{3.2191924104865999}{3.219192} & \evidencevalue{1.3147179929169772}{1.314718} & FLIP \\
+TimeTrack / Disk write & \evidencevalue{-0.78817403569266975}{-0.788174} & \evidencevalue{-0.49397716196919511}{-0.493977} & \evidencevalue{-0.1952466143019029}{-0.195247} & \evidencevalue{0.59292742139076682}{0.592927} & \evidencevalue{0.24206396483743495}{0.242064} & stable \\
+\addlinespace
+fastStorage / CPU & \evidencevalue{-4.6531576173947728}{-4.653158} & \evidencevalue{-0.83611138076552816}{-0.836111} & \evidencevalue{-4.1639350487680025}{-4.163935} & \evidencevalue{3.8170462366292446}{3.817046} & \evidencevalue{1.6958639574478678}{1.695864} & stable \\
+fastStorage / Throughput & \evidencevalue{-2.8006383205357426}{-2.800638} & \evidencevalue{-0.0073716072209525658}{-0.007372} & \evidencevalue{2.8472285960608485}{2.847229} & \evidencevalue{5.6478669165965911}{5.647867} & \evidencevalue{2.3057773324093547}{2.305777} & FLIP \\
+fastStorage / Memory & \evidencevalue{2.1662506955103797}{2.166251} & \evidencevalue{2.660079342883932}{2.660079} & \evidencevalue{2.5229751658948141}{2.522975} & \evidencevalue{0.49382864737355225}{0.493829} & \evidencevalue{0.20814435057476355}{0.208144} & stable \\
+fastStorage / Disk write & \evidencevalue{2.420594395691281}{2.420594} & \evidencevalue{2.7035010627914682}{2.703501} & \evidencevalue{2.940147319072818}{2.940147} & \evidencevalue{0.51955292338153702}{0.519553} & \evidencevalue{0.21238666862745512}{0.212387} & stable \\
+\addlinespace
+Rnd / CPU & \evidencevalue{1.9844870475471716}{1.984487} & \evidencevalue{0.39454201830971536}{0.394542} & \evidencevalue{1.8533039420064605}{1.853304} & \evidencevalue{1.5899450292374562}{1.589945} & \evidencevalue{0.72058005594286723}{0.720580} & stable \\
+Rnd / Throughput & \evidencevalue{-5.453062074428944}{-5.453062} & \evidencevalue{-7.5704349159571143}{-7.570435} & \evidencevalue{-8.6184474287412751}{-8.618447} & \evidencevalue{3.1653853543123311}{3.165385} & \evidencevalue{1.3166144469935106}{1.316614} & stable \\
+Rnd / Memory & \evidencevalue{1.7928269425656411}{1.792827} & \evidencevalue{1.6274432221916277}{1.627443} & \evidencevalue{1.599031244357078}{1.599031} & \evidencevalue{0.19379569820856313}{0.193796} & \evidencevalue{0.085450302706287354}{0.085450} & stable \\
+Rnd / Disk write & \evidencevalue{1.6178780548147289}{1.617878} & \evidencevalue{-3.6089596445065721}{-3.608960} & \evidencevalue{2.4078040194268802}{2.407804} & \evidencevalue{6.0167636639334523}{6.016764} & \evidencevalue{2.6696912087822842}{2.669691} & FLIP \\
+\addlinespace
+Materna-T1 / CPU & \evidencevalue{-2.9115216034123366}{-2.911522} & \evidencevalue{-4.5079090867023801}{-4.507909} & \evidencevalue{-5.5250935291749643}{-5.525094} & \evidencevalue{2.6135719257626278}{2.613572} & \evidencevalue{1.0756845571256759}{1.075685} & stable \\
+Materna-T1 / Throughput & \evidencevalue{1.2323449855498241}{1.232345} & \evidencevalue{-0.027270153718635774}{-0.027270} & \evidencevalue{1.739481462094681}{1.739481} & \evidencevalue{1.7667516158133167}{1.766752} & \evidencevalue{0.74275979195427344}{0.742760} & FLIP \\
+Materna-T1 / Memory & \evidencevalue{-0.34644721647241022}{-0.346447} & \evidencevalue{0.51278089479141886}{0.512781} & \evidencevalue{-0.22608648424568978}{-0.226086} & \evidencevalue{0.85922811126382914}{0.859228} & \evidencevalue{0.37986615433060772}{0.379866} & FLIP \\
+Materna-T1 / Disk write & \evidencevalue{-8.3328607154065715}{-8.332861} & \evidencevalue{-5.6271619522377705}{-5.627162} & \evidencevalue{-6.1639085635154638}{-6.163909} & \evidencevalue{2.705698763168801}{2.705699} & \evidencevalue{1.1696749861452174}{1.169675} & stable \\
+\addlinespace
+Materna-T2 / CPU & \evidencevalue{3.4217914507608995}{3.421791} & \evidencevalue{4.7157970047711437}{4.715797} & \evidencevalue{4.4733122852774807}{4.473312} & \evidencevalue{1.2940055540102442}{1.294006} & \evidencevalue{0.56163899817307783}{0.561639} & stable \\
+Materna-T2 / Throughput & \evidencevalue{1.7306278460657776}{1.730628} & \evidencevalue{-1.9334526164998425}{-1.933453} & \evidencevalue{1.0695960241397231}{1.069596} & \evidencevalue{3.6640804625656198}{3.664080} & \evidencevalue{1.5944608926531008}{1.594461} & FLIP \\
+Materna-T2 / Memory & \evidencevalue{4.0903714074948123}{4.090371} & \evidencevalue{3.67115829116393}{3.671158} & \evidencevalue{4.0830983027883496}{4.083098} & \evidencevalue{0.41921311633088232}{0.419213} & \evidencevalue{0.19592717131431148}{0.195927} & stable \\
+Materna-T2 / Disk write & \evidencevalue{-2.3851666588843141}{-2.385167} & \evidencevalue{-0.5043529981197088}{-0.504353} & \evidencevalue{-0.47482971928984052}{-0.474830} & \evidencevalue{1.9103369395944736}{1.910337} & \evidencevalue{0.89366404781978592}{0.893664} & stable \\
+\addlinespace
+Materna-T3 / CPU & \evidencevalue{1.4091295320536918}{1.409130} & \evidencevalue{-10.244288693654335}{-10.244289} & \evidencevalue{0.42075899758812962}{0.420759} & \evidencevalue{11.653418225708027}{11.653418} & \evidencevalue{5.2759651556546716}{5.275965} & FLIP \\
+Materna-T3 / Throughput & \evidencevalue{-1.2401974558752902}{-1.240197} & \evidencevalue{-0.48388138337644854}{-0.483881} & \evidencevalue{1.8445255659641224}{1.844526} & \evidencevalue{3.0847230218394124}{3.084723} & \evidencevalue{1.3127159735416922}{1.312716} & FLIP \\
+Materna-T3 / Memory & \evidencevalue{2.9603285896391576}{2.960329} & \evidencevalue{2.9913785427840835}{2.991379} & \evidencevalue{3.3143276492794658}{3.314328} & \evidencevalue{0.3539990596403082}{0.353999} & \evidencevalue{0.16006094644877214}{0.160061} & stable \\
+Materna-T3 / Disk write & \evidencevalue{-0.13866922646841354}{-0.138669} & \evidencevalue{3.3661831743782242}{3.366183} & \evidencevalue{2.4472119656009208}{2.447212} & \evidencevalue{3.5048524008466377}{3.504852} & \evidencevalue{1.4838119068347049}{1.483812} & FLIP \\
+\pagebreak[4]
+\multicolumn{7}{l}{\textbf{Panel B: M1:S2}}\\*
+TimeTrack / CPU & \evidencevalue{1.7698367475888079}{1.769837} & \evidencevalue{-3.2222150650606349}{-3.222215} & \evidencevalue{2.7217575295795999}{2.721758} & \evidencevalue{5.9439725946402344}{5.943973} & \evidencevalue{2.6067763122974688}{2.606776} & FLIP \\
+TimeTrack / Throughput & \evidencevalue{0.090879285452900763}{0.090879} & \evidencevalue{-1.8354513549949434}{-1.835451} & \evidencevalue{-0.78404291403458315}{-0.784043} & \evidencevalue{1.9263306404478442}{1.926331} & \evidencevalue{0.78752060299023374}{0.787521} & FLIP \\
+TimeTrack / Memory & \evidencevalue{-19.613352479385085}{-19.613352} & \evidencevalue{-14.181808546403015}{-14.181809} & \evidencevalue{-21.696725984504933}{-21.696726} & \evidencevalue{7.5149174381019179}{7.514917} & \evidencevalue{3.167826081772763}{3.167826} & stable \\
+TimeTrack / Disk write & \evidencevalue{-0.32232020570188097}{-0.322320} & \evidencevalue{-1.0803262564730285}{-1.080326} & \evidencevalue{-0.98557575677844877}{-0.985576} & \evidencevalue{0.75800605077114747}{0.758006} & \evidencevalue{0.33722046139183948}{0.337220} & stable \\
+\addlinespace
+fastStorage / CPU & \evidencevalue{0.59029393951800901}{0.590294} & \evidencevalue{-0.77543621989505351}{-0.775436} & \evidencevalue{0.31071790128888666}{0.310718} & \evidencevalue{1.3657301594130624}{1.365730} & \evidencevalue{0.58907765989130823}{0.589078} & FLIP \\
+fastStorage / Throughput & \evidencevalue{-23.225501069078462}{-23.225501} & \evidencevalue{-23.349536036638401}{-23.349536} & \evidencevalue{-35.114889708745032}{-35.114890} & \evidencevalue{11.889388639666571}{11.889389} & \evidencevalue{5.5757061727936517}{5.575706} & stable \\
+fastStorage / Memory & \evidencevalue{-5.0768508176175962}{-5.076851} & \evidencevalue{-4.3653261340848299}{-4.365326} & \evidencevalue{-5.158182492783201}{-5.158182} & \evidencevalue{0.79285635869837101}{0.792856} & \evidencevalue{0.35613721172699192}{0.356137} & stable \\
+fastStorage / Disk write & \evidencevalue{-4.7946085600907509}{-4.794609} & \evidencevalue{-3.879941843276054}{-3.879942} & \evidencevalue{-3.5463374202016107}{-3.546337} & \evidencevalue{1.2482711398891402}{1.248271} & \evidencevalue{0.52768761304219702}{0.527688} & stable \\
+\addlinespace
+Rnd / CPU & \evidencevalue{-16.366235750208009}{-16.366236} & \evidencevalue{-16.420187499523443}{-16.420187} & \evidencevalue{-16.743093603267337}{-16.743094} & \evidencevalue{0.3768578530593274}{0.376858} & \evidencevalue{0.16640011501790328}{0.166400} & stable \\
+Rnd / Throughput & \evidencevalue{-16.905837364623483}{-16.905837} & \evidencevalue{-13.193518954528571}{-13.193519} & \evidencevalue{-12.921484174818122}{-12.921484} & \evidencevalue{3.9843531898053612}{3.984353} & \evidencevalue{1.8175191039929459}{1.817519} & stable \\
+Rnd / Memory & \evidencevalue{-9.3885416737756113}{-9.388542} & \evidencevalue{-8.1120303258945139}{-8.112030} & \evidencevalue{-9.2523275100505629}{-9.252328} & \evidencevalue{1.2765113478810974}{1.276511} & \evidencevalue{0.57235509450599953}{0.572355} & stable \\
+Rnd / Disk write & \evidencevalue{-4.9952918183236159}{-4.995292} & \evidencevalue{-5.3120173069929333}{-5.312017} & \evidencevalue{-6.3682271447752372}{-6.368227} & \evidencevalue{1.3729353264516213}{1.372935} & \evidencevalue{0.58697394104752387}{0.586974} & stable \\
+\addlinespace
+Materna-T1 / CPU & \evidencevalue{-1.6893603718807602}{-1.689360} & \evidencevalue{2.0062278354986196}{2.006228} & \evidencevalue{2.2568779179352005}{2.256878} & \evidencevalue{3.9462382898159607}{3.946238} & \evidencevalue{1.8041000927626738}{1.804100} & FLIP \\
+Materna-T1 / Throughput & \evidencevalue{-9.0611545543132141}{-9.061155} & \evidencevalue{-7.3476725911852112}{-7.347673} & \evidencevalue{-5.515522669770025}{-5.515523} & \evidencevalue{3.5456318845431891}{3.545632} & \evidencevalue{1.4477683682595375}{1.447768} & stable \\
+Materna-T1 / Memory & \evidencevalue{-13.527842249194627}{-13.527842} & \evidencevalue{-13.443071112077067}{-13.443071} & \evidencevalue{-12.685593987452286}{-12.685594} & \evidencevalue{0.84224826174234124}{0.842248} & \evidencevalue{0.37864376022647905}{0.378644} & stable \\
+Materna-T1 / Disk write & \evidencevalue{-28.142926571883351}{-28.142927} & \evidencevalue{-28.07084561347656}{-28.070846} & \evidencevalue{-26.165410382082417}{-26.165410} & \evidencevalue{1.9775161898009337}{1.977516} & \evidencevalue{0.91569338430428404}{0.915693} & stable \\
+\addlinespace
+Materna-T2 / CPU & \evidencevalue{-2.6165134352928479}{-2.616513} & \evidencevalue{-2.2910124277126127}{-2.291012} & \evidencevalue{-2.7881605433722418}{-2.788161} & \evidencevalue{0.49714811565962913}{0.497148} & \evidencevalue{0.20617411319122361}{0.206174} & stable \\
+Materna-T2 / Throughput & \evidencevalue{-9.7323593785203286}{-9.732359} & \evidencevalue{-7.5784773756623416}{-7.578477} & \evidencevalue{-8.7982083846673085}{-8.798208} & \evidencevalue{2.153882002857987}{2.153882} & \evidencevalue{0.88189124398019325}{0.881891} & stable \\
+Materna-T2 / Memory & \evidencevalue{-9.3371385521041663}{-9.337139} & \evidencevalue{-8.8568368215303899}{-8.856837} & \evidencevalue{-9.6085138544969997}{-9.608514} & \evidencevalue{0.75167703296660981}{0.751677} & \evidencevalue{0.31079694497112348}{0.310797} & stable \\
+Materna-T2 / Disk write & \evidencevalue{-7.6486130233586822}{-7.648613} & \evidencevalue{-8.1995817061809468}{-8.199582} & \evidencevalue{-7.820434710319736}{-7.820435} & \evidencevalue{0.55096868282226463}{0.550969} & \evidencevalue{0.23017906701610105}{0.230179} & stable \\
+\addlinespace
+Materna-T3 / CPU & \evidencevalue{-5.4416947646000908}{-5.441695} & \evidencevalue{-2.5335628493840652}{-2.533563} & \evidencevalue{-17.079941232445947}{-17.079941} & \evidencevalue{14.546378383061882}{14.546378} & \evidencevalue{6.2849302669678275}{6.284930} & stable \\
+Materna-T3 / Throughput & \evidencevalue{-6.1884198604960847}{-6.188420} & \evidencevalue{-7.7626639859993292}{-7.762664} & \evidencevalue{-9.83729764639242}{-9.837298} & \evidencevalue{3.6488777858963353}{3.648878} & \evidencevalue{1.4943098922960782}{1.494310} & stable \\
+Materna-T3 / Memory & \evidencevalue{-6.9819977243822695}{-6.981998} & \evidencevalue{-9.3163784405143648}{-9.316378} & \evidencevalue{-9.8120085298354187}{-9.812009} & \evidencevalue{2.8300108054531492}{2.830011} & \evidencevalue{1.2339612668273474}{1.233961} & stable \\
+Materna-T3 / Disk write & \evidencevalue{-54.651898792047113}{-54.651899} & \evidencevalue{-71.546503749038322}{-71.546504} & \evidencevalue{-87.841536226429625}{-87.841536} & \evidencevalue{33.189637434382512}{33.189637} & \evidencevalue{13.550349700767439}{13.550350} & stable \\
+\end{longtable}
+\normalsize
+\end{document}

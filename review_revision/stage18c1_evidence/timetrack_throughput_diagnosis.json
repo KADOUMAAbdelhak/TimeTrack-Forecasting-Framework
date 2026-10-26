@@ -1,0 +1,109 @@
+{
+  "ARX_macro": 269.70943563886215,
+  "AR_macro": 28.739891294334274,
+  "alpha_counts": {
+    "AR": {
+      "0.01": 12,
+      "100.0": 23
+    },
+    "ARX": {
+      "1.0": 1,
+      "10.0": 1,
+      "100.0": 33
+    }
+  },
+  "better_groups": 21,
+  "group_count": 35,
+  "median_ratio": 0.9962770426691672,
+  "net_excess_sum": 8433.934052058474,
+  "positive_excess_sum": 8449.165414240082,
+  "ranges": {
+    "AR": {
+      "prediction_max": 1594.7619281478342,
+      "prediction_min": 0.0,
+      "scaled_prediction_max": 108.53427124023438,
+      "scaled_prediction_min": -29.26160430908203,
+      "target_max": 3746.73779296875,
+      "target_min": 0.949999988079071
+    },
+    "ARX": {
+      "prediction_max": 7611415.626105407,
+      "prediction_min": 0.0,
+      "scaled_prediction_max": 251.78268432617188,
+      "scaled_prediction_min": -114.24884796142578,
+      "target_max": 3746.73779296875,
+      "target_min": 0.949999988079071
+    }
+  },
+  "status": "PASS",
+  "ties": 0,
+  "top_positive_excess_groups": [
+    {
+      "groups": [
+        {
+          "excess": 8443.384216752997,
+          "fold": 3,
+          "machine": "machine06"
+        }
+      ],
+      "k": 1,
+      "share_net_excess": 1.0011204930743105,
+      "share_positive_excess": 0.9993157670369026
+    },
+    {
+      "groups": [
+        {
+          "excess": 8443.384216752997,
+          "fold": 3,
+          "machine": "machine06"
+        },
+        {
+          "excess": 2.235796432702813,
+          "fold": 3,
+          "machine": "machine07"
+        },
+        {
+          "excess": 1.7762109890411182,
+          "fold": 4,
+          "machine": "machine03"
+        }
+      ],
+      "k": 3,
+      "share_net_excess": 1.0015961912949722,
+      "share_positive_excess": 0.9997906077134718
+    },
+    {
+      "groups": [
+        {
+          "excess": 8443.384216752997,
+          "fold": 3,
+          "machine": "machine06"
+        },
+        {
+          "excess": 2.235796432702813,
+          "fold": 3,
+          "machine": "machine07"
+        },
+        {
+          "excess": 1.7762109890411182,
+          "fold": 4,
+          "machine": "machine03"
+        },
+        {
+          "excess": 0.4685368643585255,
+          "fold": 3,
+          "machine": "machine03"
+        },
+        {
+          "excess": 0.2944102440982288,
+          "fold": 1,
+          "machine": "machine03"
+        }
+      ],
+      "k": 5,
+      "share_net_excess": 1.0016866528878359,
+      "share_positive_excess": 0.9998809062306686
+    }
+  ],
+  "worse_groups": 14
+}

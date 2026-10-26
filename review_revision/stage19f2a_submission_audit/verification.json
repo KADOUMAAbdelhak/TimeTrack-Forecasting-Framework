@@ -1,0 +1,171 @@
+{
+  "status": "READ_ONLY_VERIFICATION_PASS",
+  "checked_utc": "2026-10-23T15:34:20.529062+00:00",
+  "protected_files_unchanged": 395786,
+  "stage18c1_output_hashes_verified": 25,
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "branch": "paper/jss-review-revision",
+  "manuscript_sha256": "5d4e4d67cb60cf19b7aaf0fc0ae46202d74c26c0696666e9cd4502e471481ef9",
+  "bibliography_sha256": "f7efdff564455a709cda5459319f8f3c25811ca3a1a409187dd2cd7e0f7eef8b",
+  "abstract_words_whitespace": 228,
+  "keywords": [
+    "runtime forecasting",
+    "cloud telemetry",
+    "multi-metric forecasting",
+    "multi-task learning",
+    "contextual input",
+    "shared representations"
+  ],
+  "bibliography_entries": 35,
+  "all_entries_cited": true,
+  "unresolved_citations_references": 0,
+  "duplicate_labels": 0,
+  "float_citation_order": {
+    "figure": [
+      "fig:sharing-framework",
+      "fig:primary-gains"
+    ],
+    "table": [
+      "tab:related-work-comparison",
+      "tab:dataset-summary",
+      "tab:posthoc-controls",
+      "tab:efficiency",
+      "tab:cross-study-synthesis"
+    ]
+  },
+  "float_issues": {
+    "figure": {
+      "uncited": [],
+      "first_reference_order": [
+        "fig:sharing-framework",
+        "fig:primary-gains"
+      ],
+      "cited_items_in_display_order": true
+    },
+    "table": {
+      "uncited": [
+        "tab:efficiency"
+      ],
+      "first_reference_order": [
+        "tab:related-work-comparison",
+        "tab:dataset-summary",
+        "tab:posthoc-controls",
+        "tab:cross-study-synthesis"
+      ],
+      "cited_items_in_display_order": true
+    }
+  },
+  "highlights": [
+    {
+      "text": "S1/S2/M1 separate cross-resource context from shared representation.",
+      "characters_including_spaces": 68,
+      "within_85": true
+    },
+    {
+      "text": "Cross-resource context benefits depend on resource, environment and time.",
+      "characters_including_spaces": 73,
+      "within_85": true
+    },
+    {
+      "text": "The tested shared long short-term memory model shows repeated adverse transfer.",
+      "characters_including_spaces": 79,
+      "within_85": true
+    },
+    {
+      "text": "M1 vs S2: about 74.5% fewer parameters and 75% fewer models, with accuracy losses.",
+      "characters_including_spaces": 82,
+      "within_85": true
+    }
+  ],
+  "supplementary": {
+    "manuscript/jss/supplementary/decision_criteria.tex": {
+      "sha256": "92596b16c67d5c5555193a645e909669d1cc82872fcdc2a1f21b4fa43e3ea3ca",
+      "standalone_document": false,
+      "internal_comments": [
+        "% This is a supplementary fragment and is not compiled as a separate PDF at Stage 3."
+      ]
+    },
+    "manuscript/jss/supplementary/overall_bootstrap_intervals.tex": {
+      "sha256": "e38508609b1b128f1e8a8a380e15ded5c7ed7e138468c26299f7e6f551e12aa3",
+      "standalone_document": false,
+      "internal_comments": [
+        "% This fragment is not compiled at Stage 4. A future supplementary wrapper"
+      ]
+    }
+  },
+  "current_pdf_pages": 17,
+  "current_pdf_sha256": "5a38f0f0fce8aa4ad17d6a1d1fca3f8a6741f61b56032fd198eb03e0cc2d7b2f",
+  "root_pdf_pages": 18,
+  "root_pdf_sha256": "aee2f75afe1b2b7524394276771399e04a95257011c95a3009f356463b43fc2c",
+  "figures": {
+    "framework_s1_s2_m1.pdf": {
+      "sha256": "a2f92edc6c712f1c2b783e9c5c5d46e16c2e5eb6a1229721dcfcd5af502c3d1b",
+      "pages": 1,
+      "fonts": [
+        {
+          "name": "/DOXDXR+SFSX1000",
+          "embedded": true
+        },
+        {
+          "name": "/ZKKPWI+CMSY10",
+          "embedded": true
+        },
+        {
+          "name": "/JHYTSG+CMR10",
+          "embedded": true
+        },
+        {
+          "name": "/KLVNIZ+SFSX1095",
+          "embedded": true
+        },
+        {
+          "name": "/MDQYLM+SFSS0900",
+          "embedded": true
+        },
+        {
+          "name": "/RXKBAQ+CMMI9",
+          "embedded": true
+        },
+        {
+          "name": "/ETZNFV+SFSX0900",
+          "embedded": true
+        }
+      ]
+    },
+    "results_signed_matrix.pdf": {
+      "sha256": "4588bb67932f8d35e8476a134daf2ad757502aee014b42a65176c334705273d8",
+      "pages": 1,
+      "fonts": [
+        {
+          "name": "/FFODNV+DejaVuSans-Bold",
+          "embedded": true
+        },
+        {
+          "name": "/KAVJRO+DejaVuSans",
+          "embedded": true
+        }
+      ]
+    }
+  },
+  "historical_tracked_dirty_files": [
+    "manuscript/jss/figures/results_signed_matrix.pdf",
+    "manuscript/jss/figures/results_signed_matrix.py",
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/references.bib",
+    "manuscript/jss/tables/efficiency_summary.tex",
+    "manuscript/jss/tables/related_work_comparison.tex"
+  ],
+  "manuscript_edits": 0,
+  "scientific_modifications": 0,
+  "training": 0,
+  "inference": 0,
+  "submission_assets_created": 0,
+  "commit": "no",
+  "push": "no"
+}

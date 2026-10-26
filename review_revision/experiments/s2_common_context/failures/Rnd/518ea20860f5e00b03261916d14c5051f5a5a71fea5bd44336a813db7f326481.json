@@ -1,0 +1,77 @@
+{
+  "error": "ValueError('Out of range float values are not JSON compliant: nan')",
+  "label": "POST-HOC SENSITIVITY CONTROL",
+  "spec": {
+    "L": 18,
+    "block": "Rnd",
+    "control_run_id": "518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481",
+    "entity": "474",
+    "epoch": 48,
+    "fold": 2,
+    "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+    "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+    "frozen_final_identity": {
+      "L": 18,
+      "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+      "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+      "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+      "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+      "environment": "GWA-T-12_Bitbrains_Rnd",
+      "environment_key": "Rnd",
+      "fold": 2,
+      "formulation": "S2",
+      "phase": "final",
+      "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+      "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+      "resource": "THROUGHPUT",
+      "run_id": "df65aac12e3c835c7078b529",
+      "seed": 0,
+      "selected_epoch": 48,
+      "support_hash": "8eb16cb1fd629478454309841c438402031a4bc66de0c9bd873bce252859f017",
+      "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+      "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+      "vm_id": "474"
+    },
+    "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/52a1b8d4a03090aaf0cb3a5e.json",
+    "inner_completion_sha256": "958b8c9971561f32ecba030c0c0b2fa81551a168fcfd8b13dfc390ddf85f0bb7",
+    "label": "POST-HOC SENSITIVITY CONTROL",
+    "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/154fe9e62d3d561cb8b03649.json",
+    "m1_context_completion_sha256": "fd485f840ea1c904374a3e4ca835ca5c3d5ce2724eb7de6adcd6562614573cf8",
+    "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/df65aac12e3c835c7078b529.json",
+    "original_completion_sha256": "6cab1d1b6dd74025ce1436856dbdc18d748fedeeaa778c7181436c5a790f779b",
+    "original_selected_L": 18,
+    "resource": "THROUGHPUT",
+    "reuse": true,
+    "scaler": {
+      "native_iqr": [
+        0.26666666666666683,
+        0.26666666666666683,
+        8388.26666666667,
+        0.1333333333333333
+      ],
+      "transformed_iqr": [
+        0.26666666666666683,
+        0.21130909366720707,
+        8388.26666666667,
+        0.11122563511022435
+      ],
+      "transformed_median": [
+        0.9333333333333332,
+        0.23638877806423034,
+        51727.6,
+        0.18232155679395465
+      ]
+    },
+    "scaler_sha256": "22d666f498873ee2b83e10f4d01f6e0e0a8c70f28383141c5fbc3778e68cb00e",
+    "seed": 0,
+    "split_hashes": {
+      "inner_train": "dfcc6ec5ddb7c1d1bce8578aed91a51668291a964923a57277ac42ef79b1f34b",
+      "inner_validation": "12b745f150df8273e81d0652e8ee63fbd9aba5c9f78a1419b7e9e9dfbd315ca2",
+      "outer_test": "1e4cf3e95024811f302c46250cf0b9092fb03bbb647bad53b273aa5776091e94",
+      "outer_train": "5303c5555ba5f94d0e0447426abb324ed4b5924f09f7f0cf4a254f10dcf0e06e"
+    }
+  },
+  "status": "FAILED_STOP",
+  "timestamp": "2026-10-21T08:37:11.442192+00:00",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/run_control.py\", line 449, in run_group\n    write(completion, value)\n    ~~~~~^^^^^^^^^^^^^^^^^^^\n  File \"/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/run_control.py\", line 76, in write\n    temp.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + \"\\n\")\n                    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/__init__.py\", line 238, in dumps\n    **kw).encode(obj)\n          ~~~~~~^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py\", line 200, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/json/encoder.py\", line 261, in iterencode\n    return _iterencode(o, 0)\nValueError: Out of range float values are not JSON compliant: nan\n"
+}

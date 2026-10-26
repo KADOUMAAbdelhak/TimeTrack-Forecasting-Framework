@@ -1,0 +1,93 @@
+{
+  "checked_at_utc": "2026-10-26T18:21:47.008884+00:00",
+  "Zenodo": {
+    "url": "https://zenodo.org/api/records/15442251",
+    "title": "TimeTrack: OAI CI/CD cluster TimeSeries dataset",
+    "doi": "10.5281/zenodo.15442251",
+    "license": {
+      "id": "cc-by-4.0"
+    },
+    "access_right": "open",
+    "files": [
+      {
+        "key": "packet-loss-dataset.csv",
+        "size": 12389830,
+        "checksum": "md5:f424ffe188eee08fa6a2694fc4227bd9"
+      },
+      {
+        "key": "disk_dataset.csv",
+        "size": 8425241,
+        "checksum": "md5:9167afb39d114b8dd7854b536137e30e"
+      },
+      {
+        "key": "throughputs_dataset.csv",
+        "size": 40993889,
+        "checksum": "md5:c3784b476aadea7bdc3301ca0dba3e5f"
+      },
+      {
+        "key": "compute_dataset.csv",
+        "size": 26942966,
+        "checksum": "md5:21bcbb45d334e485eaabaca0ef2ee34b"
+      },
+      {
+        "key": "detailed_cpu_cores_dataset.csv",
+        "size": 331354469,
+        "checksum": "md5:e380157483164d52ee1179f9b6b3c8ca"
+      },
+      {
+        "key": "network_dataset.csv",
+        "size": 2932318,
+        "checksum": "md5:7b6b82738716462185f2af1d9bb22b82"
+      }
+    ]
+  },
+  "Kaggle": {
+    "url": "https://www.kaggle.com/api/v1/datasets/list?search=open-air-interface-cicd-timeseries-dataset",
+    "records": [
+      {
+        "ref": "abdelghanimeliani/open-air-interface-cicd-timeseries-dataset",
+        "title": "TimeTrack: OAI CI/CD  cluster TimeSeries dataset",
+        "licenseName": "Apache 2.0",
+        "lastUpdated": "2025-02-13T12:39:43.673Z"
+      }
+    ]
+  },
+  "local_raw_matches_Zenodo": [
+    {
+      "path": "data/raw/packet-loss-dataset.csv",
+      "bytes": 12389830,
+      "Zenodo_checksum": "md5:f424ffe188eee08fa6a2694fc4227bd9",
+      "exact_match": true
+    },
+    {
+      "path": "data/raw/disk_dataset.csv",
+      "bytes": 8425241,
+      "Zenodo_checksum": "md5:9167afb39d114b8dd7854b536137e30e",
+      "exact_match": true
+    },
+    {
+      "path": "data/raw/throughputs_dataset.csv",
+      "bytes": 40993889,
+      "Zenodo_checksum": "md5:c3784b476aadea7bdc3301ca0dba3e5f",
+      "exact_match": true
+    },
+    {
+      "path": "data/raw/compute_dataset.csv",
+      "bytes": 26942966,
+      "Zenodo_checksum": "md5:21bcbb45d334e485eaabaca0ef2ee34b",
+      "exact_match": true
+    },
+    {
+      "path": "data/raw/detailed_cpu_cores_dataset.csv",
+      "bytes": 331354469,
+      "Zenodo_checksum": "md5:e380157483164d52ee1179f9b6b3c8ca",
+      "exact_match": true
+    },
+    {
+      "path": "data/raw/network_dataset.csv",
+      "bytes": 2932318,
+      "Zenodo_checksum": "md5:7b6b82738716462185f2af1d9bb22b82",
+      "exact_match": true
+    }
+  ]
+}

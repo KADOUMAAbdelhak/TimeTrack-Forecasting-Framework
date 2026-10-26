@@ -1,0 +1,205 @@
+{
+  "status": "AUDIT_COMPLETE_NOT_LEGAL_CLEARANCE",
+  "repository_wide_licence_present": false,
+  "root_licence_files": [],
+  "existing_owner_decision_record": "old_fgcs_rejected/docs/VERSION_CONTROL_POLICY.md:113",
+  "dataset_metadata": "dataset_licence_metadata.json",
+  "external_archive_notice_scan": [
+    {
+      "path": "data/external/raw/gwa_t_12_fastStorage.zip",
+      "sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671",
+      "licence_or_readme_members": [],
+      "auxiliary_document_licence_keyword_scan": {}
+    },
+    {
+      "path": "data/external/raw/gwa_t_12_rnd.zip",
+      "sha256": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+      "licence_or_readme_members": [],
+      "auxiliary_document_licence_keyword_scan": {}
+    },
+    {
+      "path": "data/external/raw/gwa_t_13_materna.zip",
+      "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4",
+      "licence_or_readme_members": [],
+      "auxiliary_document_licence_keyword_scan": {
+        "GWA-T-13_Materna-Workload-Traces/Materna-Trace-1/00-Trace-Info.txt": [],
+        "GWA-T-13_Materna-Workload-Traces/Materna-Trace-1/356.bak": [],
+        "GWA-T-13_Materna-Workload-Traces/Materna-Trace-2/00-Trace-Info.txt": [],
+        "GWA-T-13_Materna-Workload-Traces/Materna-Trace-3/00-Trace-Info.txt": []
+      }
+    }
+  ],
+  "third_party_template_files": [
+    {
+      "path": "manuscript/jss/cas-dc.cls",
+      "sha256": "9f7dd6cfc91f7ce52d0db29579894662e1dd8ae96d42cf18d6d0c697e42464f5",
+      "header_licence": "LPPL-1.2-or-later",
+      "scope": "Separate third-party CAS/Elsevier template; must retain upstream notices",
+      "upstream_modification_comparison": "Not established; resolve distribution/modification obligations before release"
+    },
+    {
+      "path": "manuscript/jss/cas-common.sty",
+      "sha256": "e95a01f4b33531d01ade231669fcc1e42f52193dddcb22ead5b63240eb952f8f",
+      "header_licence": "LPPL-1.3c-or-later",
+      "scope": "Separate third-party CAS/Elsevier template; must retain upstream notices",
+      "upstream_modification_comparison": "Not established; resolve distribution/modification obligations before release"
+    },
+    {
+      "path": "manuscript/jss/cas-model2-names.bst",
+      "sha256": "6f6204eb7670d762042ab363c2d05cf87196052bfbdf6dbee51a1327a8ce479a",
+      "header_licence": "LPPL-1.3c-or-later",
+      "scope": "Separate third-party CAS/Elsevier template; must retain upstream notices",
+      "upstream_modification_comparison": "Not established; resolve distribution/modification obligations before release"
+    }
+  ],
+  "local_dependency_metadata": [
+    {
+      "name": "lightgbm",
+      "installed_version": "4.7.0",
+      "licence_expression": "MIT",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "matplotlib",
+      "installed_version": "3.11.1",
+      "licence_expression": null,
+      "licence_header": [
+        "License agreement for matplotlib versions 1.3.0 and later",
+        " ========================================================="
+      ],
+      "licence_classifiers": [
+        "License :: OSI Approved :: Python Software Foundation License"
+      ],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "numpy",
+      "installed_version": "2.5.1",
+      "licence_expression": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "pandas",
+      "installed_version": "3.0.5",
+      "licence_expression": null,
+      "licence_header": [
+        "BSD 3-Clause License",
+        ""
+      ],
+      "licence_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "pyarrow",
+      "installed_version": "25.0.0",
+      "licence_expression": "Apache-2.0",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "pytest",
+      "installed_version": "9.1.1",
+      "licence_expression": "MIT",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "scikit-learn",
+      "installed_version": "1.9.0",
+      "licence_expression": "BSD-3-Clause",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "scipy",
+      "installed_version": "1.18.0",
+      "licence_expression": null,
+      "licence_header": [
+        "Copyright (c) 2001-2002 Enthought, Inc. 2003, SciPy Developers.",
+        " All rights reserved."
+      ],
+      "licence_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "seaborn",
+      "installed_version": "0.13.2",
+      "licence_expression": null,
+      "licence_header": [],
+      "licence_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "statsmodels",
+      "installed_version": "0.14.6",
+      "licence_expression": null,
+      "licence_header": [
+        "BSD License"
+      ],
+      "licence_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    },
+    {
+      "name": "torch",
+      "installed_version": "2.13.0",
+      "licence_expression": "Apache-2.0 AND Apache-2.0 WITH LLVM-exception AND BSD-2-Clause AND BSD-3-Clause AND BSL-1.0 AND MIT",
+      "licence_header": [],
+      "licence_classifiers": [],
+      "scope": "Local installed dependency; not a grant over project code, data or article"
+    }
+  ],
+  "private_export_dependency": {
+    "name": "@oai/artifact-tool",
+    "version": "2.8.106",
+    "private": true,
+    "licence": null,
+    "redistribution_permission_established": false,
+    "node_modules_symlink": "review_revision/stage19g1_evidence/node_modules",
+    "action": "Exclude dependency/symlink; retain CSV/payload; authorise portable exporter later"
+  },
+  "recommended_author_owned_code_licence": "Apache-2.0, conditional on all relevant rights-holder approval",
+  "blanket_repository_relicensing_recommended": false,
+  "original_upstream_terms_survive_for": [
+    "TimeTrack data",
+    "Bitbrains data",
+    "Materna data",
+    "CAS templates",
+    "Dependency packages"
+  ],
+  "manuscript_publication_rights": "Separate author/publisher decision; no article reuse licence selected",
+  "user_actions": [
+    "Approve code licence and exact author-owned scope/copyright holders",
+    "Approve any derived-data/model/prediction archive redistribution and hosting",
+    "Resolve CAS licence/bundle manifest and any modified-template obligations",
+    "Approve portable environment/replay/export documentation follow-up"
+  ],
+  "sources": [
+    "https://www.apache.org/licenses/LICENSE-2.0.html",
+    "https://opensource.org/license/mit",
+    "https://opensource.org/license/bsd-3-clause",
+    "https://www.latex-project.org/lppl/lppl-1-3c/",
+    "https://creativecommons.org/licenses/by/4.0/",
+    "https://atlarge-research.com/gwa-t-12/",
+    "https://atlarge-research.com/gwa-t-13/",
+    "https://zenodo.org/api/records/15442251",
+    "https://www.kaggle.com/api/v1/datasets/list?search=open-air-interface-cicd-timeseries-dataset"
+  ],
+  "licence_files_created": 0,
+  "manuscript_modifications": 0,
+  "scientific_modifications": 0
+}

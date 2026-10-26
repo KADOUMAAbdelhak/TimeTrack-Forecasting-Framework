@@ -1,0 +1,194 @@
+--- predecessor/run_linear_control.py
++++ successor/run_linear_control.py
+@@ -95,7 +95,14 @@
+     return {str(p.relative_to(ROOT)):sha(p) for p in sorted(set(paths))}
+ 
+ def verify_seal():
+-    seal = read(HERE / "provenance/experiment.json")
++    successor = HERE / "recovery/successor.json"
++    seal = read(successor if successor.exists() else HERE / "provenance/experiment.json")
++    if successor.exists():
++        require(sha(HERE/"provenance/experiment.json") == seal["predecessor_seal_sha256"], "Original seal changed")
++        require(sha(HERE/"recovery/authorisation.json") == seal["authorisation_sha256"], "Recovery authority changed")
++        require(sha(HERE/"recovery/predecessor_snapshot.json") == seal["snapshot_manifest_sha256"], "Snapshot manifest changed")
++        require(sha(HERE/"recovery/tests.json") == seal["tests_sha256"], "Recovery tests changed")
++        require(sha(HERE/"recovery/exact_adapter_diff.patch") == seal["exact_diff_sha256"], "Adapter diff changed")
+     require(sha(CONFIG) == seal["configuration_sha256"], "Config changed", "PROVENANCE_CONFLICT")
+     for rel,h in seal["source_hashes"].items(): require(sha(ROOT/rel) == h, f"Source changed {rel}", "PROVENANCE_CONFLICT")
+     for b,h in seal["plan_hashes"].items(): require(sha(HERE/f"plans/{b}.json") == h, f"Plan changed {b}", "PROVENANCE_CONFLICT")
+@@ -164,8 +171,56 @@
+ 
+ def begin(identity):
+     path = HERE/f"attempts/{identity['phase']}/{identity['block']}/{identity['run_id']}.json"
++    if path.exists() and identity["run_id"] in authorised_recoveries():
++        approved = authorised_recoveries()[identity["run_id"]]
++        require(identity == approved["identity"] and read(path)["identity"] == identity, "Recovery identity changed")
++        path = HERE/f"recovery/attempts/{identity['run_id']}.json"
+     require(not path.exists(), f"Unresolved attempt {identity}", "UNRESOLVED_ATTEMPT_CONFLICT")
+     write(path,{"identity":identity,"started":now()})
++
++def authorised_recoveries():
++    path = HERE/"recovery/authorisation.json"
++    return read(path)["units"] if path.exists() else {}
++
++def unresolved_failures(allow_authorised_pending=False):
++    approved = authorised_recoveries(); unresolved = []
++    for p in (HERE/"failures").rglob("*.json"):
++        if p.stem not in approved or sha(p) != approved[p.stem]["failure_sha256"]:
++            unresolved.append(str(p)); continue
++        identity = approved[p.stem]["identity"]; completion = completion_path(identity)
++        if completion.exists(): validate_completion(identity,read(completion))
++        elif not allow_authorised_pending: unresolved.append(str(p))
++    unresolved += [str(p) for p in (HERE/"recovery/failures").rglob("*.json")]
++    return unresolved
++
++def verify_predecessor():
++    manifest = read(HERE/"recovery/predecessor_snapshot.json")
++    snapshot = Path(manifest["snapshot_path"])
++    expected = {r["path"]:r for r in manifest["files"]}
++    actual = {str(p.relative_to(snapshot)) for p in snapshot.rglob("*") if p.is_file()}
++    require(actual == set(expected), "Predecessor snapshot membership changed")
++    retained = 0
++    for rel,row in expected.items():
++        require(sha(snapshot/rel) == row["sha256"], f"Snapshot changed {rel}")
++        if rel.startswith(("completions/","attempts/","failures/","selections/","plans/")) or rel in ("control_config.json","provenance/experiment.json","STOP.json","STAGE18B3_AR_ARX_BASELINE_REPORT.md"):
++            require(sha(HERE/rel) == row["sha256"], f"Pre-existing evidence changed {rel}")
++            retained += 1
++    write(HERE/"recovery/predecessor_preservation.json", {"status":"PASS","snapshot_files":len(expected),"retained_evidence_files":retained,"pre_existing_valid_inner_completions":1400,"timestamp":now()})
++
++def persistence_reference_mae(np, truth, persistence, timetrack):
++    # Frozen TT baseline metric promotes operands to float64 before subtracting.
++    # External raw windows already use float64: retain their original path.
++    if timetrack:
++        truth, persistence = truth.astype(float), persistence.astype(float)
++    return np.mean(np.abs(truth-persistence),axis=0)
++
++def verify_persistence_reference(np, record, resource, leads, pmae):
++    for j,lead in enumerate(leads):
++        previous = [m for m in record["persistence_metrics"] if m["resource"] == resource and m["lead"] == lead]
++        require(len(previous) == 1 and np.isclose(previous[0]["mae"],pmae[j],rtol=1e-12,atol=0), "Frozen persistence MAE differs", "PERSISTENCE_REFERENCE_CONFLICT")
++
++def transport_error(code, error):
++    return RuntimeError(f"{code}: {error}")
+ 
+ def validate_completion(identity, value):
+     require(value["identity"] == identity and value["status"] == "complete", "Completion identity differs")
+@@ -270,7 +325,8 @@
+                 native,unclipped = inverse(e,scaled,scaler,r)
+                 persistence = np.repeat(X[:,-1,i,None],len(e.leads),axis=1)
+                 mae = np.mean(np.abs(y[:,i,:]-native),axis=0)
+-                pmae = np.mean(np.abs(y[:,i,:]-persistence),axis=0)
++                skill_denominator = np.mean(np.abs(y[:,i,:]-persistence),axis=0)
++                pmae = persistence_reference_mae(np,y[:,i,:],persistence,e.tt)
+                 require(np.isfinite(mae).all() and np.isfinite(pmae).all(), "Nonfinite MAE", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+                 old = reference_frame(e,spec,r,y[:,i,:],fold.outer_test)
+                 # Retain authenticated support/time columns only; no inherited stochastic identity.
+@@ -279,10 +335,10 @@
+                 pred["run_id"] = current["run_id"]; pred["formulation"] = form; pred["alpha"] = selected["alpha"]
+                 pred["y_pred_scaled"] = scaled.ravel(); pred["y_pred"] = native.ravel(); pred["y_pred_unclipped"] = unclipped.ravel(); pred["persistence_prediction"] = persistence.ravel(); pred["label"] = RESULT_LABEL
+                 record = read(spec["reference_record"])
+-                for j,lead in enumerate(e.leads):
+-                    previous = [m for m in record["persistence_metrics"] if m["resource"] == r and m["lead"] == lead]
+-                    require(len(previous) == 1 and np.isclose(previous[0]["mae"],pmae[j],rtol=1e-12,atol=0), "Frozen persistence MAE differs")
+-                metrics = [{"resource":r,"lead":int(lead),"n":len(y),"mae":float(mae[j]),"persistence_mae":float(pmae[j]),"persistence_skill":float(1-mae[j]/pmae[j]) if pmae[j]>0 else None,"persistence_skill_undefined_reason":None if pmae[j]>0 else "zero persistence MAE denominator; raw division undefined/nonfinite"} for j,lead in enumerate(e.leads)]
++                verify_persistence_reference(np,record,r,e.leads,pmae)
++                # Preserve the original skill metric arithmetic; TT's frozen helper
++                # uses raw-window precision for its relative-skill denominator.
++                metrics = [{"resource":r,"lead":int(lead),"n":len(y),"mae":float(mae[j]),"persistence_mae":float(pmae[j]),"persistence_skill":float(1-mae[j]/skill_denominator[j]) if skill_denominator[j]>0 else None,"persistence_skill_undefined_reason":None if skill_denominator[j]>0 else "zero persistence MAE denominator; raw division undefined/nonfinite"} for j,lead in enumerate(e.leads)]
+                 mpth = output(HERE/f"models/{e.block}/{current['run_id']}.npz")
+                 with mpth.with_suffix(".tmp").open("wb") as stream: np.savez_compressed(stream,**state)
+                 os.replace(mpth.with_suffix(".tmp"),mpth)
+@@ -290,8 +346,11 @@
+                 write(path,{"status":"complete","identity":current,"test_evaluations":1,"completed":now(),"elapsed_seconds":time.perf_counter()-started,"metrics":metrics,"source_scaler":spec["scalers"]["final"],"model_path":str(mpth),"model_sha256":sha(mpth),"prediction_path":str(ppth),"prediction_sha256":sha(ppth)})
+         return {"group_id":spec["group_id"],"elapsed_seconds":time.perf_counter()-tick}
+     except BaseException as exc:
+-        write(HERE/f"failures/{spec['block']}/{current['run_id'] if current else spec['group_id']}.json", {"identity":current,"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
+-        raise
++        code = getattr(exc,"code","STAGE_18B3R_EXECUTION_FAILURE")
++        write(HERE/f"recovery/failures/{spec['block']}/{current['run_id'] if current else spec['group_id']}.json", {"identity":current,"timestamp":now(),"code":code,"error":repr(exc),"traceback":traceback.format_exc()})
++        # A built-in exception survives multiprocessing transport. Never mutate
++        # the imported frozen two-argument Conflict class or its source file.
++        raise transport_error(code,exc) from None
+ 
+ def run_block(block,workers):
+     verify_seal(); plan = read(HERE/f"plans/{block}.json")
+@@ -329,11 +388,17 @@
+                     require(all(e.np.isfinite(state[k]).all() for k in state.files), "Nonfinite model file")
+                     require(state["coef"].shape == (len(e.leads),spec["L"]*(1 if form=="AR" else 4)), "Coefficient dimensions differ")
+                 require(len(value["metrics"]) == len(e.leads), "Metric coverage differs")
++                persistence = e.np.repeat(X[:,-1,i,None],len(e.leads),axis=1)
++                reference_pm = persistence_reference_mae(e.np,y[:,i,:],persistence,e.tt)
++                skill_pm = e.np.mean(e.np.abs(y[:,i,:]-persistence),axis=0)
++                verify_persistence_reference(e.np,read(spec["reference_record"]),r,e.leads,reference_pm)
++                require(e.np.array_equal(pred.persistence_prediction.to_numpy(),persistence.ravel()), "Persisted persistence differs")
+                 for m in value["metrics"]:
+                     p = pred[pred.lead.eq(m["lead"])]
+-                    mae = float(e.np.mean(e.np.abs(p.y_true-p.y_pred))); pm = float(e.np.mean(e.np.abs(p.y_true-p.persistence_prediction)))
++                    j = list(e.leads).index(m["lead"])
++                    mae = float(e.np.mean(e.np.abs(p.y_true-p.y_pred))); pm = float(reference_pm[j])
+                     require(len(p) == m["n"] and e.np.isclose(mae,m["mae"],rtol=1e-12,atol=0) and e.np.isclose(pm,m["persistence_mae"],rtol=1e-12,atol=0), "Recomputed MAE differs")
+-                    if pm > 0: require(e.np.isclose(1-mae/pm,m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
++                    if skill_pm[j] > 0: require(e.np.isclose(1-mae/skill_pm[j],m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
+                     else:
+                         require(m["persistence_skill"] is None and m["persistence_skill_undefined_reason"], "Undefined skill not explicit"); undefined += 1
+                 expected["final"].add(identity["run_id"]); count += len(value["metrics"])
+@@ -367,13 +432,18 @@
+ 
+ def run_all(workers):
+     verify_refs(); verify_seal()
+-    require(not (HERE/"STOP.json").exists() and not list((HERE/"failures").rglob("*.json")), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
++    verify_predecessor()
++    approved = authorised_recoveries()
++    require(not (HERE/"recovery/STOP.json").exists() and not unresolved_failures(True), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
+     for phase in ("inner","final"):
+         for p in (HERE/f"attempts/{phase}").rglob("*.json"):
+-            require((HERE/f"completions/{phase}/{p.parent.name}/{p.name}").exists(), f"Unresolved interrupted attempt {p}", "UNRESOLVED_ATTEMPT_CONFLICT")
++            require((HERE/f"completions/{phase}/{p.parent.name}/{p.name}").exists() or p.stem in approved, f"Unresolved interrupted attempt {p}", "UNRESOLVED_ATTEMPT_CONFLICT")
++    for p in (HERE/"recovery/attempts").glob("*.json"):
++        require(completion_path(read(p)["identity"]).exists(), f"Interrupted recovery attempt {p}", "UNRESOLVED_ATTEMPT_CONFLICT")
+     for b in read(CONFIG)["blocks"]:
+         child("run-block",b,workers); child("audit-block",b)
+-    preserve(); verify_refs(); verify_seal()
++    require(not unresolved_failures(), "Recovery unresolved")
++    verify_predecessor(); preserve(); verify_refs(); verify_seal()
+     subprocess.run([sys.executable,"-B",str(HERE/"analyse_linear_control.py")],cwd=ROOT,check=True)
+ 
+ def main():
+@@ -393,7 +463,7 @@
+         else: verify_refs(); verify_seal(); preserve()
+     except BaseException as exc:
+         if a.action in ("prepare","run"):
+-            write(HERE/"STOP.json", {"status":getattr(exc,"code","STAGE_18B3_BLOCKED"),"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
++            write(HERE/"recovery/STOP.json", {"status":getattr(exc,"code","STAGE_18B3R_BLOCKED"),"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
+         raise
+ 
+ if __name__ == "__main__": main()
+--- predecessor/analyse_linear_control.py
++++ successor/analyse_linear_control.py
+@@ -3,7 +3,7 @@
+ import json
+ import numpy as np
+ import pandas as pd
+-from run_linear_control import HERE, ROOT, CONFIG, LABEL, RESULT_LABEL, read, write, parquet, sha, now, require, frozen, verify_seal
++from run_linear_control import HERE, ROOT, CONFIG, LABEL, RESULT_LABEL, read, write, parquet, sha, now, require, frozen, verify_seal, unresolved_failures
+ 
+ def original_gain(block,resource):
+     root = ROOT/frozen.FROZEN[block]
+@@ -26,7 +26,7 @@
+ 
+ def main():
+     verify_seal(); require(read(HERE/"provenance/preservation_after.json")["status"]=="PASS","Preservation required")
+-    require(not list((HERE/"failures").rglob("*.json")),"Failures exist")
++    require(not unresolved_failures(),"Unresolved failures exist")
+     all_metrics=[]; rows=[]; audits={}; sources={}
+     for b in read(CONFIG)["blocks"]:
+         audit = read(HERE/f"validation/full_audit_{b}.json"); require(audit["status"]=="PASS","Block audit required"); audits[b]=audit
+@@ -60,7 +60,7 @@
+         magnitude="smaller" if abs(row["ARX_vs_AR_gain_percent"])<abs(row["frozen_S2_vs_S1_gain_percent"]) else "larger" if abs(row["ARX_vs_AR_gain_percent"])>abs(row["frozen_S2_vs_S1_gain_percent"]) else "equal"
+         lines.append(f"- {row['block']} {row['resource']}: Ridge {row['ARX_vs_AR_gain_percent']:+.6f}% versus frozen LSTM {row['frozen_S2_vs_S1_gain_percent']:+.6f}%; {'agreement' if row['direction_agrees'] else 'disagreement'}, {magnitude} absolute gain magnitude; difference {row['gain_difference_percentage_points']:+.6f} percentage points.")
+     lines += ["","## Protocol and limitations","","Original frozen M1-H64 selected context is shared by AR and ARX in each entity/fold. No contexts, seeds, cohorts, horizons, purging or legal origins were tuned. Five alphas (0.01, 0.1, 1, 10, 100) are scored strictly on inner validation by native-unit MAE after frozen inversion/nonnegative projection, equally over horizons; ties choose smaller alpha using the existing selector at fixed L. Each selected alpha is refit once on the frozen outer training partition. Targets use the frozen identity/log1p transforms and training-only median/IQR source scalers. Existing RidgeForecaster adds its own training-only lag-feature StandardScaler, identically for both forms. Direct multi-output horizon prediction, per-entity fits, deterministic Ridge and no artificial repetitions are used.","","This is not a generic architecture-only causal comparison: the shared contexts were chosen by original M1, whereas original S1/S2 selected their own contexts; Ridge's alpha objective and linear regularisation differ from neural optimisation/epoch selection. The five-alpha grid, additive linear specification, frozen eligible populations and finite horizons limit generalisation. A single deterministic fit does not provide sampling uncertainty. Larger or smaller point gains do not establish statistical or practical importance. No thresholds, pooled cross-block statistic, significance tests, capacity retuning or additional experiments were introduced.","","## Preservation and artifacts","","Only review_revision/experiments/ar_arx_baseline was written. Full protected-tree SHA256 membership/content and refs are audited, including the entire original scientific/manuscript trees, both completed post-hoc controls and the Stage18B1R predecessor. Manuscript modifications=0; frozen artifacts modified=0; prior controls modified=0. Commit=no; push=no.","","Configuration/source/plan hashes: provenance/experiment.json. Exact plans: plans/. Fit identities/scores/final metrics/hashes: attempts/, completions/, selections/. Final coefficient/intercept/feature-scaler arrays: models/. Native predictions/support: predictions/. Six-block audits: validation/full_audit_*.json. Detailed results: posthoc_results.csv and posthoc_metric_rows.parquet. Full protected baseline/after audit: provenance/. Output hashes: output_sha256_inventory.json.",""]
+-    (HERE/"STAGE18B3_AR_ARX_BASELINE_REPORT.md").write_text("\n".join(lines))
++    (HERE/"STAGE18B3R_AR_ARX_RECOVERY_REPORT.md").write_text("\n".join(lines))
+     inventory(); print("COMPLETE_AWAITING_REPORT_AUDIT",flush=True)
+ 
+ if __name__=="__main__": main()

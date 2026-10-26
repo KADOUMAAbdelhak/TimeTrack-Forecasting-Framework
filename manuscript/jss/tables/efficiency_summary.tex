@@ -1,12 +1,12 @@
 % Five-horizon parameter counts and frozen Materna execution accounting.
 \begin{table}[t]
-  \caption{Model consolidation and observed Materna fitting cost.}
+  \caption{Local model complements and summed Materna worker fit-hours.}
   \label{tab:efficiency}
   \centering
   \small
   \begin{tabular}{@{}lrrr@{}}
     \toprule
-    Formulation & Models & Parameters & Fit-hours \\
+    Formulation & Models & Parameters & Worker h \\
     \midrule
     S1 & 4 & 203,028 & 85.59 \\
     S2 & 4 & 206,100 & 75.30 \\
@@ -15,8 +15,9 @@
   \end{tabular}
 
   \vspace{2pt}
-  \parbox{\columnwidth}{\footnotesize Parameter counts refer to the
-  five-horizon external instantiation. Fit-hours are observed totals from the
-  three Materna traces. Relative to S2, M1 uses approximately 74.5\% fewer
-  parameters and 75\% fewer models.}
+  \parbox{\columnwidth}{\footnotesize Models and parameters describe one
+  entity/fold/seed target complement in the five-horizon external design.
+  Worker hours sum successful inner/final fits across all three Materna
+  traces, not elapsed wall time or deployment cost. Relative to S2, H64 M1
+  uses approximately 74.5\% fewer parameters and 75\% fewer models.}
 \end{table}

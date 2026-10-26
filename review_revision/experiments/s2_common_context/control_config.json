@@ -1,0 +1,21 @@
+{
+  "label": "POST-HOC SENSITIVITY CONTROL",
+  "control": "S2-COMMON-CONTEXT",
+  "version": "stage18b1-v1",
+  "parent_manuscript_checkpoint": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+  "parent_scientific_checkpoint": "fee20c316040c57b69ba12a193530c955b539771",
+  "branch": "paper/jss-review-revision",
+  "blocks": ["TimeTrack", "fastStorage", "Rnd", "Materna-T1", "Materna-T2", "Materna-T3"],
+  "resources": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+  "seeds": [0, 1, 2],
+  "forced_context": "Exact frozen M1 selected_L for the same block/entity/outer fold; no new selection",
+  "epoch": "Exact existing S2 inner best_epoch at forced L for target and seed",
+  "architecture": {"class": "SingleTargetLSTM", "layers": 2, "hidden_size": 64, "dropout": 0.1, "bidirectional": false, "input_channels": 4},
+  "optimisation": {"optimizer": "Adam", "learning_rate": 0.001, "batch_size": 256, "max_inner_epochs": 50, "inner_patience": 7, "gradient_clip": 1.0, "final_epochs": "fixed from existing inner fit; no final early stopping"},
+  "test_evaluations_per_new_fit": 1,
+  "reuse": "Exact original S2 identity, selected epoch, support and scaler; validated completion/artifact hashes only",
+  "workers": 4,
+  "aggregation": "Seed mean within entity/fold/horizon, equal entity/fold mean within horizon, equal horizon mean; separate blocks",
+  "scope_exclusions": ["capacity-matched M1", "new inner fits", "manuscript changes", "frozen writes", "bootstrap", "global pooled statistic"],
+  "interpretation": "Descriptive numerical gap comparison only, no hard materiality threshold or formal hypothesis classes"
+}

@@ -1,0 +1,360 @@
+{
+  "determinism": {
+    "bitwise_across_environments_guaranteed": false,
+    "cpu_threads": 1,
+    "note": "Frozen warn-only deterministic policy retained; no completed interrupted output exists for bitwise comparison",
+    "same_frozen_set_seed_function": true,
+    "same_seed": true,
+    "torch_deterministic_algorithms": true,
+    "warn_only": true
+  },
+  "status": "PASS",
+  "timestamp": "2026-10-21T10:58:47.616116+00:00",
+  "units": [
+    {
+      "authorisation_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r.json",
+      "authorisation_sha256": "d641cb331c49522f3c148d2e174c2c2d65cb73c3b383e543ab3725981187592e",
+      "completion_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/completions/Rnd/518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481.json",
+      "completion_sha256": "eb1b091f124647faaea76bc7691773e03ccdb11a04e20dc0a745daec2f4dcaec",
+      "mode": "EXACT_FROZEN_REUSE",
+      "no_training": true,
+      "original_failure_sha256": "4475544e51605386f8ad79ce1ed636f6e9e93b2900b8d2d31dc7bc1b610161d4",
+      "predecessor_attempt_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/attempts/Rnd/518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481.json",
+      "predecessor_attempt_sha256": "816aea483833b3ccc931a4ee890926879ed7b8da1fab06f89d2a0b1cd53ce108",
+      "scientific_identity_unchanged": true,
+      "spec": {
+        "L": 18,
+        "block": "Rnd",
+        "control_run_id": "518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481",
+        "entity": "474",
+        "epoch": 48,
+        "fold": 2,
+        "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+        "frozen_final_identity": {
+          "L": 18,
+          "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+          "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+          "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+          "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+          "environment": "GWA-T-12_Bitbrains_Rnd",
+          "environment_key": "Rnd",
+          "fold": 2,
+          "formulation": "S2",
+          "phase": "final",
+          "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+          "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+          "resource": "THROUGHPUT",
+          "run_id": "df65aac12e3c835c7078b529",
+          "seed": 0,
+          "selected_epoch": 48,
+          "support_hash": "8eb16cb1fd629478454309841c438402031a4bc66de0c9bd873bce252859f017",
+          "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+          "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+          "vm_id": "474"
+        },
+        "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/52a1b8d4a03090aaf0cb3a5e.json",
+        "inner_completion_sha256": "958b8c9971561f32ecba030c0c0b2fa81551a168fcfd8b13dfc390ddf85f0bb7",
+        "label": "POST-HOC SENSITIVITY CONTROL",
+        "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/154fe9e62d3d561cb8b03649.json",
+        "m1_context_completion_sha256": "fd485f840ea1c904374a3e4ca835ca5c3d5ce2724eb7de6adcd6562614573cf8",
+        "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/df65aac12e3c835c7078b529.json",
+        "original_completion_sha256": "6cab1d1b6dd74025ce1436856dbdc18d748fedeeaa778c7181436c5a790f779b",
+        "original_selected_L": 18,
+        "resource": "THROUGHPUT",
+        "reuse": true,
+        "scaler": {
+          "native_iqr": [
+            0.26666666666666683,
+            0.26666666666666683,
+            8388.26666666667,
+            0.1333333333333333
+          ],
+          "transformed_iqr": [
+            0.26666666666666683,
+            0.21130909366720707,
+            8388.26666666667,
+            0.11122563511022435
+          ],
+          "transformed_median": [
+            0.9333333333333332,
+            0.23638877806423034,
+            51727.6,
+            0.18232155679395465
+          ]
+        },
+        "scaler_sha256": "22d666f498873ee2b83e10f4d01f6e0e0a8c70f28383141c5fbc3778e68cb00e",
+        "seed": 0,
+        "split_hashes": {
+          "inner_train": "dfcc6ec5ddb7c1d1bce8578aed91a51668291a964923a57277ac42ef79b1f34b",
+          "inner_validation": "12b745f150df8273e81d0652e8ee63fbd9aba5c9f78a1419b7e9e9dfbd315ca2",
+          "outer_test": "1e4cf3e95024811f302c46250cf0b9092fb03bbb647bad53b273aa5776091e94",
+          "outer_train": "5303c5555ba5f94d0e0447426abb324ed4b5924f09f7f0cf4a254f10dcf0e06e"
+        }
+      },
+      "stage": "18B1R",
+      "status": "RECOVERED",
+      "successor_adapter_sha256": "d227ff7d6fd443b9ba3a6e1d532acedbb14045986ef6dd4143dfa88d87513b9d",
+      "test_evaluations": 0,
+      "timestamp": "2026-10-21T10:58:27.626612+00:00"
+    },
+    {
+      "authorisation_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r.json",
+      "authorisation_sha256": "d641cb331c49522f3c148d2e174c2c2d65cb73c3b383e543ab3725981187592e",
+      "completion_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/completions/Rnd/4ce3021757a4964518d83768a3dae00623f6cd037e2e44a2980df949cec03b40.json",
+      "completion_sha256": "b439764ca8092b683d403709f0c9bd9943ffe01a56a4dda28e8a92c0d7a1d005",
+      "mode": "NEW_FIXED_EPOCH_REFIT",
+      "no_training": false,
+      "predecessor_attempt_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/attempts/Rnd/4ce3021757a4964518d83768a3dae00623f6cd037e2e44a2980df949cec03b40.json",
+      "predecessor_attempt_sha256": "a96702d140b5639ea1721344c45f0ecab5092d341c7a2619b5d9048334b70fcc",
+      "scientific_identity_unchanged": true,
+      "spec": {
+        "L": 9,
+        "block": "Rnd",
+        "control_run_id": "4ce3021757a4964518d83768a3dae00623f6cd037e2e44a2980df949cec03b40",
+        "entity": "493",
+        "epoch": 21,
+        "fold": 4,
+        "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+        "frozen_final_identity": {
+          "L": 9,
+          "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+          "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+          "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+          "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+          "environment": "GWA-T-12_Bitbrains_Rnd",
+          "environment_key": "Rnd",
+          "fold": 4,
+          "formulation": "S2",
+          "phase": "final",
+          "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+          "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+          "resource": "DISK_WRITE",
+          "run_id": "d289b3d60248624156c84c05",
+          "seed": 2,
+          "selected_epoch": 21,
+          "support_hash": "ead198916a3752a5a236a61db5015433ad17bb4b585a8893ddcfcf8c6589ef59",
+          "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+          "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+          "vm_id": "493"
+        },
+        "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/33839aad81b8dd6d11165f62.json",
+        "inner_completion_sha256": "f2c7084440924336dc20314023a70038017fc32dc2cbcd56b7316cb21e520463",
+        "label": "POST-HOC SENSITIVITY CONTROL",
+        "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/deaa878b238400c1b64a765d.json",
+        "m1_context_completion_sha256": "60f6c45702a1f8bfe09a59ff66c3737947f69782cd5d37a2a45d226cbe801f27",
+        "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/57171d47710cd4329d31f24c.json",
+        "original_completion_sha256": "e08b90aa1a350f92361e74adbdb41ecfcbf2e43df6b797fa23ffe9ad6654c67b",
+        "original_selected_L": 18,
+        "resource": "DISK_WRITE",
+        "reuse": false,
+        "scaler": {
+          "native_iqr": [
+            0.1499999999999999,
+            3.5333333333333337,
+            73100.0,
+            0.6666666666666667
+          ],
+          "transformed_iqr": [
+            0.1499999999999999,
+            0.90511743127603,
+            73100.0,
+            0.46262352194811307
+          ],
+          "transformed_median": [
+            1.775,
+            1.2039728043259361,
+            489333.6,
+            0.33647223662121295
+          ]
+        },
+        "scaler_sha256": "4bf2b27502acaa8b199b663c31c495385e4a862bf60df9d9e711f4d19aa97dc5",
+        "seed": 2,
+        "split_hashes": {
+          "inner_train": "65a089ba56d7817bc8f488ad7aa511bbcbac10eae4d86e7eca67681c11807ebb",
+          "inner_validation": "f669c56e5a69d70aaa149d36c53f42f1ccde65ac172e4439910780d0940300bb",
+          "outer_test": "874dd0a46072f5a0dcc393bae06c6cc841617d75a0e6abb289365cc86eda50b9",
+          "outer_train": "9e95624248dfff96b3d45199a7b307d369a10763a7fc7b92b7028d38ecd12ac4"
+        }
+      },
+      "stage": "18B1R",
+      "status": "RECOVERED",
+      "successor_adapter_sha256": "d227ff7d6fd443b9ba3a6e1d532acedbb14045986ef6dd4143dfa88d87513b9d",
+      "test_evaluations": 1,
+      "timestamp": "2026-10-21T10:58:36.729468+00:00"
+    },
+    {
+      "authorisation_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r.json",
+      "authorisation_sha256": "d641cb331c49522f3c148d2e174c2c2d65cb73c3b383e543ab3725981187592e",
+      "completion_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/completions/Rnd/7777ba54638937de20cb39c518545eaae8343f1aca3a7ec0cb89106bb859478b.json",
+      "completion_sha256": "f366abee07720ef8809c15e8ee0cd1e535ef681cbe24fc7bb9a83b751a2c0eb1",
+      "mode": "NEW_FIXED_EPOCH_REFIT",
+      "no_training": false,
+      "predecessor_attempt_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/attempts/Rnd/7777ba54638937de20cb39c518545eaae8343f1aca3a7ec0cb89106bb859478b.json",
+      "predecessor_attempt_sha256": "6a58618e45b61dbb45facc1bf33a1c905f9b9bbb1619f222b99e25c201c0a09c",
+      "scientific_identity_unchanged": true,
+      "spec": {
+        "L": 9,
+        "block": "Rnd",
+        "control_run_id": "7777ba54638937de20cb39c518545eaae8343f1aca3a7ec0cb89106bb859478b",
+        "entity": "493",
+        "epoch": 12,
+        "fold": 5,
+        "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+        "frozen_final_identity": {
+          "L": 9,
+          "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+          "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+          "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+          "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+          "environment": "GWA-T-12_Bitbrains_Rnd",
+          "environment_key": "Rnd",
+          "fold": 5,
+          "formulation": "S2",
+          "phase": "final",
+          "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+          "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+          "resource": "MEMORY",
+          "run_id": "f94a5559afd8cd3f20272911",
+          "seed": 2,
+          "selected_epoch": 12,
+          "support_hash": "cafb01dbd5f2fc719e1b3752cbbb11695bbd489b96c777a405657c37c0c7ddf1",
+          "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+          "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+          "vm_id": "493"
+        },
+        "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/9b2a55dc80a48ad5e0a06b47.json",
+        "inner_completion_sha256": "da171db441f2d09058a71ada5eac9cdb9af5d801b7d6dcc7d2641299ccbe4c33",
+        "label": "POST-HOC SENSITIVITY CONTROL",
+        "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/f13ab819b817cf27d346d1f0.json",
+        "m1_context_completion_sha256": "df9743bc20826febb2639e1c3cd5ec4f1b1386d554b30334b2b7f7a3df692f00",
+        "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/8aa92710397ee0910fb4c8fd.json",
+        "original_completion_sha256": "51e0c3fd7ffc9b361284407f7a14a941947be09fc6314332f48d263bd54dea0d",
+        "original_selected_L": 18,
+        "resource": "MEMORY",
+        "reuse": false,
+        "scaler": {
+          "native_iqr": [
+            0.1499999999999999,
+            4.066666666666666,
+            75496.79999999999,
+            0.6
+          ],
+          "transformed_iqr": [
+            0.1499999999999999,
+            0.9911920400472729,
+            75496.79999999999,
+            0.42488319396526597
+          ],
+          "transformed_median": [
+            1.775,
+            1.2237754316221159,
+            489333.3333333333,
+            0.2876820724517809
+          ]
+        },
+        "scaler_sha256": "1e7e609739bf54d6a92538e58a2f8a86e736664bfac2d5743307fc912a1ea6b9",
+        "seed": 2,
+        "split_hashes": {
+          "inner_train": "8b6257805352041c14b0833e2ac0ffc4fa9327656a8a5c44f0463c32d493f7d1",
+          "inner_validation": "9bae9b4fa1a4dd5ce0418690cc9ff91d8be91131caa8188ecdb533dc1888849a",
+          "outer_test": "f2958d1551fac7e43cf4547e0dee3d1bf1c533f0c91ae1a8b3a4a4c6411c5070",
+          "outer_train": "2e63f55f8449b16b7196586b0b05ddc50bb70d067d55e58fc721f9472538c0c9"
+        }
+      },
+      "stage": "18B1R",
+      "status": "RECOVERED",
+      "successor_adapter_sha256": "d227ff7d6fd443b9ba3a6e1d532acedbb14045986ef6dd4143dfa88d87513b9d",
+      "test_evaluations": 1,
+      "timestamp": "2026-10-21T10:58:42.551346+00:00"
+    },
+    {
+      "authorisation_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r.json",
+      "authorisation_sha256": "d641cb331c49522f3c148d2e174c2c2d65cb73c3b383e543ab3725981187592e",
+      "completion_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/completions/Rnd/bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826.json",
+      "completion_sha256": "a2a10e9aa540ed9f75e32261680b8cc0c1cf57b8f9f1e98cdf12b6f33a1f65f9",
+      "mode": "NEW_FIXED_EPOCH_REFIT",
+      "no_training": false,
+      "predecessor_attempt_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/attempts/Rnd/bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826.json",
+      "predecessor_attempt_sha256": "809e0a7ae9f561c8d51bc8d3dc552ea447b2785dbf4c7660b2e6a2c4f0b7ef2f",
+      "scientific_identity_unchanged": true,
+      "spec": {
+        "L": 9,
+        "block": "Rnd",
+        "control_run_id": "bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826",
+        "entity": "474",
+        "epoch": 17,
+        "fold": 1,
+        "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+        "frozen_final_identity": {
+          "L": 9,
+          "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+          "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+          "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+          "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+          "environment": "GWA-T-12_Bitbrains_Rnd",
+          "environment_key": "Rnd",
+          "fold": 1,
+          "formulation": "S2",
+          "phase": "final",
+          "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+          "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+          "resource": "DISK_WRITE",
+          "run_id": "f7b113c117113b9680e5de25",
+          "seed": 0,
+          "selected_epoch": 17,
+          "support_hash": "ff1f0c623c8118034a9426b6842e90ffd1a359ad80842eca05f785f3a893e3fc",
+          "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+          "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+          "vm_id": "474"
+        },
+        "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/10485cf0615798fa6d4bc4cd.json",
+        "inner_completion_sha256": "fd62aa4c3bdb0266e0de13c5cc6ff905e4ee395ec0435f8cb192e16d506fe7b9",
+        "label": "POST-HOC SENSITIVITY CONTROL",
+        "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/e628ff112fd2e13c5ab1118a.json",
+        "m1_context_completion_sha256": "102500e58b0e5dbf618e4c1a07a87fbe637e4dbfb57e7c9da14fa9fd7bb86e58",
+        "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/51018d1ad2f269fa250f861d.json",
+        "original_completion_sha256": "1b6f5b88586c57b57ba534e0d5e151c10d3120b5aa1bdb1044e88c21e66f138f",
+        "original_selected_L": 18,
+        "resource": "DISK_WRITE",
+        "reuse": false,
+        "scaler": {
+          "native_iqr": [
+            0.26666666666666683,
+            0.20000000000000012,
+            7863.199999999997,
+            0.1333333333333333
+          ],
+          "transformed_iqr": [
+            0.26666666666666683,
+            0.1541506798272584,
+            7863.199999999997,
+            0.11122563511022435
+          ],
+          "transformed_median": [
+            1.0,
+            0.23638877806423034,
+            50367.142857142855,
+            0.18232155679395465
+          ]
+        },
+        "scaler_sha256": "8efc76373cb6160726fd22f54fefb74e13581a17ffc49f24b6a670995dceb775",
+        "seed": 0,
+        "split_hashes": {
+          "inner_train": "55dffebb7eff196f60762003527315b9aff0fa522368ef57958a682e29efc888",
+          "inner_validation": "1cbc8d7684342ae3b14d1b2cbcc6d03a8003a79e1d58903f71e702fdae6f0262",
+          "outer_test": "491f9aaf9361e80d56634ca6c8454536c0fa981c12cc066c476b5d321f632f84",
+          "outer_train": "4440592c908783c95f2f601526af5d1258873a9f6dea380ca9449f14a58420df"
+        }
+      },
+      "stage": "18B1R",
+      "status": "RECOVERED",
+      "successor_adapter_sha256": "d227ff7d6fd443b9ba3a6e1d532acedbb14045986ef6dd4143dfa88d87513b9d",
+      "test_evaluations": 1,
+      "timestamp": "2026-10-21T10:58:47.615224+00:00"
+    }
+  ]
+}

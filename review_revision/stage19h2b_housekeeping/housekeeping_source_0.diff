@@ -1,0 +1,19 @@
+--- before/manuscript/jss/manuscript.tex
++++ after/manuscript/jss/manuscript.tex
+@@ -979,6 +979,7 @@
+ not replace, primary estimates, classes or intervals.
+ Table~\ref{tab:posthoc-controls} uses the designs in
+ Section~\ref{sec:posthoc-controls} beside unchanged reference gains.
++Supplementary Tables~S1--S2 provide the detailed diagnostics.
+ 
+ \begin{figure*}[t]
+ \centering
+@@ -1239,7 +1240,7 @@
+ \label{sec:results-efficiency}
+ 
+ The original H64 M1 consolidates the target-model complement for one entity,
+-outer fold and seed. In the five-horizon external design, S1 uses four
++outer fold and seed (Table~\ref{tab:efficiency}). In the five-horizon external design, S1 uses four
+ networks and 203,028 parameters, S2 four networks and 206,100 parameters, and
+ M1 one joint network and 52,500 parameters: approximately $74.5\%$ fewer
+ parameters and $75\%$ fewer models than S2. TimeTrack's eight-horizon

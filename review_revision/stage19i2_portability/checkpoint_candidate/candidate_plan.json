@@ -1,0 +1,28 @@
+{
+  "status": "PROPOSED_SUCCESSOR_NO_STAGING",
+  "supersedes": "review_revision/stage19i1_reproducibility/candidate_plan.json",
+  "predecessor_plan_sha256": "e1f91b06ae0b6202f15812010987f9aebfee65410a6d07d826caf4241b606b75",
+  "predecessor_delta_files": 8572,
+  "added_portability_files": 28,
+  "retired_private_tools_from_candidate": [
+    "review_revision/stage19g1_evidence/export_tables.mjs",
+    "review_revision/stage19g1_evidence/inspect_artifact_api.mjs"
+  ],
+  "candidate_delta_files": 8598,
+  "candidate_tree_files": 10578,
+  "modifications_to_existing_tracked_files": 11,
+  "new_additions": 8587,
+  "proposed_deletions": 0,
+  "required_compact_replay_inputs": 11,
+  "all_replay_inputs_in_candidate": true,
+  "ignored_Parquet_override_paths": 21,
+  "full_exclusion_ledger_paths": 432935,
+  "proposed_tag": "jss-review-robustness-reproducibility-v1",
+  "proposed_tag_url": "https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/jss-review-robustness-reproducibility-v1",
+  "full_saved_artifact_archive_still_required_for_Level_C": true,
+  "level_B_private_dependencies": 0,
+  "authoritative_artifacts_modified": 0,
+  "commit": "no",
+  "tag": "no",
+  "push": "no"
+}

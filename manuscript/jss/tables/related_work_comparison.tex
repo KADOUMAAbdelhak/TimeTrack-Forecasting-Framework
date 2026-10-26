@@ -1,61 +1,79 @@
-% Bounded organisational comparison from the Stage 6B full-text clearance.
-% Codes concern reported experimental arms, not unpublished capabilities.
+% Cell-level provenance is retained in review_revision/stage19e_evidence.
 \begin{table*}[t]
-  \caption{Bounded comparison of the closest inspected studies. Organisational
-  analogues do not imply identical architectures; codes are defined below.
-  No priority claim is implied.}
+  \caption{Closest inspected designs: contextual inputs, target sharing and
+  model-management evidence. Codes describe reported designs under the
+  definitions below, not architectural equivalence or a priority ranking.}
   \label{tab:related-work-comparison}
   \centering
   \small
   \setlength{\tabcolsep}{3pt}
   \begin{tabular}{@{}
-    >{\raggedright\arraybackslash}p{0.120\textwidth}
-    >{\raggedright\arraybackslash}p{0.235\textwidth}
-    >{\raggedright\arraybackslash}p{0.130\textwidth}
-    *{2}{>{\centering\arraybackslash}p{0.095\textwidth}}
-    >{\raggedright\arraybackslash}p{0.265\textwidth}@{}}
+    >{\raggedright\arraybackslash}p{0.180\textwidth}
+    >{\raggedright\arraybackslash}p{0.200\textwidth}
+    *{2}{>{\raggedright\arraybackslash}p{0.105\textwidth}}
+    *{2}{>{\raggedright\arraybackslash}p{0.100\textwidth}}
+    >{\raggedright\arraybackslash}p{0.130\textwidth}@{}}
     \toprule
-    Study & Input / target organisation & Reported S1/S2/M1 analogues
-      & S1--S2 contextual comparison & S2--M1 sharing comparison
-      & Scope relative to this study \\
+    Study & Contextual input / target organisation
+      & Independent all-input targets & Shared cross-target parameters
+      & Single-task vs shared comparison & Adverse-transfer analysis
+      & Efficiency / consolidation evidence \\
     \midrule
     \citet{Ullah2023CloudBiLSTM}
-      & Ten-channel histories to joint ten-channel forecasts through a common
-        multivariate BiLSTM.
-      & S1: NO\newline S2: NO\newline M1: PARTIAL & NO & NO
-      & fastStorage/Rnd joint forecasting; no independent all-input target
-        bridge. Common dense output differs from our resource-head topology. \\
+      & YES; ten-channel histories to joint ten-channel forecasts.
+      & NO & YES; common BiLSTM & NO & NO
+      & PARTIAL; qualitative training discussion \\
     \addlinespace
     \citet{DiMenna2026RuntimeForecasting}
-      & Per-series classical/neural fits; foundation models forecast individual
-        runtime histories zero-shot.
-      & S1: YES\newline S2: NO\newline M1: NO & NO & NO
-      & Independent-series/model-family evaluation, not multivariate runtime
-        forecasting. Pretrained weight reuse is not M1. \\
+      & NO; individual metric histories to same-metric horizons.
+      & NO & NO; pretrained reuse is a different axis & NO & NO
+      & PARTIAL; sizes and cost discussion \\
     \addlinespace
     \citet{Tripathi2025MMRP} (MMRP)
-      & Univariate or multivariate histories to one target series; CPU/memory
-        evaluated separately.
-      & S1: YES\newline S2: PARTIAL\newline M1: NO & PARTIAL & NO
-      & Alibaba/Google contextual comparison; no reported joint resource-sharing
-        arm. Feature/independent-fit matching is partially specified. \\
+      & YES; own/multichannel histories to one target.
+      & PARTIAL; exact channel/fit inventory unspecified
+      & NO & NO & NO
+      & PARTIAL; inference throughput \\
+    \addlinespace
+    \citet{Nikentari2022NARMAXLSTM} (NARMAX-LSTM)
+      & YES; lagged station inputs to station targets.
+      & Not established & YES; shared LSTM layers
+      & YES; single-task baselines & YES; task-wise discussion
+      & PARTIAL; network-reduction argument \\
+    \addlinespace
+    \citet{Nochumsohn2025MTLinear} (MTLinear)
+      & NO channel mixing in the linear predictor; own histories, grouped targets.
+      & NO & YES; weights within groups
+      & PARTIAL; grouping endpoints & YES; gradient analysis
+      & YES; parameter/grouping and compute analysis \\
+    \addlinespace
+    \citet{Bi2019CloudMultitask}
+      & Not established for cross-resource inputs; decomposed workload.
+      & Not established & Not established for resource targets
+      & Not established & Not established
+      & PARTIAL; training-speed comparison \\
     \addlinespace
     This study
-      & S1: own-resource history, independent target model.
-        S2: all-resource histories, independent target model.
-        M1: all-resource histories, shared representation and resource-specific
-        outputs.
-      & S1: YES\newline S2: YES\newline M1: YES & YES & YES
-      & Development, external environments and dependent temporal replication;
-        both operational bridges, not parameter-matched causal interventions
-        or complete factorial isolation. \\
+      & YES; S1 own history; S2/M1 all histories; independent/joint resource targets.
+      & YES; S2 & YES; M1 encoder & YES; S2--M1
+      & YES; operational accuracy contrast
+      & YES; model and parameter counts; worker fit-hours \\
     \bottomrule
   \end{tabular}
 
   \vspace{2pt}
   \parbox{\textwidth}{\footnotesize
-    YES: explicitly represented in the inspected reported experiment.
-    NO: not part of the inspected reported experiment; this does not assert
-    that an unpublished or technically possible implementation does not exist.
-    PARTIAL: related but non-equivalent or incompletely specified.}
+    Contextual input means other variables enter a target's predictor, not
+    merely that a dataset is multivariate. Independent all-input targets means
+    separately fitted target models with the selected multichannel inputs.
+    Sharing concerns learning across target series, not horizons alone or
+    pretrained reuse. YES: explicit evidence; NO: excluded by the inspected
+    reported design; PARTIAL: related, limited or incompletely matched evidence.
+    Not established: available evidence does not settle the cell.
+    Single-task/shared comparisons need not hold inputs or architecture fixed;
+    adverse-transfer analysis coded YES means explicit empirical analysis of
+    adverse-transfer outcomes, not causal identification of the mechanism.
+    Efficiency PARTIAL covers timing, qualitative cost or network-reduction
+    evidence without the quantified parameter/grouping or consolidation analysis
+    coded YES. No code rules out unpublished implementations.}
 \end{table*}

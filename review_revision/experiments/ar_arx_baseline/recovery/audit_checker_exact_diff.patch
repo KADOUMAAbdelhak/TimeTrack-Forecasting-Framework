@@ -1,0 +1,52 @@
+--- successor1/run_linear_control.py
++++ successor2/run_linear_control.py
+@@ -95,7 +95,8 @@
+     return {str(p.relative_to(ROOT)):sha(p) for p in sorted(set(paths))}
+ 
+ def verify_seal():
+-    successor = HERE / "recovery/successor.json"
++    successor = HERE / "recovery/successor_audit_fix.json"
++    if not successor.exists(): successor = HERE / "recovery/successor.json"
+     seal = read(successor if successor.exists() else HERE / "provenance/experiment.json")
+     if successor.exists():
+         require(sha(HERE/"provenance/experiment.json") == seal["predecessor_seal_sha256"], "Original seal changed")
+@@ -103,6 +104,9 @@
+         require(sha(HERE/"recovery/predecessor_snapshot.json") == seal["snapshot_manifest_sha256"], "Snapshot manifest changed")
+         require(sha(HERE/"recovery/tests.json") == seal["tests_sha256"], "Recovery tests changed")
+         require(sha(HERE/"recovery/exact_adapter_diff.patch") == seal["exact_diff_sha256"], "Adapter diff changed")
++        if "prior_successor_sha256" in seal:
++            require(sha(HERE/"recovery/successor.json") == seal["prior_successor_sha256"], "Prior recovery seal changed")
++            require(sha(HERE/"recovery/STOP.json") == seal["resolved_audit_stop_sha256"], "Historical audit STOP changed")
+     require(sha(CONFIG) == seal["configuration_sha256"], "Config changed", "PROVENANCE_CONFLICT")
+     for rel,h in seal["source_hashes"].items(): require(sha(ROOT/rel) == h, f"Source changed {rel}", "PROVENANCE_CONFLICT")
+     for b,h in seal["plan_hashes"].items(): require(sha(HERE/f"plans/{b}.json") == h, f"Plan changed {b}", "PROVENANCE_CONFLICT")
+@@ -398,7 +402,7 @@
+                     j = list(e.leads).index(m["lead"])
+                     mae = float(e.np.mean(e.np.abs(p.y_true-p.y_pred))); pm = float(reference_pm[j])
+                     require(len(p) == m["n"] and e.np.isclose(mae,m["mae"],rtol=1e-12,atol=0) and e.np.isclose(pm,m["persistence_mae"],rtol=1e-12,atol=0), "Recomputed MAE differs")
+-                    if skill_pm[j] > 0: require(e.np.isclose(1-mae/skill_pm[j],m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
++                    if skill_pm[j] > 0: require(e.np.isclose(1-e.np.float64(mae)/skill_pm[j],m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
+                     else:
+                         require(m["persistence_skill"] is None and m["persistence_skill_undefined_reason"], "Undefined skill not explicit"); undefined += 1
+                 expected["final"].add(identity["run_id"]); count += len(value["metrics"])
+@@ -434,7 +438,8 @@
+     verify_refs(); verify_seal()
+     verify_predecessor()
+     approved = authorised_recoveries()
+-    require(not (HERE/"recovery/STOP.json").exists() and not unresolved_failures(True), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
++    historical_audit_stop = (HERE/"recovery/successor_audit_fix.json").exists() and sha(HERE/"recovery/STOP.json") == read(HERE/"recovery/successor_audit_fix.json")["resolved_audit_stop_sha256"]
++    require((not (HERE/"recovery/STOP.json").exists() or historical_audit_stop) and not (HERE/"recovery/current_STOP.json").exists() and not unresolved_failures(True), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
+     for phase in ("inner","final"):
+         for p in (HERE/f"attempts/{phase}").rglob("*.json"):
+             require((HERE/f"completions/{phase}/{p.parent.name}/{p.name}").exists() or p.stem in approved, f"Unresolved interrupted attempt {p}", "UNRESOLVED_ATTEMPT_CONFLICT")
+@@ -463,7 +468,9 @@
+         else: verify_refs(); verify_seal(); preserve()
+     except BaseException as exc:
+         if a.action in ("prepare","run"):
+-            write(HERE/"recovery/STOP.json", {"status":getattr(exc,"code","STAGE_18B3R_BLOCKED"),"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
++            stop = HERE/"recovery/STOP.json"
++            if stop.exists(): stop = HERE/"recovery/current_STOP.json"
++            write(stop, {"status":getattr(exc,"code","STAGE_18B3R_BLOCKED"),"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
+         raise
+ 
+ if __name__ == "__main__": main()

@@ -1,0 +1,21 @@
+{
+  "column_audit_mismatches": [
+    {
+      "entity": "252",
+      "fold": 3,
+      "id": "54866c92d2a06080987d3cf2c3a16592270df3996bfd886660329cfc86302d4c",
+      "lead": 4,
+      "mae_column": 1.0696717949697216,
+      "mae_stored": 1.0696717949697474,
+      "pm": 1.0735441125188816,
+      "resource": "CPU",
+      "skill_column": 0.003607040925476479,
+      "skill_from_verified_stored_mae": 0.003607040925452498,
+      "skill_stored": 0.003607040925452498
+    }
+  ],
+  "inference": 0,
+  "scientific_fits": 0,
+  "stored_mae_skill_mismatches": 0,
+  "timestamp": "2026-10-23T12:12:15.853274+00:00"
+}

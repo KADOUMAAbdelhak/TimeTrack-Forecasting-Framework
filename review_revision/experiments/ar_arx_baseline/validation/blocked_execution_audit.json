@@ -1,0 +1,24 @@
+{
+  "all_completed_inner_records_valid": true,
+  "counts": {
+    "duplicates": 0,
+    "failed_final_attempts": 35,
+    "final_attempts": 35,
+    "final_completed": 0,
+    "inner_attempts": 1400,
+    "inner_completed": 1400,
+    "models": 0,
+    "predictions": 0,
+    "selections": 280
+  },
+  "failure_messages": {
+    "Conflict('PROVENANCE_CONFLICT: Frozen persistence MAE differs')": 35
+  },
+  "heartbeat": "PAUSED",
+  "runner_process_group": 76371,
+  "runner_stopped": true,
+  "scientific_retry_performed": false,
+  "sealed_sources_patched": false,
+  "status": "STAGE_18B3_PERSISTENCE_VERIFICATION_CONFLICT",
+  "timestamp": "2026-10-23T11:56:15.333603+00:00"
+}

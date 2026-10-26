@@ -1,0 +1,118 @@
+{
+  "files": [
+    {
+      "path": "review_revision/stage19i1_reproducibility/STAGE19I1_REPRODUCIBILITY_CHECKPOINT_AUDIT.md",
+      "bytes": 22057,
+      "sha256": "109e33112c823a3acb66e59aeec46adb8e135ce8a1a9f11c4ac564fb49baf36d"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/audit_checkpoint.py",
+      "bytes": 3533,
+      "sha256": "195b5affdce6bad523a7989d0683992a2dc1829ef96d04ebe2f067cdbd4ac77d"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/build_licence_ledger.py",
+      "bytes": 5354,
+      "sha256": "2ed780d75d2a345b3b87002243be00fd8a58ed869b78b0c4959031e413fe9e41"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/candidate_commit_delta.jsonl",
+      "bytes": 3045061,
+      "sha256": "99831ac0f5ab41f5ed146df2d3918bd058be3b4650cff96ba68072b78269536a"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/candidate_commit_paths.txt",
+      "bytes": 1221771,
+      "sha256": "f1c34f138e4e88b4cc78d2d6a510249f1eb99cd0e6118342b1e1450f56ea511a"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/candidate_plan.json",
+      "bytes": 1862,
+      "sha256": "e1f91b06ae0b6202f15812010987f9aebfee65410a6d07d826caf4241b606b75"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/candidate_requires_ignore_override.txt",
+      "bytes": 1515,
+      "sha256": "412ecb317f47623c077ab73e9e76f8fd6d525e0935bfaee027be0489aa230e14"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/candidate_tree_paths.txt",
+      "bytes": 1384719,
+      "sha256": "e0b4beed5ad5e2b6297beb49a5370fe458bb42a797b775d5275f88e4c1a78d55"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/collect_public_licences.py",
+      "bytes": 1819,
+      "sha256": "554eb5c08745dd729371bfaef39ffe535b175f5166b4492030176697a8e72e88"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/coverage_checks.json",
+      "bytes": 4997,
+      "sha256": "5ae7c68c8ecc42de17ac4b8d03a94f167fedbd6787121ce695263397c10ff86b"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/dataset_licence_metadata.json",
+      "bytes": 2687,
+      "sha256": "2da1938db493f10ec0552a88f8401a7c296cb0908e71f6a63827234d3787f00f"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/files_excluded.jsonl",
+      "bytes": 119211519,
+      "sha256": "6901635dc5548ca741f2051f550a3b412d59337bf0efa56ab08fc2a4cad097ce"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/finalise.py",
+      "bytes": 4828,
+      "sha256": "9d2228624ecd8ff83e554d882dbb5d6f125b3f45874d6057c1a2d45899962f7a"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/git_before.json",
+      "bytes": 271127,
+      "sha256": "aba059e64fa2c3b69e40f51c22dfa835f1bb3fa607a477c38a15ee64d63540fb"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/inherited_tracked.jsonl",
+      "bytes": 411240,
+      "sha256": "da2d283289fd936aa73f00937caea236173aec07eca1be74808aa02dbeb2445f"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/licence_findings.json",
+      "bytes": 8088,
+      "sha256": "c524d0365fa6fb7da67f450b40452a07383740c4a6d973837db01059a465e022"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/plan_checkpoint.py",
+      "bytes": 9733,
+      "sha256": "d56c835785b358503e0a15820f851736556597f7e1edfcf49ed5568d673e84a3"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/preservation_after.json",
+      "bytes": 278,
+      "sha256": "34259f2a7f86ee9a11b2a0eaf0ab1ea6a857359166407e2f39f069c96ced0577"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/preservation_before.json",
+      "bytes": 156,
+      "sha256": "5789f00bdcc66b18c107a4e1da080afe11a28158de65b2c4b64ce4779b4a8756"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/verification.json",
+      "bytes": 3059,
+      "sha256": "2a73b6c7aa635078be0ead614a9b60ac5563b38491ad1add9bcba4c7e2c3b15c"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/verify_coverage.py",
+      "bytes": 6762,
+      "sha256": "b24528739d144033a4535696ed2456d1972e8ed410a7892da70225d95b9c3637"
+    },
+    {
+      "path": "review_revision/stage19i1_reproducibility/working_tree_before.jsonl",
+      "bytes": 119263588,
+      "sha256": "f5ceaadff969d96da5de763e0ad816329118257b935fe97e3d215214191e01b0"
+    }
+  ],
+  "exclusions": [
+    "self-referential output inventory"
+  ],
+  "scope": "Audit evidence, not a submission package or experiment archive"
+}

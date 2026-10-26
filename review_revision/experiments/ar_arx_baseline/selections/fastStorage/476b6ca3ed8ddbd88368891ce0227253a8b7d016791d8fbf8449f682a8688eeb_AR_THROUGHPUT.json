@@ -1,0 +1,31 @@
+{
+  "L": 4,
+  "alpha": 0.01,
+  "candidate_sources": [
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/fastStorage/e5ca550b14617a1ee829ec5a5e2624b93270a54117beaf0a5804b873cdff6798.json",
+      "sha256": "12075d77f19c9cf17e16ffa15e9b3efc413ffaa2d2c553f8e5fa762a1d3a4ecf"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/fastStorage/fe48de3065a09e1a82c0029b8c9cf434fb9107cc6638d81766fe6e1b272b962d.json",
+      "sha256": "c2fc1b842ec3777f8a74a3d3f61744e5d1bc17038293ca88591cfc3be9acd9c4"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/fastStorage/030497624dda530b2f38d31814338ceae223251603d754b9049706da38affcef.json",
+      "sha256": "b54c99c6c1e3049859cf19343cfd3a3c294070ea976630a5bcd93be8233436ea"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/fastStorage/f82b0e4d327e803f1b8b3157b945d9bf6740e315814f632a4e8579723f8d1304.json",
+      "sha256": "02d6422cad9eaba921ad20c84e825dc3b889a25782bf01ea06adffbf43e3746c"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/fastStorage/01d596e4c4a78a378ca67688d355e9d692b08724cdab06400e00dee027373ab5.json",
+      "sha256": "b3a0a5fd10f848238cb818f1fa724711fb92a0ce881f2c59eab21849a6f05731"
+    }
+  ],
+  "formulation": "AR",
+  "group_id": "476b6ca3ed8ddbd88368891ce0227253a8b7d016791d8fbf8449f682a8688eeb",
+  "inner_validation_mae": 0.9035732790553195,
+  "resource": "THROUGHPUT",
+  "test_accessed": false
+}

@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "reviewed_at_utc": "2026-10-23T20:18:40.697270+00:00",
+  "review": "Manual inspection by the agent of rendered page layouts and focused full-page images",
+  "main_layout_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "main_focused_pages": [
+    1,
+    12,
+    13,
+    15,
+    16
+  ],
+  "supplement_full_pages": [
+    1,
+    2,
+    3
+  ],
+  "inspected": [
+    "all main-page contact sheets",
+    "full-page attribution and RQ4",
+    "full-page abstract, discussion and conclusion",
+    "all 24 robustness rows",
+    "all 48 seed rows and panel/page boundaries"
+  ],
+  "result": "Readable; no clipping, overlap, new overfull body lines or missing rows",
+  "main_pdf_sha256": "432fbb072912924ffec0b11b2db287db35aaa41a4f3e65c27a14115c9c7a385b",
+  "supplement_pdf_sha256": "f9ce31ac1e5795f0c8df614dba449be5659583d503cbdd1f017ead8a85b51153",
+  "image_sha256": {
+    "render/main/page-01.png": "6777f888d1cf004261379265af4471c59f02c9f4289e52f537075d8a026024fe",
+    "render/main/page-02.png": "2224822d091db148524b873cddcf3071b34bc6ca262c1ea95f6e09ebc419cf54",
+    "render/main/page-03.png": "206d55c64ca821399d0c29bea08d7c4f4994cbab0a558d553089eb83b87075e2",
+    "render/main/page-04.png": "1d92d436545b555f82714d00093f450baec30da1bf37d6c8f5338ce069fd876d",
+    "render/main/page-05.png": "e1ec46df64bd2b66c7f3a535b0b8fed707bb434d19b8e6502f4f1e6c06e1821d",
+    "render/main/page-06.png": "31f762e59af249a1785af9e2bf8dc10512d5709bab93732e96b66f45aa212455",
+    "render/main/page-07.png": "8a8ae8b3bb62d2784b2ae396154246d986473289cec9170234fc952867f84c35",
+    "render/main/page-08.png": "54fd92d45e8294e5427adb691456e63730d7c4fca75bf9678b116fb87c1a40b2",
+    "render/main/page-09.png": "3a646b8c5414a77c2ff954c2bdab9900b8ab545d2e8b89346c5022015bed2500",
+    "render/main/page-10.png": "ee6d7c4bb91475ae9a6bf80cd5349f93023707abb35a563c49d4f4e5a5ebc3f0",
+    "render/main/page-11.png": "1679251b68747b4f0349520927a76245d1402b8d5140d366d77523d58d50d82a",
+    "render/main/page-12.png": "eacc10dd8691abb5a48af0ff2fdaa8291a0f249d992da3c6ec42956030727e8d",
+    "render/main/page-13.png": "4ac3a417f6f805e1df273e07d59104b01278d280ff9e9e0ca577c09aca8ba84b",
+    "render/main/page-14.png": "2cdd0bfbcb7061da9c2416f4840848a2278b29f9999ecc6565aed4cf5e21166c",
+    "render/main/page-15.png": "ec0a52ceeb1e4d14540b1470e270aa51f23f3cd4ae8d2a237b12ef8783ef11fc",
+    "render/main/page-16.png": "c77b757a9388f0fd328c22cb348a58e31a296741dffe90f7ef337655c426a15c",
+    "render/main/page-17.png": "30f56b85ca1e6fae65a8acc372eb461e094fed42dfefdba12a248f7f5df4b796",
+    "render/main/page-18.png": "13353277dc271dd09fd346c328b1024333b46d26927c6b8b3194600ac29589cf",
+    "render/main_contact_1.png": "05a22a158fb6f0cf5d0e4acd01c0a32c40e18592b9913dd48e2ad2f4d3e08c8c",
+    "render/main_contact_2.png": "b04ec688d5cf59f6529430dc495604297b2f122b504364daba4074024104797d",
+    "render/main_contact_3.png": "d6494feda2714e9c2d7eb605b9d76169ac0f5d8eeeb91a3df9ba09d71d6d1626",
+    "render/supplement/page-1.png": "226e8762955bf1cbd4086277935f7c9f5a8c4df7c208e4f8d0f957f9f9e0b8de",
+    "render/supplement/page-2.png": "bc88ec05b978b7a5ac2735e5fad5a31d8b8ac973318f2c43195bd56bf76a88e5",
+    "render/supplement/page-3.png": "d930175fc0eb750cc46b54872d0db816d7b3c657a6b7d68844f292d7c0825056"
+  }
+}

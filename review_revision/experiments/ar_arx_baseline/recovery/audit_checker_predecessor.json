@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "path": "run_linear_control.py",
+      "sha256": "c815d082508402766be1f47b4ed588deebd46933db7b3656115c8b24303a9ac5"
+    },
+    {
+      "path": "test_recovery.py",
+      "sha256": "b9bf083328deb8219eb504c4429970d88c24e8aa70de99f3f76813090b0338da"
+    },
+    {
+      "path": "recovery/successor.json",
+      "sha256": "12856802319cf97a735bb947510b86babe7d3235ba301570b4b21ac62d0c9206"
+    },
+    {
+      "path": "recovery/tests.json",
+      "sha256": "ce7185c610be23b02f880c3a98fb9c16a59848a9f793093356ce65f597e1db90"
+    },
+    {
+      "path": "recovery/STOP.json",
+      "sha256": "8aadfbb4d58e8448a4f69f68128816f4f202c428277fd12f8d480db01f4bbe3c"
+    },
+    {
+      "path": "recovery/resumed_execution.log",
+      "sha256": "2df343dc81f2c81f68768b1bbae6a98f784ce45dca2851ece934d7a9289be252"
+    }
+  ],
+  "reason": "post-fit skill audit scalar-promotion bug; scientific results unchanged",
+  "timestamp": "2026-10-23T12:06:49.986728+00:00"
+}

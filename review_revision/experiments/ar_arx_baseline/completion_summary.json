@@ -1,0 +1,30 @@
+{
+  "actual_executed_fits_including_historical_failures": 43715,
+  "actual_final_test_calls_including_historical_failures": 7315,
+  "authorised_same_identity_recovery_fits": 35,
+  "block_resource_rows": 24,
+  "commit": false,
+  "counts": {
+    "failed": 0,
+    "final": 7280,
+    "inner": 36400
+  },
+  "duplicates": 0,
+  "final_audited_timestamp": "2026-10-23T12:25:35.536484+00:00",
+  "frozen_artifacts_modified": 0,
+  "historical_failed_final_attempts": 35,
+  "human_report_audit": "PASS",
+  "label": "POST-HOC SENSITIVITY CONTROL",
+  "manuscript_modifications": 0,
+  "metric_rows": 37240,
+  "preexisting_inner_reused": 1400,
+  "push": false,
+  "report_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/STAGE18B3R_AR_ARX_RECOVERY_REPORT.md",
+  "report_sha256": "edc9ff1024df8fd1f0a5d3360dda3b0d6640d52f9da6ebed92eb0e3501f63c80",
+  "resolved_recovery_final_identities": 35,
+  "reused_failed_final_artifacts": 0,
+  "scientific_config_changes": 0,
+  "status": "STAGE_18B3R_PASS",
+  "timestamp": "2026-10-23T12:20:11.837467+00:00",
+  "unresolved_failures": 0
+}

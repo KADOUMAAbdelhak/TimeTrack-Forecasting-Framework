@@ -1,0 +1,53 @@
+TimeTrack research reproducibility checkpoint
+
+Original project-authored research code expressly listed in
+PROJECT_AUTHORED_CODE.txt is available under Apache License 2.0 (LICENSE).
+See LICENSE_SCOPE.md. No blanket repository-wide, dataset or publication
+licence is granted, and no new copyright ownership is asserted.
+
+Third-party data and acknowledgements
+-----------------------------------
+TimeTrack: OAI CI/CD cluster TimeSeries dataset.
+Kaggle metadata lists Apache 2.0:
+https://www.kaggle.com/datasets/abdelghanimeliani/open-air-interface-cicd-timeseries-dataset
+The publisher's Zenodo record lists CC BY 4.0:
+https://doi.org/10.5281/zenodo.15442251
+https://creativecommons.org/licenses/by/4.0/
+These are source-specific data statements, not a licence over this repository.
+
+Bitbrains fastStorage and Rnd (GWA-T-12): we acknowledge Bitbrains IT Services
+Inc. and the Grid Workloads Archive. The source requests acknowledgement and
+referral to Shen, van Beek and Iosup, Statistical Characterization of
+Business-Critical Workloads Hosted in Cloud Datacenters (CCGrid 2015).
+https://atlarge-research.com/gwa-t-12/
+
+Materna T1/T2/T3 (GWA-T-13): we acknowledge Materna GmbH Information &
+Communications, Dortmund, Germany, and the Grid Workloads Archive. The source
+requests acknowledgement and referral to Kohne et al., FederatedCloudSim
+(2014), and Evaluation of SLA-based Decision Strategies for VM Scheduling in
+Cloud Data Centers (2016).
+https://atlarge-research.com/gwa-t-13/
+
+The Bitbrains/Materna pages give acknowledgement/citation conditions rather
+than a conventional SPDX open-data licence. Public downloads must not be
+interpreted as an Apache/MIT/BSD grant. Obtain raw data upstream and consult
+the applicable source terms before redistribution of copies or derivatives.
+
+Elsevier CAS files
+------------------
+manuscript/jss/cas-dc.cls retains its LPPL 1.2-or-later notice;
+cas-common.sty and cas-model2-names.bst retain LPPL 1.3c-or-later notices,
+including their original Elsevier/author attributions. These files are not
+covered by the project code grant. Their existing bytes match the official
+CAS bundle checked for this release; none was modified for licensing.
+Full upstream bundle and licence information:
+https://mirrors.ctan.org/macros/latex/contrib/els-cas-templates.zip
+https://www.latex-project.org/lppl/
+
+Other boundaries
+----------------
+Manuscript text, article figures and publication material remain subject to
+their separate author/publisher rights. Third-party dependencies retain their
+own licences and notices; no environment or vendor package is redistributed
+by this checkpoint. Legacy/imported material without established ownership
+is excluded from the project code grant. Existing upstream notices prevail.

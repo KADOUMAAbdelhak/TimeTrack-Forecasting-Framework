@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "scope": "Derived-only compact-endpoint replay",
+  "manifest_sha256": "97fe4f8930f00604d2ada85f625dd7ff9b7017467d716b5e2ed875de7d6a5dad",
+  "source_hashes_verified": 11,
+  "csv_checks": [
+    {
+      "file": "m1_s2_robustness_24.csv",
+      "rows": 24,
+      "columns": 6,
+      "byte_identical": true,
+      "parsed_table_identical": true,
+      "sha256": "8b085b0279bb02422ab3c84bc48a7044e0b0f1f8dfff48a4a56881910da6f9c0"
+    },
+    {
+      "file": "seed_sensitivity_48.csv",
+      "rows": 48,
+      "columns": 9,
+      "byte_identical": true,
+      "parsed_table_identical": true,
+      "sha256": "d32061414cd18bed523d3851f833c534d8b43235e6651be4410f0e9806f1f363"
+    },
+    {
+      "file": "timetrack_memory_attribution.csv",
+      "rows": 47,
+      "columns": 10,
+      "byte_identical": true,
+      "parsed_table_identical": true,
+      "sha256": "903ec0ecf0c9e98398d52dc4f1a99557efa92382fb24639744c4a65d209be95d"
+    }
+  ],
+  "C1_robustness_seed_projections_exact": true,
+  "existing_seed_flip_counts": {
+    "S2_vs_S1": 9,
+    "M1_vs_S2": 4
+  },
+  "supplement_fragments_byte_identical": true,
+  "output_sha256": {
+    "m1_s2_robustness_24.csv": "8b085b0279bb02422ab3c84bc48a7044e0b0f1f8dfff48a4a56881910da6f9c0",
+    "seed_sensitivity_48.csv": "d32061414cd18bed523d3851f833c534d8b43235e6651be4410f0e9806f1f363",
+    "timetrack_memory_attribution.csv": "903ec0ecf0c9e98398d52dc4f1a99557efa92382fb24639744c4a65d209be95d",
+    "m1_s2_robustness_rows.tex": "b3095589b871ce5a9a5f8bb69fb6b655c7311562bcc8e927c82a5089fb87081e",
+    "seed_sensitivity_rows.tex": "2a333d6892504bad105fe314be937140ebb5898295f06d74325be1de3da7abd9",
+    "sharing_sensitivity.csv": "4a8eb9630fa5410eec76d7bb4c1d83d1efa259e2bd67f3a47b8e50242ad01f44",
+    "contextual_evidence.csv": "e95d5fc5237c5a495d47dc56728acc74eb1fb110a3f3c9cc6cfb8f401a42f05d",
+    "diagnostic_extract.json": "fdeab23ba3a2ec89641ce281f928403dedcfcbf29d18ec662255370192223343"
+  },
+  "training": 0,
+  "inference": 0,
+  "new_scientific_statistics": 0,
+  "historical_seal_changes": 0,
+  "runtime": {
+    "python": "3.9.6",
+    "implementation": "cpython"
+  },
+  "note": "Metadata checks are newly derived; CSV/TeX outputs match authoritative bytes. No Git or historical HEAD required."
+}

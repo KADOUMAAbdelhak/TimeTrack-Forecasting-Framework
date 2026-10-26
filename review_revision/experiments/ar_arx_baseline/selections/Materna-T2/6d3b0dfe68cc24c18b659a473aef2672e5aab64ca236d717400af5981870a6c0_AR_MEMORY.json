@@ -1,0 +1,31 @@
+{
+  "L": 4,
+  "alpha": 0.01,
+  "candidate_sources": [
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/Materna-T2/b50c802a1021c2ea1ba901a209439ca5a993d25e054c8f270e0f46a912ddef98.json",
+      "sha256": "1af718aec0d2591064c2f0b75d434baf92797fc6606db7fc89ee973fc0c7f91d"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/Materna-T2/39dcd4ece66b80ed68167c2b0e70ad155ad6c83bd29c5920fc3f60b254ba825d.json",
+      "sha256": "837cc975a700ae9861291407a77bff069445c679fd033b21306ec1342765353e"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/Materna-T2/f130aba5116f9560daa290fd24bf711591f0011214c7727d6ab1d8b3e7de3f67.json",
+      "sha256": "a1730d2ae013e8785510687faabe9735cbe1cdcb9ff5c241dea55e19cba12d91"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/Materna-T2/81665aa2bfa05c453bdd69e3c28378f02c8b0eaf9fee94a616582f700dbf8840.json",
+      "sha256": "fdf8bc5905b51d7e473a0af7079a042d12f6448333126bb15eb86e57756ac35c"
+    },
+    {
+      "path": "/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/completions/inner/Materna-T2/b3684f5c60ce4d9e94dea58aeed2c7f0b4524da39aed4e65254abab06dc5647a.json",
+      "sha256": "adfd23460fda637d70fcaaa1e049ebfb694bea801beebdb58614f4c0bc094b63"
+    }
+  ],
+  "formulation": "AR",
+  "group_id": "6d3b0dfe68cc24c18b659a473aef2672e5aab64ca236d717400af5981870a6c0",
+  "inner_validation_mae": 92384.35608183584,
+  "resource": "MEMORY",
+  "test_accessed": false
+}

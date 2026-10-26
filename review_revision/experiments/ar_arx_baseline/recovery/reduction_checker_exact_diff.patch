@@ -1,0 +1,57 @@
+--- successor2/run_linear_control.py
++++ successor3/run_linear_control.py
+@@ -95,7 +95,8 @@
+     return {str(p.relative_to(ROOT)):sha(p) for p in sorted(set(paths))}
+ 
+ def verify_seal():
+-    successor = HERE / "recovery/successor_audit_fix.json"
++    successor = HERE / "recovery/successor_audit_reduction_fix.json"
++    if not successor.exists(): successor = HERE / "recovery/successor_audit_fix.json"
+     if not successor.exists(): successor = HERE / "recovery/successor.json"
+     seal = read(successor if successor.exists() else HERE / "provenance/experiment.json")
+     if successor.exists():
+@@ -107,6 +108,9 @@
+         if "prior_successor_sha256" in seal:
+             require(sha(HERE/"recovery/successor.json") == seal["prior_successor_sha256"], "Prior recovery seal changed")
+             require(sha(HERE/"recovery/STOP.json") == seal["resolved_audit_stop_sha256"], "Historical audit STOP changed")
++        if "prior_audit_successor_sha256" in seal:
++            require(sha(HERE/"recovery/successor_audit_fix.json") == seal["prior_audit_successor_sha256"], "Prior audit seal changed")
++            for rel,h in seal["resolved_current_stops"].items(): require(sha(HERE/rel) == h, "Historical current STOP changed")
+     require(sha(CONFIG) == seal["configuration_sha256"], "Config changed", "PROVENANCE_CONFLICT")
+     for rel,h in seal["source_hashes"].items(): require(sha(ROOT/rel) == h, f"Source changed {rel}", "PROVENANCE_CONFLICT")
+     for b,h in seal["plan_hashes"].items(): require(sha(HERE/f"plans/{b}.json") == h, f"Plan changed {b}", "PROVENANCE_CONFLICT")
+@@ -402,7 +406,10 @@
+                     j = list(e.leads).index(m["lead"])
+                     mae = float(e.np.mean(e.np.abs(p.y_true-p.y_pred))); pm = float(reference_pm[j])
+                     require(len(p) == m["n"] and e.np.isclose(mae,m["mae"],rtol=1e-12,atol=0) and e.np.isclose(pm,m["persistence_mae"],rtol=1e-12,atol=0), "Recomputed MAE differs")
+-                    if skill_pm[j] > 0: require(e.np.isclose(1-e.np.float64(mae)/skill_pm[j],m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
++                    # MAE was independently recomputed and checked immediately
++                    # above. Use that verified stored MAE for its derived skill:
++                    # column and vector residual reductions can differ by ulps.
++                    if skill_pm[j] > 0: require(e.np.isclose(1-e.np.float64(m["mae"])/skill_pm[j],m["persistence_skill"],rtol=1e-12,atol=1e-14), "Skill differs")
+                     else:
+                         require(m["persistence_skill"] is None and m["persistence_skill_undefined_reason"], "Undefined skill not explicit"); undefined += 1
+                 expected["final"].add(identity["run_id"]); count += len(value["metrics"])
+@@ -439,7 +446,9 @@
+     verify_predecessor()
+     approved = authorised_recoveries()
+     historical_audit_stop = (HERE/"recovery/successor_audit_fix.json").exists() and sha(HERE/"recovery/STOP.json") == read(HERE/"recovery/successor_audit_fix.json")["resolved_audit_stop_sha256"]
+-    require((not (HERE/"recovery/STOP.json").exists() or historical_audit_stop) and not (HERE/"recovery/current_STOP.json").exists() and not unresolved_failures(True), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
++    resolved = read(HERE/"recovery/successor_audit_reduction_fix.json").get("resolved_current_stops",{}) if (HERE/"recovery/successor_audit_reduction_fix.json").exists() else {}
++    current_stops = [p for p in (HERE/"recovery").glob("current_STOP*.json") if resolved.get(str(p.relative_to(HERE))) != sha(p)]
++    require((not (HERE/"recovery/STOP.json").exists() or historical_audit_stop) and not current_stops and not unresolved_failures(True), "Unresolved failure; no silent retry", "UNRESOLVED_FAILURE_CONFLICT")
+     for phase in ("inner","final"):
+         for p in (HERE/f"attempts/{phase}").rglob("*.json"):
+             require((HERE/f"completions/{phase}/{p.parent.name}/{p.name}").exists() or p.stem in approved, f"Unresolved interrupted attempt {p}", "UNRESOLVED_ATTEMPT_CONFLICT")
+@@ -469,7 +478,10 @@
+     except BaseException as exc:
+         if a.action in ("prepare","run"):
+             stop = HERE/"recovery/STOP.json"
+-            if stop.exists(): stop = HERE/"recovery/current_STOP.json"
++            if stop.exists():
++                stop = HERE/"recovery/current_STOP.json"; number = 2
++                while stop.exists():
++                    stop = HERE/f"recovery/current_STOP_{number}.json"; number += 1
+             write(stop, {"status":getattr(exc,"code","STAGE_18B3R_BLOCKED"),"timestamp":now(),"error":repr(exc),"traceback":traceback.format_exc()})
+         raise
+ 

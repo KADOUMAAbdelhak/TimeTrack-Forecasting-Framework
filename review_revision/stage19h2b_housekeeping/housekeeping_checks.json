@@ -1,0 +1,57 @@
+{
+  "status": "CHECKS_PASS_AWAITING_VISUAL_AND_PRESERVATION",
+  "main_pages": 18,
+  "supplement_pages": 3,
+  "figure1_heading_removed": true,
+  "diagram_geometry_preserved": true,
+  "all_figure_pixels_outside_heading_identical": true,
+  "figure_changed_pixel_bbox": [
+    551,
+    10,
+    1250,
+    45
+  ],
+  "Table1_cells_byte_identical": true,
+  "Table1_YES_empirical_not_causal_note": true,
+  "main_table_first_citation_order": {
+    "tab:related-work-comparison": "1",
+    "tab:dataset-summary": "2",
+    "tab:posthoc-controls": "3",
+    "tab:efficiency": "4",
+    "tab:cross-study-synthesis": "5"
+  },
+  "main_figure_first_citation_order": {
+    "fig:sharing-framework": "1",
+    "fig:primary-gains": "2"
+  },
+  "supplementary_first_citation_order": [
+    "S1",
+    "S2"
+  ],
+  "duplicate_inclusion": 0,
+  "unused_float_definitions_in_build": 0,
+  "unused_primary_gains_fragment": "Not included, preserved unchanged",
+  "bibliography_entries": 35,
+  "all_retained_entries_cited": true,
+  "unresolved_refs_citations": 0,
+  "active_title": "Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems",
+  "manuscript_and_supplement_PDF_titles_exact": true,
+  "stale_root_build_artifacts_archived_and_refreshed": 7,
+  "historical_evidence_files_deleted": 0,
+  "obsolete_supplement_comments_removed": true,
+  "historical_literature_audits": "Preserved unchanged; old titles/stages remain only as historical evidence",
+  "author_declarations_checkpoint_licence_packaging_content_changed": false,
+  "PDFs": {
+    "manuscript/jss/manuscript.pdf": "bc1db7c27d5f8c9e2b0327c9619493ac53146b7c2cab38f21dcfd7ed144ffbc6",
+    "review_revision/stage19h2b_housekeeping/build/supplement/final_evidence_supplement.pdf": "df4c86015e939d1881df3e62da5aa2ae182683f812e8a2f6af20915c4c6377f6"
+  },
+  "manuscript_source_sha256": "4b71f2ae85134e7911cb81d2b6bd0a8489d327d5b4dbe648d33498fb551ce1f4",
+  "figure_source_sha256": "d6fb46a9141a2075ad462e9e8b08a29a39cd7456fd8fa31bbaf1f39e222382e8",
+  "bibliography_sha256": "f7efdff564455a709cda5459319f8f3c25811ca3a1a409187dd2cd7e0f7eef8b",
+  "scientific_modifications": 0,
+  "analysis": 0,
+  "training": 0,
+  "inference": 0,
+  "commit": "no",
+  "push": "no"
+}

@@ -1,0 +1,58 @@
+{
+  "fold": 3,
+  "formulation": "ARX",
+  "lead": 8,
+  "machine": "machine06",
+  "model_inference": 0,
+  "origin_index": 30957,
+  "origin_timestamp_as_stored": "2024-07-14 14:18:39.485656",
+  "per_lead": [
+    {
+      "lead": 1,
+      "mae": 582.361714942835,
+      "max_prediction": 56691.88426343146
+    },
+    {
+      "lead": 2,
+      "mae": 2346.3776208332074,
+      "max_prediction": 331680.2791393935
+    },
+    {
+      "lead": 4,
+      "mae": 9532.583638154281,
+      "max_prediction": 1687211.9136144717
+    },
+    {
+      "lead": 8,
+      "mae": 23949.157643276063,
+      "max_prediction": 7611415.626105407
+    },
+    {
+      "lead": 16,
+      "mae": 25576.812320006033,
+      "max_prediction": 4865994.603298627
+    },
+    {
+      "lead": 32,
+      "mae": 1138.6713026863642,
+      "max_prediction": 166541.4452491803
+    },
+    {
+      "lead": 64,
+      "mae": 57.54709923829315,
+      "max_prediction": 352.735915448672
+    },
+    {
+      "lead": 128,
+      "mae": 5101.749279192308,
+      "max_prediction": 915872.8518755718
+    }
+  ],
+  "prediction": 7611415.626105407,
+  "scaled_prediction": 251.78268432617188,
+  "source_path": "review_revision/experiments/ar_arx_baseline/predictions/TimeTrack/fed7b2801fb8eaadf5d30c8f79838112884338f30a6851565a5133851b75da31.parquet",
+  "source_sha256": "56cdacdfd87b99c6e7a00cafb2da093ed0b31314de711973087f5e0edde7a8a5",
+  "target_timestamp_as_stored": "2024-07-14 14:24:17.581950",
+  "target_value": 1512.0255126953125,
+  "training": 0
+}

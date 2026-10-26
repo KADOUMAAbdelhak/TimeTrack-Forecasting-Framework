@@ -1,0 +1,38 @@
+{
+  "status": "STAGE_19B_PASS",
+  "changed_manuscript_source_files": [
+    "manuscript/jss/manuscript.tex"
+  ],
+  "scope": "Sections 3-4 including framework caption; separately authorised R4 label-only replacement in Results",
+  "front_matter_abstract_introduction_related_work_unchanged": true,
+  "results_and_later_unchanged_except_authorised_label": true,
+  "figures_tables_bibliography_supplement_unchanged": true,
+  "rq_numbering_preserved": true,
+  "evaluation_subsection_number": "4.8",
+  "posthoc_subsection_number": "4.11",
+  "inappropriate_factorial_claims_remaining": 0,
+  "selection_equals_native_nmae_ambiguity": false,
+  "remaining_factorial_occurrences": "Only explicit denials in untouched Introduction, Related Work and Threats to Validity",
+  "before_sha256": "1acf98ee9f325dcd7edb39fc2514f1d20c0f13c5b0b03f0b2145f4f2d0652331",
+  "after_sha256": "d50a98b8ed2c24fc20ca3ffb3b0700b83c28bfa4ea2876d93e8438167d99e139",
+  "protected_unchanged_files": 395784,
+  "protected_membership_unchanged": true,
+  "stage18c1_output_hashes_verified": 25,
+  "scientific_result_modifications": 0,
+  "training_calls": 0,
+  "inference_calls": 0,
+  "build": "Tectonic exit 0; desktop compiler success",
+  "pages": 19,
+  "undefined_references_or_citations": 0,
+  "visual_check": "Changed pages 4-12 and authorised label on page 14 checked",
+  "remaining_warnings": "Pre-existing CAS overfull/empty-anchor, underfull boxes and two empty-pages bibliography fields",
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "commit": "no",
+  "push": "no"
+}

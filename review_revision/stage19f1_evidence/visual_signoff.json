@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "pdf_sha256": "c76e5909baf9bd73a0b0d11ee65454d901c5c531412b73c4488386ac6f7b06e1",
+  "source_sha256": "5d4e4d67cb60cf19b7aaf0fc0ae46202d74c26c0696666e9cd4502e471481ef9",
+  "pages_inspected": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+  "render": "Final Poppler PNGs at 1500-pixel page height",
+  "findings": "All pages readable; no clipped or overlapping content, broken equations, obscured table cells, blank pages or unreadable figure labels. Tables 1-5 and Figures 1-2 retain their original source/layout settings.",
+  "desktop_compiler": "success",
+  "new_layout_defects": 0,
+  "existing_warnings": "CAS title-box/empty-anchor warnings, underfull boxes and two bibliography empty-pages fields; no visible title clipping."
+}

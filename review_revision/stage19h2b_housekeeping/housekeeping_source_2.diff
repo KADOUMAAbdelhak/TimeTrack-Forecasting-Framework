@@ -1,0 +1,12 @@
+--- before/manuscript/jss/tables/related_work_comparison.tex
++++ after/manuscript/jss/tables/related_work_comparison.tex
+@@ -71,7 +71,8 @@
+     reported design; PARTIAL: related, limited or incompletely matched evidence.
+     Not established: available evidence does not settle the cell.
+     Single-task/shared comparisons need not hold inputs or architecture fixed;
+-    adverse-transfer analysis does not imply causal identification.
++    adverse-transfer analysis coded YES means explicit empirical analysis of
++    adverse-transfer outcomes, not causal identification of the mechanism.
+     Efficiency PARTIAL covers timing, qualitative cost or network-reduction
+     evidence without the quantified parameter/grouping or consolidation analysis
+     coded YES. No code rules out unpublished implementations.}

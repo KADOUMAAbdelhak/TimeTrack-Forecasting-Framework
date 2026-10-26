@@ -1,0 +1,135 @@
+--- before/manuscript.tex
++++ after/manuscript.tex
+@@ -40,7 +40,7 @@
+ Software engineers designing multi-metric runtime forecasters must decide
+ whether to include other resources' telemetry and whether multiple targets
+ should share a predictive representation. These decisions affect forecasting
+-accuracy and model consolidation. Our original frozen experiment compares
++accuracy and per-entity model consolidation. Our original frozen experiment compares
+ conventional long short-term memory (LSTM) formulations: S1 uses own-resource
+ input with independent target models; S2 uses all-resource input with
+ independent target models; M1 uses all-resource input with a shared
+@@ -57,7 +57,7 @@
+ throughput, memory and disk-write point estimates persist in all six blocks
+ under both separate controls. This supports an accuracy--consolidation
+ trade-off for the evaluated shared-LSTM design, not a causal attribution to
+-sharing alone. Ridge confirms that particular contextual effects are
++sharing alone. Ridge indicates that particular contextual effects are
+ model-specific. Small effects can change sign across seeds, and relative
+ improvement does not ensure superiority to persistence. Contextual input and
+ representation sharing therefore require separate, resource-specific
+@@ -1032,7 +1032,8 @@
+ LSTM estimate contrasts with a positive Ridge gain. External memory is thus
+ the strongest recurring favourable contextual pattern, not a universal
+ benefit. Existing-seed diagnostics find sign changes in 9/24 LSTM S2:S1
+-block/resource summaries across the three fixed seeds. Small point gains or
++block/resource summaries across the three fixed seeds (Supplementary
++Table~S2). Small point gains or
+ sign reversals should not be treated as stable improvements or temporal
+ regime changes.
+ 
+@@ -1083,20 +1084,32 @@
+ architecture, optimisation and training objectives remain part of the
+ implemented comparison, and common-S2 contexts align H64, not necessarily
+ H129. Existing-seed diagnostics find sign changes in 4/24 original M1:S2
+-block/resource summaries, concentrated in the small CPU exceptions and
+-TimeTrack throughput. Adverse aggregate directions do not imply adverse
++block/resource summaries (Supplementary Table~S2), concentrated in small
++CPU exceptions and TimeTrack throughput. Adverse aggregate directions do not imply adverse
+ outcomes for every seed.
+ 
+ The post-hoc matched-cell diagnostics further separate direction from
+ magnitude. A cell is entity $\times$ outer fold $\times$ forecast lead, with
+ MAE first averaged across existing seeds. In all 24 original M1:S2
+-block/resource summaries, the median candidate/reference MAE ratio exceeds
++block/resource summaries (Supplementary Table~S1), the median candidate/reference MAE ratio exceeds
+ one and the candidate win rate is below $50\%$. This includes the small
+ positive CPU MacroMAE exceptions. Materna T1/T3 disk-write median ratios are
+ approximately $1.0246/1.0347$, despite MacroMAE gains of
+ $-27.46\%/-71.30\%$. The adverse typical-cell direction is widespread, but
+ the much larger mean-error penalties do not describe every VM or the
+ magnitude of degradation in a typical cell.
++
++Post-hoc attribution locates this uneven magnitude. In Materna T1/T3,
++28/35 and 32/35 VM-averaged disk-write errors worsen. VM266 and VM272
++contribute 82.10\% and 86.97\% of positive excess error; the top three VMs
++contribute 91.72\% and 92.93\%, respectively. No training or scaling defect
++was demonstrated.
++For TimeTrack memory, all seven machine averages and 31/35 machine/fold
++pairs worsen, with median pair ratio $1.195276$. The largest pair contributes
++21.80\% and the top three 51.06\% of positive excess error at that same
++machine/fold level. Adverse direction is broad but magnitude uneven;
++pair-level attribution must not be
++conflated with the finer matched-cell medians in Supplementary Table~S1.
+ 
+ \input{tables/posthoc_controls}
+ 
+@@ -1159,13 +1172,16 @@
+ 
+ The frozen within-Materna RQ4 outcome was recorded as follows.
+ 
+-\noindent Temporal heterogeneity confirmed. Mechanically, seven of the 12
++\noindent The prespecified RQ4 criterion for temporal heterogeneity was met.
++Seven of the 12
+ resource--comparison pairs changed frozen classification across T1--T3 and
+ five changed raw sign. The S2-versus-S1 trace decision also changed: T1 met the
+ frozen non-support rule, whereas T2 and T3 were mixed. The M1-versus-S2
+ trace-level decision was consistently not supported, even though its CPU
+-classification varied. These prespecified changes satisfy the RQ4 criterion;
+-no post-hoc temporal regimes or causal mechanisms are inferred.
++classification varied. Several small S2 effects are seed-variable
++(Supplementary Table~S2). This is a descriptive criterion, not an IID or
++inferential claim; no post-hoc temporal regimes or causal mechanisms are
++inferred.
+ 
+ \subsection{Persistence Boundary}
+ \label{sec:results-persistence}
+@@ -1314,7 +1330,7 @@
+ suffice to explain the pattern.
+ 
+ Direction need not imply uniform severity. Materna T1/T3 disk-write median
+-ratios are about $1.025/1.035$, despite much larger MacroMAE penalties.
++ratios are about $1.025/1.035$, despite much larger tail-sensitive MacroMAE penalties.
+ Direction is broadly adverse but absolute-error magnitude concentrated,
+ not equally severe in every VM (Section~\ref{sec:results-rq2}).
+ 
+@@ -1351,6 +1367,11 @@
+ assessment follows task-grouping and service-forecasting research
+ \citep{Standley2020TaskGrouping,Syu2017DynamicQoS}; deployment still requires
+ platform measurements and resource-specific error tolerances.
++
++Per-entity consolidation may still be attractive where modest target-specific
++accuracy penalties are acceptable. This requires distinguishing typical-cell
++magnitude from tail-sensitive MacroMAE penalties and checking adverse tails,
++not recommending M1 universally or treating concentrated excess as irrelevant.
+ 
+ \subsection{Applicability and Generalisation Limits}
+ \label{sec:discussion-applicability}
+@@ -1400,7 +1421,7 @@
+ 
+ Only three neural seeds were recorded. Existing diagnostics identify 9/24
+ S2:S1 and 4/24 M1:S2 block/resource summaries whose gains change sign across
+-those seeds. These counts do not establish a general noise floor or stability
++those seeds (Supplementary Table~S2). These counts do not establish a general noise floor or stability
+ under arbitrary retraining. Contexts, epochs and optimisation can interact
+ with formulation, and missing gradient/clipping histories limit mechanism
+ attribution even after the separate controls.
+@@ -1456,11 +1477,14 @@
+ External memory recurs favourably, but Ridge and seed sensitivity bound
+ contextual value by model and environment. The evaluated shared-LSTM model
+ generally loses throughput, memory and disk-write accuracy while consolidating
+-local models. Adverse point directions survive separate post-hoc common-context
++per-entity models. Adverse point directions survive separate post-hoc common-context
+ and H129 approximate-capacity controls, without identifying sharing alone as
+-the mechanism. These operational findings do not universally reject multi-task
+-forecasting. Validate contextual input and consolidation by resource and design,
+-within the eligible population and against absolute persistence skill.
++the mechanism. Typical-cell penalties can be more modest than tail-sensitive
++MacroMAE suggests: per-entity consolidation may be attractive when
++target-specific accuracy penalties are acceptable, provided adverse tails
++are assessed. These findings do not universally reject multi-task forecasting.
++Validate contextual input and consolidation by resource and design, within
++the eligible population and against absolute persistence skill.
+ 
+ \section*{Data availability}
+ 

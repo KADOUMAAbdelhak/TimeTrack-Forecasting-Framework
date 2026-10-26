@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "scope": "Compact derived-only replay; no raw data, checkpoints or inference",
+  "files": [
+    {
+      "path": "review_revision/stage19g1_evidence/table_payload.json",
+      "bytes": 27914,
+      "sha256": "b0fc68efe1bb22e27f53390d1c7070b8a1f444fe47f0838dae778a589f53d6dd"
+    },
+    {
+      "path": "review_revision/stage19g1_evidence/m1_s2_robustness_24.csv",
+      "bytes": 2028,
+      "sha256": "8b085b0279bb02422ab3c84bc48a7044e0b0f1f8dfff48a4a56881910da6f9c0"
+    },
+    {
+      "path": "review_revision/stage19g1_evidence/seed_sensitivity_48.csv",
+      "bytes": 6465,
+      "sha256": "d32061414cd18bed523d3851f833c534d8b43235e6651be4410f0e9806f1f363"
+    },
+    {
+      "path": "review_revision/stage19g1_evidence/timetrack_memory_attribution.csv",
+      "bytes": 5540,
+      "sha256": "903ec0ecf0c9e98398d52dc4f1a99557efa92382fb24639744c4a65d209be95d"
+    },
+    {
+      "path": "review_revision/stage18c1_evidence/robust_seed_mean_cells.csv",
+      "bytes": 7932,
+      "sha256": "57b8cf713d74079a856ded9e70da61b7ff20618ee514d45b15dd6284a8ff56ae"
+    },
+    {
+      "path": "review_revision/stage18c1_evidence/seed_sensitivity.csv",
+      "bytes": 11185,
+      "sha256": "576eb00a40e5cbc04a84049ce940a43a857d0f4e974d807996aa12aecccaa147"
+    },
+    {
+      "path": "review_revision/stage18c1_evidence/sharing_sensitivity.csv",
+      "bytes": 2071,
+      "sha256": "4a8eb9630fa5410eec76d7bb4c1d83d1efa259e2bd67f3a47b8e50242ad01f44"
+    },
+    {
+      "path": "review_revision/stage18c1_evidence/contextual_evidence.csv",
+      "bytes": 1588,
+      "sha256": "e95d5fc5237c5a495d47dc56728acc74eb1fb110a3f3c9cc6cfb8f401a42f05d"
+    },
+    {
+      "path": "review_revision/stage19g1_evidence/analysis.json",
+      "bytes": 181988,
+      "sha256": "682014bb8555912e8b0ee4627955ce908c7864a59ad858f33e0758eab6c67fe8"
+    },
+    {
+      "path": "review_revision/stage19h1_scale_context/analysis.json",
+      "bytes": 1995179,
+      "sha256": "a6c86871944073f093ae417905b59682b4698aff2d18a6e36b8561cb49fd5913"
+    },
+    {
+      "path": "manuscript/jss/supplementary/final_evidence_supplement.tex",
+      "bytes": 21750,
+      "sha256": "2e95741d8dd23d6e0ddbe811591ae3b157a3c37867b33dd9d2f4186ad97a3d33"
+    }
+  ],
+  "expected_csv_rows": {
+    "m1_s2_robustness_24.csv": 24,
+    "seed_sensitivity_48.csv": 48,
+    "timetrack_memory_attribution.csv": 47
+  },
+  "authoritative_supplement_fragment_sha256": {
+    "m1_s2_robustness_rows.tex": "b3095589b871ce5a9a5f8bb69fb6b655c7311562bcc8e927c82a5089fb87081e",
+    "seed_sensitivity_rows.tex": "2a333d6892504bad105fe314be937140ebb5898295f06d74325be1de3da7abd9"
+  },
+  "note": "Authoring snapshot, not a new scientific seal. Preserve original experiment seals separately."
+}

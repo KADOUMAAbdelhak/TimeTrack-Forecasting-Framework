@@ -1,0 +1,34 @@
+{
+  "status": "CHECKS_PASS_AWAITING_VISUAL_AND_PRESERVATION",
+  "abstract_words": 228,
+  "main_pages": 18,
+  "supplement_pages": 3,
+  "main_scope_exact": true,
+  "supplement_24_48_rows_and_all_312_numeric_strings_unchanged": true,
+  "Table3_numeric_rows_unchanged": true,
+  "H64_H129_gains": [
+    "-18.476885757816117",
+    "-18.484754219705916"
+  ],
+  "scale_ranks_ratios_match_H1": true,
+  "all_four_named_memory_gains_positive_each_seed": true,
+  "seed_disk_example_matches_existing_values": true,
+  "stable_explicitly_sign_only": true,
+  "unchanged_methods_figures_bibliography_declarations": true,
+  "unresolved_refs_citations": 0,
+  "source_sha256": {
+    "manuscript/jss/manuscript.tex": "882d4fa71ebbddd77fc2f0a2fcb420eac22f72b073cd0077a6e41b2f9872e935",
+    "manuscript/jss/supplementary/final_evidence_supplement.tex": "89121e8c1b0d4dd827823240accbf3399f8bddd18c61f659358af00e865972a8",
+    "manuscript/jss/tables/posthoc_controls.tex": "1aea8d56e75e21806733850e288ba02771910a8fcbae36e480db734d2769c7bc"
+  },
+  "pdf_sha256": {
+    "review_revision/stage19h2a_evidence/build/manuscript.pdf": "585cf291558b60aed3ab08042045363ff88ddafb0a21ca8da690079255601ebb",
+    "review_revision/stage19h2a_evidence/build/supplement/final_evidence_supplement.pdf": "27bbf40c8ca1368e6152300f9bedfe04570a45d48f2cbfeca294b26e30d4acdf"
+  },
+  "new_analysis": 0,
+  "training": 0,
+  "inference": 0,
+  "scientific_modifications": 0,
+  "commit": "no",
+  "push": "no"
+}

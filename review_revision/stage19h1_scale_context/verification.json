@@ -1,0 +1,32 @@
+{
+  "status": "STAGE_19H1_PASS",
+  "classification_by_VM": {
+    "Materna-T1/VM266": "SCALE_INSTABILITY_NOT_SUPPORTED",
+    "Materna-T3/VM272": "SCALE_INSTABILITY_NOT_SUPPORTED"
+  },
+  "raw_final_training_partitions_exact": 1050,
+  "dominant_final_partitions_reported": 30,
+  "selected_context_comparisons": 30,
+  "cohort_size": 35,
+  "original_final_completion_scalers_verified": 3150,
+  "dominant_saved_inverse_predictions_verified": 90,
+  "independently_reconciled_cohort_statistics": 240,
+  "direct_input_hashes_reverified": 3347,
+  "protected_files_unchanged": 395787,
+  "prior_output_hashes_verified": {
+    "stage18c1_evidence": 25,
+    "stage19g1_evidence": 19,
+    "stage19g2_evidence": 47
+  },
+  "implementation_defect_demonstrated": false,
+  "further_experiment_required": false,
+  "causal_sharing_mechanism_identified": false,
+  "thresholds_invented": false,
+  "native_medians_exact_from_original_training_rows": true,
+  "training": 0,
+  "inference": 0,
+  "manuscript_modifications": 0,
+  "scientific_modifications": 0,
+  "commit": "no",
+  "push": "no"
+}

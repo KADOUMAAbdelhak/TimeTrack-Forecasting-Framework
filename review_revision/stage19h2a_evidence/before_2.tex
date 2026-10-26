@@ -1,0 +1,39 @@
+% Formatting-only projection of authoritative post-hoc CSV fields.
+\begin{table*}[t]
+  \caption{POST-HOC sensitivity comparisons alongside frozen reference gains (\%).}
+  \label{tab:posthoc-controls}
+  \centering
+  \small
+  \setlength{\tabcolsep}{2pt}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrr@{}}
+    \toprule
+    \multicolumn{5}{l}{\textbf{A:} [H64 M1:S2 / H64 M1:common-S2 / H129 M1:S2]} \\
+    Block & CPU & Throughput & Memory & Disk write \\
+    \midrule
+    TimeTrack & $[+0.47/-0.81/-2.93]$ & $[-0.84/-0.54/-0.16]$ & $[-18.48/-17.79/-18.48]$ & $[-0.80/-0.56/-0.60]$ \\
+    fastStorage & $[+0.05/+0.36/+3.14]$ & $[-27.09/-20.31/-33.83]$ & $[-4.87/-4.43/-4.19]$ & $[-4.07/-1.75/-4.05]$ \\
+    Rnd & $[-16.51/-16.32/-17.57]$ & $[-14.32/-12.57/-15.56]$ & $[-8.92/-8.69/-8.06]$ & $[-5.55/-3.72/-6.85]$ \\
+    Materna T1 & $[+0.88/-0.61/+3.19]$ & $[-7.31/-7.19/-4.72]$ & $[-13.22/-10.15/-12.32]$ & $[-27.46/-27.98/-24.62]$ \\
+    Materna T2 & $[-2.56/-1.38/+0.17]$ & $[-8.69/-7.26/-3.65]$ & $[-9.27/-7.52/-6.72]$ & $[-7.89/-7.93/-7.20]$ \\
+    Materna T3 & $[-8.10/-7.40/-8.21]$ & $[-7.91/-7.44/-5.83]$ & $[-8.70/-7.79/-6.53]$ & $[-71.30/-69.67/-64.00]$ \\
+    \midrule
+    \multicolumn{5}{l}{\textbf{B:} [frozen LSTM S2:S1 / Ridge ARX:AR]} \\
+    Block & CPU & Throughput & Memory & Disk write \\
+    \midrule
+    TimeTrack & $[-3.31/-14.00]$ & $[-0.24/-838.45]$\textsuperscript{a} & $[+0.86/-23.21]$ & $[-0.49/-7.58]$ \\
+    fastStorage & $[-3.20/-4.37]$ & $[+0.01/-20.75]$ & $[+2.45/+2.88]$ & $[+2.69/+1.05]$ \\
+    Rnd & $[+1.41/+0.22]$ & $[-7.21/+0.37]$ & $[+1.67/+4.26]$ & $[+0.16/+1.68]$ \\
+    Materna T1 & $[-4.32/+6.27]$ & $[+0.99/-13.90]$ & $[-0.02/+7.22]$ & $[-6.70/+2.05]$ \\
+    Materna T2 & $[+4.21/+9.67]$ & $[+0.29/+0.91]$ & $[+3.95/+6.47]$ & $[-1.12/+10.07]$ \\
+    Materna T3 & $[-2.79/+2.17]$ & $[+0.04/-2.15]$ & $[+3.09/+1.81]$ & $[+1.91/-0.69]$ \\
+    \bottomrule
+  \end{tabular*}
+  \vspace{2pt}
+  \parbox{\textwidth}{\footnotesize Positive means lower candidate MacroMAE; values are rounded to two decimals.
+  Frozen H64 M1:S2 and LSTM S2:S1 references are repeated unchanged, not replaced by controls.
+  Common-S2 uses H64-M1 contexts; H129 selects its own contexts. These are separate controls, not joint causal isolation.
+  \textsuperscript{a}The TimeTrack Ridge throughput penalty is concentrated in machine06/fold3:
+  99.93\% of positive excess error; ARX improves 21/35 machine/fold pairs, median ARX/AR ratio $0.9963$ (Section~\ref{sec:results-rq1}).
+  Point signs imply neither significance nor model-independent benefit; Materna T1--T3 remain dependent blocks.}
+\end{table*}

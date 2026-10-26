@@ -1,0 +1,1202 @@
+[
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "0.4695621549386364",
+    "displayed": "+0.47"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-0.8052025985940046",
+    "displayed": "-0.81"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-2.928994927443657",
+    "displayed": "-2.93"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-0.8400841905477818",
+    "displayed": "-0.84"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-0.5385781336120545",
+    "displayed": "-0.54"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-0.15563522249248216",
+    "displayed": "-0.16"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-18.476885757816117",
+    "displayed": "-18.48"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-17.790024203135452",
+    "displayed": "-17.79"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-18.484754219705916",
+    "displayed": "-18.48"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-0.7955718991562205",
+    "displayed": "-0.80"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-0.5598754220446145",
+    "displayed": "-0.56"
+  },
+  {
+    "panel": "A",
+    "block": "TimeTrack",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-0.6009949488889033",
+    "displayed": "-0.60"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "0.0450473868306402",
+    "displayed": "+0.05"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "0.35682363526542327",
+    "displayed": "+0.36"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "3.1375508893076174",
+    "displayed": "+3.14"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-27.09415154919393",
+    "displayed": "-27.09"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-20.306730046410994",
+    "displayed": "-20.31"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-33.828991395206295",
+    "displayed": "-33.83"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-4.867061227553229",
+    "displayed": "-4.87"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-4.431740977127493",
+    "displayed": "-4.43"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-4.187581642671231",
+    "displayed": "-4.19"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-4.072128557614391",
+    "displayed": "-4.07"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-1.7534618942762847",
+    "displayed": "-1.75"
+  },
+  {
+    "panel": "A",
+    "block": "fastStorage",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-4.052647459606458",
+    "displayed": "-4.05"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-16.509940836792648",
+    "displayed": "-16.51"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-16.322195960673213",
+    "displayed": "-16.32"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-17.566460271127525",
+    "displayed": "-17.57"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-14.318986597264496",
+    "displayed": "-14.32"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-12.567783279465177",
+    "displayed": "-12.57"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-15.563045645172895",
+    "displayed": "-15.56"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-8.915737250291556",
+    "displayed": "-8.92"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-8.685518877972935",
+    "displayed": "-8.69"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-8.064243541123908",
+    "displayed": "-8.06"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-5.55123313950084",
+    "displayed": "-5.55"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-3.717436285392215",
+    "displayed": "-3.72"
+  },
+  {
+    "panel": "A",
+    "block": "Rnd",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-6.854271285126738",
+    "displayed": "-6.85"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "0.8826988008743397",
+    "displayed": "+0.88"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-0.6107853728887068",
+    "displayed": "-0.61"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "3.1878483827658055",
+    "displayed": "+3.19"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-7.308355099611014",
+    "displayed": "-7.31"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.18527923097234",
+    "displayed": "-7.19"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-4.716270242017474",
+    "displayed": "-4.72"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-13.218359969887002",
+    "displayed": "-13.22"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-10.147520536108347",
+    "displayed": "-10.15"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-12.317567843791107",
+    "displayed": "-12.32"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-27.457745704458592",
+    "displayed": "-27.46"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-27.98088667591193",
+    "displayed": "-27.98"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T1",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-24.62298441540339",
+    "displayed": "-24.62"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-2.5643630921002254",
+    "displayed": "-2.56"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-1.383237948560831",
+    "displayed": "-1.38"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "0.1720404976396068",
+    "displayed": "+0.17"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-8.692761161667406",
+    "displayed": "-8.69"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.263713839819848",
+    "displayed": "-7.26"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-3.652728490092275",
+    "displayed": "-3.65"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-9.266823255124155",
+    "displayed": "-9.27"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.517031380769875",
+    "displayed": "-7.52"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-6.7189143195679355",
+    "displayed": "-6.72"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-7.888503112775446",
+    "displayed": "-7.89"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.932131581492883",
+    "displayed": "-7.93"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T2",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-7.203054681717735",
+    "displayed": "-7.20"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-8.099015462994837",
+    "displayed": "-8.10"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "CPU",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.404382733549947",
+    "displayed": "-7.40"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "CPU",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-8.206775452179329",
+    "displayed": "-8.21"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-7.91427836494572",
+    "displayed": "-7.91"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.437102195233154",
+    "displayed": "-7.44"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-5.825118744634948",
+    "displayed": "-5.83"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-8.702592838551173",
+    "displayed": "-8.70"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-7.794014225027665",
+    "displayed": "-7.79"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-6.53310460051475",
+    "displayed": "-6.53"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "original_H64_vs_S2_gain_percent",
+    "raw": "-71.2950945564506",
+    "displayed": "-71.30"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+    "source_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+    "field": "M1_vs_S2_common_gain_percent",
+    "raw": "-69.66794621460811",
+    "displayed": "-69.67"
+  },
+  {
+    "panel": "A",
+    "block": "Materna-T3",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+    "source_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+    "field": "H129_vs_S2_gain_percent",
+    "raw": "-64.0027458225599",
+    "displayed": "-64.00"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-3.3130493929567058",
+    "displayed": "-3.31"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-14.003654566489756",
+    "displayed": "-14.00"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-0.2427519992283133",
+    "displayed": "-0.24"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-838.4497417776664",
+    "displayed": "-838.45"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.8593891410653923",
+    "displayed": "+0.86"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-23.2135287340475",
+    "displayed": "-23.21"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-0.4923194366636362",
+    "displayed": "-0.49"
+  },
+  {
+    "panel": "B",
+    "block": "TimeTrack",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-7.575291290627813",
+    "displayed": "-7.58"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-3.1985192105105176",
+    "displayed": "-3.20"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-4.365672118287238",
+    "displayed": "-4.37"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.0127305836584149",
+    "displayed": "+0.01"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-20.745934664824095",
+    "displayed": "-20.75"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "2.4499853710353565",
+    "displayed": "+2.45"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "2.875731799057416",
+    "displayed": "+2.88"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "2.68920705730721",
+    "displayed": "+2.69"
+  },
+  {
+    "panel": "B",
+    "block": "fastStorage",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "1.0482662106102527",
+    "displayed": "+1.05"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "1.4128665430650702",
+    "displayed": "+1.41"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "0.22286343858771573",
+    "displayed": "+0.22"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-7.21449131368454",
+    "displayed": "-7.21"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "0.3658788127186939",
+    "displayed": "+0.37"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "1.673082654319145",
+    "displayed": "+1.67"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "4.258510435854143",
+    "displayed": "+4.26"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.1603998406175479",
+    "displayed": "+0.16"
+  },
+  {
+    "panel": "B",
+    "block": "Rnd",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "1.6834578447314643",
+    "displayed": "+1.68"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-4.317957952266449",
+    "displayed": "-4.32"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "6.271617273960623",
+    "displayed": "+6.27"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.9869354261349662",
+    "displayed": "+0.99"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-13.900364004953204",
+    "displayed": "-13.90"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-0.0196923063556929",
+    "displayed": "-0.02"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "7.221756556614937",
+    "displayed": "+7.22"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-6.699661701912392",
+    "displayed": "-6.70"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T1",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "2.0466676684511795",
+    "displayed": "+2.05"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "4.207624465636621",
+    "displayed": "+4.21"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "9.66821464027505",
+    "displayed": "+9.67"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.2943153448863148",
+    "displayed": "+0.29"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "0.9110806943189067",
+    "displayed": "+0.91"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "3.948170786252221",
+    "displayed": "+3.95"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "6.469005676030402",
+    "displayed": "+6.47"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-1.120181473536967",
+    "displayed": "-1.12"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T2",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "10.072815013270576",
+    "displayed": "+10.07"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "-2.787547559692435",
+    "displayed": "-2.79"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "CPU",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "2.173782187826715",
+    "displayed": "+2.17"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "0.0447658987164556",
+    "displayed": "+0.04"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "THROUGHPUT",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-2.1488039853592",
+    "displayed": "-2.15"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "3.089001588397735",
+    "displayed": "+3.09"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "MEMORY",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "1.8124277202696277",
+    "displayed": "+1.81"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "frozen_S2_vs_S1_gain_percent",
+    "raw": "1.9071683348777215",
+    "displayed": "+1.91"
+  },
+  {
+    "panel": "B",
+    "block": "Materna-T3",
+    "resource": "DISK_WRITE",
+    "source": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+    "source_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+    "field": "ARX_vs_AR_gain_percent",
+    "raw": "-0.690740332116436",
+    "displayed": "-0.69"
+  }
+]

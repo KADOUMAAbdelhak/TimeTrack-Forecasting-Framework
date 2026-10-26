@@ -1,0 +1,86 @@
+{
+  "authorisation_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r.json",
+  "authorisation_sha256": "d641cb331c49522f3c148d2e174c2c2d65cb73c3b383e543ab3725981187592e",
+  "completion_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/completions/Rnd/bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826.json",
+  "completion_sha256": "a2a10e9aa540ed9f75e32261680b8cc0c1cf57b8f9f1e98cdf12b6f33a1f65f9",
+  "mode": "NEW_FIXED_EPOCH_REFIT",
+  "no_training": false,
+  "predecessor_attempt_path": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/attempts/Rnd/bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826.json",
+  "predecessor_attempt_sha256": "809e0a7ae9f561c8d51bc8d3dc552ea447b2785dbf4c7660b2e6a2c4f0b7ef2f",
+  "scientific_identity_unchanged": true,
+  "spec": {
+    "L": 9,
+    "block": "Rnd",
+    "control_run_id": "bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826",
+    "entity": "474",
+    "epoch": 17,
+    "fold": 1,
+    "forced_context_source": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+    "forced_context_source_sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403",
+    "frozen_final_identity": {
+      "L": 9,
+      "archive_hash": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06",
+      "cohort_hash": "f175f8b443adbed472caf5a2b26f9d73f989faf9f68334e520655c33ae982d2e",
+      "config_hash": "627391b84887411d8b930fd5d00cdd9a1f90f3990f958d582f4329424353fa4e",
+      "criteria_hash": "79df6a168d7021dbafd6080640a506d22699e9d4989d422f924b178600465f12",
+      "environment": "GWA-T-12_Bitbrains_Rnd",
+      "environment_key": "Rnd",
+      "fold": 1,
+      "formulation": "S2",
+      "phase": "final",
+      "phase4b_decision_hash": "247197a787250f9e81ea3b858a9f79dd8f5377d548da2fbc2bdec514e420b81e",
+      "phase4c_amendment_decision_hash": "4261300afd29362cf3d7faecc068bfc8170d5ac046691e80dd7b642d0a0add57",
+      "resource": "DISK_WRITE",
+      "run_id": "f7b113c117113b9680e5de25",
+      "seed": 0,
+      "selected_epoch": 17,
+      "support_hash": "ff1f0c623c8118034a9426b6842e90ffd1a359ad80842eca05f785f3a893e3fc",
+      "training_scale_eligibility_hash": "1ab811bc94b130a7a496eb56a0d90eac0aa6cb5616a10c5e362289476349b6a4",
+      "training_scale_eligibility_version": "phase4c-training-scale-eligibility-v1",
+      "vm_id": "474"
+    },
+    "inner_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/inner/10485cf0615798fa6d4bc4cd.json",
+    "inner_completion_sha256": "fd62aa4c3bdb0266e0de13c5cc6ff905e4ee395ec0435f8cb192e16d506fe7b9",
+    "label": "POST-HOC SENSITIVITY CONTROL",
+    "m1_context_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/e628ff112fd2e13c5ab1118a.json",
+    "m1_context_completion_sha256": "102500e58b0e5dbf618e4c1a07a87fbe637e4dbfb57e7c9da14fa9fd7bb86e58",
+    "original_completion": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/runtime/completions/final/51018d1ad2f269fa250f861d.json",
+    "original_completion_sha256": "1b6f5b88586c57b57ba534e0d5e151c10d3120b5aa1bdb1044e88c21e66f138f",
+    "original_selected_L": 18,
+    "resource": "DISK_WRITE",
+    "reuse": false,
+    "scaler": {
+      "native_iqr": [
+        0.26666666666666683,
+        0.20000000000000012,
+        7863.199999999997,
+        0.1333333333333333
+      ],
+      "transformed_iqr": [
+        0.26666666666666683,
+        0.1541506798272584,
+        7863.199999999997,
+        0.11122563511022435
+      ],
+      "transformed_median": [
+        1.0,
+        0.23638877806423034,
+        50367.142857142855,
+        0.18232155679395465
+      ]
+    },
+    "scaler_sha256": "8efc76373cb6160726fd22f54fefb74e13581a17ffc49f24b6a670995dceb775",
+    "seed": 0,
+    "split_hashes": {
+      "inner_train": "55dffebb7eff196f60762003527315b9aff0fa522368ef57958a682e29efc888",
+      "inner_validation": "1cbc8d7684342ae3b14d1b2cbcc6d03a8003a79e1d58903f71e702fdae6f0262",
+      "outer_test": "491f9aaf9361e80d56634ca6c8454536c0fa981c12cc066c476b5d321f632f84",
+      "outer_train": "4440592c908783c95f2f601526af5d1258873a9f6dea380ca9449f14a58420df"
+    }
+  },
+  "stage": "18B1R",
+  "status": "RECOVERED",
+  "successor_adapter_sha256": "d227ff7d6fd443b9ba3a6e1d532acedbb14045986ef6dd4143dfa88d87513b9d",
+  "test_evaluations": 1,
+  "timestamp": "2026-10-21T10:58:47.615224+00:00"
+}

@@ -1,0 +1,51 @@
+{
+  "status": "CHECKS_PASS_AWAITING_VISUAL_SIGNOFF_AND_PRESERVATION",
+  "changed_manuscript_sources": [
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/supplementary/final_evidence_supplement.tex"
+  ],
+  "robustness_rows": 24,
+  "seed_rows": 48,
+  "exact_source_decimal_strings": 312,
+  "display_precision": "six decimal places only; full CSV strings retained in LaTeX macro arguments",
+  "seed_status_counts": {
+    "S2_vs_S1": {
+      "stable": 15,
+      "FLIP": 9
+    },
+    "M1_vs_S2": {
+      "FLIP": 4,
+      "stable": 20
+    }
+  },
+  "main_pages": 18,
+  "supplement_pages": 3,
+  "abstract_words": 229,
+  "preserved_main_numeric_literals": true,
+  "all_old_equations_labels_citations_inputs_preserved": true,
+  "all_35_bibliography_entries_cited": true,
+  "methods_protocol_introduction_related_work_synthesis_declarations_unchanged": true,
+  "table_A_memory_exact_gains": [
+    "-18.476885757816117",
+    "-18.484754219705916"
+  ],
+  "table_A_memory_two_decimal_rounding": "-18.48 for both; table unchanged",
+  "unresolved_refs_citations": 0,
+  "supplementary_table_identifiers_verified": {
+    "S1": "24 rows, page 1",
+    "S2": "48 rows, pages 2-3"
+  },
+  "build": "Tectonic cached-only exit 0 for both documents",
+  "main_pdf_sha256": "432fbb072912924ffec0b11b2db287db35aaa41a4f3e65c27a14115c9c7a385b",
+  "supplement_pdf_sha256": "f9ce31ac1e5795f0c8df614dba449be5659583d503cbdd1f017ead8a85b51153",
+  "source_sha256": {
+    "manuscript/jss/manuscript.tex": "0c966905a3da0646efadb878364e50764046d678e03d7705c04968fb7d5b7d7b",
+    "manuscript/jss/supplementary/final_evidence_supplement.tex": "c5e67fbea9dc4758f18fe3548e2d63d680ea6241ef8a4d634ae36d0d5dcd7a81"
+  },
+  "training": 0,
+  "inference": 0,
+  "new_statistics": 0,
+  "scientific_modifications": 0,
+  "commit": "no",
+  "push": "no"
+}

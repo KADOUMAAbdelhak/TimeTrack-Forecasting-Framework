@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "phase": "before",
+  "protected_membership": 395787,
+  "protected_files_unchanged": 395787,
+  "allowed_manuscript_sources": [
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/supplementary/final_evidence_supplement.tex",
+    "manuscript/jss/tables/posthoc_controls.tex"
+  ],
+  "source_sha256": {
+    "manuscript/jss/manuscript.tex": "0c966905a3da0646efadb878364e50764046d678e03d7705c04968fb7d5b7d7b",
+    "manuscript/jss/supplementary/final_evidence_supplement.tex": "c5e67fbea9dc4758f18fe3548e2d63d680ea6241ef8a4d634ae36d0d5dcd7a81",
+    "manuscript/jss/tables/posthoc_controls.tex": "5a65a678e8cf8551bb3ef82f0ea2b68f5b5189897c9f9c74e0df4908e673c4ed"
+  },
+  "prior_output_hashes_verified": {
+    "stage18c1_evidence": 25,
+    "stage19g1_evidence": 19,
+    "stage19g2_evidence": 47,
+    "stage19h1_scale_context": 10
+  },
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "scientific_modifications": 0,
+  "training": 0,
+  "inference": 0,
+  "commit": "no",
+  "push": "no"
+}

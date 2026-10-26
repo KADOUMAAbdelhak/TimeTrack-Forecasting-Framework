@@ -1,0 +1,22 @@
+{
+  "error": "Conflict('PROVENANCE_CONFLICT: Frozen persistence MAE differs')",
+  "identity": {
+    "L": 32,
+    "alpha": 100.0,
+    "block": "TimeTrack",
+    "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+    "entity": "machine03",
+    "fold": 1,
+    "formulation": "AR",
+    "group_id": "20cabcd8d06a6ac5c6c61a24e6b4dea0afa27e8fe9f7c155803a2ff27ab50f8c",
+    "namespace": "stage18b3-matched-linear-ar-arx-v1",
+    "phase": "final",
+    "resource": "CPU",
+    "run_id": "9ce835442cd0f6bbab089db27a38d898ea3d79761a78e926cb880ae4f7e64585",
+    "scaler_sha256": "8de0ae6ceebbf22a072ac661f8130a8252250bd888273de846e8513291599217",
+    "selection_sha256": "436355149b5452e03e70521b0e02b8cc3669308a43e6c3e7a57fd5e603576fe9",
+    "support": "74342efac9a98b56ff7672e37b0b0c0a5e1cd6730c70bb52f379898ff5b66315"
+  },
+  "timestamp": "2026-10-23T11:54:32.233952+00:00",
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/fgtek002/TimeTrack/review_revision/experiments/ar_arx_baseline/run_linear_control.py\", line 284, in run_group\n    require(len(previous) == 1 and np.isclose(previous[0][\"mae\"],pmae[j],rtol=1e-12,atol=0), \"Frozen persistence MAE differs\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/run_control.py\", line 47, in require\n    raise Conflict(code, detail)\nrun_control.Conflict: PROVENANCE_CONFLICT: Frozen persistence MAE differs\n"
+}

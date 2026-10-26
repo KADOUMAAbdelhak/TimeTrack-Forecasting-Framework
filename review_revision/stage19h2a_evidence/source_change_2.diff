@@ -1,0 +1,10 @@
+--- before/manuscript/jss/tables/posthoc_controls.tex
++++ after/manuscript/jss/tables/posthoc_controls.tex
+@@ -32,6 +32,7 @@
+   \vspace{2pt}
+   \parbox{\textwidth}{\footnotesize Positive means lower candidate MacroMAE; values are rounded to two decimals.
+   Frozen H64 M1:S2 and LSTM S2:S1 references are repeated unchanged, not replaced by controls.
++  For TimeTrack memory, both H64 and H129 gains round to $-18.48\%$; they are distinct before rounding.
+   Common-S2 uses H64-M1 contexts; H129 selects its own contexts. These are separate controls, not joint causal isolation.
+   \textsuperscript{a}The TimeTrack Ridge throughput penalty is concentrated in machine06/fold3:
+   99.93\% of positive excess error; ARX improves 21/35 machine/fold pairs, median ARX/AR ratio $0.9963$ (Section~\ref{sec:results-rq1}).

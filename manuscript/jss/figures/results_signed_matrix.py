@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 from decimal import Decimal, ROUND_HALF_EVEN
 import hashlib
+import math
 import os
 from pathlib import Path
 import re
@@ -81,18 +82,20 @@ PROPOSED_CAPTION = (
     "Primary overall MacroMAE percentage gains for (a) S2 versus S1, "
     "(b) M1 versus S2 and (c) M1 versus S1 across the evaluated evidence blocks. "
     "Positive values indicate lower MacroMAE for the candidate formulation; "
-    "negative values indicate higher MacroMAE. Cell fills encode sign only, "
-    "not magnitude. Values are point estimates, not significance classifications. "
+    "negative values indicate higher MacroMAE. Continuous signed colour uses a "
+    "symmetric asinh mapping as a nonlinear visual aid only, without clipping "
+    "values; printed raw percentages at the reported precision are authoritative. "
+    "Legend ticks are raw percentage units, not transformed scores. "
+    "Values are point estimates, not significance classifications. "
     "Materna T1, T2 and T3 are dependent temporal blocks. Comparisons are bounded to "
     "the evaluated implementation and eligible populations."
 )
 
-# Both fills are constant within their sign, independent of absolute magnitude.
-# Blue/orange, light backgrounds and black explicit signs keep greyscale usable.
-POSITIVE_FILL = "#DFEDF5"
-NEGATIVE_FILL = "#FAE5D7"
+# Presentation constants only; no endpoint, threshold or scientific aggregation.
+# Explicit signs remain readable in greyscale; text contrast follows luminance.
+COLOUR_LIMIT = 75.0
 WIDTH_MM = 174.0
-HEIGHT_MM = 98.0
+HEIGHT_MM = 108.0
 
 
 class ResultValueConflict(RuntimeError):
@@ -234,6 +237,7 @@ def render(values: dict[tuple[str, str, str], Decimal]) -> None:
 
         matplotlib.use("Agg")
         from matplotlib import pyplot as plt
+        from matplotlib.colors import LinearSegmentedColormap
         from matplotlib.patches import Rectangle
 
         with matplotlib.rc_context({
@@ -249,8 +253,15 @@ def render(values: dict[tuple[str, str, str], Decimal]) -> None:
             ax.set(xlim=(0, WIDTH_MM), ylim=(0, HEIGHT_MM))
             ax.set_axis_off()
             cell_width, cell_height, grid_left = 24.0, 4.8, 28.0
+            cmap = LinearSegmentedColormap.from_list(
+                "signed_gain", ("#9b4410", "#fffdfb", "#14547a"), N=1024)
+            def position(raw):
+                return 0.5 + math.asinh(raw) / (2 * math.asinh(COLOUR_LIMIT))
+            def colour(raw):
+                require_layout(abs(raw) <= COLOUR_LIMIT, "colour scale would clip a value")
+                return cmap(position(raw))
             numeric_artists = []
-            for comparison, title, panel_top in zip(COMPARISONS, PANEL_TITLES, (94, 63, 32)):
+            for comparison, title, panel_top in zip(COMPARISONS, PANEL_TITLES, (104, 73, 42)):
                 ax.text(2, panel_top, title, fontsize=9.5, fontweight="bold", va="center")
                 ax.text(136, panel_top, "Materna temporal blocks", fontsize=8.5,
                         ha="center", va="center")
@@ -267,27 +278,32 @@ def render(values: dict[tuple[str, str, str], Decimal]) -> None:
                         value = values[comparison, block, resource]
                         x = grid_left + column * cell_width
                         bottom = y - cell_height / 2
-                        fill = POSITIVE_FILL if value > 0 else NEGATIVE_FILL
+                        fill = colour(float(value))
                         ax.add_patch(Rectangle((x, bottom), cell_width, cell_height,
                                                facecolor=fill, edgecolor="white", lw=0.65,
                                                rasterized=False))
+                        luminance = sum(c * w for c, w in zip(fill[:3], (0.2126, 0.7152, 0.0722)))
                         artist = ax.text(x + cell_width / 2, y, display(value), fontsize=9.5,
-                                         ha="center", va="center", color="black")
+                                         ha="center", va="center",
+                                         color="white" if luminance < 0.48 else "black")
                         numeric_artists.append((artist, x, bottom))
                 # Boundary denotes group membership, never pooling or independence.
                 grid_top = panel_top - 10.0 + cell_height / 2
                 grid_bottom = grid_top - 4 * cell_height
                 ax.plot([100, 100], [grid_bottom, grid_top], color="0.45", lw=0.65)
 
-            ax.text(2, 2.5, "MacroMAE gain (%)", fontsize=8.5, va="center")
-            for x, fill, label in (
-                (36, POSITIVE_FILL, "+ Lower candidate error"),
-                (95, NEGATIVE_FILL, "- Higher candidate error"),
-            ):
-                ax.add_patch(Rectangle((x, 1.4), 2.2, 2.2, facecolor=fill,
-                                       edgecolor="0.6", lw=0.45, rasterized=False))
-                ax.text(x + 3.5, 2.5, label, fontsize=8.5, va="center")
-            ax.text(171.5, 2.5, "Sign-only fill", fontsize=8.5, ha="right", va="center")
+            ax.text(2, 6, "Gain (%)", fontsize=8.5, va="center")
+            ax.text(103, 10.6, "Nonlinear asinh colour aid; exact values printed above",
+                    fontsize=8, ha="center", va="center")
+            left, width, steps = 36.0, 134.0, 512
+            for i in range(steps):
+                ax.add_patch(Rectangle((left + width*i/steps, 5), width/steps + 0.002,
+                                       2.6, facecolor=cmap((i+0.5)/steps), edgecolor="none"))
+            for raw in (-75, -20, -5, -1, 0, 1, 5, 20, 75):
+                x = left + width * position(raw)
+                ax.plot((x, x), (4.4, 5), color="0.3", lw=0.5)
+                ax.text(x, 2.1, f"{raw:+d}" if raw else "0", fontsize=7.5,
+                        ha="center", va="center")
 
             # Geometry checks are implementation checks, not scientific analyses.
             fig.canvas.draw()

@@ -1,0 +1,131 @@
+{
+  "status": "PASS_LOCAL_COVERAGE_AND_HASH_AUDIT",
+  "posthoc": [
+    {
+      "experiment": "s2_common_context",
+      "status": "STAGE_18B1R_PASS",
+      "inventory_files_verified": 33336,
+      "active_seal": "review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r_successor.json",
+      "result": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+      "metric_file": "review_revision/experiments/s2_common_context/posthoc_metric_rows.parquet",
+      "counts": {
+        "failed": 0,
+        "new": 5712,
+        "required": 10920,
+        "reused": 5208
+      },
+      "rows": 24,
+      "historical_failures_preserved": true,
+      "missing_files": 0
+    },
+    {
+      "experiment": "m1_capacity_matched",
+      "status": "STAGE_18B2_PASS",
+      "inventory_files_verified": 36442,
+      "active_seal": "review_revision/experiments/m1_capacity_matched/provenance/experiment.json",
+      "result": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+      "metric_file": "review_revision/experiments/m1_capacity_matched/posthoc_metric_rows.parquet",
+      "counts": {
+        "failed": 0,
+        "final": 2730,
+        "inner": 8190
+      },
+      "rows": 24,
+      "historical_failures_preserved": true,
+      "missing_files": 0
+    },
+    {
+      "experiment": "ar_arx_baseline",
+      "status": "STAGE_18B3R_PASS",
+      "inventory_files_verified": 109360,
+      "active_seal": "review_revision/experiments/ar_arx_baseline/recovery/successor_audit_reduction_fix.json",
+      "result": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+      "metric_file": "review_revision/experiments/ar_arx_baseline/posthoc_metric_rows.parquet",
+      "counts": {
+        "failed": 0,
+        "final": 7280,
+        "inner": 36400
+      },
+      "rows": 24,
+      "historical_failures_preserved": true,
+      "missing_files": 0
+    }
+  ],
+  "originals": [
+    {
+      "inventory": "multiresource/04_lstm_factorial/PHASE3C_SCIENTIFIC_ARTIFACT_SHA256.csv",
+      "files_verified": 5706
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/PHASE4C_V2_SCIENTIFIC_CHECKPOINT_SHA256.csv",
+      "files_verified": 50
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/PHASE4D_MATERNA_FINAL_SCIENTIFIC_CHECKPOINT_SHA256.csv",
+      "files_verified": 41
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/PHASE4C_V2_EXECUTION_CHECKPOINT_SHA256.csv",
+      "files_verified": 35
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/PHASE4D_MATERNA_EXECUTION_CHECKPOINT_SHA256.csv",
+      "files_verified": 42
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/runtime/PHASE4C_V2_EXECUTION_ARTIFACT_SHA256.csv",
+      "files_verified": 56723
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/outputs/scientific_v1/runtime/PHASE4D_EXECUTION_ARTIFACT_SHA256.csv",
+      "files_verified": 141785
+    }
+  ],
+  "evidence_output_hashes_verified": {
+    "stage18c1_evidence": 25,
+    "stage19g1_evidence": 19,
+    "stage19g2_evidence": 47,
+    "stage19h1_scale_context": 10,
+    "stage19h2a_evidence": 50,
+    "stage19h2b_housekeeping": 70
+  },
+  "direct_input_hashes_verified": {
+    "stage19g1_evidence": 6955,
+    "stage19h1_scale_context": 3347
+  },
+  "historical_manuscript_inputs_resolved": [
+    {
+      "stage": "stage19g1_evidence",
+      "path": "manuscript/jss/manuscript.tex",
+      "historical_sha256": "5d4e4d67cb60cf19b7aaf0fc0ae46202d74c26c0696666e9cd4502e471481ef9",
+      "exact_preserved_predecessors": [
+        "review_revision/stage19g2_evidence/manuscript_before.tex"
+      ],
+      "current_sha256": "4b71f2ae85134e7911cb81d2b6bd0a8489d327d5b4dbe648d33498fb551ce1f4",
+      "reason": "Authorised later manuscript revisions; scientific inputs unchanged"
+    },
+    {
+      "stage": "stage19g1_evidence",
+      "path": "manuscript/jss/tables/posthoc_controls.tex",
+      "historical_sha256": "5a65a678e8cf8551bb3ef82f0ea2b68f5b5189897c9f9c74e0df4908e673c4ed",
+      "exact_preserved_predecessors": [
+        "review_revision/stage19h2a_evidence/before_2.tex"
+      ],
+      "current_sha256": "1aea8d56e75e21806733850e288ba02771910a8fcbae36e480db734d2769c7bc",
+      "reason": "Authorised later manuscript revisions; scientific inputs unchanged"
+    }
+  ],
+  "named_required_inputs_present": true,
+  "missing_named_inputs": [],
+  "local_files_complete": true,
+  "public_clean_checkout_self_contained": false,
+  "portability_gaps": [
+    "Full checkpoints/predictions are local, not all tracked",
+    "G1 CSV exporter uses private @oai/artifact-tool and an absolute local node_modules symlink",
+    "Some verification scripts require historical HEAD/clean tree and historical output locations",
+    "No unified portable dependency lock or checkpoint entry README"
+  ],
+  "training": 0,
+  "inference": 0,
+  "scientific_recomputation": 0
+}

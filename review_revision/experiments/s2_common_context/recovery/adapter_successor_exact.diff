@@ -1,0 +1,512 @@
+--- predecessor/run_control.py
++++ successor/run_control.py
+@@ -7,7 +7,10 @@
+ import fcntl
+ import hashlib
+ import importlib
++import copy
+ import json
++import math
++import numbers
+ import multiprocessing as mp
+ import os
+ from pathlib import Path
+@@ -30,6 +33,7 @@
+ }
+ PROTECTED = ("multiresource/04_lstm_factorial", "independent_validation/05_bitbrains_factorial", "independent_validation/06_materna_replication", "manuscript/jss")
+ _ENGINE = None
++_RECOVERING = False
+ 
+ 
+ class Conflict(RuntimeError):
+@@ -75,6 +79,94 @@
+     temp = path.with_suffix(path.suffix + ".tmp")
+     temp.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False) + "\n")
+     os.replace(temp, path)
++
++
++def finite_primary(value, path="primary"):
++    """Never apply optional-metric null conversion to scientific inputs/outputs."""
++    if isinstance(value, dict):
++        for key, part in value.items(): finite_primary(part, f"{path}/{key}")
++    elif isinstance(value, (list, tuple)):
++        for index, part in enumerate(value): finite_primary(part, f"{path}/{index}")
++    elif isinstance(value, numbers.Real):
++        require(math.isfinite(float(value)), f"Nonfinite primary field {path}", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++    elif value is None:
++        raise Conflict("PRIMARY_NONFINITE_RESULT_CONFLICT", f"Missing primary field {path}")
++
++
++def validate_prediction_primary(prediction):
++    import numpy as np
++    from pandas.api.types import is_numeric_dtype
++    required = ["y_true", "y_pred", "y_pred_scaled", "origin_index", "target_index", "lead", "selected_L", "selected_epoch", "seed", "fold", "support_hash"]
++    required += [name for name in prediction if "timestamp" in name]
++    require(all(name in prediction for name in required), "Missing prediction identity fields", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++    require(not prediction[required].isna().any().any(), "Missing primary prediction/timestamp/identity", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++    for name in required + (["y_pred_unclipped"] if "y_pred_unclipped" in prediction else []):
++        if is_numeric_dtype(prediction[name]):
++            require(bool(np.isfinite(prediction[name].to_numpy()).all()), f"Nonfinite prediction field {name}", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++
++
++def strict_reuse_metrics(original, prediction):
++    """Null only recognised undefined optional metrics, retaining exact raw semantics."""
++    validate_prediction_primary(prediction)
++    metrics = copy.deepcopy(original["metrics"])
++    persistence = {int(row["lead"]): row for row in original.get("persistence_metrics", [])}
++    semantics = []
++    for index, row in enumerate(metrics):
++        for key, value in list(row.items()):
++            if isinstance(value, numbers.Real) and not math.isfinite(float(value)):
++                lead = int(row["lead"])
++                targets = prediction.loc[prediction.lead.eq(lead), "y_true"].to_numpy()
++                reason = None
++                # Infinity is not an undefined-zero-denominator marker.
++                if math.isnan(float(value)) and key == "r2" and len(targets) and bool((targets == targets[0]).all()):
++                    reason = "undefined_zero_target_variance"
++                if math.isnan(float(value)) and key == "persistence_skill" and lead in persistence:
++                    denominator = persistence[lead].get("mae")
++                    finite_primary(denominator, "persistence_reference_mae")
++                    if denominator == 0: reason = "undefined_zero_persistence_mae"
++                require(reason is not None, f"Unrecognised nonfinite metric {key} at lead {lead}", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++                row[key] = None
++                row[f"{key}_status"] = reason
++                semantics.append({"metric_index": index, "lead": lead, "field": key, "original_raw_value": "NaN", "reason": reason})
++        finite_primary({k:v for k,v in row.items() if not (k in ("r2", "persistence_skill") and v is None)}, f"metrics/{index}")
++        require("mae" in row and row["mae"] is not None, "Primary MAE absent", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++    return metrics, semantics
++
++
++def recovery_authorisation(spec):
++    record = read(HERE / "provenance/recovery_stage18b1r.json")
++    require(spec["control_run_id"] in record["authorised_run_ids"], "Unapproved interrupted retry", "INTERRUPTED_REFIT_IDENTITY_CONFLICT")
++    snapshot = Path(record["snapshot_root"])
++    predecessor = read(snapshot / f"attempts/{spec['block']}/{spec['control_run_id']}.json")
++    require(predecessor["spec"] == spec, "Interrupted scientific identity differs", "INTERRUPTED_REFIT_IDENTITY_CONFLICT")
++    require(sha(HERE / f"attempts/{spec['block']}/{spec['control_run_id']}.json") == sha(snapshot / f"attempts/{spec['block']}/{spec['control_run_id']}.json"), "Original attempt changed", "INTERRUPTED_REFIT_IDENTITY_CONFLICT")
++    return {"stage": "18B1R", "authorisation_path": str(HERE / "provenance/recovery_stage18b1r.json"), "authorisation_sha256": sha(HERE / "provenance/recovery_stage18b1r.json"), "predecessor_attempt_path": str(HERE / f"attempts/{spec['block']}/{spec['control_run_id']}.json"), "predecessor_attempt_sha256": sha(snapshot / f"attempts/{spec['block']}/{spec['control_run_id']}.json"), "successor_adapter_sha256": sha(Path(__file__))}
++
++
++def unresolved_failures():
++    unresolved = []
++    for directory in (HERE / "failures", HERE / "recovery/failures"):
++        for failure in directory.rglob("*.json") if directory.exists() else []:
++            evidence = HERE / "recovery/evidence" / failure.parent.name / failure.name
++            if not evidence.exists(): unresolved.append(str(failure)); continue
++            value = read(evidence)
++            require(value.get("original_failure_sha256") == sha(failure), f"Failure-resolution identity mismatch {failure}")
++            require(sha(value["completion_path"]) == value["completion_sha256"], "Recovered completion changed")
++    return unresolved
++
++
++def verify_adapter_provenance():
++    original = read(HERE / "provenance/experiment.json")
++    recovery_path = HERE / "provenance/recovery_stage18b1r_successor.json"
++    if not recovery_path.exists():
++        for rel, digest in original["source_hashes"].items(): require(sha(ROOT / rel) == digest, f"Source changed {rel}")
++        return
++    successor = read(recovery_path)
++    predecessor = read(HERE / "provenance/recovery_stage18b1r.json")
++    require(sha(CONFIG) == predecessor["predecessor_config_sha256"], "Recovery would change config", "RECOVERY_CONFIG_CHANGE_REQUIRED")
++    require(sha(HERE / "provenance/experiment.json") == predecessor["original_provenance_sha256"], "Original provenance changed")
++    require(successor["tests"]["status"] == "PASS", "Recovery regression tests not passed")
++    for rel, digest in successor["source_hashes"].items(): require(sha(ROOT / rel) == digest, f"Successor source changed {rel}")
+ 
+ 
+ def parquet(path, frame):
+@@ -327,6 +419,7 @@
+ 
+ 
+ def check_spec(engine, spec):
++    finite_primary(spec, "spec")
+     for key in ("inner_completion", "original_completion", "m1_context_completion", "forced_context_source"):
+         require(sha(ROOT / spec[key]) == spec[key + "_sha256"], f"Source changed: {spec[key]}")
+     frame, folds = engine.data(spec["entity"], spec["L"]); fold = folds[spec["fold"]-1]
+@@ -336,21 +429,25 @@
+     return frame, fold, scaler
+ 
+ 
+-def init_worker(block):
+-    global _ENGINE
++def init_worker(block, recovering=False):
++    global _ENGINE, _RECOVERING
++    _RECOVERING = recovering
+     _ENGINE = Engine(block)
+     # The frozen finite-data computation is unchanged. Fail fast on nonfinite loss/gradient.
+     core = _ENGINE.core; torch = _ENGINE.torch
+     original_loss = core.resource_losses
+     def guarded_loss(*args, **kwargs):
+         result = original_loss(*args, **kwargs)
+-        require(bool(torch.isfinite(result[0])), "Nonfinite training loss", "STAGE_18B1_BLOCKED")
++        require(bool(torch.isfinite(result[0])), "Nonfinite training loss", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+         return result
+     core.resource_losses = guarded_loss
+     original_clip = torch.nn.utils.clip_grad_norm_
+     def guarded_clip(*args, **kwargs):
+         kwargs["error_if_nonfinite"] = True
+-        return original_clip(*args, **kwargs)
++        try: return original_clip(*args, **kwargs)
++        except RuntimeError as exc:
++            if "non-finite" in str(exc): raise Conflict("PRIMARY_NONFINITE_RESULT_CONFLICT", str(exc)) from exc
++            raise
+     torch.nn.utils.clip_grad_norm_ = guarded_clip
+ 
+ 
+@@ -372,6 +469,8 @@
+         require(sha(p) == value[f"{kind}_sha256"], f"Control {kind} hash mismatch {p}")
+     require(value["test_evaluations"] == (0 if spec["reuse"] else 1), "Test evaluation count")
+     require(len(value["metrics"]) == len(engine.leads), "Metric count")
++    finite_primary(spec, "completion/spec")
++    for metric in value["metrics"]: finite_primary(metric["mae"], "completion/mae")
+ 
+ 
+ def run_group(specs):
+@@ -385,11 +484,17 @@
+         if completion.exists():
+             value = read(completion); validate_completion(engine, spec, value)
+             completed.append({"reuse": spec["reuse"], "resumed": True}); continue
+-        require(not failure.exists() and not started_path.exists(), f"Unresolved prior attempt {run_id}; never silently retrain", "STAGE_18B1_BLOCKED")
++        recovery = None
++        if _RECOVERING:
++            recovery = recovery_authorisation(spec)
++            if failure.exists(): recovery["original_failure_sha256"] = sha(failure)
++            failure = HERE / f"recovery/failures/{engine.block}/{run_id}.json"
++            started_path = HERE / f"recovery/attempts/{engine.block}/{run_id}.json"
++        require(not failure.exists() and not started_path.exists(), f"Unresolved prior attempt {run_id}; never silently retrain", "STAGE_18B1R_BLOCKED")
+         try:
+             frame, fold, scaler = check_spec(engine, spec)
+             started = now()
+-            write(started_path, {"label": LABEL, "spec": spec, "started": started, "pid": os.getpid()})
++            write(started_path, {"label": LABEL, "spec": spec, "started": started, "pid": os.getpid(), **({"recovery": recovery} if recovery else {})})
+             original = read(ROOT / spec["original_completion"])
+             if spec["reuse"]:
+                 require(original["identity"] == spec["frozen_final_identity"], "Reused frozen identity changed")
+@@ -397,12 +502,12 @@
+                 for kind in ("model", "prediction"):
+                     require(sha(engine.artifact(original, kind)) == original[f"{kind}_sha256"], f"Reused {kind} changed")
+                 prediction = engine.pd.read_parquet(engine.artifact(original, "prediction"))
+-                require(np.isfinite(prediction[["y_true", "y_pred", "y_pred_scaled"]].to_numpy()).all(), "Nonfinite reused predictions", "STAGE_18B1_BLOCKED")
++                validate_prediction_primary(prediction)
+                 state = torch.load(engine.artifact(original, "model"), map_location="cpu", weights_only=True)
+-                require(all(bool(torch.isfinite(v).all()) for v in state.values()), "Nonfinite reused weights", "STAGE_18B1_BLOCKED")
++                require(all(bool(torch.isfinite(v).all()) for v in state.values()), "Nonfinite reused weights", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+                 require(sum(v.numel() for v in state.values()) == (51720 if engine.tt else 51525), "Reused parameter count")
+-                metrics = original["metrics"]
+-                value = {"status": "complete", "label": LABEL, "spec": spec, "started": started, "completed": now(), "mode": "EXACT_FROZEN_REUSE", "equality_check": {"identity": True, "selected_epoch": True, "scaler": True, "support": True, "configuration": True, "seed": True}, "test_evaluations": 0, "metrics": metrics, "train_seconds": 0.0, "original_completion_sha256": sha(ROOT / spec["original_completion"])}
++                metrics, semantics = strict_reuse_metrics(original, prediction)
++                value = {"status": "complete", "label": LABEL, "spec": spec, "started": started, "completed": now(), "mode": "EXACT_FROZEN_REUSE", "equality_check": {"identity": True, "selected_epoch": True, "scaler": True, "support": True, "configuration": True, "seed": True}, "test_evaluations": 0, "metrics": metrics, "train_seconds": 0.0, "original_completion_sha256": sha(ROOT / spec["original_completion"]), "original_completion_path": str(ROOT / spec["original_completion"]), "reuse": True, "no_training": True, "no_new_test_evaluation": True, "original_raw_ancillary_semantics": semantics}
+                 for kind in ("model", "prediction"):
+                     value[f"{kind}_path"] = str(engine.artifact(original, kind))
+                     value[f"{kind}_sha256"] = original[f"{kind}_sha256"]
+@@ -415,8 +520,8 @@
+                 train_x, train_y = core.scaled_views(X, y, "S2", spec["resource"])
+                 model, loss_logs, seconds, rss = core.fit_final_model("S2", spec["resource"], spec["seed"], train_x, train_y, spec["epoch"])
+                 require(len(loss_logs) == spec["epoch"], "Refit epoch count")
+-                require(np.isfinite([r["joint_loss"] for r in loss_logs]).all(), "Nonfinite loss history", "STAGE_18B1_BLOCKED")
+-                require(all(bool(torch.isfinite(v).all()) for v in model.state_dict().values()), "Nonfinite trained weights", "STAGE_18B1_BLOCKED")
++                require(np.isfinite([r["joint_loss"] for r in loss_logs]).all(), "Nonfinite loss history", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++                require(all(bool(torch.isfinite(v).all()) for v in model.state_dict().values()), "Nonfinite trained weights", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+                 require(core.parameter_count(model) == (51720 if engine.tt else 51525), "New parameter count")
+                 model_path = output(HERE / f"models/{engine.block}/{run_id}.pt")
+                 torch.save(model.state_dict(), model_path)
+@@ -430,7 +535,7 @@
+                 index = engine.resources.index(spec["resource"])
+                 inverse = core.inverse_one(prediction_scaled, scaler, spec["resource"], project=True) if engine.tt else scaler.inverse_one(prediction_scaled, spec["resource"], project=True)
+                 native, negative, unclipped = inverse
+-                require(np.isfinite(prediction_scaled).all() and np.isfinite(native).all() and np.isfinite(unclipped).all(), "Nonfinite test prediction", "STAGE_18B1_BLOCKED")
++                require(np.isfinite(y_test_native).all() and np.isfinite(prediction_scaled).all() and np.isfinite(native).all() and np.isfinite(unclipped).all(), "Nonfinite test target/prediction", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+                 artifact_identity = dict(spec["frozen_final_identity"])
+                 artifact_identity.update(run_id=run_id, formulation="S2-COMMON-CONTEXT", selected_epoch=spec["epoch"], support_hash=engine.support_hash(fold, "final"))
+                 if engine.tt:
+@@ -438,15 +543,19 @@
+                 else:
+                     predicted = core.prediction_frame(artifact_identity, spec["resource"], engine.clean, fold.outer_test, spec["epoch"], y_test_native[:,index,:], prediction_scaled, native, unclipped)
+                 predicted["control_label"] = LABEL
++                validate_prediction_primary(predicted)
+                 validate_prediction_support(engine, spec, predicted)
+                 pred_path = HERE / f"predictions/{engine.block}/{run_id}.parquet"
+                 parquet(pred_path, predicted)
+                 truth = y_test_native[:,index,:]
+                 mae = np.mean(np.abs(truth - native), axis=0)
+-                require(np.isfinite(mae).all(), "Nonfinite MAE", "STAGE_18B1_BLOCKED")
++                require(np.isfinite(mae).all(), "Nonfinite MAE", "PRIMARY_NONFINITE_RESULT_CONFLICT")
+                 metrics = [{"block": engine.block, "formulation": "S2-COMMON-CONTEXT", "entity": spec["entity"], "fold": spec["fold"], "resource": spec["resource"], "seed": spec["seed"], "lead": int(lead), "mae": float(mae[i]), "n": len(truth), "selected_L": spec["L"], "selected_epoch": spec["epoch"], "run_id": run_id, "outer_test_hash": fold.hashes["outer_test"]} for i,lead in enumerate(engine.leads)]
+                 value = {"status": "complete", "label": LABEL, "spec": spec, "started": started, "completed": now(), "mode": "NEW_FIXED_EPOCH_REFIT", "test_evaluations": 1, "model_path": str(model_path), "model_sha256": sha(model_path), "prediction_path": str(pred_path), "prediction_sha256": sha(pred_path), "support_hash": engine.support_hash(fold, "final"), "scaler_sha256": spec["scaler_sha256"], "train_seconds": seconds, "prediction_seconds": pred_seconds, "peak_rss_bytes": rss, "parameter_count": core.parameter_count(model), "loss_logs": loss_logs, "metrics": metrics}
++            if recovery: value["recovery"] = recovery
+             write(completion, value)
++            if recovery:
++                write(HERE / f"recovery/evidence/{engine.block}/{run_id}.json", {"status": "RECOVERED", "timestamp": now(), "spec": spec, **recovery, "completion_path": str(completion), "completion_sha256": sha(completion), "mode": value["mode"], "test_evaluations": value["test_evaluations"], "no_training": bool(spec["reuse"]), "scientific_identity_unchanged": True})
+             completed.append({"reuse": spec["reuse"], "resumed": False})
+             print(f"FIT_COMPLETE {engine.block} {spec['entity']} fold={spec['fold']} {spec['resource']} seed={spec['seed']} mode={value['mode']}", flush=True)
+         except BaseException as exc:
+@@ -469,6 +578,54 @@
+             print(f"PROGRESS {block} completed={done}/{plan['required']}", flush=True)
+     require(done == plan["required"], f"Incomplete block {block}")
+     write(HERE / f"validation/{block}.json", {"status": "PASS", "required": done, "planned_reuse": plan["reused"], "planned_new": plan["new"], "timestamp": now()})
++
++
++def recover_units():
++    verify_refs(); verify_adapter_provenance()
++    authorisation = read(HERE / "provenance/recovery_stage18b1r.json")
++    plan = read(HERE / "plans/Rnd.json")
++    lookup = {s["control_run_id"]:s for s in plan["tasks"]}
++    init_worker("Rnd", recovering=True)
++    results = []
++    for run_id in authorisation["authorised_run_ids"]:
++        spec = lookup[run_id]
++        run_group([spec])
++        evidence = read(HERE / f"recovery/evidence/Rnd/{run_id}.json")
++        require(evidence["scientific_identity_unchanged"], "Recovered identity differs", "INTERRUPTED_REFIT_IDENTITY_CONFLICT")
++        results.append(evidence)
++    require(not unresolved_failures(), "Unresolved failure after four-unit recovery")
++    write(HERE / "recovery/four_units_recovered.json", {"status": "PASS", "timestamp": now(), "units": results, "determinism": {"same_seed": True, "same_frozen_set_seed_function": True, "torch_deterministic_algorithms": True, "warn_only": True, "cpu_threads": 1, "bitwise_across_environments_guaranteed": False, "note": "Frozen warn-only deterministic policy retained; no completed interrupted output exists for bitwise comparison"}})
++
++
++def audit_block(block):
++    """Read-only numerical/provenance audit; no model inference or fitting."""
++    engine = Engine(block); plan = read(HERE / f"plans/{block}.json")
++    specs = {s["control_run_id"]:s for s in plan["tasks"]}
++    files = list((HERE / f"completions/{block}").glob("*.json"))
++    require(len(files) == len(specs) and {p.stem for p in files} == set(specs), f"Duplicate/missing completion files {block}", "CONTROL_COMPLETION_DUPLICATION_CONFLICT")
++    identities = set(); checked_groups = set(); counts = {"reused": 0, "new": 0}; metric_rows = 0
++    for path in sorted(files):
++        spec = specs[path.stem]; value = read(path)
++        identity = canonical(spec["frozen_final_identity"])
++        require(identity not in identities, f"Duplicate scientific identity {block}/{path.stem}", "CONTROL_COMPLETION_DUPLICATION_CONFLICT")
++        identities.add(identity); validate_completion(engine, spec, value)
++        group = (spec["entity"], spec["fold"], spec["L"])
++        if group not in checked_groups:
++            check_spec(engine, spec)
++            selected = engine.unique(engine.contexts, **{engine.entity_key:spec["entity"], "fold":spec["fold"], "formulation":"M1"})
++            require(int(selected.selected_L) == spec["L"], "Forced context differs")
++            checked_groups.add(group)
++        inner = read(ROOT / spec["inner_completion"])
++        require(sha(ROOT / spec["inner_completion"]) == spec["inner_completion_sha256"] and int(inner["best_epoch"]) == spec["epoch"], "Forced-L S2 epoch provenance differs")
++        prediction = engine.pd.read_parquet(value["prediction_path"])
++        validate_prediction_primary(prediction)
++        validate_prediction_support(engine, spec, prediction)
++        state = engine.torch.load(value["model_path"], map_location="cpu", weights_only=True)
++        require(all(bool(engine.torch.isfinite(v).all()) for v in state.values()), "Nonfinite checkpoint", "PRIMARY_NONFINITE_RESULT_CONFLICT")
++        require(sum(v.numel() for v in state.values()) == (51720 if engine.tt else 51525), "Model parameter count differs")
++        counts["reused" if spec["reuse"] else "new"] += 1; metric_rows += len(value["metrics"])
++    require(counts == {"reused":plan["reused"], "new":plan["new"]}, "Reuse/new counts differ")
++    write(HERE / f"validation/full_audit_{block}.json", {"status":"PASS", "timestamp":now(), "valid_completions":len(files), "counts":counts, "metric_rows":metric_rows, "duplicate_scientific_identities":0, "support_scaler_context_epoch_and_numerical_checks":"PASS", "test_evaluations_during_audit":0})
+ 
+ 
+ def prepare():
+@@ -495,11 +652,14 @@
+ 
+ def run_all(workers):
+     verify_refs()
+-    provenance = read(HERE / "provenance/experiment.json")
+-    for rel, digest in provenance["source_hashes"].items():
+-        require(sha(ROOT / rel) == digest, f"Source code changed after plan: {rel}")
++    verify_adapter_provenance()
++    if (HERE / "provenance/recovery_stage18b1r_successor.json").exists():
++        require(read(HERE / "recovery/four_units_recovered.json")["status"] == "PASS", "Recover four units before general resume")
++    require(not unresolved_failures(), "Unresolved failed units")
+     for block in read(CONFIG)["blocks"]:
+         subprocess.run([sys.executable, "-B", str(Path(__file__)), "run-block", "--block", block, "--workers", str(workers)], cwd=ROOT, check=True)
++    for block in read(CONFIG)["blocks"]:
++        subprocess.run([sys.executable, "-B", str(Path(__file__)), "audit-block", "--block", block], cwd=ROOT, check=True)
+     preservation_check(full=True)
+     print("ALL_FITS_COMPLETE_PRESERVATION_PASS analysis_pending=true", flush=True)
+     subprocess.run([sys.executable, "-B", str(HERE / "analyse_control.py")], cwd=ROOT, check=True)
+@@ -507,13 +667,13 @@
+ 
+ def main():
+     parser = argparse.ArgumentParser()
+-    parser.add_argument("action", choices=("prepare", "plan-block", "run", "run-block", "verify"))
++    parser.add_argument("action", choices=("prepare", "plan-block", "run", "run-block", "verify", "recover-units", "audit-block"))
+     parser.add_argument("--block", choices=list(FROZEN))
+     parser.add_argument("--workers", type=int, default=4)
+     args = parser.parse_args()
+     # Parent lock is not used by child plan/run-block processes.
+     lock = None
+-    if args.action in ("prepare", "run"):
++    if args.action in ("prepare", "run", "recover-units"):
+         lock = output(HERE / "runtime.lock").open("a")
+         try: fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+         except BlockingIOError: raise Conflict("PROVENANCE_CONFLICT", "Control process already active")
+@@ -523,9 +683,12 @@
+         elif args.action == "run": run_all(args.workers)
+         elif args.action == "run-block": execute_block(args.block, args.workers)
+         elif args.action == "verify": print(json.dumps(preservation_check(full=True)))
++        elif args.action == "recover-units": recover_units()
++        elif args.action == "audit-block": audit_block(args.block)
+     except BaseException as exc:
+-        if args.action in ("prepare", "run"):
+-            write(HERE / "STOP.json", {"status": getattr(exc,"code","STAGE_18B1_BLOCKED"), "timestamp": now(), "error": repr(exc), "traceback": traceback.format_exc()})
++        if args.action in ("prepare", "run", "recover-units"):
++            stop_path = HERE / ("recovery/STOP.json" if (HERE / "provenance/recovery_stage18b1r.json").exists() else "STOP.json")
++            write(stop_path, {"status": getattr(exc,"code","STAGE_18B1R_BLOCKED"), "timestamp": now(), "error": repr(exc), "traceback": traceback.format_exc()})
+         raise
+ 
+ 
+--- predecessor/analyse_control.py
++++ successor/analyse_control.py
+@@ -7,7 +7,7 @@
+ import numpy as np
+ 
+ sys.path.insert(0, str(Path(__file__).resolve().parent))
+-from run_control import HERE, ROOT, FROZEN, CONFIG, LABEL, RESULT_LABEL, read, write, sha, require, now, parquet
++from run_control import HERE, ROOT, FROZEN, CONFIG, LABEL, RESULT_LABEL, read, write, sha, require, now, parquet, unresolved_failures
+ 
+ 
+ def gain(candidate, reference):
+@@ -44,11 +44,12 @@
+ def main():
+     require(read(HERE / "provenance/preservation_after.json")["status"] == "PASS", "Final preservation verification required")
+     cfg=read(CONFIG); rows=[]; all_metrics=[]; totals={"required":0,"reused":0,"new":0,"failed":0}
+-    failures=list((HERE/"failures").rglob("*.json")) if (HERE/"failures").exists() else []
++    failures=unresolved_failures()
+     require(not failures, f"Unresolved failures: {failures}")
+     for block in cfg["blocks"]:
+         plan=read(HERE/f"plans/{block}.json"); metrics=[]
+         require(read(HERE/f"validation/{block}.json")["status"] == "PASS", f"Block not passed: {block}")
++        require(read(HERE/f"validation/full_audit_{block}.json")["status"] == "PASS", f"Full provenance/numerical audit not passed: {block}")
+         completions=list((HERE/f"completions/{block}").glob("*.json"))
+         require(len(completions)==plan["required"],f"Completion count {block}")
+         for spec in plan["tasks"]:
+@@ -93,7 +94,8 @@
+         if (r["block"],r["resource"]) in priority:
+             lines.append(f"- {r['block']} {r['resource']}: M1:original-S2 {r['original_M1_vs_S2_gain_percent']:.6f}%; M1:common-S2 {r['M1_vs_S2_common_gain_percent']:.6f}%; common-S2 MAE {r['S2_common_context_MacroMAE']:.9g} versus original-S2 {r['original_S2_MacroMAE']:.9g}; context matches {r['original_context_matches']}/{r['entity_fold_units']}.")
+     lines += ["","## Protocol, interpretation and limitations","","Four independent H64/two-layer S2 networks remain per entity/fold/seed. Each forced L comes directly from frozen M1; each epoch comes from existing S2 inner best_epoch at that exact L. Source-specific support/scalers, transforms and horizons are preserved. Exact frozen reuse is reference-based, not copied/retrained. New final refits use one test forward pass only. No inner fit, new selection, bootstrap, global pooled statistic or capacity-matched M1 was run.","","The numerical consequence of restricting S2 context selection is estimated within this implemented pipeline. This does not completely isolate representation sharing, capacity, optimisation geometry or model-count differences. Scaler training-row sets and refit epochs can change as protocol-prescribed consequences of changing L. Three seeds and the original eligible populations remain the scope. Concurrent unrelated workload was observed, so recorded runtime is not a clean hardware-efficiency experiment.","","## Preservation","","Full protected-file SHA-256 inventory and unchanged Git refs were verified after fitting. Manuscript modifications=0; frozen scientific artifact modifications=0; original frozen result modifications=0. New model count is the new-fit count above. Commit=NO; push=NO.","","Detailed fit identities, source paths/hashes, equality checks, support/scaler hashes, new model/prediction hashes and timestamps are in plans/, completions/ and provenance/. Every output belongs to this new post-hoc namespace.","","STAGE_18B1_PASS",""]
+-    (HERE/"STAGE18B1_S2_COMMON_CONTEXT_REPORT.md").write_text("\n".join(lines))
++    # Preserve the blocked-run report; successor reporting has a separate path.
++    (HERE/"STAGE18B1R_S2_COMMON_CONTEXT_REPORT.md").write_text("\n".join(lines))
+     inventory=[]
+     for p in sorted(HERE.rglob("*")):
+         if p.is_file() and p.name not in {"output_sha256_inventory.json","execution.log"}:
+--- /dev/null
++++ successor/test_serialisation_recovery.py
+@@ -0,0 +1,129 @@
++"""Stage18B1R regressions: no training, inference or scientific outcome changes."""
++import copy
++import json
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++from unittest import mock
++
++import numpy as np
++import pandas as pd
++
++sys.path.insert(0, str(Path(__file__).resolve().parent))
++import run_control as c
++
++
++class SerialisationTests(unittest.TestCase):
++    def prediction(self):
++        return pd.DataFrame({"y_true":[0.,0.], "y_pred":[.1,.2], "y_pred_scaled":[.1,.2], "y_pred_unclipped":[.1,.2], "origin_index":[0,1], "target_index":[1,2], "lead":[1,1], "selected_L":[18,18], "selected_epoch":[48,48], "seed":[0,0], "fold":[2,2], "support_hash":["support","support"], "origin_timestamp_seconds":[100,200], "target_timestamp_seconds":[200,300]})
++
++    def original(self):
++        return {"metrics":[{"lead":1,"mae":.15,"r2":float("nan"),"persistence_skill":float("nan")}], "persistence_metrics":[{"lead":1,"mae":0.}]}
++
++    def assert_primary_conflict(self, fn):
++        with self.assertRaises(c.Conflict) as caught: fn()
++        self.assertEqual(caught.exception.code,"PRIMARY_NONFINITE_RESULT_CONFLICT")
++
++    def test_A_constant_target_r2(self):
++        rows,_=c.strict_reuse_metrics(self.original(),self.prediction())
++        self.assertIsNone(rows[0]["r2"])
++        self.assertEqual(rows[0]["r2_status"],"undefined_zero_target_variance")
++
++    def test_B_zero_persistence_mae(self):
++        rows,_=c.strict_reuse_metrics(self.original(),self.prediction())
++        self.assertIsNone(rows[0]["persistence_skill"])
++        self.assertEqual(rows[0]["persistence_skill_status"],"undefined_zero_persistence_mae")
++
++    def test_C_finite_ancillary_unchanged(self):
++        original=self.original();original["metrics"][0].update(r2=.123456789,persistence_skill=-2.5)
++        rows,semantics=c.strict_reuse_metrics(original,self.prediction())
++        self.assertEqual(rows,original["metrics"]);self.assertEqual(semantics,[])
++
++    def test_D_nan_primary_mae(self):
++        original=self.original();original["metrics"][0]["mae"]=float("nan")
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(original,self.prediction()))
++
++    def test_E_nan_prediction(self):
++        pred=self.prediction();pred.loc[0,"y_pred"]=float("nan")
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(self.original(),pred))
++
++    def test_F_strict_json_and_raw_semantics(self):
++        rows,semantics=c.strict_reuse_metrics(self.original(),self.prediction())
++        value=json.loads(json.dumps({"metrics":rows,"original_raw_ancillary_semantics":semantics},allow_nan=False))
++        self.assertEqual(value["metrics"][0]["mae"],.15)
++        self.assertEqual([s["original_raw_value"] for s in semantics],["NaN","NaN"])
++
++    def test_H_source_payload_unchanged(self):
++        original=self.original();before=json.dumps(original,sort_keys=True)
++        c.strict_reuse_metrics(original,self.prediction())
++        self.assertEqual(json.dumps(original,sort_keys=True),before)
++
++    def test_I_finite_payload_semantically_unchanged(self):
++        original=self.original();original["metrics"][0].update(r2=0.,persistence_skill=.5)
++        rows,semantics=c.strict_reuse_metrics(original,self.prediction())
++        self.assertEqual(json.loads(json.dumps(rows,allow_nan=False)),original["metrics"])
++        self.assertFalse(semantics)
++
++    def test_unknown_nonfinite_metric_rejected(self):
++        original=self.original();original["metrics"][0]["rmse"]=float("nan")
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(original,self.prediction()))
++
++    def test_infinite_r2_not_zero_variance_marker(self):
++        original=self.original();original["metrics"][0]["r2"]=float("inf")
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(original,self.prediction()))
++
++    def test_nan_r2_nonconstant_target_rejected(self):
++        pred=self.prediction();pred.loc[1,"y_true"]=1.
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(self.original(),pred))
++
++    def test_nan_skill_positive_reference_rejected(self):
++        original=self.original();original["persistence_metrics"][0]["mae"]=1.
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(original,self.prediction()))
++
++    def test_nan_target_rejected(self):
++        pred=self.prediction();pred.loc[0,"y_true"]=np.nan
++        self.assert_primary_conflict(lambda:c.strict_reuse_metrics(self.original(),pred))
++
++    def test_nonfinite_epoch_context_scaler_identity(self):
++        for key in ("epoch","L","scaler","support_identity"):
++            with self.subTest(key=key):self.assert_primary_conflict(lambda:c.finite_primary({key:float("inf")}))
++
++    def test_missing_timestamp_rejected(self):
++        pred=self.prediction();pred.loc[0,"target_timestamp_seconds"]=np.nan
++        self.assert_primary_conflict(lambda:c.validate_prediction_primary(pred))
++
++    def test_nan_scaled_or_unclipped_prediction_rejected(self):
++        for key in ("y_pred_scaled","y_pred_unclipped"):
++            pred=self.prediction();pred.loc[0,key]=np.nan
++            with self.subTest(key=key):self.assert_primary_conflict(lambda:c.validate_prediction_primary(pred))
++
++    def test_duplicate_scientific_identity_guard(self):
++        with self.assertRaises(c.Conflict) as caught:c.require(False,"duplicate","CONTROL_COMPLETION_DUPLICATION_CONFLICT")
++        self.assertEqual(caught.exception.code,"CONTROL_COMPLETION_DUPLICATION_CONFLICT")
++
++
++class ExactFrozenReuseIntegration(unittest.TestCase):
++    def test_G_H_failing_frozen_reuse_has_no_training_or_inference(self):
++        real_here=c.HERE
++        plan=c.read(real_here/"plans/Rnd.json")
++        spec=next(s for s in plan["tasks"] if s["control_run_id"]=="518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481")
++        source=c.ROOT/spec["original_completion"];before=c.sha(source);original=c.read(source)
++        engine=c.Engine("Rnd")
++        parent=real_here/"recovery/test_tmp";parent.mkdir(parents=True,exist_ok=True)
++        with tempfile.TemporaryDirectory(dir=parent) as temp, mock.patch.object(c,"HERE",Path(temp)), mock.patch.object(c,"_ENGINE",engine), mock.patch.object(c,"_RECOVERING",False), mock.patch.object(engine.core,"fit_final_model",side_effect=AssertionError("Reuse trained")) as fit, mock.patch.object(engine.core,"build_model",side_effect=AssertionError("Reuse instantiated network")) as build:
++            c.run_group([spec])
++            result=c.read(Path(temp)/f"completions/Rnd/{spec['control_run_id']}.json")
++            fit.assert_not_called();build.assert_not_called()
++            self.assertTrue(result["reuse"] and result["no_training"] and result["no_new_test_evaluation"])
++            self.assertEqual(result["test_evaluations"],0)
++            self.assertEqual([r["mae"] for r in result["metrics"]],[r["mae"] for r in original["metrics"]])
++            self.assertEqual(result["prediction_sha256"],original["prediction_sha256"])
++            self.assertEqual(result["model_sha256"],original["model_sha256"])
++            self.assertEqual(result["original_completion_sha256"],before)
++            self.assertEqual(len(result["original_raw_ancillary_semantics"]),10)
++            json.dumps(result,allow_nan=False)
++        self.assertEqual(c.sha(source),before)
++
++
++if __name__=="__main__":unittest.main()

@@ -1,0 +1,16 @@
+{
+  "adapter_sha256": "afe50555e5f794d651d4b42b0c89116436df72b1c89f275b52590b400a7c3770",
+  "command": [
+    "/Users/fgtek002/TimeTrack/old_fgcs_rejected/.venv_legacy/bin/python",
+    "-B",
+    "/Users/fgtek002/TimeTrack/review_revision/experiments/m1_capacity_matched/run_capacity_control.py",
+    "run",
+    "--workers",
+    "4"
+  ],
+  "configuration_sha256": "200f8ba6f3b1f9a688812ee589e85c6b9cfc5ce2bdc5f81ad79c860038c1538f",
+  "heartbeat": "continue-stage-18b2-m1-capacity-matched-control",
+  "pid": 23598,
+  "timestamp": "2026-10-22T00:48:49.634207+00:00",
+  "workers": 4
+}

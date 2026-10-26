@@ -1,0 +1,30 @@
+test_empty_fields (__main__.CSVContract.test_empty_fields) ... ok
+test_nonstring_rejected (__main__.CSVContract.test_nonstring_rejected) ... ok
+test_numeric_lexemes_not_normalised (__main__.CSVContract.test_numeric_lexemes_not_normalised) ... ok
+test_plain_column_and_row_order (__main__.CSVContract.test_plain_column_and_row_order) ... ok
+test_quote_bare_cr (__main__.CSVContract.test_quote_bare_cr) ... ok
+test_quote_comma (__main__.CSVContract.test_quote_comma) ... ok
+test_quote_double_quote (__main__.CSVContract.test_quote_double_quote) ... ok
+test_quote_lf_and_crlf (__main__.CSVContract.test_quote_lf_and_crlf) ... ok
+test_ragged_rejected (__main__.CSVContract.test_ragged_rejected) ... ok
+test_stdlib_imports_only (__main__.CSVContract.test_stdlib_imports_only) ... ok
+test_utf8_no_bom (__main__.CSVContract.test_utf8_no_bom) ... ok
+test_all_scientific_outputs_deterministic (__main__.ScratchReplay.test_all_scientific_outputs_deterministic) ... ok
+test_existing_empty_output_supported (__main__.ScratchReplay.test_existing_empty_output_supported) ... ok
+test_inside_input_root_refused (__main__.ScratchReplay.test_inside_input_root_refused) ... ok
+test_manifest_tampering_refused (__main__.ScratchReplay.test_manifest_tampering_refused) ... ok
+test_missing_source_fails_before_writes (__main__.ScratchReplay.test_missing_source_fails_before_writes) ... ok
+test_no_git_environment_or_models_needed (__main__.ScratchReplay.test_no_git_environment_or_models_needed) ... ok
+test_nonempty_output_refused (__main__.ScratchReplay.test_nonempty_output_refused) ... ok
+test_output_symlink_refused (__main__.ScratchReplay.test_output_symlink_refused) ... ok
+test_second_run_never_overwrites (__main__.ScratchReplay.test_second_run_never_overwrites) ... ok
+test_source_symlink_escape_refused (__main__.ScratchReplay.test_source_symlink_escape_refused) ... ok
+test_source_tampering_fails_before_writes (__main__.ScratchReplay.test_source_tampering_fails_before_writes) ... ok
+test_supplement_fragments_exact (__main__.ScratchReplay.test_supplement_fragments_exact) ... ok
+test_tampering_still_fails_under_optimisation (__main__.ScratchReplay.test_tampering_still_fails_under_optimisation) ... ok
+test_unrelated_historical_head_does_not_matter (__main__.ScratchReplay.test_unrelated_historical_head_does_not_matter) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.631s
+
+OK

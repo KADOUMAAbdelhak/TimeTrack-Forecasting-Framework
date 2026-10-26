@@ -1,0 +1,25 @@
+--- before/manuscript/jss/supplementary/final_evidence_supplement.tex
++++ after/manuscript/jss/supplementary/final_evidence_supplement.tex
+@@ -88,15 +88,19 @@
+ MacroMAE gains and their stored range and population standard deviation
+ (SD, divisor three), expressed in percentage points (pp). Neither range nor
+ SD is a confidence interval or standard error. FLIP denotes both strictly
+-positive and strictly negative seed gains; stable denotes no such sign flip,
+-not demonstrated reproducibility under arbitrary retraining. There are 9/24
++positive and strictly negative seed gains; ``stable'' means ``no sign flip
++across the three recorded seeds'', not demonstrated reproducibility under
++arbitrary retraining. Sign stability does not imply magnitude stability:
++Materna T3 M1:S2 disk-write gains are $-54.65\%$, $-71.55\%$ and $-87.84\%$.
++There are 9/24
+ FLIP summaries for S2:S1 and 4/24 for M1:S2. No meaningfulness threshold is
+ imposed on small effects. Materna T1--T3 are dependent temporal blocks.
+ 
+ \small
+ \begin{longtable}{@{}lrrrrrl@{}}
+ \caption{Post-hoc sensitivity across the three existing neural seeds.
+-Panel A: S2:S1; Panel B: M1:S2.}
++Panel A: S2:S1; Panel B: M1:S2. Stable means no sign flip across the three
++recorded seeds; it does not imply magnitude stability.}
+ \label{tab:supp-seed-sensitivity}\\
+ \toprule
+ Block / resource & \shortstack{Seed 0\\gain (\%)} & \shortstack{Seed 1\\gain (\%)} & \shortstack{Seed 2\\gain (\%)} & \shortstack{Range\\(pp)} & \shortstack{SD\\(pp)} & Status \\

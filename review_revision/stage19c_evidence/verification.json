@@ -1,0 +1,50 @@
+{
+  "status": "STAGE_19C_PASS",
+  "changed": [
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/figures/results_signed_matrix.py",
+    "manuscript/jss/figures/results_signed_matrix.pdf",
+    "manuscript/jss/tables/efficiency_summary.tex"
+  ],
+  "added": "manuscript/jss/tables/posthoc_controls.tex",
+  "scope": "Only Sections 5-6 and associated primary-figure renderer/artwork, new post-hoc table and efficiency caption/notes",
+  "untouched": "Front matter, Abstract, Introduction, Related Work, Sections 3-4, Discussion, Threats, Conclusion, bibliography, supplement",
+  "frozen_primary_labels_verified": 72,
+  "posthoc_table_entries_verified": 120,
+  "primary_and_cross_study_table_sources_unchanged": true,
+  "efficiency_table_numeric_rows_unchanged": true,
+  "existing_seed_sign_flip_counts": {
+    "S2:S1": 9,
+    "M1:S2": 4
+  },
+  "matched_cell_summaries_verified": 24,
+  "ridge_throughput_classification": "CONCENTRATED_DEGRADATION",
+  "new_statistics": 0,
+  "training_calls": 0,
+  "inference_calls": 0,
+  "preserved_files": 395781,
+  "permitted_added_files": 1,
+  "stage18c1_output_hashes_verified": 25,
+  "scientific_modifications": 0,
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "build": "Tectonic exit 0 and desktop compiler success",
+  "pages": 20,
+  "unresolved_references_citations": 0,
+  "visual_check": "Pages 12-16, Figure 2 colour and greyscale; table readable",
+  "warnings": "Pre-existing CAS overfull/empty-anchor, underfull boxes and two empty-pages bibliography fields",
+  "source_hashes": {
+    "manuscript/jss/manuscript.tex": "1194d9bb0fe85c07df499c5737e43fddc127b6a48d2bed00b7391230daa47915",
+    "manuscript/jss/figures/results_signed_matrix.py": "135e437417f4203538595024b1024ee99b16528f10e9a639c3a0d82106782cff",
+    "manuscript/jss/figures/results_signed_matrix.pdf": "4588bb67932f8d35e8476a134daf2ad757502aee014b42a65176c334705273d8",
+    "manuscript/jss/tables/efficiency_summary.tex": "d19127f0c854bc26efdc5979ff990f17f79fa3329347652432f50661c9304ea5",
+    "manuscript/jss/tables/posthoc_controls.tex": "5a65a678e8cf8551bb3ef82f0ea2b68f5b5189897c9f9c74e0df4908e673c4ed"
+  },
+  "commit": "no",
+  "push": "no"
+}

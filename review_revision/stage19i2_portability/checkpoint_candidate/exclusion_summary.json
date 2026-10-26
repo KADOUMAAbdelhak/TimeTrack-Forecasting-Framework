@@ -1,0 +1,22 @@
+{
+  "status": "PROPOSED_ONLY",
+  "full_exclusion_ledger": "review_revision/stage19i2_portability/checkpoint_candidate/files_excluded.jsonl",
+  "ledger_sha256": "5a017044cb119aeb73b64c18490d4cc29c6f1b3ded3e4517fd4bce969ae08a50",
+  "excluded_paths": 432935,
+  "by_disposition": {
+    "LOCAL_ONLY": 38640,
+    "UPSTREAM_DERIVED_CACHE": 1639,
+    "OUT_OF_SCOPE": 5475,
+    "UPSTREAM_DATA": 15,
+    "HISTORICAL_ARCHIVE": 12043,
+    "SCIENTIFIC_ARCHIVE": 374869,
+    "BUILD_ARCHIVE": 245,
+    "PROVENANCE_ARCHIVE": 9
+  },
+  "retired_private_tools": [
+    "review_revision/stage19g1_evidence/export_tables.mjs",
+    "review_revision/stage19g1_evidence/inspect_artifact_api.mjs"
+  ],
+  "historical_files_deleted": 0,
+  "old_plan_preserved": true
+}

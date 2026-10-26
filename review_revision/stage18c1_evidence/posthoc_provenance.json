@@ -1,0 +1,62 @@
+{
+  "experiments": [
+    {
+      "active_seal": "review_revision/experiments/s2_common_context/provenance/recovery_stage18b1r_successor.json",
+      "active_seal_sha256": "c79b9caf6f44f1bb70aa52e490f5d51e5fef4edd1d3d8f4a2db2722650ef483c",
+      "counts": {
+        "failed": 0,
+        "new": 5712,
+        "required": 10920,
+        "reused": 5208
+      },
+      "experiment": "s2_common_context",
+      "final_report": "review_revision/experiments/s2_common_context/STAGE18B1R_S2_COMMON_CONTEXT_REPORT.md",
+      "metric_file": "review_revision/experiments/s2_common_context/posthoc_metric_rows.parquet",
+      "metric_sha256": "04fb0e3309ca8e121ede779bdcbe72f5614bd67b239ef37f2bcf3647a3acaf9a",
+      "report_sha256": "af997c0b2bb8a140e22959bcebebd31fadf8a29c2643fe2d3990beaa1a6a4b12",
+      "result_file": "review_revision/experiments/s2_common_context/posthoc_results.csv",
+      "result_sha256": "83746b1d7639d03877a3993edcf8fb7a6282f3cb0cec6f672799d64826c03693",
+      "six_block_audits": "PASS",
+      "status": "STAGE_18B1R_PASS"
+    },
+    {
+      "active_seal": "review_revision/experiments/m1_capacity_matched/provenance/experiment.json",
+      "active_seal_sha256": "db89fb445cdd1a90e2508181892ad03f0f4d1788ff41fe33d01e37cbbaad52b2",
+      "counts": {
+        "failed": 0,
+        "final": 2730,
+        "inner": 8190
+      },
+      "experiment": "m1_capacity_matched",
+      "final_report": "review_revision/experiments/m1_capacity_matched/STAGE18B2_M1_CAPACITY_MATCHED_REPORT.md",
+      "metric_file": "review_revision/experiments/m1_capacity_matched/posthoc_metric_rows.parquet",
+      "metric_sha256": "a8f407413e14147885a06685c758d1d288f809fcaa8d6edab20d5c34cc1e5fc4",
+      "report_sha256": "c7ddc9d3034ece3abf28f8363d31cb557329e7b9f90b37c298468ccfc768b6d0",
+      "result_file": "review_revision/experiments/m1_capacity_matched/posthoc_results.csv",
+      "result_sha256": "c7122b25f76f7e8d44abfeb5068d6a29d7dd38e6641346771f845205ea47a5b5",
+      "six_block_audits": "PASS",
+      "status": "STAGE_18B2_PASS"
+    },
+    {
+      "active_seal": "review_revision/experiments/ar_arx_baseline/recovery/successor_audit_reduction_fix.json",
+      "active_seal_sha256": "ef92ed24f57c75e531d7f42e6c330e927a2594b12466c82b5047347c47bec9be",
+      "counts": {
+        "failed": 0,
+        "final": 7280,
+        "inner": 36400
+      },
+      "experiment": "ar_arx_baseline",
+      "final_report": "review_revision/experiments/ar_arx_baseline/STAGE18B3R_AR_ARX_RECOVERY_REPORT.md",
+      "metric_file": "review_revision/experiments/ar_arx_baseline/posthoc_metric_rows.parquet",
+      "metric_sha256": "78c1056e2188f0a621bd5abd3fafd4b619a7ce6ed0e76ef5b5548ecb531ae29a",
+      "report_sha256": "edc9ff1024df8fd1f0a5d3360dda3b0d6640d52f9da6ebed92eb0e3501f63c80",
+      "result_file": "review_revision/experiments/ar_arx_baseline/posthoc_results.csv",
+      "result_sha256": "a8fa3afa5084d0be27d560613f084cebc2dd794370ed8290646f80324f66f665",
+      "six_block_audits": "PASS",
+      "status": "STAGE_18B3R_PASS"
+    }
+  ],
+  "historical_failure_records": "preserved and evidence-resolved, not current blockers",
+  "status": "PASS",
+  "training_or_inference": 0
+}

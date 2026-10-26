@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "protected_files_unchanged": 395786,
+  "stage18c1_hashes_verified": 25,
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "manuscript_sha256": "5d4e4d67cb60cf19b7aaf0fc0ae46202d74c26c0696666e9cd4502e471481ef9",
+  "tracked_dirty_files": [
+    "manuscript/jss/figures/results_signed_matrix.pdf",
+    "manuscript/jss/figures/results_signed_matrix.py",
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/references.bib",
+    "manuscript/jss/tables/efficiency_summary.tex",
+    "manuscript/jss/tables/related_work_comparison.tex"
+  ],
+  "scientific_modifications": 0,
+  "manuscript_modifications": 0,
+  "training": 0,
+  "model_inference": 0,
+  "commit": "no",
+  "push": "no"
+}

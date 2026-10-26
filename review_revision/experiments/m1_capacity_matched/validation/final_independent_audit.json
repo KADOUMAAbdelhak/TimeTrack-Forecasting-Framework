@@ -1,0 +1,57 @@
+{
+  "all_artifact_hashes": "PASS",
+  "blocks": {
+    "Materna-T1": {
+      "entities": 35,
+      "metric_rows": 10500,
+      "selections": 175,
+      "status": "PASS"
+    },
+    "Materna-T2": {
+      "entities": 35,
+      "metric_rows": 10500,
+      "selections": 175,
+      "status": "PASS"
+    },
+    "Materna-T3": {
+      "entities": 35,
+      "metric_rows": 10500,
+      "selections": 175,
+      "status": "PASS"
+    },
+    "Rnd": {
+      "entities": 35,
+      "metric_rows": 10500,
+      "selections": 175,
+      "status": "PASS"
+    },
+    "TimeTrack": {
+      "entities": 7,
+      "metric_rows": 3360,
+      "selections": 35,
+      "status": "PASS"
+    },
+    "fastStorage": {
+      "entities": 35,
+      "metric_rows": 10500,
+      "selections": 175,
+      "status": "PASS"
+    }
+  },
+  "counts": {
+    "final": 2730,
+    "inner": 8190
+  },
+  "duplicates": 0,
+  "failures": 0,
+  "final_prediction_files": 2730,
+  "metric_rows": 55860,
+  "model_files": 10920,
+  "native_MacroMAE_and_three_gains": "PASS",
+  "new_training_or_inference_runs": 0,
+  "selection_records": 910,
+  "source_refs_hashes": "PASS",
+  "status": "PASS",
+  "support_scaler_epoch_identity": "PASS",
+  "timestamp": "2026-10-23T09:51:08.333489+00:00"
+}

@@ -1,0 +1,124 @@
+--- before/manuscript/jss/manuscript.tex
++++ after/manuscript/jss/manuscript.tex
+@@ -37,31 +37,31 @@
+ \cortext[1]{Corresponding author}
+ 
+ \begin{abstract}
+-Software engineers designing multi-metric runtime forecasters must decide
+-whether to include other resources' telemetry and whether multiple targets
+-should share a predictive representation. These decisions affect forecasting
+-accuracy and per-entity model consolidation. Our original frozen experiment compares
++Multi-metric runtime forecasting requires decisions about other-resource
++telemetry and cross-target representation sharing, with consequences for
++accuracy and per-entity model consolidation. Our frozen experiment compares
+ conventional long short-term memory (LSTM) formulations: S1 uses own-resource
+-input with independent target models; S2 uses all-resource input with
+-independent target models; M1 uses all-resource input with a shared
+-multi-resource model. We evaluate central processing unit (CPU) utilisation, throughput, memory usage
+-and disk-write activity across TimeTrack development data, Bitbrains
+-fastStorage and Rnd external environments, and Materna T1--T3 dependent
+-temporal replication. Post-hoc sensitivity controls separately constrain S2
+-to M1-selected contexts and increase M1's hidden size from H64 to H129 to
++input and independent target models; S2 uses all-resource input and
++independent target models; M1 uses all-resource input and a shared
++multi-resource model. We evaluate central processing unit (CPU) utilisation,
++throughput, memory and disk-write activity across TimeTrack development data,
++Bitbrains fastStorage and Rnd external environments, and Materna T1--T3
++dependent temporal blocks. Separate post-hoc controls constrain S2 to
++M1-selected contexts and increase M1's hidden size from H64 to H129 to
+ approximately match S2's aggregate parameter count. A matched-context
+ comparison of Ridge autoregression (AR) and autoregression with cross-resource
+-inputs (ARX) examines contextual input in a non-LSTM family.
+-Contextual-input value is selective and model- and environment-dependent;
+-memory shows repeated benefits, but not universally. Adverse M1-versus-S2
+-throughput, memory and disk-write point estimates persist in all six blocks
+-under both separate controls. This supports an accuracy--consolidation
+-trade-off for the evaluated shared-LSTM design, not a causal attribution to
+-sharing alone. Ridge indicates that particular contextual effects are
+-model-specific. Small effects can change sign across seeds, and relative
+-improvement does not ensure superiority to persistence. Contextual input and
+-representation sharing therefore require separate, resource-specific
+-evaluation when consolidating forecasting models.
++inputs (ARX) examines contextual value beyond LSTMs. Contextual value is
++selective and model- and environment-dependent; memory benefits recur but
++are not universal. Adverse M1:S2 throughput, memory and disk-write point
++estimates persist across all six blocks under both controls, without
++identifying sharing alone as the cause. Yet M1 matched-cell median MAE ratios
++are close to one in many comparisons, and some larger MacroMAE penalties are
++tail-concentrated. Per-entity consolidation therefore presents a
++target-specific accuracy--consolidation trade-off. Ridge indicates
++model-family dependence. Effects can change sign across the recorded seeds,
++and sign stability need not imply magnitude stability. Relative gains do not
++ensure superiority to persistence. Contextual input and representation
++sharing require separate, resource-specific evaluation.
+ \end{abstract}
+ 
+ \begin{keywords}
+@@ -136,7 +136,11 @@
+ Contextual value is selective: memory shows recurring benefits, but directions
+ depend on model family and environment. M1:S2 throughput, memory and disk-write
+ point estimates remain adverse in all six blocks under both separate LSTM
+-controls, without identifying sharing alone as the cause. Original external
++controls, without identifying sharing alone as the cause. Matched-cell median
++M1/S2 MAE ratios are close to one in many comparisons, whereas some much larger
++MacroMAE penalties are tail-concentrated (Section~\ref{sec:results-rq2}).
++Per-entity consolidation can therefore offer a target-specific trade-off,
++subject to assessment of adverse tails. Original external
+ H64 M1 uses approximately $74.5\%$ fewer parameters and $75\%$ fewer models per
+ target set. Seed sensitivity and poor persistence skill in some settings bound
+ this accuracy--consolidation trade-off, which establishes no production savings
+@@ -1029,13 +1033,14 @@
+ improves under Ridge in all five external blocks; fastStorage, Rnd and
+ Materna T2/T3 have positive point gains in both model families. TimeTrack
+ memory instead reverses under Ridge, and Materna T1's near-zero negative
+-LSTM estimate contrasts with a positive Ridge gain. External memory is thus
++LSTM estimate contrasts with a positive Ridge gain. Memory S2:S1 gains in
++fastStorage, Rnd and Materna T2 and T3 are positive in all three recorded
++seeds (Supplementary Table~S2). External memory is thus
+ the strongest recurring favourable contextual pattern, not a universal
+ benefit. Existing-seed diagnostics find sign changes in 9/24 LSTM S2:S1
+ block/resource summaries across the three fixed seeds (Supplementary
+-Table~S2). Small point gains or
+-sign reversals should not be treated as stable improvements or temporal
+-regime changes.
++Table~S2). Point gains or reversals with seed-varying signs should not be
++treated as seed-invariant improvements or temporal regime changes.
+ 
+ The Ridge TimeTrack throughput gain of $-838.45\%$ is diagnosed as
+ \textsc{Concentrated Degradation}, not broad Ridge failure. The saved-artifact
+@@ -1085,8 +1090,11 @@
+ implemented comparison, and common-S2 contexts align H64, not necessarily
+ H129. Existing-seed diagnostics find sign changes in 4/24 original M1:S2
+ block/resource summaries (Supplementary Table~S2), concentrated in small
+-CPU exceptions and TimeTrack throughput. Adverse aggregate directions do not imply adverse
+-outcomes for every seed.
++CPU exceptions and TimeTrack throughput. Adverse aggregate directions do not
++imply adverse outcomes for every seed. Here, ``stable'' means ``no sign flip
++across the three recorded seeds''. Sign stability does not imply magnitude
++stability: Materna T3 M1:S2 disk-write gains are $-54.65\%$, $-71.55\%$ and
++$-87.84\%$ (Supplementary Table~S2).
+ 
+ The post-hoc matched-cell diagnostics further separate direction from
+ magnitude. A cell is entity $\times$ outer fold $\times$ forecast lead, with
+@@ -1100,10 +1108,17 @@
+ magnitude of degradation in a typical cell.
+ 
+ Post-hoc attribution locates this uneven magnitude. In Materna T1/T3,
+-28/35 and 32/35 VM-averaged disk-write errors worsen. VM266 and VM272
+-contribute 82.10\% and 86.97\% of positive excess error; the top three VMs
+-contribute 91.72\% and 92.93\%, respectively. No training or scaling defect
+-was demonstrated.
++28/35 and 32/35 VM-averaged disk-write errors worsen. VM266 dominates the T1
++tail and VM272 the T3 tail, contributing 82.10\% and 86.97\% of positive
++excess error, respectively; the top three VMs contribute 91.72\% and 92.93\%.
++No training or scaling defect was demonstrated. A post-hoc frozen-partition
++audit, using each VM's frozen M1-selected context within each fold, places
++their log-space training IQRs near the upper cohort tail: VM266 ranks
++33--34/35 at approximately 7.86--8.19 times the cohort median IQR, and VM272
++ranks 35/35 at 7.59--7.75 times it. Both have the largest native disk-write
++IQR in every fold. Unusually small training IQRs are therefore not supported as an
++explanation for these tails. This does not establish that the large scale
++caused the errors or that sharing is causal.
+ For TimeTrack memory, all seven machine averages and 31/35 machine/fold
+ pairs worsen, with median pair ratio $1.195276$. The largest pair contributes
+ 21.80\% and the top three 51.06\% of positive excess error at that same

@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "format": "CSV as requested; no workbook layout or formula changes",
+  "checks": [
+    {
+      "file": "m1_s2_robustness_24.csv",
+      "rows": 24,
+      "columns": 6,
+      "all_fields_exact": true,
+      "roundtrip": "PASS"
+    },
+    {
+      "file": "seed_sensitivity_48.csv",
+      "rows": 48,
+      "columns": 9,
+      "all_fields_exact": true,
+      "roundtrip": "PASS"
+    },
+    {
+      "file": "timetrack_memory_attribution.csv",
+      "rows": 47,
+      "columns": 10,
+      "all_fields_exact": true,
+      "roundtrip": "PASS"
+    }
+  ]
+}

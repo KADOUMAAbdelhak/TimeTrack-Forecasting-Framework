@@ -1,0 +1,48 @@
+{
+  "status": "STAGE_19E_PASS",
+  "changed": [
+    "manuscript/jss/manuscript.tex",
+    "manuscript/jss/tables/related_work_comparison.tex"
+  ],
+  "before_sha256": {
+    "manuscript/jss/manuscript.tex": "58c49d9793b4508d2190de62ea344698aafc35c1612e7e2263f31a6a764f2e2b",
+    "manuscript/jss/tables/related_work_comparison.tex": "ef75b55f316e1f229b519ab387e7b788f48e5cd54e6e34719191973486a1b333"
+  },
+  "after_sha256": {
+    "manuscript/jss/tables/related_work_comparison.tex": "c500d603869e25cbd468c2ba5f1a6e52f10865d5da4fdc4d95a8e1db89181658",
+    "manuscript/jss/manuscript.tex": "8a5d5dd805e862c9b3ef6ebdbbe3fbad19a6f9afd5e85a251b09e8983a20b2e3"
+  },
+  "scope": "Related Work and its comparison table/caption only",
+  "prefix_suffix_byte_identical": true,
+  "all_labels_preserved": true,
+  "table_rows": 7,
+  "literature_rows": 6,
+  "table_dimensions": 6,
+  "traced_cells": 42,
+  "table_rows_discussed_in_prose": true,
+  "bibliography_entries": 39,
+  "new_citation_keys": 0,
+  "bibliography_unchanged": true,
+  "gaps": "NARMAX all-input independent-fit inventory; Bi resource-sharing/method/comparator detail; MMRP exact channel/fit inventory",
+  "build": "Tectonic exit 0 and desktop compiler success",
+  "pages": 20,
+  "unresolved_references_citations": 0,
+  "new_overfull_lines": 0,
+  "visual_check": "Final pages 2-5 inspected; Table 1 readable at full page",
+  "protected_files_unchanged": 395784,
+  "protected_membership_verified": 395786,
+  "stage18c1_output_hashes_verified": 25,
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "scientific_modifications": 0,
+  "training": 0,
+  "inference": 0,
+  "new_statistics": 0,
+  "commit": "no",
+  "push": "no"
+}

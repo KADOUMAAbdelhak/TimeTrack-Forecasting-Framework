@@ -1,0 +1,107 @@
+{
+  "status": "STAGE_19D_PASS",
+  "changed": [
+    "manuscript/jss/manuscript.tex"
+  ],
+  "before_sha256": "1194d9bb0fe85c07df499c5737e43fddc127b6a48d2bed00b7391230daa47915",
+  "after_sha256": "58c49d9793b4508d2190de62ea344698aafc35c1612e7e2263f31a6a764f2e2b",
+  "scope": "Discussion, Threats to Validity and Conclusion only",
+  "prefix_and_suffix_byte_identical": true,
+  "all_labels_preserved": true,
+  "untouched": "Abstract, Introduction, Related Work, Methods, Results, Cross-Dataset Synthesis, all figures/tables, bibliography and supplement",
+  "numerical_prose_trace": [
+    {
+      "claim": "Existing seed signs",
+      "displayed": "9/24",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 161,
+      "anchor": "S2:S1 has 15 sign-stable and 9 sign-variable"
+    },
+    {
+      "claim": "Existing seed signs",
+      "displayed": "4/24",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 161,
+      "anchor": "M1:S2 has 20 stable and 4 variable"
+    },
+    {
+      "claim": "All 24 matched-cell directions",
+      "displayed": "win rate below $50\\%$",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 91,
+      "anchor": "Every M1:S2 block/resource has median seed-mean ratio>1 and win rate<50%"
+    },
+    {
+      "claim": "Separate controls",
+      "displayed": "all\nsix blocks",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 310,
+      "anchor": "Every throughput, memory and disk-write block/resource retains an adverse M1"
+    },
+    {
+      "claim": "Ridge aggregate gain",
+      "displayed": "-838.45",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 171,
+      "anchor": "\u2212838.449742%"
+    },
+    {
+      "claim": "Ridge concentration",
+      "displayed": "99.93",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 173,
+      "anchor": "99.931577%"
+    },
+    {
+      "claim": "Ridge improved pairs",
+      "displayed": "21/35",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 171,
+      "anchor": "Across 35 machine/fold pairs, ARX improves 21"
+    },
+    {
+      "claim": "Ridge median",
+      "displayed": "0.9963",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 171,
+      "anchor": "0.996277043"
+    },
+    {
+      "claim": "Materna disk medians",
+      "displayed": "1.025/1.035",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 91,
+      "anchor": "1.024565/1.034743"
+    },
+    {
+      "claim": "Persistence boundary",
+      "displayed": "TimeTrack memory, Bitbrains CPU",
+      "source": "review_revision/stage18c1_final_robustness_synthesis.md",
+      "source_line": 342,
+      "anchor": "TimeTrack memory, Bitbrains CPU and fastStorage throughput"
+    }
+  ],
+  "trace_source_sha256": "81e56b53454bf7318d876b6fc2cdffc8dbd052543838bf96bdd3c2e68a9fdc97",
+  "protected_files_unchanged": 395785,
+  "protected_membership_verified": 395786,
+  "stage18c1_output_hashes_verified": 25,
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "build": "Tectonic exit 0 and desktop compiler success",
+  "pages": 20,
+  "unresolved_references_citations": 0,
+  "new_overfull_lines": 0,
+  "visual_check": "Rendered pages 16-19 inspected; no clipped or overlapping revised prose",
+  "warnings": "Pre-existing CAS title overfull, empty anchors, underfull boxes and bibliography empty-pages fields",
+  "scientific_modifications": 0,
+  "training": 0,
+  "inference": 0,
+  "new_statistics": 0,
+  "commit": "no",
+  "push": "no"
+}

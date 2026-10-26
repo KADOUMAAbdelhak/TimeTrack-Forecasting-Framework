@@ -1,0 +1,12 @@
+{
+  "scope": "derived-only compact-endpoint replay",
+  "minimum_python": "3.9",
+  "required_third_party_packages": [],
+  "verified_cpython_versions": ["3.9.6", "3.12.14"],
+  "verified_flags": ["-I", "-S", "-B"],
+  "network_required": false,
+  "git_required": false,
+  "private_or_local_only_package_required": false,
+  "historical_training_environment_lock": false,
+  "bitwise_cross_platform_training_claim": false
+}

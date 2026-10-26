@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "python": "3.9.6",
+      "tests": 25,
+      "status": "PASS",
+      "isolated_stdlib": true,
+      "replay_checks": "review_revision/stage19i2_portability/validation/python39_checks.json",
+      "output_sha256": {
+        "m1_s2_robustness_24.csv": "8b085b0279bb02422ab3c84bc48a7044e0b0f1f8dfff48a4a56881910da6f9c0",
+        "seed_sensitivity_48.csv": "d32061414cd18bed523d3851f833c534d8b43235e6651be4410f0e9806f1f363",
+        "timetrack_memory_attribution.csv": "903ec0ecf0c9e98398d52dc4f1a99557efa92382fb24639744c4a65d209be95d",
+        "m1_s2_robustness_rows.tex": "b3095589b871ce5a9a5f8bb69fb6b655c7311562bcc8e927c82a5089fb87081e",
+        "seed_sensitivity_rows.tex": "2a333d6892504bad105fe314be937140ebb5898295f06d74325be1de3da7abd9",
+        "sharing_sensitivity.csv": "4a8eb9630fa5410eec76d7bb4c1d83d1efa259e2bd67f3a47b8e50242ad01f44",
+        "contextual_evidence.csv": "e95d5fc5237c5a495d47dc56728acc74eb1fb110a3f3c9cc6cfb8f401a42f05d",
+        "diagnostic_extract.json": "fdeab23ba3a2ec89641ce281f928403dedcfcbf29d18ec662255370192223343"
+      }
+    },
+    {
+      "python": "3.12.14",
+      "tests": 25,
+      "status": "PASS",
+      "isolated_stdlib": true,
+      "replay_checks": "review_revision/stage19i2_portability/validation/python312_checks.json",
+      "output_sha256": {
+        "m1_s2_robustness_24.csv": "8b085b0279bb02422ab3c84bc48a7044e0b0f1f8dfff48a4a56881910da6f9c0",
+        "seed_sensitivity_48.csv": "d32061414cd18bed523d3851f833c534d8b43235e6651be4410f0e9806f1f363",
+        "timetrack_memory_attribution.csv": "903ec0ecf0c9e98398d52dc4f1a99557efa92382fb24639744c4a65d209be95d",
+        "m1_s2_robustness_rows.tex": "b3095589b871ce5a9a5f8bb69fb6b655c7311562bcc8e927c82a5089fb87081e",
+        "seed_sensitivity_rows.tex": "2a333d6892504bad105fe314be937140ebb5898295f06d74325be1de3da7abd9",
+        "sharing_sensitivity.csv": "4a8eb9630fa5410eec76d7bb4c1d83d1efa259e2bd67f3a47b8e50242ad01f44",
+        "contextual_evidence.csv": "e95d5fc5237c5a495d47dc56728acc74eb1fb110a3f3c9cc6cfb8f401a42f05d",
+        "diagnostic_extract.json": "fdeab23ba3a2ec89641ce281f928403dedcfcbf29d18ec662255370192223343"
+      }
+    }
+  ],
+  "scientific_outputs_identical_across_verified_runtimes": true,
+  "private_dependency_used": false,
+  "training": 0,
+  "inference": 0,
+  "manuscript_modifications": 0,
+  "authoritative_artifacts_overwritten": 0,
+  "historical_seals_changed": 0
+}

@@ -1,0 +1,78 @@
+{
+  "status": "STAGE_19I1_PASS",
+  "audit_scope": "Read-only reproducibility/licence audit and unstaged checkpoint plan",
+  "release_clearance": false,
+  "USER_ACTION": [
+    "Approve code licence and exact author-owned scope/copyright holders",
+    "Approve any derived-data/model/prediction archive redistribution and hosting",
+    "Resolve CAS licence/bundle manifest and any modified-template obligations",
+    "Approve portable environment/replay/export documentation follow-up"
+  ],
+  "local_scientific_coverage": "COMPLETE",
+  "missing_named_scientific_inputs": [],
+  "clean_public_checkout_self_contained": false,
+  "portability_gaps": [
+    "Full checkpoints/predictions are local, not all tracked",
+    "G1 CSV exporter uses private @oai/artifact-tool and an absolute local node_modules symlink",
+    "Some verification scripts require historical HEAD/clean tree and historical output locations",
+    "No unified portable dependency lock or checkpoint entry README"
+  ],
+  "protected_files_unchanged": 443461,
+  "protected_bytes_unchanged": 33092681050,
+  "candidate_delta_files": 8572,
+  "candidate_tree_files": 10552,
+  "tracked_modifications_preserved": 11,
+  "candidate_new_additions": 8561,
+  "posthoc_output_entries_verified": 179138,
+  "original_frozen_inventories": [
+    {
+      "inventory": "multiresource/04_lstm_factorial/PHASE3C_SCIENTIFIC_ARTIFACT_SHA256.csv",
+      "files_verified": 5706
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/PHASE4C_V2_SCIENTIFIC_CHECKPOINT_SHA256.csv",
+      "files_verified": 50
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/PHASE4D_MATERNA_FINAL_SCIENTIFIC_CHECKPOINT_SHA256.csv",
+      "files_verified": 41
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/PHASE4C_V2_EXECUTION_CHECKPOINT_SHA256.csv",
+      "files_verified": 35
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/PHASE4D_MATERNA_EXECUTION_CHECKPOINT_SHA256.csv",
+      "files_verified": 42
+    },
+    {
+      "inventory": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/runtime/PHASE4C_V2_EXECUTION_ARTIFACT_SHA256.csv",
+      "files_verified": 56723
+    },
+    {
+      "inventory": "independent_validation/06_materna_replication/outputs/scientific_v1/runtime/PHASE4D_EXECUTION_ARTIFACT_SHA256.csv",
+      "files_verified": 141785
+    }
+  ],
+  "evidence_output_inventories": {
+    "stage18c1_evidence": 25,
+    "stage19g1_evidence": 19,
+    "stage19g2_evidence": 47,
+    "stage19h1_scale_context": 10,
+    "stage19h2a_evidence": 50,
+    "stage19h2b_housekeeping": 70
+  },
+  "historical_manuscript_input_predecessors_resolved": 2,
+  "report_sha256": "109e33112c823a3acb66e59aeec46adb8e135ce8a1a9f11c4ac564fb49baf36d",
+  "manuscript_modifications": 0,
+  "scientific_modifications": 0,
+  "declaration_modifications": 0,
+  "licence_files_created": 0,
+  "training": 0,
+  "inference": 0,
+  "scientific_recomputation": 0,
+  "package_generation": 0,
+  "commit": "no",
+  "tag": "no",
+  "push": "no"
+}

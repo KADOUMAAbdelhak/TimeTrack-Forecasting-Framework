@@ -1,0 +1,85 @@
+{
+  "status": "PASS",
+  "reviewed_at_utc": "2026-10-24T05:04:19.834662+00:00",
+  "review": "Manual rendered-page inspection by agent",
+  "main_layout_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "main_full_page_checks": [
+    4,
+    5,
+    10,
+    14
+  ],
+  "figure1_heading_only_pixel_change": true,
+  "supplement_visible_pages_identical_to_prior_verified_build": [
+    {
+      "page": 1,
+      "pixels_identical": true,
+      "previous_sha256": "226e8762955bf1cbd4086277935f7c9f5a8c4df7c208e4f8d0f957f9f9e0b8de",
+      "current_sha256": "226e8762955bf1cbd4086277935f7c9f5a8c4df7c208e4f8d0f957f9f9e0b8de"
+    },
+    {
+      "page": 2,
+      "pixels_identical": true,
+      "previous_sha256": "81043e5190fa547d7ee174880b7170869fe5b0d7c66b582e7008de0ae534ff0c",
+      "current_sha256": "81043e5190fa547d7ee174880b7170869fe5b0d7c66b582e7008de0ae534ff0c"
+    },
+    {
+      "page": 3,
+      "pixels_identical": true,
+      "previous_sha256": "d930175fc0eb750cc46b54872d0db816d7b3c657a6b7d68844f292d7c0825056",
+      "current_sha256": "d930175fc0eb750cc46b54872d0db816d7b3c657a6b7d68844f292d7c0825056"
+    }
+  ],
+  "result": "Readable; no clipping, overlap or new overfull body text",
+  "pdf_sha256": {
+    "manuscript/jss/manuscript.pdf": "bc1db7c27d5f8c9e2b0327c9619493ac53146b7c2cab38f21dcfd7ed144ffbc6",
+    "review_revision/stage19h2b_housekeeping/build/supplement/final_evidence_supplement.pdf": "df4c86015e939d1881df3e62da5aa2ae182683f812e8a2f6af20915c4c6377f6"
+  },
+  "rendered_image_sha256": {
+    "render/figure_after/figure-1.png": "56fb873e4982675f532ac0f2188b3c8a523701e4380c4125b5d19a7a2bc817a7",
+    "render/figure_before/figure-1.png": "6e4489b1b99b4cc7927abd1b78dcb1ef6b0aeeb2a5c4c9bc7a7da31f8f4e9086",
+    "render/main/page-01.png": "8500b52bb0086ea911b4bd6afea32263a32e6e7ef1ed6669ece45cfdfa612c19",
+    "render/main/page-02.png": "0fcca7394a065c844434e8b21156def8a4203114daa1b6047bde45cf08e5e028",
+    "render/main/page-03.png": "0f360e4c9dd9a539a381000110db287b4d8e143fdf3b205165f2fb9fc16fd998",
+    "render/main/page-04.png": "0237641bb8c4872aa27263039c8f97e48fd20f4ba757ba4c0fdec1133b8b07e4",
+    "render/main/page-05.png": "7a27fc60b31d1d001e49f0c3796c4b0a86c0895f75b55c00c8f4384987475afa",
+    "render/main/page-06.png": "31f762e59af249a1785af9e2bf8dc10512d5709bab93732e96b66f45aa212455",
+    "render/main/page-07.png": "8a8ae8b3bb62d2784b2ae396154246d986473289cec9170234fc952867f84c35",
+    "render/main/page-08.png": "54fd92d45e8294e5427adb691456e63730d7c4fca75bf9678b116fb87c1a40b2",
+    "render/main/page-09.png": "3a646b8c5414a77c2ff954c2bdab9900b8ab545d2e8b89346c5022015bed2500",
+    "render/main/page-10.png": "a7e23df9826e04a34486771552b828d9d675242ce92687cf2b5fdf7ad6c1bc01",
+    "render/main/page-11.png": "b7a8afa3d09278d53036ec00971afb50f672c646899fda2dc13ae8003fd5ede3",
+    "render/main/page-12.png": "2fdbe204f90c74203ea46a2389ab5e0383e470316359ae010131863c519717e6",
+    "render/main/page-13.png": "adfb7966506f77cf39acbbe8588a32a30927ea6946ad5e17e73f16814e831251",
+    "render/main/page-14.png": "e4ca2f2a5f9f628eb120d2b131370361794d4971c138037c4e15246cbf668d9d",
+    "render/main/page-15.png": "e5f7927029bd182d0a124c30e79a6b980d53dd122ad364923c2eefeb1cf7ae66",
+    "render/main/page-16.png": "468118ba3c271577de8b3f4cfc63b031ab87f8d29c486c223ec6ab222d428d4d",
+    "render/main/page-17.png": "098deea2082d6631e11db1df8e4dd733ee8516f4a9a09d635cdc03575ba88a1c",
+    "render/main/page-18.png": "3a9ba2078735c83203f7a1afe60ebcadcf7266d5679d997d503849468e61814a",
+    "render/main_contact_1.png": "3b4837ee88094b1f3ef1b7598442482402b6fc714faf929fbb59f50834de2cf4",
+    "render/main_contact_2.png": "2e0fe14777b8091f1dab1bc435dcfadae39f519dd9c6b17486ce7643f9209aa9",
+    "render/main_contact_3.png": "502db5fb8f8661cb0bb15f6117365dde356bdc10c5ac075231554e4957bbe637",
+    "render/supplement/page-1.png": "226e8762955bf1cbd4086277935f7c9f5a8c4df7c208e4f8d0f957f9f9e0b8de",
+    "render/supplement/page-2.png": "81043e5190fa547d7ee174880b7170869fe5b0d7c66b582e7008de0ae534ff0c",
+    "render/supplement/page-3.png": "d930175fc0eb750cc46b54872d0db816d7b3c657a6b7d68844f292d7c0825056"
+  }
+}

@@ -1,0 +1,2369 @@
+{
+  "block": "TimeTrack",
+  "entities": [
+    "machine01",
+    "machine02",
+    "machine03",
+    "machine04",
+    "machine05",
+    "machine06",
+    "machine07"
+  ],
+  "final": 280,
+  "groups": [
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine01",
+      "final_support": "67fd4ee9c7b4619323dfc8378dfb27831cce70bb8cb25d86bd71b22b51f36111",
+      "fold": 1,
+      "group_id": "d887caed5e48c5a19ea8ecd072285fcc8e154f688211405031a3b743567450c5",
+      "inner_support": "a8cdaa676fdaace722b74cfd9ea6d45cd7f325afd9d47de35c02ce39a92f898c",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/ab7ebcb02624bb2c52206e0b.parquet",
+      "reference_prediction_sha256": "a250aa244fb87e9970d18bf2d0ce802e2edf94da11774677f68a96cd9beaeac4",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/ab7ebcb02624bb2c52206e0b.json",
+      "reference_record_sha256": "f9ae97963bba206da40b121aeaf43ce8055d679c3e396181c0d1e03db31980dd",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7555555557849374,
+            "transformed_iqr": 0.7555555557849374,
+            "transformed_median": 1.992592592206267
+          },
+          "DISK_WRITE": {
+            "native_iqr": 78421.33333333328,
+            "transformed_iqr": 0.29090892749466235,
+            "transformed_median": 12.49816472957061
+          },
+          "MEMORY": {
+            "native_iqr": 405321728.0,
+            "transformed_iqr": 405321728.0,
+            "transformed_median": 17012727808.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 7.741666666666667,
+            "transformed_iqr": 0.5786166932596326,
+            "transformed_median": 2.5031648752328057
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7444444444047769,
+            "transformed_iqr": 0.7444444444047769,
+            "transformed_median": 1.9870370369473536
+          },
+          "DISK_WRITE": {
+            "native_iqr": 79257.59999999998,
+            "transformed_iqr": 0.2944407319082476,
+            "transformed_median": 12.513466900011615
+          },
+          "MEMORY": {
+            "native_iqr": 317386752.0,
+            "transformed_iqr": 317386752.0,
+            "transformed_median": 16969766912.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 7.55388888888889,
+            "transformed_iqr": 0.5703383195969316,
+            "transformed_median": 2.4943067742999157
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "a694afda3cbbf49b0978a9f3014be0dd0874807b6df93a9716e0a4992387279c",
+        "inner_validation": "e74b78cf44a0383558f778204b610994de8588da569399d5f8520ebed9eb2445",
+        "outer_test": "59561fe6e2193ae1e9c1c155ad2c6bc664b6328bd4ea5cdebaeca71791569d1c",
+        "outer_train": "93add5d4d2b941f30b019eed673699888959295783028dc125bb554fdd67a16d"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine01",
+      "final_support": "df5a6a5cdac825e08303b14cee154ab3f8abd72a76a21d23f6361dc79e3c0821",
+      "fold": 2,
+      "group_id": "e314df632ee2a2962f14c5cf64cc5538ebc2845d1d5dc6f65d63668638c98829",
+      "inner_support": "7e9253c8a9a521c6b0428ef06ceabc281596935242eeabc87a8d621646697a5f",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/86b101f6180995258910c562.parquet",
+      "reference_prediction_sha256": "08ed0ecc584ba92a4f9b05c1b32ab991d4a11493e5870556d166a1940ae21f09",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/86b101f6180995258910c562.json",
+      "reference_record_sha256": "7d739dc5770dc9e8279ad40ef0ff89795dbe27e33ff6e8d86a996ab4302928d2",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7814814813900735,
+            "transformed_iqr": 0.7814814813900735,
+            "transformed_median": 2.00740740729358
+          },
+          "DISK_WRITE": {
+            "native_iqr": 75690.66666666669,
+            "transformed_iqr": 0.277453723851238,
+            "transformed_median": 12.515848590917948
+          },
+          "MEMORY": {
+            "native_iqr": 660739072.0,
+            "transformed_iqr": 660739072.0,
+            "transformed_median": 17060165632.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 8.269722222222224,
+            "transformed_iqr": 0.6037686354973273,
+            "transformed_median": 2.5271498561303485
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7740740738895344,
+            "transformed_iqr": 0.7740740738895344,
+            "transformed_median": 1.9981481478101133
+          },
+          "DISK_WRITE": {
+            "native_iqr": 79086.93333333335,
+            "transformed_iqr": 0.29143416089504015,
+            "transformed_median": 12.50502274464898
+          },
+          "MEMORY": {
+            "native_iqr": 440174592.0,
+            "transformed_iqr": 440174592.0,
+            "transformed_median": 17022320640.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 8.166666666666668,
+            "transformed_iqr": 0.6011789486315742,
+            "transformed_median": 2.5181444009499474
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "eea3a05b836a08dcb1cd43ee005a92a24c3c2d6490a63429132e602c5e4fb4ee",
+        "inner_validation": "d2fad544cdff58b68e0f36f1be692233be32f52329ad1204216f66d3f964eb10",
+        "outer_test": "87f075fc4060745a1a9841a77d2e5b0515a240a287a17494834b6240bd54df64",
+        "outer_train": "525dd1a04a755d6abe296e6dc1a61c26ee4ed598b9b636f74e08721c9dddafa6"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine01",
+      "final_support": "cbd115a16c78a84a927574a7ae12eb1d9adc5d6442e989e32b14792c32e9e86e",
+      "fold": 3,
+      "group_id": "7e3bc9c99e6daf7cd81e4f26e5ae80b19ac7ee2007ecf0fe2bb1f6c795ffbb99",
+      "inner_support": "0dad18f33462b238e13749a53b26323a554e00c762dac01ccad3b9293c5f63ca",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/158f5bb9951a984e0c53181a.parquet",
+      "reference_prediction_sha256": "f107f563fce5a3d5f10118273677af8fe64ed392af169b983c613942d148ee92",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/158f5bb9951a984e0c53181a.json",
+      "reference_record_sha256": "8e7fbd70bbd516caa43914b505adc888600dd051fbef683f198b2b98e2db2199",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7870370366058692,
+            "transformed_iqr": 0.7870370366058692,
+            "transformed_median": 2.0185185189324404
+          },
+          "DISK_WRITE": {
+            "native_iqr": 73932.80000000002,
+            "transformed_iqr": 0.26718111536286493,
+            "transformed_median": 12.538012483475702
+          },
+          "MEMORY": {
+            "native_iqr": 994377728.0,
+            "transformed_iqr": 994377728.0,
+            "transformed_median": 17152462848.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 8.176666666666666,
+            "transformed_iqr": 0.5955611829572232,
+            "transformed_median": 2.5262618354699145
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.77777777807097,
+            "transformed_iqr": 0.77777777807097,
+            "transformed_median": 2.00555555522442
+          },
+          "DISK_WRITE": {
+            "native_iqr": 76219.73333333331,
+            "transformed_iqr": 0.27994721538726886,
+            "transformed_median": 12.51233674771074
+          },
+          "MEMORY": {
+            "native_iqr": 596819968.0,
+            "transformed_iqr": 596819968.0,
+            "transformed_median": 17050251264.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 8.224444444444442,
+            "transformed_iqr": 0.6021408605446759,
+            "transformed_median": 2.5249283241374862
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "fb43a7db6cb62c1d273b1c0e24845bb3599bd778bfb2628e723728044b6c5913",
+        "inner_validation": "0e99f2f2dd885e99f5e77e7f09f833e1111202657dc9838e482f70a056cf3e86",
+        "outer_test": "f51849eb77212fac958ff14f260587c28d18800a7bb1ffe83c294c350e8cf297",
+        "outer_train": "a6b29246acdb42dc4403976f275ae53796e32f068ae79ce1a6d41c4d319a9535"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine01",
+      "final_support": "0ec5890e7018deadf8825ce955744d012d6443d58b8eb4460bf9b29305f13f57",
+      "fold": 4,
+      "group_id": "9ad23ea1453959313f5ac12abb863373b5d7d80615663c81660d664372865e65",
+      "inner_support": "4846c606d619720cef731786995391bab3dee4fc1dc27772c6e9e89eaea75c51",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/3e25e4f28bbdaacdd7eba72d.parquet",
+      "reference_prediction_sha256": "2af8c5995f3cef16552160f4d086f464092da37768668ed9db358d718bc8688b",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/3e25e4f28bbdaacdd7eba72d.json",
+      "reference_record_sha256": "4a3641974a387a577a608cedf8fcfffc7bb63959b979fd272cc409256e28a4de",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7796296290190963,
+            "transformed_iqr": 0.7796296290190963,
+            "transformed_median": 2.0129629624662573
+          },
+          "DISK_WRITE": {
+            "native_iqr": 74820.26666666666,
+            "transformed_iqr": 0.2730712107002624,
+            "transformed_median": 12.531254479994091
+          },
+          "MEMORY": {
+            "native_iqr": 1157900288.0,
+            "transformed_iqr": 1157900288.0,
+            "transformed_median": 17279348736.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 7.809444444444448,
+            "transformed_iqr": 0.5754436929982818,
+            "transformed_median": 2.5104119401963625
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7925925928995832,
+            "transformed_iqr": 0.7925925928995832,
+            "transformed_median": 2.0166666669495124
+          },
+          "DISK_WRITE": {
+            "native_iqr": 74820.26666666666,
+            "transformed_iqr": 0.27187842230626913,
+            "transformed_median": 12.529279909174665
+          },
+          "MEMORY": {
+            "native_iqr": 910141440.0,
+            "transformed_iqr": 910141440.0,
+            "transformed_median": 17116905472.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 8.476388888888888,
+            "transformed_iqr": 0.6115729250955249,
+            "transformed_median": 2.5391931366088305
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "0df8e5e383764cd9649b5c6fbf75ec42ba8cd1deaddfc1e484c5baf6eae6cf07",
+        "inner_validation": "d719830698c5d879e19914030e2fcb99a76fe6394377ffe4ecd320354849a972",
+        "outer_test": "a7659ae1d425ddecc100840d374da13a0edd085c0b7863bfb190af0e42fdc34b",
+        "outer_train": "08be5f0539f58c82fa55267b8873bcf126bc64860beefe1a01981a6cc46a3144"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine01",
+      "final_support": "c18785fed9e5f2dc99e2dbcc0b8185dfebb4fe768c47866a6e5730e370c18cbd",
+      "fold": 5,
+      "group_id": "1e2c5610d4a459421a6d574baf62a7b1fd4215d520ff5eaad2875dbbbc381c68",
+      "inner_support": "f606e6a00f8c5d71216d6ff51c3486306fb76409f612e2f7b3b92d08b6e12968",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/4d92897e796959f3f42b5308.parquet",
+      "reference_prediction_sha256": "cbc2589134ceee4ad1a527bf3efdbcf22cdba3083a3d129172269eeee242e5ff",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/4d92897e796959f3f42b5308.json",
+      "reference_record_sha256": "59041791f88aa63d97ac71e1a75bffcc0cf33026f17e5e90387abdde6f8d6899",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7759259256568782,
+            "transformed_iqr": 0.7759259256568782,
+            "transformed_median": 2.0222222220359587
+          },
+          "DISK_WRITE": {
+            "native_iqr": 80008.53333333335,
+            "transformed_iqr": 0.29983824351874766,
+            "transformed_median": 12.505402369946568
+          },
+          "MEMORY": {
+            "native_iqr": 1202083840.0,
+            "transformed_iqr": 1202083840.0,
+            "transformed_median": 17504436224.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 7.872222222222224,
+            "transformed_iqr": 0.5779350973303155,
+            "transformed_median": 2.513656063073986
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7814814816056577,
+            "transformed_iqr": 0.7814814816056577,
+            "transformed_median": 2.0185185185875048
+          },
+          "DISK_WRITE": {
+            "native_iqr": 72703.99999999997,
+            "transformed_iqr": 0.2624933869541941,
+            "transformed_median": 12.540092114670296
+          },
+          "MEMORY": {
+            "native_iqr": 1101008896.0,
+            "transformed_iqr": 1101008896.0,
+            "transformed_median": 17201303552.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 7.957777777777782,
+            "transformed_iqr": 0.5834266225236346,
+            "transformed_median": 2.5192186110613006
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "96e5f08058faf7e0273c26450d90f1d48da8c22edd514eb6510f8657c616ad23",
+        "inner_validation": "a8b09287a1e6f9b2f16fcf0de8ed729a3b29cb3336eeec9ac9ace1c5579452df",
+        "outer_test": "f77786baea844fcbeece0477aa29868d729a8f3c6e1ad145386ac1fe3d67e3a1",
+        "outer_train": "ccb2eb9b631e8b99cc3ab46d1c2661c133ddff42b729aa4d6516d1a3b3c9c3a6"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine02",
+      "final_support": "ea4bba86b9040d06f3a7e6fd80ad6672bd3a9b3fc1ae56f86b7c0f26089773e2",
+      "fold": 1,
+      "group_id": "57b84773c26175f6fb46288d73d1bb8c07e4906689e5ec00dfb3bbba32d2a44c",
+      "inner_support": "3cb3eb15d68cec63b4a34a74e7a879120279c521c068b577e8f128d6f071ac76",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/9c87ffed75169f17bf19288a.parquet",
+      "reference_prediction_sha256": "8ff427e4dc33ffdf27cdf10f24935250cab32d570b515b716dd8342d55b7b0ff",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/9c87ffed75169f17bf19288a.json",
+      "reference_record_sha256": "16d9d1ef8a341a43e88ff37be11008c76a30d976edef9c1076056041e47f00f7",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.5427083330157787,
+            "transformed_iqr": 1.5427083330157787,
+            "transformed_median": 3.5562500000620885
+          },
+          "DISK_WRITE": {
+            "native_iqr": 297915.7333333334,
+            "transformed_iqr": 0.3294788337973493,
+            "transformed_median": 13.714892482663009
+          },
+          "MEMORY": {
+            "native_iqr": 880667648.0,
+            "transformed_iqr": 880667648.0,
+            "transformed_median": 13001445376.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 53.174166666666665,
+            "transformed_iqr": 0.8100771965465854,
+            "transformed_median": 3.9791830697844666
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.4944444446074256,
+            "transformed_iqr": 1.4944444446074256,
+            "transformed_median": 3.540277777679473
+          },
+          "DISK_WRITE": {
+            "native_iqr": 286037.33333333326,
+            "transformed_iqr": 0.3221534679342106,
+            "transformed_median": 13.695049865582712
+          },
+          "MEMORY": {
+            "native_iqr": 444895232.0,
+            "transformed_iqr": 444895232.0,
+            "transformed_median": 12934709248.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 51.56777777777778,
+            "transformed_iqr": 0.7997500946018214,
+            "transformed_median": 3.965753327849114
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "4132f6105ca64bd9ef347708d013f6890e3ff533b9eb201939ae25626ccf5381",
+        "inner_validation": "180cb76330d29357f689eb8c6c4d9d46d558457a164ffb405f954e00e99a4992",
+        "outer_test": "49eea1c586c0d06fd5125e8a32938639699fb9247e0aec821de7f3b85c38b8a4",
+        "outer_train": "136e694d764e9acec2b318ee2ace6f2136485aacc754f65084c95b8e85875646"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine02",
+      "final_support": "09aa868c7ba64fef73ccb39ef2641df6c2f9d1e1b2fb42182b16755cd5fe1eab",
+      "fold": 2,
+      "group_id": "e18142fa5b3feaf118497ae374e121592f58954d2920fffcc8a8178a7f824987",
+      "inner_support": "95403abf4d68c26345faf721fb76513f6631baf5c85e0023e97cd401ca26c2fd",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/c271ac36de2fc21699c93492.parquet",
+      "reference_prediction_sha256": "81ba9e1fca02e548401d300d1c007ec167142006e7d2274f19709744e2b97ae9",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/c271ac36de2fc21699c93492.json",
+      "reference_record_sha256": "5c5e52e24714e6cfeff271527649659a55132cbbb2504cf69985dcaae8c4b5b7",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.5965277779064793,
+            "transformed_iqr": 1.5965277779064793,
+            "transformed_median": 3.575000000160393
+          },
+          "DISK_WRITE": {
+            "native_iqr": 306312.53333333356,
+            "transformed_iqr": 0.33183790449515804,
+            "transformed_median": 13.735144614551386
+          },
+          "MEMORY": {
+            "native_iqr": 1114400768.0,
+            "transformed_iqr": 1114400768.0,
+            "transformed_median": 13153587200.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 54.22638888888889,
+            "transformed_iqr": 0.8144322756974227,
+            "transformed_median": 3.99336742913144
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.555555555823958,
+            "transformed_iqr": 1.555555555823958,
+            "transformed_median": 3.561111110870519
+          },
+          "DISK_WRITE": {
+            "native_iqr": 300202.6666666665,
+            "transformed_iqr": 0.33055270523909996,
+            "transformed_median": 13.719674831831195
+          },
+          "MEMORY": {
+            "native_iqr": 936991744.0,
+            "transformed_iqr": 936991744.0,
+            "transformed_median": 13019811840.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 53.570277777777775,
+            "transformed_iqr": 0.813101908463632,
+            "transformed_median": 3.982522888092201
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "40f2840dc3db8ec19c4e7da337044fae94478b7496d684db34303c6d9240cb0a",
+        "inner_validation": "b737c2d5533e9b5dfc7b5c0eb97ea0f24ac033c51380b4de7fa96d1efd4509bd",
+        "outer_test": "80517d637dc48e5a4f2af5c5457ebf5545dfc2476fd7bb39ad19362187a14eb8",
+        "outer_train": "b4de4025edfb727de41f8ded643a23e4fa367ecbc229eb143aaff6f6f24beaee"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine02",
+      "final_support": "f418de3fc1fdb29e6a6bafcf01dd020d9edcfbcfce5b24c208b675380114fbf2",
+      "fold": 3,
+      "group_id": "b99598266699ca39190ee3e070f34391a7a7fb323ae25027b3f9a3220bddc651",
+      "inner_support": "ab2fa6782679517ebcea9b4f027ef674f558b87d76ed0f23e7f2a561d0236e9b",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/b600ed08f717bae53d412319.parquet",
+      "reference_prediction_sha256": "3d4c5c31885f096a03347748417aaf12411b01e28be435cf117a260e298b7743",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/b600ed08f717bae53d412319.json",
+      "reference_record_sha256": "619d6dd1a6c1d0e440b331c0008ecbbfac6c72f7b36989ccf77c9f8c1f41b56d",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.6326388887925223,
+            "transformed_iqr": 1.6326388887925223,
+            "transformed_median": 3.5819444445142943
+          },
+          "DISK_WRITE": {
+            "native_iqr": 317858.1333333333,
+            "transformed_iqr": 0.3390240268918898,
+            "transformed_median": 13.750287642018737
+          },
+          "MEMORY": {
+            "native_iqr": 1196481536.0,
+            "transformed_iqr": 1196481536.0,
+            "transformed_median": 13356261376.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 53.8675,
+            "transformed_iqr": 0.8085540234467521,
+            "transformed_median": 3.9962007418180656
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.6100694446261805,
+            "transformed_iqr": 1.6100694446261805,
+            "transformed_median": 3.5750000002250686
+          },
+          "DISK_WRITE": {
+            "native_iqr": 305646.93333333323,
+            "transformed_iqr": 0.33113137933714754,
+            "transformed_median": 13.733237826746635
+          },
+          "MEMORY": {
+            "native_iqr": 1125928960.0,
+            "transformed_iqr": 1125928960.0,
+            "transformed_median": 13176123392.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 54.356666666666676,
+            "transformed_iqr": 0.8161761145534516,
+            "transformed_median": 3.9937156328139567
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "9b6514a5f6b9c7204534fdc998f56ff5efd0b6dc65f6fa2554ebf95869372dd0",
+        "inner_validation": "b7f2a8287f18cbc11986d1b870bad06929621d1962d71bfbe32b6d869585ae73",
+        "outer_test": "c9622a8898aac1d20a583630925502ce0eeae446c0adcb650b7cac5efb660db2",
+        "outer_train": "ea2b408e7ad0fd9d31720461b72c63001014124f76425b953ac57d433c63361f"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine02",
+      "final_support": "9139d855b8c2575e4653046f8a8a5bd6420aed9187c796f2c49ce8865366d555",
+      "fold": 4,
+      "group_id": "13f579aab42fa53b57268b544636d6d356d1095496ea56f0f6861f518c47d05c",
+      "inner_support": "4d0c88d9bf74cc60d7aa0995ebc9bf02fd70ce17fbe507e93ec8d8c421e1f19f",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/5ef1c28ebdc7e2c4a3abea84.parquet",
+      "reference_prediction_sha256": "cc26d3b4867aebb73350389bb440a7d6099faf2bdf3bb93476d88af64cc37f3c",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/5ef1c28ebdc7e2c4a3abea84.json",
+      "reference_record_sha256": "3f34e942a42a0de1ae57c8ff45dc1fef868c98c3225ed0d05693d88f29b87675",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.5562499998486605,
+            "transformed_iqr": 1.5562499998486605,
+            "transformed_median": 3.568055556065196
+          },
+          "DISK_WRITE": {
+            "native_iqr": 327116.79999999993,
+            "transformed_iqr": 0.34594288067412116,
+            "transformed_median": 13.759499274154308
+          },
+          "MEMORY": {
+            "native_iqr": 1213448192.0,
+            "transformed_iqr": 1213448192.0,
+            "transformed_median": 13105348608.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 50.78666666666666,
+            "transformed_iqr": 0.7747156579878984,
+            "transformed_median": 3.990341149974089
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.6152777778269298,
+            "transformed_iqr": 1.6152777778269298,
+            "transformed_median": 3.583333333566164
+          },
+          "DISK_WRITE": {
+            "native_iqr": 320102.3999999999,
+            "transformed_iqr": 0.34111789699231565,
+            "transformed_median": 13.752107676188597
+          },
+          "MEMORY": {
+            "native_iqr": 1193472000.0,
+            "transformed_iqr": 1193472000.0,
+            "transformed_median": 13261307904.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 53.4188888888889,
+            "transformed_iqr": 0.8023685420944013,
+            "transformed_median": 3.9969767113083097
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "7684980a94c720d0a71694761eb37a5fc3cf89b0ae2ece95578db176fda18e0f",
+        "inner_validation": "78127efa50a4fb12673318741cc05d2f20c13a0c218a2e91be74d83cd4126bdd",
+        "outer_test": "10dfb4bfc4efae21dfd061c3ff1251ee3be3fecb0a950a3a502ad490b85aa3f9",
+        "outer_train": "dc54ff2f099d3fcb80ba12e2678bdb53637724077d265d4edfc2b3c2a9b89907"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine02",
+      "final_support": "74b1c8f853d0aaa01c1b94e8e32079c3ed51457b923176d7e4cc022d12969d3c",
+      "fold": 5,
+      "group_id": "4a5082c838582894764d0a7c22a4de244f9f4b1578d64390b384041f0b9e12b9",
+      "inner_support": "3abd3e3bd7ebf7da0bd95b3ad31fd54bcfc9e488aba002ec88dc652f9241f3ba",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/fac761849cfe3c550bf60fa5.parquet",
+      "reference_prediction_sha256": "62e076e9ded06789b35c85c4eafd54b87b150bf604d4a41d416b17324245bfbd",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/fac761849cfe3c550bf60fa5.json",
+      "reference_record_sha256": "a3a5dbb81cff040b7e9e0566258d71da3815308ad4251ab449b61d94857e2b14",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.5347222222771948,
+            "transformed_iqr": 1.5347222222771948,
+            "transformed_median": 3.5527777776264378
+          },
+          "DISK_WRITE": {
+            "native_iqr": 334916.2666666666,
+            "transformed_iqr": 0.3486382500483973,
+            "transformed_median": 13.776607762269881
+          },
+          "MEMORY": {
+            "native_iqr": 1157441536.0,
+            "transformed_iqr": 1157441536.0,
+            "transformed_median": 13080991744.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 47.005833333333314,
+            "transformed_iqr": 0.7342122727173539,
+            "transformed_median": 3.981061801732693
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.5763888890958473,
+            "transformed_iqr": 1.5763888890958473,
+            "transformed_median": 3.5680555558064952
+          },
+          "DISK_WRITE": {
+            "native_iqr": 326809.6000000001,
+            "transformed_iqr": 0.34532822096162796,
+            "transformed_median": 13.759878249458183
+          },
+          "MEMORY": {
+            "native_iqr": 1218899968.0,
+            "transformed_iqr": 1218899968.0,
+            "transformed_median": 13129289728.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 50.17555555555556,
+            "transformed_iqr": 0.7689658123381617,
+            "transformed_median": 3.9885209759241302
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "d99fabda0090d2dc4c0613e93ff9780a2327c7308ceb0aeb23b44d18671bab4a",
+        "inner_validation": "be59b330013e62da657cec3904ab0acf52c4a953cf9e4a83b053680379bdf2a4",
+        "outer_test": "137d9233d33d573b1b0a3c22c2aeeb01201ab3afad4f1cfb66c7caf71e8eb350",
+        "outer_train": "6bacf6c78301bf0fdf1569bd5ef7b0f3f9bc5071444ea86969d234e2f6da8f2e"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine03",
+      "final_support": "74342efac9a98b56ff7672e37b0b0c0a5e1cd6730c70bb52f379898ff5b66315",
+      "fold": 1,
+      "group_id": "20cabcd8d06a6ac5c6c61a24e6b4dea0afa27e8fe9f7c155803a2ff27ab50f8c",
+      "inner_support": "18c93cf0b66834acdc892611dce40aeba0c1c8a8e5ffb117aa6857a5b1adbb8c",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/d42ca057d98d208b29495093.parquet",
+      "reference_prediction_sha256": "5ab91286ad7f5e340b91ccbc29b937c634bb522a56289c8c29d9a699d0eadbbe",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/d42ca057d98d208b29495093.json",
+      "reference_record_sha256": "5076df986352bc055e5efdb25b63751d6486857cefa265d3e06e242225396cd6",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7685185182425691,
+            "transformed_iqr": 0.7685185182425691,
+            "transformed_median": 2.822222222349848
+          },
+          "DISK_WRITE": {
+            "native_iqr": 446395.7333333333,
+            "transformed_iqr": 0.8251193745551983,
+            "transformed_median": 13.256370007085831
+          },
+          "MEMORY": {
+            "native_iqr": 268460032.0,
+            "transformed_iqr": 268460032.0,
+            "transformed_median": 15819395072.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.997777777777779,
+            "transformed_iqr": 0.358122130848487,
+            "transformed_median": 2.312865402401602
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7685185189324408,
+            "transformed_iqr": 0.7685185189324408,
+            "transformed_median": 2.8203703702806884
+          },
+          "DISK_WRITE": {
+            "native_iqr": 446190.93333333335,
+            "transformed_iqr": 0.8253023873498293,
+            "transformed_median": 13.254936060613808
+          },
+          "MEMORY": {
+            "native_iqr": 265232384.0,
+            "transformed_iqr": 265232384.0,
+            "transformed_median": 15814328320.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.997777777777779,
+            "transformed_iqr": 0.3583023614910994,
+            "transformed_median": 2.3126454287975475
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "ed2e2a8b1f3985464f90e871501ebdc2812ab1d024eeb05bdd1f0871887dac6a",
+        "inner_validation": "26689b7fb92a077e1c6447a6f2e271d802bb9f484856f479a3f1865a3abee110",
+        "outer_test": "347d690dbda15916c338630d4c9188c60acdb937c37027d1fe6c6bb2d96f60d7",
+        "outer_train": "02bcd9d1b28228982c707fb8d7599f85263d49d6129e67ebb31fb9c234acebbd"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine03",
+      "final_support": "25d95b57f98fc09b86817e399d221eada64e292aff648d95bf0076a7d65644e8",
+      "fold": 2,
+      "group_id": "6704983ebe726c0172a2e9c3bb12e0bf00f7dfc0ed836f1b7ebba76dee1319fb",
+      "inner_support": "b653abcb29480c487c02e39eca290e30a378dec4d5e859cea36d5e1bcca46391",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/f2f592e39022f21654c28759.parquet",
+      "reference_prediction_sha256": "9e8ecff85f8bf894246dade27675e4afced79af977d01abdf3a0b78bceb1f549",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/f2f592e39022f21654c28759.json",
+      "reference_record_sha256": "e042d785360764cb0ba15df4b83c0b9972223509eb3d7b3a11de43a5bb49872a",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7703703696003057,
+            "transformed_iqr": 0.7703703696003057,
+            "transformed_median": 2.8370370365748254
+          },
+          "DISK_WRITE": {
+            "native_iqr": 449365.3333333332,
+            "transformed_iqr": 0.8222765653366366,
+            "transformed_median": 13.265078750767602
+          },
+          "MEMORY": {
+            "native_iqr": 272598016.0,
+            "transformed_iqr": 272598016.0,
+            "transformed_median": 15827185664.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 4.013333333333332,
+            "transformed_iqr": 0.3588957608222638,
+            "transformed_median": 2.3159399628558477
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7666666662596437,
+            "transformed_iqr": 0.7666666662596437,
+            "transformed_median": 2.824074073901606
+          },
+          "DISK_WRITE": {
+            "native_iqr": 447283.20000000007,
+            "transformed_iqr": 0.8288908067804162,
+            "transformed_median": 13.25320062741698
+          },
+          "MEMORY": {
+            "native_iqr": 277798912.0,
+            "transformed_iqr": 277798912.0,
+            "transformed_median": 15818092544.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.9833333333333343,
+            "transformed_iqr": 0.3570339459170988,
+            "transformed_median": 2.312975371060645
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "02bcd9d1b28228982c707fb8d7599f85263d49d6129e67ebb31fb9c234acebbd",
+        "inner_validation": "9f53f0b96e8f896ec6effe444baa3553d15a5a0f39db6253cd991b720dec7a25",
+        "outer_test": "7afeafaa37213421268758528d1e807c6a8c6342b126af73b3c3796536b0f720",
+        "outer_train": "624b6634ed4d3c47a108752e8438bc325ddc04fb3c628d19c6504a51950bf9fa"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine03",
+      "final_support": "5261d541b186dbc802ef73ede28931ed3397b795aa7ea4ef3a96f0e5f91b7555",
+      "fold": 3,
+      "group_id": "26f09551260b5b9b125a14c3b7fd9015d3669f9d278f8a60df3616a828577992",
+      "inner_support": "91d1bfee3967d2eb25742bb66a3adc77d206d7eb7c2e1b3cf2a57f4f4dcc7723",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/dcfa408995b8f284e44ad5bd.parquet",
+      "reference_prediction_sha256": "1a840d0bac757f93bba8bc716f3c94be238d217315fb16e700a69e5fb322ff17",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/dcfa408995b8f284e44ad5bd.json",
+      "reference_record_sha256": "757985b99a2c2a7f2beb88294f1e386da8e670bfa576865110ec2eca74f5def3",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7555555553106528,
+            "transformed_iqr": 0.7555555553106528,
+            "transformed_median": 2.8333333327814376
+          },
+          "DISK_WRITE": {
+            "native_iqr": 448648.5333333333,
+            "transformed_iqr": 0.8184079655244734,
+            "transformed_median": 13.265581716364379
+          },
+          "MEMORY": {
+            "native_iqr": 287301632.0,
+            "transformed_iqr": 287301632.0,
+            "transformed_median": 15836446720.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.980555555555556,
+            "transformed_iqr": 0.3565732875729579,
+            "transformed_median": 2.3148429903895478
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7740740739326504,
+            "transformed_iqr": 0.7740740739326504,
+            "transformed_median": 2.8388888883852843
+          },
+          "DISK_WRITE": {
+            "native_iqr": 450116.2666666667,
+            "transformed_iqr": 0.8238112987994946,
+            "transformed_median": 13.265640872107952
+          },
+          "MEMORY": {
+            "native_iqr": 283013120.0,
+            "transformed_iqr": 283013120.0,
+            "transformed_median": 15823622144.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 4.026666666666667,
+            "transformed_iqr": 0.3597887431988469,
+            "transformed_median": 2.3168166752407697
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "d9cf6da4309662723d8e57bc169849332eab37049e2185d1615418b9955da2e3",
+        "inner_validation": "5e2e93146d1396a16fc3e294df705cec5d32400689dcb9dbc2f06afd9a7d55b3",
+        "outer_test": "8c0498d51c11fc25c15e59dfdf5f46559eed588e030baf13e2c8ec1928426d10",
+        "outer_train": "f5bd76175811a9fff8329034911e3fc38cf0af6021e19cf02ef1c23dad2856ee"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine03",
+      "final_support": "5b5dd36ef26065f67d4f078a51f02aa3767a0bc49ba5ab05b8d8521ce31caaf9",
+      "fold": 4,
+      "group_id": "c051f1ef50eb1ccae2ec311fe9562225c7127057967f0417a797457a2ed1142a",
+      "inner_support": "80d7dd8611d2c418850892604f5391787ec7713c2ce6d7ac213a2e90fa732d56",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/d58a8c1c72ab918a22e8db40.parquet",
+      "reference_prediction_sha256": "16803231b1ff0a765e8136d852af432c865637c58c9050225da85def235d116f",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/d58a8c1c72ab918a22e8db40.json",
+      "reference_record_sha256": "0ea9dd39a92972cc95566958217834392adeaebfa60f0aad4ee1740e1c43f596",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7518518518406396,
+            "transformed_iqr": 0.7518518518406396,
+            "transformed_median": 2.840740740626913
+          },
+          "DISK_WRITE": {
+            "native_iqr": 451908.26666666666,
+            "transformed_iqr": 0.8226629785154902,
+            "transformed_median": 13.265936598346164
+          },
+          "MEMORY": {
+            "native_iqr": 300898304.0,
+            "transformed_iqr": 300898304.0,
+            "transformed_median": 15825733632.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.980833333333333,
+            "transformed_iqr": 0.3572050603821628,
+            "transformed_median": 2.312975371060645
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7648148142767175,
+            "transformed_iqr": 0.7648148142767175,
+            "transformed_median": 2.8333333335575404
+          },
+          "DISK_WRITE": {
+            "native_iqr": 449194.6666666666,
+            "transformed_iqr": 0.8218736076595956,
+            "transformed_median": 13.2641609276826
+          },
+          "MEMORY": {
+            "native_iqr": 265967616.0,
+            "transformed_iqr": 265967616.0,
+            "transformed_median": 15824351232.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.9977777777777774,
+            "transformed_iqr": 0.35779817705597816,
+            "transformed_median": 2.314952741802707
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "a8e73769345c5f7af5aeb176be8782603902248f221a8005e3d0a4e4e0d37f71",
+        "inner_validation": "0cb77e266d04c39ef8b3bd55993692f5d207231f623d0fd5c32a3cbe066f5004",
+        "outer_test": "68fbd72d7669186953cbde118263d09d1dde82a19070348cc110f6a7f29c29ca",
+        "outer_train": "1f565bf2e384a6a7d10b0adf3c4ed76074ad5dabf2cf9360d7428520265f0bf4"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine03",
+      "final_support": "7bbc5bb7981976047d9cfc02d7235a905402ece9033ff2685250833556510e16",
+      "fold": 5,
+      "group_id": "4afa334f7e3a7ea5f2ef8b222f3f15d2604891a861845a32bc880330d1bd16a9",
+      "inner_support": "0b270ad93f33c4912ab1e4fff9e51310c869dbf4eaaad27fc6393b64d0f469da",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/1adb2e079d0b45aeaf174a34.parquet",
+      "reference_prediction_sha256": "d23818c617f807427bf48e404dc6dbad659895d6bd8d32c1ab07f6ba0c370699",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/1adb2e079d0b45aeaf174a34.json",
+      "reference_record_sha256": "030e34d58b266a7d3b58f88397594d6f20b8607edb8a295a416a4b1760df014e",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.7685185179407545,
+            "transformed_iqr": 0.7685185179407545,
+            "transformed_median": 2.8444444440753642
+          },
+          "DISK_WRITE": {
+            "native_iqr": 457267.19999999995,
+            "transformed_iqr": 0.8225821608382358,
+            "transformed_median": 13.285930493578448
+          },
+          "MEMORY": {
+            "native_iqr": 299701248.0,
+            "transformed_iqr": 299701248.0,
+            "transformed_median": 15817912320.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 4.024444444444445,
+            "transformed_iqr": 0.3598386534869591,
+            "transformed_median": 2.3192236785910674
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.7518518517759656,
+            "transformed_iqr": 0.7518518517759656,
+            "transformed_median": 2.8259259260570007
+          },
+          "DISK_WRITE": {
+            "native_iqr": 448153.6,
+            "transformed_iqr": 0.8189235457560411,
+            "transformed_median": 13.265404228134352
+          },
+          "MEMORY": {
+            "native_iqr": 282241024.0,
+            "transformed_iqr": 282241024.0,
+            "transformed_median": 15836917760.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 3.963055555555556,
+            "transformed_iqr": 0.3557551384996991,
+            "transformed_median": 2.3126454287975475
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "3fac1ff9a8a3d6299f1c84303b3995124e07f972564b0d962baad4c72e664fc2",
+        "inner_validation": "a04899b4fe48340f91aa6a9f4189c29452d74f13a63d6deaf6724190f5cc0c5d",
+        "outer_test": "3289d2dba70e27100366fc34c1beea1c7b2a36f60e000a7715025dd097d2a8c9",
+        "outer_train": "305fef90bf83cce907e413265e1552805dad76186478a43ea1dacb20a069f241"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine04",
+      "final_support": "856620c1984fb4cac3d78ad08a0585c60054d166edafcdef0c6ba4476678b52a",
+      "fold": 1,
+      "group_id": "be6ebf7366c6f1cac0c10480022cefc25aa4b66e9435ca42b4d91ca234412a07",
+      "inner_support": "c51f9b147b94cad5d7359046228c1c5c64f7ee485917694e62ba47815aba24cb",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/e29d77c0c02bb510dece0fe5.parquet",
+      "reference_prediction_sha256": "9ab697d0a8d19db85526bf15511529b09dfcd3d090268a18a62c24d79e6c56a5",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/e29d77c0c02bb510dece0fe5.json",
+      "reference_record_sha256": "d93acf5ed10be4ac2ecec5a4a9e0aab1d95114aab6a3917ceb987ce643740968",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.44814814873798564,
+            "transformed_iqr": 0.44814814873798564,
+            "transformed_median": 0.7537037038451256
+          },
+          "DISK_WRITE": {
+            "native_iqr": 34713.600000000006,
+            "transformed_iqr": 0.3090832070937122,
+            "transformed_median": 11.632264030902576
+          },
+          "MEMORY": {
+            "native_iqr": 157437952.0,
+            "transformed_iqr": 157437952.0,
+            "transformed_median": 7265583104.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.19000000000000017,
+            "transformed_iqr": 0.08565934764962546,
+            "transformed_median": 0.787952182278255
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.44814814750915893,
+            "transformed_iqr": 0.44814814750915893,
+            "transformed_median": 0.7481481480688124
+          },
+          "DISK_WRITE": {
+            "native_iqr": 32802.13333333333,
+            "transformed_iqr": 0.2976403978495714,
+            "transformed_median": 11.606177163919474
+          },
+          "MEMORY": {
+            "native_iqr": 154010624.0,
+            "transformed_iqr": 154010624.0,
+            "transformed_median": 7253667840.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.17999999999999994,
+            "transformed_iqr": 0.08157515141417226,
+            "transformed_median": 0.7839015438284094
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "17618591a220c75bf69083ee395c78cb4004aec31f92f9bc74b616c0d7df9eb3",
+        "inner_validation": "d461dde97e2cd6eb95a8a07b9cb3a5841351edebb10a9b9abfada0c57215e469",
+        "outer_test": "e97a31e2f38064e3a812845c57b5af5221ce42afed289cec27a9b36324d44d24",
+        "outer_train": "a5b40ebbc283a36ff643e276d25a99ecd65e40759b4cd82b0908c105a0f5fdee"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine04",
+      "final_support": "9081bba76668094d1637f5d955164fec6be5837ea80126d35172785028b970e9",
+      "fold": 2,
+      "group_id": "392c46907fdd5e61e0a10498b8410cab0224d4214893074ae37ab60b3fddce5c",
+      "inner_support": "56180ddac48882e81727c117cc3899baf4e3dc9d10e9b18f63fd8850361c19a6",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/702d202f37cc6a0916d19ac9.parquet",
+      "reference_prediction_sha256": "ebc7b8fa6fe3710c4acd152983ac3d9e79805bc5f82b2d135a1556af2ea396e5",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/702d202f37cc6a0916d19ac9.json",
+      "reference_record_sha256": "8c225117719367d3f6cff16586728e6b259b97a9c1df004ec768740dfc3773b2",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.45185185218644114,
+            "transformed_iqr": 0.45185185218644114,
+            "transformed_median": 0.7666666666045779
+          },
+          "DISK_WRITE": {
+            "native_iqr": 38877.86666666667,
+            "transformed_iqr": 0.3358183809128459,
+            "transformed_median": 11.654729957599793
+          },
+          "MEMORY": {
+            "native_iqr": 107814912.0,
+            "transformed_iqr": 107814912.0,
+            "transformed_median": 7270330368.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.22333333333333338,
+            "transformed_iqr": 0.09956248954285518,
+            "transformed_median": 0.7939975407398856
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.448148148393052,
+            "transformed_iqr": 0.448148148393052,
+            "transformed_median": 0.7518518518621994
+          },
+          "DISK_WRITE": {
+            "native_iqr": 34338.13333333333,
+            "transformed_iqr": 0.30771364812902036,
+            "transformed_median": 11.620992115739286
+          },
+          "MEMORY": {
+            "native_iqr": 157716480.0,
+            "transformed_iqr": 157716480.0,
+            "transformed_median": 7261102080.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.19222222222222252,
+            "transformed_iqr": 0.08674942544916675,
+            "transformed_median": 0.7869410598463061
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "1826b806682223bde09deb547e7047779b464ff20d3bb8c9311697d572057c72",
+        "inner_validation": "a88c80eff733496483e50c2a05c272996e54ad9bc7850635095f11af104be4c3",
+        "outer_test": "9ab1e1d5648a4b818ac83fe61dae59ff7fc91c5881dfe7c0500be15656076a93",
+        "outer_train": "5bad200e8729389bb59c6469384e365930b4c27bc18902907ea6b79d3fe5b2e5"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine04",
+      "final_support": "9a36ba93b0ce5003acd98f8565257f9d9b4b49697dc3377f8ff9cacea0bbe4f0",
+      "fold": 3,
+      "group_id": "7a648d9698dd2a6a327e41534c9fbd69b583315a5ca08aaa7d69f1720b6a6445",
+      "inner_support": "0835d2fbbf798982bc3cab7d3b6422fda88e7b6249d3f193edb93fc7e809d664",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/cb944b2a3b49eb497e28bff9.parquet",
+      "reference_prediction_sha256": "b1c74c28bb7cc50c42e759ec0f001ec6f4b337cd0814d185061220f4a38e808a",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/cb944b2a3b49eb497e28bff9.json",
+      "reference_record_sha256": "cd3f29a67aa9d5a57ed587b266dd0b0580180a93bf26cc4f46bb89b1d578cbab",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.45185185158280405,
+            "transformed_iqr": 0.45185185158280405,
+            "transformed_median": 0.7722222222946572
+          },
+          "DISK_WRITE": {
+            "native_iqr": 40942.93333333335,
+            "transformed_iqr": 0.3481301231629157,
+            "transformed_median": 11.66884771749264
+          },
+          "MEMORY": {
+            "native_iqr": 100511744.0,
+            "transformed_iqr": 100511744.0,
+            "transformed_median": 7277572096.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.22444444444444445,
+            "transformed_iqr": 0.09983592767624139,
+            "transformed_median": 0.7960045659996531
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.45185185218644003,
+            "transformed_iqr": 0.45185185218644003,
+            "transformed_median": 0.7629629634148261
+          },
+          "DISK_WRITE": {
+            "native_iqr": 38638.933333333334,
+            "transformed_iqr": 0.3358646337130313,
+            "transformed_median": 11.649383986037916
+          },
+          "MEMORY": {
+            "native_iqr": 154382336.0,
+            "transformed_iqr": 154382336.0,
+            "transformed_median": 7268728832.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.21999999999999975,
+            "transformed_iqr": 0.09824453753480644,
+            "transformed_median": 0.7929925155296614
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "b239133618befedcc417a60aa7a28612842c08cc96ce7cd702d7576e0a3582da",
+        "inner_validation": "422bb09fdc02efa56c9edeb9cf3b9ef1302dc4a539c1a607c05be4e386ce8370",
+        "outer_test": "0eb699f8861880a633d7c938ea30c2e9a501e7180f9a9c31a2185f5727ceef1e",
+        "outer_train": "21c2b90199b9daaef55d40501ead6f0f05a64eb8ae6e96886efb1ce6619afb8b"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine04",
+      "final_support": "b3d533621a78e9ec7fb00f3bc40c1fe731068b055ad7252b1866398fafaf4894",
+      "fold": 4,
+      "group_id": "8ab59445c11778fdd85675cb76a00da64acdb05f67f11120e0faca612a10b48e",
+      "inner_support": "4d8aa68403c7b11310ee73d7d3e62af2ef554bc87eab17cbefc8dee91f8a0c75",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/42ad60a37c72bd6c94c846cf.parquet",
+      "reference_prediction_sha256": "7318beb369a5f1c060fbb6c88c8cdc7e76141a694f87f5ee7e49cea243d29cfa",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/42ad60a37c72bd6c94c846cf.json",
+      "reference_record_sha256": "a14e63bc7ab6f19527f5406a38f12a781b6b6bf58462ed5a9c17c1afb3f08ba8",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.44999999942741004,
+            "transformed_iqr": 0.44999999942741004,
+            "transformed_median": 0.7611111109144978
+          },
+          "DISK_WRITE": {
+            "native_iqr": 39236.266666666634,
+            "transformed_iqr": 0.3374915230531599,
+            "transformed_median": 11.659458057862205
+          },
+          "MEMORY": {
+            "native_iqr": 92444672.0,
+            "transformed_iqr": 92444672.0,
+            "transformed_median": 7283519488.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.20888888888888868,
+            "transformed_iqr": 0.09327530225954084,
+            "transformed_median": 0.7950015568884838
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.4518518520139719,
+            "transformed_iqr": 0.4518518520139719,
+            "transformed_median": 0.7712962962600771
+          },
+          "DISK_WRITE": {
+            "native_iqr": 40584.533333333355,
+            "transformed_iqr": 0.346112054712135,
+            "transformed_median": 11.665336918934923
+          },
+          "MEMORY": {
+            "native_iqr": 102723584.0,
+            "transformed_iqr": 102723584.0,
+            "transformed_median": 7275745280.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.22777777777777786,
+            "transformed_iqr": 0.10129610487275531,
+            "transformed_median": 0.7955031871974728
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "310c8e3d1ecd3abf43fcfee369256ae126c9b9724bf25d23f4b24ed8472fa729",
+        "inner_validation": "5e600276d01f62c9a3c6b09e47c30c91301416b84b719f226d04cecf449186bc",
+        "outer_test": "194097bcb8a53501364af9251a1ab048b0e309c9301cef10559c263d11953fc0",
+        "outer_train": "73bfe6a2b7ebd9c8542d2caa300039788d6423ab6577ec140d42b9a956c0b9a7"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine04",
+      "final_support": "55e04562d471648899f5fbd4c407990f52af700911909d9058f84be64c861fb8",
+      "fold": 5,
+      "group_id": "2935b350e7bd3d07de07a2c2d46a4fd66f7f996a7d8c1c14afe24ceeee5ff1f9",
+      "inner_support": "542651a157473685b35c66473ac74578f025b80aa8dc7b7aeee817aa4314676d",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/f4d002001afd331afa979a4d.parquet",
+      "reference_prediction_sha256": "98d09c80b037bc945d7b4a02c241ff3885dc6d8328155b6b67dfaace5539c1e1",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/f4d002001afd331afa979a4d.json",
+      "reference_record_sha256": "54f6e5cdc83c90997f14c961c99760375baf66e0754f734f52aafe7dc84d043e",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.44999999994481016,
+            "transformed_iqr": 0.44999999994481016,
+            "transformed_median": 0.7518518518621994
+          },
+          "DISK_WRITE": {
+            "native_iqr": 37546.66666666667,
+            "transformed_iqr": 0.32698105174641157,
+            "transformed_median": 11.642810969414244
+          },
+          "MEMORY": {
+            "native_iqr": 80536576.0,
+            "transformed_iqr": 80536576.0,
+            "transformed_median": 7291457536.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.2022222222222223,
+            "transformed_iqr": 0.09042900052770209,
+            "transformed_median": 0.7939975407398856
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.4499999994274094,
+            "transformed_iqr": 0.4499999994274094,
+            "transformed_median": 0.7685185184581538
+          },
+          "DISK_WRITE": {
+            "native_iqr": 39552.0,
+            "transformed_iqr": 0.3373469583599924,
+            "transformed_median": 11.671181420894206
+          },
+          "MEMORY": {
+            "native_iqr": 93908992.0,
+            "transformed_iqr": 93908992.0,
+            "transformed_median": 7280461824.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.20666666666666678,
+            "transformed_iqr": 0.09219005246808132,
+            "transformed_median": 0.7955031871974728
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "d314b8962a1b216531d98a2d6b87f3af594230065f8851d9ec60375e37ce6259",
+        "inner_validation": "da9a3f97908b0f8c551155115630da580fc673f045b299cc77b169502af2ec44",
+        "outer_test": "92f65b4633260938ed20834bd8ee74700dd58f1573448079c9305486ca25b55e",
+        "outer_train": "70cbade0cf6a0b081489f96591b363425910076b3b675d431849b493794fabce"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine05",
+      "final_support": "5769b8d176a62b808e8718bae0e19d2036829b666bebc9445e6d1e951b71cef9",
+      "fold": 1,
+      "group_id": "33add911f70999cdeeb70bcf274a6b9471fcad264d8f1f21dd2916b2006dbe60",
+      "inner_support": "fa77c9b6a5994bb51cfc10d1cd45320b0403241602e390be6eb8be08089d2392",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/ef555212a096f38b4ccad51c.parquet",
+      "reference_prediction_sha256": "1c5a5999f430a7308bd3d213c548374a5804097331ccb455193a5bf5e7d77abe",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/ef555212a096f38b4ccad51c.json",
+      "reference_record_sha256": "3ed0c09770795ed35a266f0c8f2a196d74815573bd6dc3807f23d5f598277011",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.8866666667163381,
+            "transformed_iqr": 0.8866666667163381,
+            "transformed_median": 3.1633333335630596
+          },
+          "DISK_WRITE": {
+            "native_iqr": 148155.73333333328,
+            "transformed_iqr": 0.27413401364371914,
+            "transformed_median": 13.20132722639599
+          },
+          "MEMORY": {
+            "native_iqr": 1038039040.0,
+            "transformed_iqr": 1038039040.0,
+            "transformed_median": 8682420224.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.17527777777778,
+            "transformed_iqr": 0.3636237122246069,
+            "transformed_median": 3.356316233989439
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.8966666668032603,
+            "transformed_iqr": 0.8966666668032603,
+            "transformed_median": 3.173333333649983
+          },
+          "DISK_WRITE": {
+            "native_iqr": 147592.53333333327,
+            "transformed_iqr": 0.27394062051686063,
+            "transformed_median": 13.197535040780762
+          },
+          "MEMORY": {
+            "native_iqr": 1076355072.0,
+            "transformed_iqr": 1076355072.0,
+            "transformed_median": 8612388864.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.626666666666665,
+            "transformed_iqr": 0.3770128659557397,
+            "transformed_median": 3.354222236016284
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "88bb0c965d4498382c587cae41017a1b03ed0e515a3968225e0f97bdd80120bf",
+        "inner_validation": "a041982d95c41977b8d2cee8dc869268c5fbc9cb2ebed9ba426edee3a8f3c655",
+        "outer_test": "3773536b4d2d827f8eadabb751acd4d30ccfa8be5794d155817359fe2999a29b",
+        "outer_train": "3efe1ce225a3d5b60ca35f4f4d37a304fc11a155b9f438b9b8d9a9eed9bdce7d"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine05",
+      "final_support": "8fe3307c67cba2dbe7ba62799802d94f8bbb39d92e922cee8e61d18034941489",
+      "fold": 2,
+      "group_id": "61d28f11dff6974a07bfb7566c655765eb8e27fc0398e5a0231a951249a2476f",
+      "inner_support": "e4bda09dff94db45186b1a02ba8a5b59bf3f25ea5ae5bcdec0726bc01c15de96",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/7dc83cef7e6703fe94ebf57d.parquet",
+      "reference_prediction_sha256": "47acd5a641ae400eaa7d322a76f56d6a25411e73bd1eb83e30b757d1e73f90ba",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/7dc83cef7e6703fe94ebf57d.json",
+      "reference_record_sha256": "18138c54a1520cca3f7e32053ade8885011389c18666e2ad1601839915af4e3d",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.8799999996942138,
+            "transformed_iqr": 0.8799999996942138,
+            "transformed_median": 3.163333333175008
+          },
+          "DISK_WRITE": {
+            "native_iqr": 150766.9333333333,
+            "transformed_iqr": 0.2772650824680447,
+            "transformed_median": 13.20554490766231
+          },
+          "MEMORY": {
+            "native_iqr": 974372864.0,
+            "transformed_iqr": 974372864.0,
+            "transformed_median": 8875495424.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.175555555555551,
+            "transformed_iqr": 0.3621619019551079,
+            "transformed_median": 3.3626875269002796
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.8866666667163381,
+            "transformed_iqr": 0.8866666667163381,
+            "transformed_median": 3.1633333335630596
+          },
+          "DISK_WRITE": {
+            "native_iqr": 148155.73333333328,
+            "transformed_iqr": 0.27413401364371914,
+            "transformed_median": 13.20132722639599
+          },
+          "MEMORY": {
+            "native_iqr": 1038039040.0,
+            "transformed_iqr": 1038039040.0,
+            "transformed_median": 8682420224.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.17527777777778,
+            "transformed_iqr": 0.3636237122246069,
+            "transformed_median": 3.356316233989439
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "3efe1ce225a3d5b60ca35f4f4d37a304fc11a155b9f438b9b8d9a9eed9bdce7d",
+        "inner_validation": "67d3309f8f5d88276e55be236dfe510a310d8b5b8b3869be778fa301e43419e1",
+        "outer_test": "9330b65903e25eb1f52a32dcafa17a62a0c96c25296fe4f1f0ae112d612cda93",
+        "outer_train": "fb992823ba3288cff71dec8cb2c17d0de4e230d3f25d6050fdf96df295302572"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine05",
+      "final_support": "6128786bbe965144200d0eb5941a0bfc2b7e12b7517c6e03f25ad5a0a90554ce",
+      "fold": 3,
+      "group_id": "42df83847e2289aa8982c490e6e02bb4d89377a49f93527c867f67ea335413be",
+      "inner_support": "8657038aa6efda1deb1585f12196a27e3d1a5a10cce333d9596ac2092455abe4",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/3c429c729bdac663b22aa047.parquet",
+      "reference_prediction_sha256": "e7fc64a5823ca71cd16d6415849f1fb4741482d13c1f864b18e5cd16f03a5f02",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/3c429c729bdac663b22aa047.json",
+      "reference_record_sha256": "b673e84961db6ef6c97cd3e89a5ed5ec7bf06e8705e60e9eb353319f83e7c78c",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.8799999998882408,
+            "transformed_iqr": 0.8799999998882408,
+            "transformed_median": 3.1633333330973983
+          },
+          "DISK_WRITE": {
+            "native_iqr": 152354.13333333336,
+            "transformed_iqr": 0.2786900225795126,
+            "transformed_median": 13.210776493232284
+          },
+          "MEMORY": {
+            "native_iqr": 895365120.0,
+            "transformed_iqr": 895365120.0,
+            "transformed_median": 8917659648.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.302500000000002,
+            "transformed_iqr": 0.36401969984842264,
+            "transformed_median": 3.368635927090688
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.8966666662599883,
+            "transformed_iqr": 0.8966666662599883,
+            "transformed_median": 3.1700000000807145
+          },
+          "DISK_WRITE": {
+            "native_iqr": 150766.93333333335,
+            "transformed_iqr": 0.27747543906404104,
+            "transformed_median": 13.204979386680069
+          },
+          "MEMORY": {
+            "native_iqr": 993947648.0,
+            "transformed_iqr": 993947648.0,
+            "transformed_median": 8870764544.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.48222222222222,
+            "transformed_iqr": 0.37042440381779285,
+            "transformed_median": 3.3640338104000933
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "0aabc294ae046858dc9582fb30ac4d5091ba795c8c173caaa479af6766f88bb9",
+        "inner_validation": "44594cbe739f986579ca1ae0e36a2aaca99eafe9e4919ab272d48cd69ebf7a3d",
+        "outer_test": "40cc0610f438ad7cd8ff631a1ef20ab64c309ceab1a0f27c9e93c6678077ea31",
+        "outer_train": "9698b0e02a9291231680de26636dee1d3138e7b9fe2f9ebf94ac9b62f867c613"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine05",
+      "final_support": "b1eb5a2c45755e2e8aed4d94fd870b36756b4fe3b8e66de84da5be1dd4d15172",
+      "fold": 4,
+      "group_id": "13d8af5faaa1b0f7d8f977a8f8400d58210d3d24ba140dbc62d6f7a1e03c1359",
+      "inner_support": "5e487a47ca133c1989177ecce15cf18b468a07b6e33b4e9adb11439d489fcceb",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/8258ecc86205f84aee310a06.parquet",
+      "reference_prediction_sha256": "4991eee70420d14ca25111f431a26351bbc3a66ba899157dd264d071ee838f47",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/8258ecc86205f84aee310a06.json",
+      "reference_record_sha256": "af96e63607a46db570b6a0b782553c2f81a64d0519b4470bd0e0d747bca1d4bd",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.8400000007823101,
+            "transformed_iqr": 0.8400000007823101,
+            "transformed_median": 3.1466666664928193
+          },
+          "DISK_WRITE": {
+            "native_iqr": 153326.93333333335,
+            "transformed_iqr": 0.27991226874534014,
+            "transformed_median": 13.21336647685867
+          },
+          "MEMORY": {
+            "native_iqr": 761499648.0,
+            "transformed_iqr": 761499648.0,
+            "transformed_median": 8851750912.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 10.946111111111112,
+            "transformed_iqr": 0.353311872571592,
+            "transformed_median": 3.3708908925650376
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.8700000000341479,
+            "transformed_iqr": 0.8700000000341479,
+            "transformed_median": 3.1599999998385697
+          },
+          "DISK_WRITE": {
+            "native_iqr": 151714.13333333336,
+            "transformed_iqr": 0.2776415890315018,
+            "transformed_median": 13.21043273897529
+          },
+          "MEMORY": {
+            "native_iqr": 900045824.0,
+            "transformed_iqr": 900045824.0,
+            "transformed_median": 8911896576.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.165277777777774,
+            "transformed_iqr": 0.3606351571855986,
+            "transformed_median": 3.3657237136328453
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "1aa9bfc24ecb3362d91c9494f723f88ddd3d55ec183517a697ce4525daef46f9",
+        "inner_validation": "20b4ad0f71a03915a568e0775ee3b867e6b06995fee91e9a188375e2f93dbba2",
+        "outer_test": "01b5b98dcf3b193970f8b1d5ad2d36ee62aa8d3b70db79ba6a0cb6886458c4ae",
+        "outer_train": "100da4bb6012dd24aaa2b1b458fe40154a5a17838c24c5372935690bdfd97d86"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine05",
+      "final_support": "51f52a107c8bdc26d41f1868a12522a548c7290404535106948ddbd4ce4e8c0e",
+      "fold": 5,
+      "group_id": "fa01d241b521b86fd0cbd862dcb45f0af916933162fda8227f601761b29de009",
+      "inner_support": "b3bdd1b6025589a666be88cb74f2d71721b131aeda32637e35bfef0bffaad31c",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/56ca48294127ff0f7de53f92.parquet",
+      "reference_prediction_sha256": "461832836e5e4795e90cdb701b11a48c35fd83ad91aa5cd907990395a5aea566",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/56ca48294127ff0f7de53f92.json",
+      "reference_record_sha256": "264c1be5fdc147a13f1d540ad3123377a3a75a8dd3c64af7994d601fe1d88994",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.8458333331315462,
+            "transformed_iqr": 0.8458333331315462,
+            "transformed_median": 3.1433333335444327
+          },
+          "DISK_WRITE": {
+            "native_iqr": 155613.8666666667,
+            "transformed_iqr": 0.2833609586893058,
+            "transformed_median": 13.215732158762114
+          },
+          "MEMORY": {
+            "native_iqr": 558223360.0,
+            "transformed_iqr": 558223360.0,
+            "transformed_median": 8817182720.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.123055555555567,
+            "transformed_iqr": 0.3561544870593427,
+            "transformed_median": 3.38135364223137
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.8666666666977108,
+            "transformed_iqr": 0.8666666666977108,
+            "transformed_median": 3.156666666734963
+          },
+          "DISK_WRITE": {
+            "native_iqr": 153173.33333333337,
+            "transformed_iqr": 0.279895903386258,
+            "transformed_median": 13.2121191295935
+          },
+          "MEMORY": {
+            "native_iqr": 878430208.0,
+            "transformed_iqr": 878430208.0,
+            "transformed_median": 8893534208.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 11.181111111111107,
+            "transformed_iqr": 0.36001975892229465,
+            "transformed_median": 3.3711199264248775
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "e1f7130d3c3ab8183d28f208eb1423ed2deebf6c47e98b530fff77b0589d8e97",
+        "inner_validation": "d9868992134792044f3a842877aa7941a871ae883e55bb0056520b04a1b89232",
+        "outer_test": "439ca456783f1f874a28c5ca0879c42d43c2f4b0a56a300171debd93bb9c5914",
+        "outer_train": "41be2c00b9ca587bd07c4d4eb65a7de0e9eb391ab29e460af4cb69fe1b6e6f38"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine06",
+      "final_support": "6059faa51908d8bfd5d970bea0365762e19dc5e5ab38690a8c9bf2348b1d7edc",
+      "fold": 1,
+      "group_id": "df633d1e20c0b0fad7c105e9b696e4dfee0f440e9358fc4af65b0fb10dd76abd",
+      "inner_support": "f2770c148e29161dc21d1bd8654e5e799d3e6e174c44a0b24ae89bd65e666e1b",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/85a48351d2c8082a30de1ddd.parquet",
+      "reference_prediction_sha256": "4da83935532b27472ef1a62352e4d144570b87091a90110b363f29c799452164",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/85a48351d2c8082a30de1ddd.json",
+      "reference_record_sha256": "4d469be03957030b09729e90c1a34ec89dc9bbc24bdf765ba8f3a6e736b35e26",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.05370370345190201,
+            "transformed_iqr": 0.05370370345190201,
+            "transformed_median": 0.6037037037485449
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10137.6,
+            "transformed_iqr": 1.9718181556226178,
+            "transformed_median": 8.358822508778069
+          },
+          "MEMORY": {
+            "native_iqr": 28474368.0,
+            "transformed_iqr": 28474368.0,
+            "transformed_median": 36911669248.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.1533333333333331,
+            "transformed_iqr": 0.058915883536594604,
+            "transformed_median": 0.9555114450274362
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.05000000008968997,
+            "transformed_iqr": 0.05000000008968997,
+            "transformed_median": 0.6037037035760777
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10103.466666666669,
+            "transformed_iqr": 1.9689156427997077,
+            "transformed_median": 8.342696936923549
+          },
+          "MEMORY": {
+            "native_iqr": 25858048.0,
+            "transformed_iqr": 25858048.0,
+            "transformed_median": 36907937792.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.1544444444444446,
+            "transformed_iqr": 0.059431892139423015,
+            "transformed_median": 0.9550840032598682
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "787d0ca70d3628f882c597d66c1fbc9f07c7dc08608a09f1eaadc7f7ac103a92",
+        "inner_validation": "8698ace9395f2483cb56bdd9708aca2152e84037180b824b555cfadfdd7df704",
+        "outer_test": "d347ca3a67a6fa0eb902e4b11051df364cfbc666412ff80d135ed5b6b264755a",
+        "outer_train": "736cd91f75af7a4dae7259ecf87b3d024c280143f49cae6a26b2c5316cbaa5ed"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine06",
+      "final_support": "0ef18cebbc3b8106844952d5174035319f8267895e2d3917e5dee8c1a960e326",
+      "fold": 2,
+      "group_id": "f21dafe14aa68e21c0933aa23c01afb4132842a7aedeb9339ecb0553be329ae1",
+      "inner_support": "9983807b669f67e62bfd433c63bbb9e98b0f7bf9a7e209edf13d650aa2cc91d3",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/d725778340792bb6c86b69bf.parquet",
+      "reference_prediction_sha256": "9738f458c2913804b0711c96ab39277f5ba156fb4d3449772a64f0b1a9483489",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/d725778340792bb6c86b69bf.json",
+      "reference_record_sha256": "45260587cfd491623fa3fa370e4a8fa297ead5d9f47ee01e39f592a83e688a26",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.053703704055536705,
+            "transformed_iqr": 0.053703704055536705,
+            "transformed_median": 0.6055555554727713
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10274.133333333333,
+            "transformed_iqr": 1.9833446875981657,
+            "transformed_median": 8.398034209579922
+          },
+          "MEMORY": {
+            "native_iqr": 36790272.0,
+            "transformed_iqr": 36790272.0,
+            "transformed_median": 36915929088.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.15444444444444438,
+            "transformed_iqr": 0.05915359686634403,
+            "transformed_median": 0.9572193873725925
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.05185185224507749,
+            "transformed_iqr": 0.05185185224507749,
+            "transformed_median": 0.6037037038347787
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10187.35842006939,
+            "transformed_iqr": 1.9760338977930143,
+            "transformed_median": 8.366788818742332
+          },
+          "MEMORY": {
+            "native_iqr": 28006400.0,
+            "transformed_iqr": 28006400.0,
+            "transformed_median": 36911740928.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.15444444444444438,
+            "transformed_iqr": 0.05930507027242593,
+            "transformed_median": 0.9555114450274363
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "d8f4a046e5a2bc6f28f143984274f8bb7debdb1de9ef592afaa494a17c115849",
+        "inner_validation": "68e361cf63fee708548331c8931b076345f1b12b019c72d972b6b1df1953d77d",
+        "outer_test": "d55534d1233d8cff53a1e628317ed3980030b4abaaa684742ba41c09db35bb78",
+        "outer_train": "990746de2ea8691e4613a0fd108ec75c873fe003e30f858b1a87f29a216122ea"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine06",
+      "final_support": "b09cbdcf8d4b377d08e64b0c8c65871960b3e64efa986dd197e78d08b5e3f381",
+      "fold": 3,
+      "group_id": "d0156dd861e92d48f9a6d6a34b479eae7b08998c488d20a8b7e610a54bc85613",
+      "inner_support": "91d30202df37eb578caf2d91c5706efeea6f5de3ca503c896355bc9443039ca8",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/93b9214914302438a2d4dd50.parquet",
+      "reference_prediction_sha256": "6345870079d699251e61e94780dcd2a752d6e234a86a6c8f1ab9b3fd28cbbe79",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/93b9214914302438a2d4dd50.json",
+      "reference_record_sha256": "6985137ace819d37196266d26956f342e9a392382aa552fc46b2b145775c33ff",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.05555555534859469,
+            "transformed_iqr": 0.05555555534859469,
+            "transformed_median": 0.6055555555158878
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10376.533333333333,
+            "transformed_iqr": 1.9919032256115834,
+            "transformed_median": 8.413298267920021
+          },
+          "MEMORY": {
+            "native_iqr": 45914112.0,
+            "transformed_iqr": 45914112.0,
+            "transformed_median": 36920143872.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.15444444444444438,
+            "transformed_iqr": 0.05912842651603756,
+            "transformed_median": 0.957645917556069
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.053703703883069664,
+            "transformed_iqr": 0.053703703883069664,
+            "transformed_median": 0.6055555553865369
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10274.133333333337,
+            "transformed_iqr": 1.9833446875981675,
+            "transformed_median": 8.413298267920021
+          },
+          "MEMORY": {
+            "native_iqr": 35252224.0,
+            "transformed_iqr": 35252224.0,
+            "transformed_median": 36914958336.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.1566666666666663,
+            "transformed_iqr": 0.06003078990504773,
+            "transformed_median": 0.9567926751834849
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "6ec004e161704903e547ab55e07fdbba9733a71786bb5cb2977464ad321aaf23",
+        "inner_validation": "693111a51fcf32d88726e4fb78303b3f576311400c3aba80e64f7ef5b3836305",
+        "outer_test": "75fae8ac6a5c145073829893eda3739c8c56563aa6a2c4bdb2a00493416b5765",
+        "outer_train": "014109d76bef130f36f9fe1f126c1aa8eddd199da45f6a5643a092e46a25908e"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine06",
+      "final_support": "094123fb039e7364fd31ca4945fc29544f75cb5d924b37733d4390c40d5970fb",
+      "fold": 4,
+      "group_id": "b2377038cfb7dc009733d23464e83d2eaf47ab471065c5201494de9ee64da7c9",
+      "inner_support": "6e05cb0d354a4527219c68c2ae268fa3f6d1b68fdafabd91e09c8bd3aac999e3",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/66b2c427b6e8eeb27b57b867.parquet",
+      "reference_prediction_sha256": "bea53d5cb95b8dd2a09fd79507f56d21428ade245ce3a72391b49c8ed54407c3",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/66b2c427b6e8eeb27b57b867.json",
+      "reference_record_sha256": "c484b98be4d4b7bc603b76ec07c19370be2e0f90cc48fd66c09bebe4bbc8ed30",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.05555555534859491,
+            "transformed_iqr": 0.05555555534859491,
+            "transformed_median": 0.6055555555590046
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10240.0,
+            "transformed_iqr": 1.9804754863717768,
+            "transformed_median": 8.398034209579922
+          },
+          "MEMORY": {
+            "native_iqr": 47847424.0,
+            "transformed_iqr": 47847424.0,
+            "transformed_median": 36923504640.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.15777777777777802,
+            "transformed_iqr": 0.06036681676718414,
+            "transformed_median": 0.9584984325267127
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.0555555556504117,
+            "transformed_iqr": 0.0555555556504117,
+            "transformed_median": 0.6055555555590048
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10376.533333333333,
+            "transformed_iqr": 1.9919032256115834,
+            "transformed_median": 8.398034209579922
+          },
+          "MEMORY": {
+            "native_iqr": 41594880.0,
+            "transformed_iqr": 41594880.0,
+            "transformed_median": 36918009856.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.1566666666666665,
+            "transformed_iqr": 0.05995419039450478,
+            "transformed_median": 0.95807226588911
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "ee0a6c49dd0a8fe99cdb382dfd5ed960f6c1754cb203cd7cabd7644aca408d4c",
+        "inner_validation": "47657d972aec9ebff173649825933915d3adf6edcbf0f7c4d36ace23218f0768",
+        "outer_test": "838d607828f4960709cba5b03ed73e5bb247dd053938b39d6f3fb58c2f19d387",
+        "outer_train": "a27dd8ea6ebabb2f3f2bcaa8a3c7c0577e5d7371f3f4efd6b913da937bd0f056"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine06",
+      "final_support": "fb31bcc8fa33437e776bfeab8b45c37dcd6ca0ca35dddc4665c1e7ef8fb56c5e",
+      "fold": 5,
+      "group_id": "f2eb71732a396b499121fa2d3d078cf80fe18684e32d75cb5590be04c5e7d6c1",
+      "inner_support": "5cac4531e56b02ea372eba70a841a65ba42e835add131630dbdf487817aca7c1",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/c595a806b8da883eac1cac0d.parquet",
+      "reference_prediction_sha256": "490f664dba9a51418b958632327e29ad81c122c9d22b07557c790fc2f55d765e",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/c595a806b8da883eac1cac0d.json",
+      "reference_record_sha256": "31487b368f53adc5705aef564933030b70b79b8b7642b6a1b05219fdde684662",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 0.05555555552106162,
+            "transformed_iqr": 0.05555555552106162,
+            "transformed_median": 0.6055555556452382
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10376.533333333333,
+            "transformed_iqr": 1.9919032256115834,
+            "transformed_median": 8.405695362401868
+          },
+          "MEMORY": {
+            "native_iqr": 47611904.0,
+            "transformed_iqr": 47611904.0,
+            "transformed_median": 36929155072.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.16222222222222205,
+            "transformed_iqr": 0.06201562175736797,
+            "transformed_median": 0.9593502213346021
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 0.05555555543482893,
+            "transformed_iqr": 0.05555555543482893,
+            "transformed_median": 0.6055555555590031
+          },
+          "DISK_WRITE": {
+            "native_iqr": 10376.533333333333,
+            "transformed_iqr": 1.9919032256115834,
+            "transformed_median": 8.413298267920021
+          },
+          "MEMORY": {
+            "native_iqr": 46010368.0,
+            "transformed_iqr": 46010368.0,
+            "transformed_median": 36920928256.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 0.15444444444444438,
+            "transformed_iqr": 0.05912842651603756,
+            "transformed_median": 0.95807226588911
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "a0a1061100f6d5d38d20660163b35a2babc968512219a648d7a2e2a82e3d502f",
+        "inner_validation": "5d6a0b18dc5a87a3b205a1888fd2e9ad9ab7e46c26068878ad020785f84d8ab8",
+        "outer_test": "27bd21ac041e24dc6656a031145fd56d7deb7de96c19470d95c3e22c71fd8a4b",
+        "outer_train": "35c63191857518f9d6f0cc34a39ce33560ec12978dbc6275297503de4685cb63"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine07",
+      "final_support": "e6285663e52459c1ab74805f138a158a3b71e54a7b91fb02f881fd73e48ad3ab",
+      "fold": 1,
+      "group_id": "87a0fe70c6d8cf1f78a4195b841b77fdfbede2fcb7c265733af5b51949d64438",
+      "inner_support": "8659ed51a0fbdbeafa7f5de786be91e6a3dbff4a615952a252ab3376e685444b",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/e0c52a6b03c219890a28c0d1.parquet",
+      "reference_prediction_sha256": "3428c76dd1456e099d12c93e98a4ef1fa52c6cfd7fd6a76fb2996412def7be02",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/e0c52a6b03c219890a28c0d1.json",
+      "reference_record_sha256": "ea8da2936784a499402063f0492c3e611c57760e96e0e2390f15bfee4418310c",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.1916666662566255,
+            "transformed_iqr": 1.1916666662566255,
+            "transformed_median": 4.0638888891812215
+          },
+          "DISK_WRITE": {
+            "native_iqr": 204578.13333333342,
+            "transformed_iqr": 0.30391119515252285,
+            "transformed_median": 13.426411492262492
+          },
+          "MEMORY": {
+            "native_iqr": 336138240.0,
+            "transformed_iqr": 336138240.0,
+            "transformed_median": 17794066432.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 56.259444444444455,
+            "transformed_iqr": 0.8512275275387484,
+            "transformed_median": 3.9640565785695454
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.1777777784542804,
+            "transformed_iqr": 1.1777777784542804,
+            "transformed_median": 4.0527777774130085
+          },
+          "DISK_WRITE": {
+            "native_iqr": 201147.73333333328,
+            "transformed_iqr": 0.29950701810649605,
+            "transformed_median": 13.423940366508816
+          },
+          "MEMORY": {
+            "native_iqr": 270483456.0,
+            "transformed_iqr": 270483456.0,
+            "transformed_median": 17765347328.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 55.751666666666665,
+            "transformed_iqr": 0.8444627179861168,
+            "transformed_median": 3.9661112771140212
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "f55b4117a45e8393827353483a3c9885abfb5cf41d5f63f3604442da8b7ad497",
+        "inner_validation": "e6204a6665010972777a439c5b3b1034c27fbc8d7864711e9cb6719a523b1e63",
+        "outer_test": "1d81884ec02422f1cd0ca0ff90587b1a5a7555ec545efeb7afd4555d3619e4d5",
+        "outer_train": "124f043fe5df054aee39016b7aeb06f0d772be3b28af1d1263163ada1b604f3c"
+      }
+    },
+    {
+      "L": 32,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine07",
+      "final_support": "3ab01d617e537942581947919f1ab511533b2380420ef08d0b42ef75d7af973a",
+      "fold": 2,
+      "group_id": "9cce45fdb4fc62ccc54f684172dd8269f755860b36e21f3301c63dd5a59292c8",
+      "inner_support": "e96c270560c31de545d90f6a8a7f443b6ffc4c1aa91794a287ff481ed6dd9912",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/191894fb21f7d84d9fb23f84.parquet",
+      "reference_prediction_sha256": "61ca99d83078df44675978b6def1225b7ff2fdbdea254f15d760173ca0341214",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/191894fb21f7d84d9fb23f84.json",
+      "reference_record_sha256": "8a651de10c1ca6a42294d1b49719e5fc4dbee732f876e9b165c17e29372fc86f",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.2305555556667982,
+            "transformed_iqr": 1.2305555556667982,
+            "transformed_median": 4.094444444247833
+          },
+          "DISK_WRITE": {
+            "native_iqr": 209339.73333333328,
+            "transformed_iqr": 0.30994510976401557,
+            "transformed_median": 13.432963122318146
+          },
+          "MEMORY": {
+            "native_iqr": 1085181952.0,
+            "transformed_iqr": 1085181952.0,
+            "transformed_median": 17861058560.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 58.03666666666666,
+            "transformed_iqr": 0.8708323735942542,
+            "transformed_median": 3.9660481205488125
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.194444444263354,
+            "transformed_iqr": 1.194444444263354,
+            "transformed_median": 4.069444445324026
+          },
+          "DISK_WRITE": {
+            "native_iqr": 204936.53333333333,
+            "transformed_iqr": 0.3043702166997786,
+            "transformed_median": 13.427091241354448
+          },
+          "MEMORY": {
+            "native_iqr": 359915520.0,
+            "transformed_iqr": 359915520.0,
+            "transformed_median": 17800110080.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 56.179999999999986,
+            "transformed_iqr": 0.850543216479851,
+            "transformed_median": 3.965374180925141
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "3d9ad7bd7e949105b2c817941cdc3c5a331486dc6b9fa1906d5c0d81876f8c74",
+        "inner_validation": "1e45ead1111f8decb9b41d83099fe3ddd456a6c506904aea112b00b97f85dd9d",
+        "outer_test": "084d6ac6e2a5fb456d954377bb9c0322831f9eae84f8087181ac9be9f72fdef1",
+        "outer_train": "f8f5deb481809255d2fbc09613348ef33b8fc467dbf42a4b1912b9b8c9c8af99"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine07",
+      "final_support": "0f67d70a37a23e7939d548584a65cc6ca0215859dca4de460b741f5ea1e196f3",
+      "fold": 3,
+      "group_id": "da8b12fc0884b3faa48ab7b82bfb05fbf750465c2aebbbc4e8f4b8b3f3e2de53",
+      "inner_support": "85d5ed69fc7f9cc04db610d6708b15ee7647be8c7f67869d2c647d594cec4e70",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/b7717e5a947beee62f373508.parquet",
+      "reference_prediction_sha256": "26defda2b328917d89fa48152649643ef07edc0414450cccf7f88cd3512a89d2",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/b7717e5a947beee62f373508.json",
+      "reference_record_sha256": "5bb77023a89070be1bad78b005e620fcfbc10fc6f4f520f54892782377fc6289",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.2194444456124787,
+            "transformed_iqr": 1.2194444456124787,
+            "transformed_median": 4.097222221834171
+          },
+          "DISK_WRITE": {
+            "native_iqr": 211379.19999999995,
+            "transformed_iqr": 0.31182426621580817,
+            "transformed_median": 13.436509661723711
+          },
+          "MEMORY": {
+            "native_iqr": 1452690432.0,
+            "transformed_iqr": 1452690432.0,
+            "transformed_median": 17926264832.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 58.50944444444444,
+            "transformed_iqr": 0.8773022876134644,
+            "transformed_median": 3.9593623777163223
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.222222221905314,
+            "transformed_iqr": 1.222222221905314,
+            "transformed_median": 4.088888888493075
+          },
+          "DISK_WRITE": {
+            "native_iqr": 210090.6666666665,
+            "transformed_iqr": 0.3112771216610799,
+            "transformed_median": 13.432061995916559
+          },
+          "MEMORY": {
+            "native_iqr": 1267431424.0,
+            "transformed_iqr": 1267431424.0,
+            "transformed_median": 17858861056.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 58.23416666666667,
+            "transformed_iqr": 0.87232154654588,
+            "transformed_median": 3.9653531127696544
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "ba672b0dfcd7fbe48c2514915c0812b4913c34f3066c0ea001d5d3a273fbe717",
+        "inner_validation": "57eb127f60d83db04627dcfcc79195d38f3cd0ae82354e09af9db4518d3cd1f0",
+        "outer_test": "d7823ea225ec1aa86a69a09311f6ad4d6d49c91c56245dc757a0f4bf647af295",
+        "outer_train": "61a9b71553ce4177693e704111b22605847889b3fd8f46544f8176dc040d2dd6"
+      }
+    },
+    {
+      "L": 64,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine07",
+      "final_support": "4d213b8522689220ade3948b214f40838ce9a9337b465869751e9935f31e01bf",
+      "fold": 4,
+      "group_id": "93c20f460a63881db51045031abce465120b56c9166f8520493f36856dc43299",
+      "inner_support": "e290e39aad7ff6ceca521d57783ccfe8d6f51b414c5a3f55ee28865c13774b9f",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/41c7410cea35f06c5f7ab002.parquet",
+      "reference_prediction_sha256": "0d333f8ce6f456868ebdc5bf72573f243454f0c277fb8e4b74832510ee0e8565",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/41c7410cea35f06c5f7ab002.json",
+      "reference_record_sha256": "d1b15d3213cc73f0c71f53ffc2c169baa371c8079323d6596109f8b0a1102f8b",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.2638888894515619,
+            "transformed_iqr": 1.2638888894515619,
+            "transformed_median": 4.105555555369291
+          },
+          "DISK_WRITE": {
+            "native_iqr": 214929.06666666665,
+            "transformed_iqr": 0.31516366494556003,
+            "transformed_median": 13.445148368378245
+          },
+          "MEMORY": {
+            "native_iqr": 1422231552.0,
+            "transformed_iqr": 1422231552.0,
+            "transformed_median": 18290933760.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 56.60444444444445,
+            "transformed_iqr": 0.8585012481761387,
+            "transformed_median": 3.950206856382099
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.2333333330267737,
+            "transformed_iqr": 1.2333333330267737,
+            "transformed_median": 4.097222222222221
+          },
+          "DISK_WRITE": {
+            "native_iqr": 210286.93333333335,
+            "transformed_iqr": 0.31021842351295525,
+            "transformed_median": 13.436260317861718
+          },
+          "MEMORY": {
+            "native_iqr": 1436298240.0,
+            "transformed_iqr": 1436298240.0,
+            "transformed_median": 17909901312.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 58.68138888888889,
+            "transformed_iqr": 0.8780242038675174,
+            "transformed_median": 3.961913093336432
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "0665d7d2803fcae389067fefa1ec8f0fba70177e8972cf11cb1120e5bd61d778",
+        "inner_validation": "9e8f9f6ed7f1ac32c29f53f61d8724ca7e6fa9935c1adadbbe1bf24bea074deb",
+        "outer_test": "3e85bfadf8e8ee15a5b2e9abb697fbba78e81aff5b3c13b1230016f70ce4a47f",
+        "outer_train": "61f145e5bd200e8fd9c6db4dc2d30d21ff5b4428764ad6bdb46a6aeff157c6f0"
+      }
+    },
+    {
+      "L": 128,
+      "block": "TimeTrack",
+      "configuration_sha256": "ae97a89cb1e8034890256fa8f21ea242fa729fcb725be43088be7552e1309626",
+      "entity": "machine07",
+      "final_support": "83a40c25547358cb38c9e77790588b06d670513b268225e741122548422d2f83",
+      "fold": 5,
+      "group_id": "cd3d4a4e79f3f75b2537755ae282d35153213f34db751e254725761bc40c84b5",
+      "inner_support": "3ebd75a11968c37746fc5394d3197c7fa83201e4fd9c450346a978e2f363deec",
+      "namespace": "stage18b3-matched-linear-ar-arx-v1",
+      "reference_prediction": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/m1/predictions/c1c5a241f51de395f78202ba.parquet",
+      "reference_prediction_sha256": "3af5f64a57d0110b1515a2cb55d5100f50dba91a9ea26bd94c1236588917dbe9",
+      "reference_record": "/Users/fgtek002/TimeTrack/multiresource/04_lstm_factorial/outputs/scientific/runtime/completions/final/c1c5a241f51de395f78202ba.json",
+      "reference_record_sha256": "6579ab36437e2c492df2ec14e5e7f7a6b452a847da274a9d931c6929881c8798",
+      "scalers": {
+        "final": {
+          "CPU": {
+            "native_iqr": 1.291666667028848,
+            "transformed_iqr": 1.291666667028848,
+            "transformed_median": 4.1166666662320495
+          },
+          "DISK_WRITE": {
+            "native_iqr": 218862.93333333335,
+            "transformed_iqr": 0.31985778052663605,
+            "transformed_median": 13.45012877162481
+          },
+          "MEMORY": {
+            "native_iqr": 1417842688.0,
+            "transformed_iqr": 1417842688.0,
+            "transformed_median": 18491465728.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 56.13444444444444,
+            "transformed_iqr": 0.8514324545142995,
+            "transformed_median": 3.9501747713925224
+          }
+        },
+        "inner": {
+          "CPU": {
+            "native_iqr": 1.2388888881024385,
+            "transformed_iqr": 1.2388888881024385,
+            "transformed_median": 4.100000000067261
+          },
+          "DISK_WRITE": {
+            "native_iqr": 214323.20000000007,
+            "transformed_iqr": 0.31498973661950913,
+            "transformed_median": 13.441781201211878
+          },
+          "MEMORY": {
+            "native_iqr": 1441468416.0,
+            "transformed_iqr": 1441468416.0,
+            "transformed_median": 18081357824.0
+          },
+          "THROUGHPUT": {
+            "native_iqr": 57.09,
+            "transformed_iqr": 0.8635591193535195,
+            "transformed_median": 3.9531222948319544
+          }
+        }
+      },
+      "split_hashes": {
+        "inner_train": "7ed0ba01a930fba93aff73df7c0fa3e435a7af28bde9f80d756d6270f1d52982",
+        "inner_validation": "208cf70743233c0005dece91db3d006e8c8797f12d49dc5af0be9e5810837a90",
+        "outer_test": "034fd65df6652ae6eba0de7ab6f3d6154a4965f3b6a22213080ea127957395d1",
+        "outer_train": "051ec0f28b9821954c70692adf0fa00ad8682013bd07f292db8b3756ce2310be"
+      }
+    }
+  ],
+  "inner": 1400,
+  "metric_rows": 2240,
+  "source_hashes": {
+    "multiresource/04_lstm_factorial/configs/lstm_factorial.json": "fe985007ebd72417dcab8e8a1851c358d3d9a3da26f372595ac7ff6b499eedd6",
+    "multiresource/04_lstm_factorial/outputs/scientific/inner_run_registry.csv": "13601953140f788be23c731fd0011c759fdd56cca88785f8ed38e1e58db22ed2",
+    "multiresource/04_lstm_factorial/outputs/scientific/run_registry.csv": "d1280f3d6744d64d3a6d20ad64e52edc2f4cac61d9b07c9be0050c23d9cf1190",
+    "multiresource/04_lstm_factorial/outputs/scientific/selected_contexts.csv": "412e3da33b93b639b491ff2bf185e620709f0a5ccbb56e443975b280e853f7b8",
+    "multiresource/04_lstm_factorial/outputs/scientific/support_manifest.parquet": "1a85e42d429cfac32c74586b48c73bcc864678c86c68e34228167dcfb0e24e65"
+  }
+}

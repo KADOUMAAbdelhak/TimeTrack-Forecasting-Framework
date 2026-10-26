@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "block": "TimeTrack",
+      "exit_code": 0,
+      "stderr": "test_01_exact_parameters (__main__.SafetyTests.test_01_exact_parameters) ... ok\ntest_02_wrong_factory_fails (__main__.SafetyTests.test_02_wrong_factory_fails) ... ok\ntest_03_forward_shapes_no_training (__main__.SafetyTests.test_03_forward_shapes_no_training) ... ok\ntest_04_fresh_selection_and_epochs (__main__.SafetyTests.test_04_fresh_selection_and_epochs) ... ok\ntest_05_short_context_tie (__main__.SafetyTests.test_05_short_context_tie) ... ok\ntest_06_missing_seed_fails (__main__.SafetyTests.test_06_missing_seed_fails) ... ok\ntest_07_nonfinite_primary_fails (__main__.SafetyTests.test_07_nonfinite_primary_fails) ... ok\ntest_08_no_outside_writes (__main__.SafetyTests.test_08_no_outside_writes) ... ok\ntest_09_unchanged_training_primitives (__main__.SafetyTests.test_09_unchanged_training_primitives) ... ok\ntest_10_config (__main__.SafetyTests.test_10_config) ... ok\ntest_11_formula (__main__.SafetyTests.test_11_formula) ... ok\ntest_12_strict_json (__main__.SafetyTests.test_12_strict_json) ... ok\ntest_13_attempt_no_retry (__main__.SafetyTests.test_13_attempt_no_retry) ... ok\ntest_14_identity_changes_only_on_scientific_fields (__main__.SafetyTests.test_14_identity_changes_only_on_scientific_fields) ... ok\ntest_15_nan_prediction_fails (__main__.SafetyTests.test_15_nan_prediction_fails) ... ok\ntest_16_completed_identity_no_training (__main__.SafetyTests.test_16_completed_identity_no_training) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 1.745s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "block": "fastStorage",
+      "exit_code": 0,
+      "stderr": "test_01_exact_parameters (__main__.SafetyTests.test_01_exact_parameters) ... ok\ntest_02_wrong_factory_fails (__main__.SafetyTests.test_02_wrong_factory_fails) ... ok\ntest_03_forward_shapes_no_training (__main__.SafetyTests.test_03_forward_shapes_no_training) ... ok\ntest_04_fresh_selection_and_epochs (__main__.SafetyTests.test_04_fresh_selection_and_epochs) ... ok\ntest_05_short_context_tie (__main__.SafetyTests.test_05_short_context_tie) ... ok\ntest_06_missing_seed_fails (__main__.SafetyTests.test_06_missing_seed_fails) ... ok\ntest_07_nonfinite_primary_fails (__main__.SafetyTests.test_07_nonfinite_primary_fails) ... ok\ntest_08_no_outside_writes (__main__.SafetyTests.test_08_no_outside_writes) ... ok\ntest_09_unchanged_training_primitives (__main__.SafetyTests.test_09_unchanged_training_primitives) ... ok\ntest_10_config (__main__.SafetyTests.test_10_config) ... ok\ntest_11_formula (__main__.SafetyTests.test_11_formula) ... ok\ntest_12_strict_json (__main__.SafetyTests.test_12_strict_json) ... ok\ntest_13_attempt_no_retry (__main__.SafetyTests.test_13_attempt_no_retry) ... ok\ntest_14_identity_changes_only_on_scientific_fields (__main__.SafetyTests.test_14_identity_changes_only_on_scientific_fields) ... ok\ntest_15_nan_prediction_fails (__main__.SafetyTests.test_15_nan_prediction_fails) ... ok\ntest_16_completed_identity_no_training (__main__.SafetyTests.test_16_completed_identity_no_training) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 1.270s\n\nOK\n",
+      "stdout": ""
+    },
+    {
+      "block": "Materna-T1",
+      "exit_code": 0,
+      "stderr": "test_01_exact_parameters (__main__.SafetyTests.test_01_exact_parameters) ... ok\ntest_02_wrong_factory_fails (__main__.SafetyTests.test_02_wrong_factory_fails) ... ok\ntest_03_forward_shapes_no_training (__main__.SafetyTests.test_03_forward_shapes_no_training) ... ok\ntest_04_fresh_selection_and_epochs (__main__.SafetyTests.test_04_fresh_selection_and_epochs) ... ok\ntest_05_short_context_tie (__main__.SafetyTests.test_05_short_context_tie) ... ok\ntest_06_missing_seed_fails (__main__.SafetyTests.test_06_missing_seed_fails) ... ok\ntest_07_nonfinite_primary_fails (__main__.SafetyTests.test_07_nonfinite_primary_fails) ... ok\ntest_08_no_outside_writes (__main__.SafetyTests.test_08_no_outside_writes) ... ok\ntest_09_unchanged_training_primitives (__main__.SafetyTests.test_09_unchanged_training_primitives) ... ok\ntest_10_config (__main__.SafetyTests.test_10_config) ... ok\ntest_11_formula (__main__.SafetyTests.test_11_formula) ... ok\ntest_12_strict_json (__main__.SafetyTests.test_12_strict_json) ... ok\ntest_13_attempt_no_retry (__main__.SafetyTests.test_13_attempt_no_retry) ... ok\ntest_14_identity_changes_only_on_scientific_fields (__main__.SafetyTests.test_14_identity_changes_only_on_scientific_fields) ... ok\ntest_15_nan_prediction_fails (__main__.SafetyTests.test_15_nan_prediction_fails) ... ok\ntest_16_completed_identity_no_training (__main__.SafetyTests.test_16_completed_identity_no_training) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 1.264s\n\nOK\n",
+      "stdout": ""
+    }
+  ],
+  "status": "PASS",
+  "test_cases": 48,
+  "timestamp": "2026-10-22T00:46:13.179859+00:00",
+  "training_runs_launched": 0
+}

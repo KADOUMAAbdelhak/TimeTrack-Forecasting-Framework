@@ -1,0 +1,50 @@
+{
+  "status": "STAGE_19A_PASS",
+  "changed_manuscript_source_files": [
+    "manuscript/jss/manuscript.tex"
+  ],
+  "allowed_sections": [
+    "title",
+    "shorttitle",
+    "abstract",
+    "keywords",
+    "Introduction"
+  ],
+  "title": "Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems",
+  "abstract_word_count": 228,
+  "word_count_method": "whitespace-separated; hyphenated compounds retained",
+  "keywords": [
+    "runtime forecasting",
+    "cloud telemetry",
+    "multi-metric forecasting",
+    "multi-task learning",
+    "contextual input",
+    "shared representations"
+  ],
+  "keyword_count": 6,
+  "unmodified_body_from_related_work_to_eof": true,
+  "before_sha256": "1946a95cf881dc39529f5ae59c95ef73c4599652973837988cf0243178348a30",
+  "after_sha256": "1acf98ee9f325dcd7edb39fc2514f1d20c0f13c5b0b03f0b2145f4f2d0652331",
+  "stage18c1_manifest_sha256": "4fa8c1797a1ad1bc6864e35b2238539a8459861c9d874b0c5edca1f2317eea93",
+  "protected_unchanged_files": 395784,
+  "protected_membership_unchanged": true,
+  "stage18c1_output_hashes_verified": 25,
+  "scientific_result_modifications": 0,
+  "training_calls": 0,
+  "inference_calls": 0,
+  "build": "Tectonic exit 0; desktop compiler also success",
+  "pages": 18,
+  "undefined_references_or_citations": 0,
+  "visual_check": "pages 1-3 clean",
+  "layout_warnings": "pre-existing CAS 123.62721pt and body 0.70636pt overfull hboxes; empty anchors; underfull boxes",
+  "remaining_work_outside_scope": "Later integration of post-hoc controls and selection terminology into Methods/Results/Discussion; unchanged here",
+  "refs": {
+    "HEAD": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "main": "fee20c316040c57b69ba12a193530c955b539771",
+    "paper_jss": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+    "scientific_tag_object": "ea2ea37794970c13ed4bfbd6d1821ba2173b3522",
+    "scientific_tag_target": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "commit": "no",
+  "push": "no"
+}

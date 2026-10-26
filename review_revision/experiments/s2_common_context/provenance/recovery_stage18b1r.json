@@ -1,0 +1,29 @@
+{
+  "authorised_run_ids": [
+    "518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481",
+    "4ce3021757a4964518d83768a3dae00623f6cd037e2e44a2980df949cec03b40",
+    "7777ba54638937de20cb39c518545eaae8343f1aca3a7ec0cb89106bb859478b",
+    "bf03831196fb1a150e17c8e2fd89094ff71608a03b9d16381915136d60d80826"
+  ],
+  "blocked_report_sha256": "a5060f381477f4c54497074ccf13bb99ccb99fce4e75f6d4025bed26db69eca9",
+  "counts": {
+    "attempts": 2771,
+    "completions": 2767,
+    "failures": 1,
+    "models": 1564,
+    "predictions": 1564
+  },
+  "failure_record": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context/failures/Rnd/518ea20860f5e00b03261916d14c5051f5a5a71fea5bd44336a813db7f326481.json",
+  "failure_record_sha256": "4475544e51605386f8ad79ce1ed636f6e9e93b2900b8d2d31dc7bc1b610161d4",
+  "original_provenance_sha256": "fa7633feed37f2e90926cb1b82461fe039fa1e5bc2f39323c4c163ac46f570db",
+  "parent_manuscript_commit": "f6936cd111d911e40ec2725a18fdfc53768d9ccf",
+  "parent_scientific_commit": "fee20c316040c57b69ba12a193530c955b539771",
+  "predecessor_adapter_sha256": "63d7f21a27fe0bcaf836ddb91a275d0ff48fd9d5b930fbf9a56dd0b50375e806",
+  "predecessor_config_sha256": "6a3236cfa1bc46acc3bcc384a74cb766aceab6ab6fd6b4bdba70e5ea80bab78d",
+  "predecessor_inventory_sha256": "10a83968ddd7ae650aa1ed04f7aac9473a449081db2c9ce348f63c35fdfeb896",
+  "scope": "strict-JSON representation of legitimately undefined ancillary metrics; exact same-identity recovery of four explicitly authorised units; skip completed work and resume unchanged Stage 18B1 plan",
+  "snapshot_root": "/Users/fgtek002/TimeTrack/review_revision/experiments/s2_common_context_predecessor_stage18b1r",
+  "stage": "18B1R",
+  "status": "PREPATCH_BLOCKED_STATE_PRESERVED",
+  "timestamp": "2026-10-21T10:51:55.882392+00:00"
+}
