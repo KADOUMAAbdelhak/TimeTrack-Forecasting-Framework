@@ -28,6 +28,7 @@ _SOURCES = (Path(__file__).resolve().relative_to(ROOT).as_posix(),)
 PHASES = ("certify", "canary", "inner", "final", "diagnostics", "systems", "evaluation")
 FIT_PHASES = ("canary", "inner", "final", "diagnostics")
 MAX_RETRIES = 2
+TRAINING_WORKERS = 4  # C4: exactly four concurrent single-thread workers, enforced by slot locks
 RETRYABLE = frozenset({"OSError", "MemoryError", "TimeoutError", "InterruptedError", "BrokenPipeError",
                        "ConnectionError", "BlockingIOError", "ChildProcessError", "KeyboardInterrupt"})
 
@@ -193,10 +194,12 @@ class Session:
     utc_start: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     started: float = field(default_factory=monotonic)
     executed: dict = field(default_factory=dict)
+    slot: int | None = None
+    stopped: bool = False
 
 
 class Orchestrator:
-    """One worker process. Several may run concurrently up to the registered worker count."""
+    """One worker process. At most TRAINING_WORKERS run concurrently, each holding one slot lock."""
 
     def __init__(self, journal, schedule, executors, *, registration, workers):
         if not isinstance(journal, Journal) or not isinstance(schedule, Schedule):
@@ -205,8 +208,8 @@ class Orchestrator:
         registration = Path(registration)
         if not registration.is_file():
             raise ProvenanceError("Execution requires the registration record")
-        if type(workers) is not int or workers < 1:
-            raise ValueError("Expected the registered worker count")
+        if workers != TRAINING_WORKERS or type(workers) is not int:
+            raise ValueError(f"Expected the registered worker count ({TRAINING_WORKERS}, C4)")
         self.journal, self.schedule, self.executors, self.workers = journal, schedule, executors, workers
         self.registration_sha256 = sha256_file(registration)
         self._publish_exact(self._path("schedule.json"), {
@@ -270,7 +273,9 @@ class Orchestrator:
                          if unit.identity is not None and self.abandoned(unit) is not None)
 
     def close_fits(self):
-        return self.close("fits", ("certify", *FIT_PHASES))
+        record = self.close("fits", ("certify", *FIT_PHASES))
+        self.cost_report()
+        return record
 
     def close_evaluation(self):
         return self.close("evaluation", ("systems", "evaluation"))
@@ -315,6 +320,33 @@ class Orchestrator:
     def _lease(self, unit):
         return self._lock(self._path("leases", f"{_digest(unit.key)}.lock"), fcntl.LOCK_EX)
 
+    @contextmanager
+    def _slot(self):
+        """C4: hold one of the registered worker slots for the whole session, or refuse to start."""
+        for index in range(self.workers):
+            with self._lock(self._path("slots", f"{index}.lock"), fcntl.LOCK_EX) as held:
+                if held:
+                    yield index
+                    return
+        raise ProvenanceError(f"All {self.workers} registered worker slots are in use (C4)")
+
+    # -- graceful pause --------------------------------------------------------------------------
+    def request_stop(self, *, reason):
+        """Pause between units: running workers finish their current unit, then stop taking work."""
+        if not reason:
+            raise ProvenanceError("A stop request needs a reason")
+        _atomic_publish(self._path("stop", "request.json"),
+                        {"reason": reason, "utc": datetime.now(timezone.utc).isoformat()})
+
+    def clear_stop(self):
+        path = self._path("stop", "request.json")
+        if path.exists():
+            target = self._path("stop", f"cleared-{uuid4().hex}.json")
+            path.rename(target)
+
+    def stop_requested(self):
+        return self._path("stop", "request.json").exists()
+
     # -- gates -----------------------------------------------------------------------------------
     def gate(self, name):
         path = self._path("gates", f"{name}.json")
@@ -332,6 +364,8 @@ class Orchestrator:
                              for state in ("complete", "failed", "abandoned")},
                   "incomplete_identity_sha256": sorted(unit.identity.digest for unit in units
                                                        if unit.identity is not None and states[unit.key] != "complete"),
+                  "abandoned_identity_sha256": sorted(unit.identity.digest for unit in units
+                                                      if unit.identity is not None and states[unit.key] == "abandoned"),
                   "terminal_sha256": _digest(sorted(states.items()))}
         self._publish_exact(self._path("gates", f"{name}.json"), record)
         return record
@@ -365,10 +399,18 @@ class Orchestrator:
         if phase not in PHASES:
             raise ValueError("Unknown phase")
         self._require_phase_open(phase)
+        with self._slot() as slot:
+            return self._run(phase, limit, slot)
+
+    def _run(self, phase, limit, slot):
         session = Session(phase)
+        session.slot = slot
         executed = session.executed
         for unit in self.schedule.phase(phase):
             if limit is not None and sum(executed.values()) >= limit:
+                break
+            if self.stop_requested():
+                session.stopped = True
                 break
             state = self.state(unit)
             if state in {"complete", "failed", "abandoned"}:
@@ -387,6 +429,12 @@ class Orchestrator:
                     if not hosted:
                         continue
                     state = self.state(unit)
+                    if state == "interrupted" and self._retries(unit) >= MAX_RETRIES:
+                        # C3: interruptions share the two-retry budget with infrastructure failures.
+                        self._abandon(unit, f"retry budget exhausted: interrupted after {MAX_RETRIES} "
+                                            "same-identity retries (C3)")
+                        executed["abandoned"] = executed.get("abandoned", 0) + 1
+                        continue
                     if state in {"interrupted", "retry"}:
                         self.journal.quarantine(unit.identity, evaluation=unit.evaluation,
                                                 reason=f"same-identity retry after {state} attempt (v0.3 §2, C3)")
@@ -423,7 +471,8 @@ class Orchestrator:
     def _finish(self, session):
         record = {"phase": session.phase, "token": session.token, "utc_start": session.utc_start,
                   "utc_end": datetime.now(timezone.utc).isoformat(), "elapsed_seconds": monotonic() - session.started,
-                  "executed": session.executed, "registered_workers": self.workers,
+                  "executed": session.executed, "registered_workers": self.workers, "slot": session.slot,
+                  "stopped_on_request": session.stopped,
                   "schedule_sha256": self.schedule.digest, "registration_sha256": self.registration_sha256}
         _atomic_publish(self._path("sessions", f"{session.token}.json"), record)
 
@@ -448,6 +497,44 @@ class Orchestrator:
             if any(value is not None for value in values):
                 result[label] = sum(value["span_seconds"] for value in values if value is not None)
         return result
+
+    def cost_report(self):
+        """C2: training costs over every fit and diagnostic unit in the journal, not only the systems sample.
+
+        Grouped by block, arm, formulation and phase. Seconds come from each terminal outcome's
+        journalled timing; quarantined attempts are counted (their records stay in the quarantine).
+        """
+        import math
+
+        if self.gate("fits") is None:
+            raise ProvenanceError("The cost report requires the closed fit phases")
+        groups = {}
+        for unit in self.schedule.units:
+            if unit.kind not in ("fit", "diagnostic"):
+                continue
+            identity = unit.identity
+            key = "/".join((identity.block, identity.arm, identity.formulation, identity.phase))
+            group = groups.setdefault(key, {"complete": 0, "failed": 0, "abandoned": 0, "quarantined_attempts": 0,
+                                            "complete_seconds": {}, "failed_seconds": {}})
+            group["quarantined_attempts"] += self._retries(unit)
+            state = self.state(unit)
+            if state == "abandoned" or self._record(unit) is None:
+                group["abandoned"] += 1
+                continue
+            status, evidence, _ = self.journal.terminal_evidence(identity)
+            timings = (evidence.get("timing_seconds", {}) if identity.arm != "diagnostic" else
+                       {"diagnostic_seconds": evidence["diagnostic_seconds"]} if "diagnostic_seconds" in evidence else {})
+            bucket = "complete" if status == "complete" else "failed"
+            group[bucket] += 1
+            for name, value in timings.items():
+                group[f"{bucket}_seconds"].setdefault(name, []).append(value)
+        for group in groups.values():
+            for bucket in ("complete_seconds", "failed_seconds"):
+                group[bucket] = {name: math.fsum(values) for name, values in sorted(group[bucket].items())}
+        record = {"schedule_sha256": self.schedule.digest, "registered_workers": self.workers,
+                  "scheduler_elapsed": self.scheduler_elapsed(), "groups": dict(sorted(groups.items()))}
+        self._publish_exact(self._path("costs.json"), record)
+        return record
 
 
 # -- production executors (used only by scientific execution) --------------------------------------

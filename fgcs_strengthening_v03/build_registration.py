@@ -26,8 +26,9 @@ REFERENCES = (
 )
 DECISIONS = {
     "date": "2026-11-12",
-    "clarifications": "C1-C9 approved by the author without changes",
+    "clarifications": "C1-C9 approved by the author; revision 2 after the independent audit (D1-D5, C6 note)",
     "training_workers": 4,
+    "training_cost_concurrency": "C4 declared departure from the §9 one-worker condition for training-cost seconds",
     "origins": "C1 per partition",
     "systems_population": "C2 seed 0, fold 1, every entity",
     "retry_policy": "C3 two infrastructure retries; code repairs by chained seal amendment",

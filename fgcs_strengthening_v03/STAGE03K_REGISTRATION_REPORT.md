@@ -6,11 +6,11 @@ Basis: tag `fgcs-v03-execution-candidate` (commit `fd45c2d5`), the author decisi
 
 The package is in `registration/`. It is built and re-verified by `python -m fgcs_strengthening_v03.build_registration --build | --verify`; verification recomputes every generated file from the repository and compares bytes.
 
-**Package digest: `f6bd4ba54b1ea476f33c5e2e8ae1a068fe692cf28b4b915a95e78721648a7d82`** (recomputed and verified).
+**Package digest (revision 2): `bf4232aef6c45be1e3b2284cbbc9fc6b3bf095c87f0d9977e5129d2eff8f209e`** (recomputed and verified). It supersedes the audited first package `f6bd4ba5…7d82` (tag `fgcs-v03-registration-package`); see Revision 2 below.
 
 | File | Content |
 |---|---|
-| `execution_seal.json` | `execution_fingerprints()`: 36 inputs, 60 sources, digest **`6ff4cfc0b155868e19dd39e85150129afebf448e71730a444b5afe3d7c8aa152`** |
+| `execution_seal.json` | `execution_fingerprints()`: 36 inputs, 60 sources, digest **`7d24169354dbf028449525ead1574bf3b6e1db6cce52ad6d109f4654a86792c7`** (revision 2; was `6ff4cfc0…a152`) |
 | `schedule.json` | Schedule digest `ad6c1693…7dfee2`, 283,635 units by phase; the budget from `validate_schedule()`; 206,000 unique identities (list SHA-256 `c84610a8…7681d`); the 96 canary and 30 pilot identities |
 | `analysis_catalogue.json` | All 832 registered analysis rows, 156 inferential; 1,085,800 required cells; 81,650 evaluation identities (list hash); the 15 historical tables |
 | `systems_population.json` | C2: 182 partitions, 1,380 deployments |
@@ -52,8 +52,8 @@ Referenced by hash:
 
 **No-leakage checks:**
 
-- Outer-test windows are reachable at exactly two code sites, `OuterEvaluator._score` and `LightGBMRunner.evaluate`.
-- Systems benchmarks read outer-test inputs only, with no targets. The historical reader reads origin IDs only.
+- Outer-test targets are reachable at exactly two code sites, `OuterEvaluator._score` and `LightGBMRunner.evaluate`.
+- Systems benchmarks read outer-test inputs only, with no targets. (Revision 2: this read is now also gated on fit closure.) The historical reader reads origin IDs only.
 - Epoch and configuration selection read inner validation outcomes only.
 - **Finding, fixed in this stage.** The orchestrator enforced C6, but `OuterEvaluator.evaluate`, `LightGBMRunner.evaluate` and `TransferRunner.evaluate` were public and could be called directly before fit closure. Both evaluators now refuse unless the journal holds the fit-closure record covering every fit phase. A new test checks all three entry points and confirms that nothing is materialised. Clarification C9 now records this, and refers to the package for the seal digest instead of a stale hard-coded value.
 
@@ -77,12 +77,42 @@ Referenced by hash:
   - The author registers the package digest and seal digest externally.
 - Stage 4A (the first execution):
   1. Verify that the live host equals `host_manifest.json`.
-  2. Create the runtime journal with `execution_fingerprints()`, whose digest must equal `6ff4cfc0…`.
+  2. Create the runtime journal with `execution_fingerprints()`, whose digest must equal `7d241693…92c7`.
   3. Run `certify` and `canary` with 4 workers, then stop at the canary gate.
+
+## Revision 2 — independent audit findings (2026-11-12)
+
+An independent session repeated the §11 audit against tag `fgcs-v03-registration-package` and returned AUDIT_PASS. It reported five discrepancies and one note. The author authorised fixing all of them. Each is listed below with its fix and test:
+
+| Item | Fix | Test |
+|---|---|---|
+| D1: systems benchmark preparation read outer-test inputs without the C6 check | `SystemsRunner._prepare` calls `require_fits_closed`. This covers `prepare` and the fresh-process RSS replay. | The isolated end-to-end probe is refused before fit closure and publishes nothing |
+| D2: C4 departs from §9's one-worker condition, and N = 4 was not enforced | `TRAINING_WORKERS = 4`; any other count is refused; each session holds one of four slot locks. C4 restated as a declared departure. | `test_worker_count_slots_and_graceful_stop` |
+| D3: interrupted attempts retried without a limit | Interruptions share the two-retry budget; a third interruption abandons the identity. A stop request lets workers pause between units without using retries. | `test_interruptions_share_the_retry_budget` |
+| D4: training costs summed only over the 1,380 systems deployments | Fit closure writes `orchestrator/costs.json` over every fit and diagnostic, by block, arm, formulation and phase | `test_phases_gates_blinding_resume_state_and_wall_time` |
+| D5: C1 presented as a reading of §9 | C1 stated as a chosen interpretation | — |
+| C6 note: bundle builder trusted a caller-supplied abandoned list | Closure records list abandoned identities. The builder requires both closure records and reads fit and evaluation abandonments separately. | `test_bundle_validates_under_the_scientific_record_checks` |
+
+Effect on the package:
+
+- The schedule (`ad6c1693…`), analysis catalogue, systems population and host manifest are byte-unchanged.
+- The execution seal changed, because three sealed sources changed: `orchestrator.py`, `systems.py` and `manifest_builder.py`. `PACKAGE.json` changed with it, and also records the new hashes of the revised clarifications and `build_registration.py` decisions.
+- No budget, identity, cohort, estimand or multiplicity family changed.
+
+Revision 2 checks:
+
+- 170 tests pass in 91 s, two more than before.
+- LSTM trajectories remain byte-identical to the pre-3I reconstruction.
+- Whitespace is clean. The unused-import scan finds nothing new: its three hits are unchanged from the tagged tree.
+- `build_registration --verify` passes.
+
+**Open operational point (not changed):** a modern-family fit interrupted by Ctrl-C or a crash halts that family pending author review, as §8 and Stage 3G require. Planned pauses must use `Orchestrator.request_stop`.
+
+A second independent review of revision 2 is advisable before external registration.
 
 ## Protocol deviations
 
-None.
+One declared departure, C4. Training-cost seconds are measured under four concurrent workers, not under §9's one-worker condition. Inference and memory benchmarks keep that condition.
 
 **Wall-clock:** start `2026-11-12T17:35:56+02:00` (first repository check), end `2026-11-12T17:46:02+02:00`, elapsed **10 min 6 s**.
 

@@ -26,7 +26,7 @@ from fgcs_strengthening_v03.src.systems_environment import (
 )
 from fgcs_strengthening_v03.src.systems_records import COST_LABELS, digest
 from fgcs_strengthening_v03.tests.systems_fixtures import complement, manifest, plan_for
-from fgcs_strengthening_v03.tests.training_fixtures import _seal, digest as text_digest, identity
+from fgcs_strengthening_v03.tests.training_fixtures import _seal, close_fits, digest as text_digest, identity
 
 _FORBIDDEN = ("energy", "carbon", "joule", "co2", "watt", "kwh")
 
@@ -108,6 +108,14 @@ def end_to_end_probe():
 
         host = observe_environment()
         runner = SystemsRunner(engine.journal, host)
+        try:
+            runner.prepare((final_id,), final)
+        except ProvenanceError as error:
+            _check("C6" in str(error), "systems preparation refused before fit closure")
+        else:
+            _check(False, "systems preparation refused before fit closure")
+        _check(not engine.journal._path("systems", "origins").exists(), "nothing published before fit closure")
+        close_fits(engine.journal)
         plan = runner.prepare((final_id,), final)
         again = runner.prepare((final_id,), final)
         _check(again.binding == plan.binding and again.origins == plan.origins, "Origin sampling is not stable")

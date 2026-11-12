@@ -70,9 +70,18 @@ def scratch_engine(seal=None, *, closed_fits=False):
         yield engine
 
 
-def close_fits(journal):
+def close_fits(journal, abandoned=()):
     from fgcs_strengthening_v03.src.evaluation import FIT_CLOSURE_PHASES
     from fgcs_strengthening_v03.src.provenance import _atomic_publish
 
     _atomic_publish(journal._path("orchestrator", "gates", "fits.json"),
-                    {"gate": "fits", "phases": list(FIT_CLOSURE_PHASES), "synthetic": True})
+                    {"gate": "fits", "phases": list(FIT_CLOSURE_PHASES), "synthetic": True,
+                     "schedule_sha256": "synthetic", "abandoned_identity_sha256": sorted(abandoned)})
+
+
+def close_evaluation(journal, abandoned=()):
+    from fgcs_strengthening_v03.src.provenance import _atomic_publish
+
+    _atomic_publish(journal._path("orchestrator", "gates", "evaluation.json"),
+                    {"gate": "evaluation", "phases": ["systems", "evaluation"], "synthetic": True,
+                     "schedule_sha256": "synthetic", "abandoned_identity_sha256": sorted(abandoned)})

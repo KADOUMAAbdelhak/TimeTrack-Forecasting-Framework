@@ -514,6 +514,9 @@ class SystemsRunner:
             return plan
 
     def _prepare(self, identities, partition):
+        from .evaluation import require_fits_closed
+
+        require_fits_closed(self.journal)  # C6: benchmark histories are outer-test inputs
         complement = _load_complement(self.journal, identities, partition)
         origins = sample_origins(partition_origin_key(partition.block, partition.entity, partition.fold),
                                  partition.benchmark_origin_ids())

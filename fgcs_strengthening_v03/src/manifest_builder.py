@@ -1,7 +1,8 @@
 """Build the scientific cells/diagnostics bundle from a closed journal. Nothing runs on import.
 
-This is the only code that reads outer-test MAEs in bulk. It refuses to run while any registered
-identity lacks a terminal record, unless the orchestrator has closed that identity as abandoned.
+This is the only code that reads outer-test MAEs in bulk. It requires the orchestrator's fit and
+evaluation closure records, and refuses to run while any registered identity lacks a terminal record,
+unless the matching closure record lists that identity as abandoned (C6).
 """
 
 from collections import defaultdict
@@ -11,7 +12,7 @@ from itertools import product
 import json
 from pathlib import Path
 
-from .evaluation import evaluation_source
+from .evaluation import FIT_CLOSURE_PHASES, evaluation_source
 from .historical import HistoricalReader
 from .identity import ROOT, canonical_json, read_config
 from .provenance import Journal, ProvenanceError
@@ -51,23 +52,45 @@ class ScheduleNotClosed(ProvenanceError):
     """A registered identity has neither a terminal record nor an explicit abandonment."""
 
 
+def _closure(journal, name, phases):
+    path = journal._path("orchestrator", "gates", f"{name}.json")
+    try:
+        record = json.loads(path.read_text())
+    except FileNotFoundError:
+        raise ScheduleNotClosed(f"The bundle requires the {name} closure record (C6)") from None
+    if record.get("gate") != name or not set(phases) <= set(record.get("phases", ())):
+        raise ScheduleNotClosed(f"The {name} closure record does not cover {', '.join(phases)}")
+    return record
+
+
 class BundleBuilder:
-    def __init__(self, journal, historical, *, abandoned=frozenset()):
+    def __init__(self, journal, historical):
         if not isinstance(journal, Journal) or not isinstance(historical, HistoricalReader):
             raise TypeError("Expected a sealed journal and the registered historical reader")
         from ..analyse_study import _sources
 
         journal.seal.require_protocol(additional_sources=(*_sources(), *_SOURCES))
         self.journal, self.historical = journal, historical
-        self.abandoned = frozenset(abandoned)
         self.inputs = {}
         self._evaluations = {}
 
+    def _abandoned(self):
+        """Abandoned fit and evaluation identities, read only from the closure records."""
+        if not hasattr(self, "_closed"):
+            fits = _closure(self.journal, "fits", FIT_CLOSURE_PHASES)
+            evaluations = _closure(self.journal, "evaluation", ("systems", "evaluation"))
+            if fits.get("schedule_sha256") != evaluations.get("schedule_sha256"):
+                raise ScheduleNotClosed("Fit and evaluation closures belong to different schedules")
+            self._closed = {False: frozenset(fits.get("abandoned_identity_sha256", ())),
+                            True: frozenset(evaluations.get("abandoned_identity_sha256", ()))}
+        return self._closed
+
     def _record(self, identity, *, evaluation=False):
         """(status, evidence, file hash) or None when no terminal record exists."""
+        abandoned = self._abandoned()[evaluation]
         path = self.journal._record_path("outcomes", identity, evaluation)
         if not path.exists():
-            if identity.digest in self.abandoned:
+            if identity.digest in abandoned:
                 return None
             raise ScheduleNotClosed(f"Registered identity has no terminal record: {identity.digest}")
         status, evidence, digest = self.journal.terminal_evidence(identity, evaluation=evaluation)

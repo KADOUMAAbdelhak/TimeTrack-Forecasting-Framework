@@ -1,15 +1,16 @@
 {
   "author_decisions": {
-    "clarifications": "C1-C9 approved by the author without changes",
+    "clarifications": "C1-C9 approved by the author; revision 2 after the independent audit (D1-D5, C6 note)",
     "date": "2026-11-12",
     "origins": "C1 per partition",
     "retry_policy": "C3 two infrastructure retries; code repairs by chained seal amendment",
     "systems_population": "C2 seed 0, fold 1, every entity",
+    "training_cost_concurrency": "C4 declared departure from the \u00a79 one-worker condition for training-cost seconds",
     "training_workers": 4
   },
   "generated_files": {
     "analysis_catalogue.json": "4b51bb3c22067c05e9b2f88dfebe18cb176b368485bdd5dcb3b05d08cd36df78",
-    "execution_seal.json": "9afdf4138ede0ae32dab8edba03225f8d872ee9459b2ecb5c7028fb756228776",
+    "execution_seal.json": "d1218efd492f56f374b255e4f6a876c87befd41f1bfed1aabd10992f3c3a8357",
     "host_manifest.json": "ba4910be3823079197a94ac96e272344b650e3b441169cfdbd5389e5c6408363",
     "schedule.json": "e035717bdad456ae1aec856ebfdc2dbfae630d7a08cfa61e684b6573dff3f0fd",
     "systems_population.json": "6478a2e7a1b0a4ccb416503cfcc686d343d88f1c0dac728cc5818ee35d7505f3"
@@ -45,10 +46,10 @@
     }
   },
   "package": "fgcs-v03 registration package",
-  "package_sha256": "f6bd4ba54b1ea476f33c5e2e8ae1a068fe692cf28b4b915a95e78721648a7d82",
+  "package_sha256": "bf4232aef6c45be1e3b2284cbbc9fc6b3bf095c87f0d9977e5129d2eff8f209e",
   "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.3.md",
   "referenced_files": {
-    "fgcs_strengthening_v03/STAGE03J_CLARIFICATIONS_DRAFT.md": "b6be1aa4b168649d4a452d38c08aff81fcf7080199885b243d4e2a99a5605644",
+    "fgcs_strengthening_v03/STAGE03J_CLARIFICATIONS_DRAFT.md": "ca042ae2d84b2025b25028e4de24ea17df659bff7bd0777e7cc0166a41fe73a2",
     "fgcs_strengthening_v03/STAGE03J_SCOPE.md": "85e63471c4214f64372f05a5662578fda0068fcaac9943bfd7f5407652f71f63",
     "fgcs_strengthening_v03/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
     "fgcs_strengthening_v03/configs/protocol_v03.json": "59cda69a3e9b6b789aa09f70d2c606fce41a5d4b37d5a1d8dfe0a9b819cff62b",

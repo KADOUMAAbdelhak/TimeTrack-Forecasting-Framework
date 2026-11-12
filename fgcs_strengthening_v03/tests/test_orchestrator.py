@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 from fgcs_strengthening_v03.src.identity import HOME, RESOURCES, ScientificIdentity
 from fgcs_strengthening_v03.src.orchestrator import (
-    FIT_PHASES, PHASES, Orchestrator, ProductionExecutors, Schedule, Unit, _digest, canary_identities,
+    FIT_PHASES, MAX_RETRIES, PHASES, TRAINING_WORKERS, Orchestrator, ProductionExecutors, Schedule, Unit, _digest, canary_identities,
     execution_fingerprints, execution_sources, registered_schedule, systems_population,
 )
 from fgcs_strengthening_v03.src.provenance import Fingerprints, Journal, ProvenanceError
@@ -56,7 +56,7 @@ class OrchestratorTests(unittest.TestCase):
             executors = ProductionExecutors(engine.journal, partitions=provider)
             executors["systems"] = systems or (lambda unit: None)
             yield Orchestrator(engine.journal, schedule or tiny_schedule(), executors,
-                               registration=registration.name, workers=2)
+                               registration=registration.name, workers=4)
 
     def advance(self, orchestrator, *phases):
         for phase in phases:
@@ -84,9 +84,59 @@ class OrchestratorTests(unittest.TestCase):
             sessions = [json.loads(path.read_text()) for path in journal._path("orchestrator", "sessions").glob("*")]
             self.assertEqual(len(sessions), 6)  # refused runs open no session
             self.assertNotIn("mae", json.dumps(sessions))
-            self.assertEqual({record["registered_workers"] for record in sessions}, {2})
+            self.assertEqual({record["registered_workers"] for record in sessions}, {4})
             self.assertEqual(set(orch.scheduler_elapsed()), {"selection_cost", "final_fit_cost", "diagnostic_cost"})
             self.assertGreaterEqual(orch.wall_time("final")["span_seconds"], 0)
+            costs = json.loads(journal._path("orchestrator", "costs.json").read_text())
+            m1 = identity("M1")
+            group = costs["groups"][f"{m1.block}/core/M1/final"]
+            self.assertEqual((group["complete"], group["failed"], group["abandoned"]), (1, 0, 0))
+            self.assertGreater(group["complete_seconds"]["elapsed"], 0)
+            self.assertEqual(sum(g["complete"] for g in costs["groups"].values()), 5)  # every fit, not a sample
+            self.assertEqual(costs["registered_workers"], TRAINING_WORKERS)
+
+    def test_worker_count_slots_and_graceful_stop(self):
+        with self.orchestrator() as orch:
+            with self.assertRaisesRegex(ValueError, "registered worker count"):
+                Orchestrator(orch.journal, orch.schedule, orch.executors,
+                             registration=__file__,
+                             workers=2)
+            handles = []
+            for index in range(TRAINING_WORKERS):
+                path = orch._path("slots", f"{index}.lock")
+                path.parent.mkdir(parents=True, exist_ok=True)
+                handle = path.open("a+b")
+                fcntl.flock(handle, fcntl.LOCK_EX)
+                handles.append(handle)
+            with self.assertRaisesRegex(ProvenanceError, "worker slots"):
+                orch.run("canary")
+            handles.pop().close()  # one slot frees
+            orch.request_stop(reason="planned pause")
+            session = orch.run("canary")
+            self.assertEqual((session.executed, session.stopped, session.slot), ({}, True, TRAINING_WORKERS - 1))
+            orch.clear_stop()
+            self.assertEqual(orch.run("canary").executed, {"complete": 1})
+            for handle in handles:
+                handle.close()
+
+    def test_interruptions_share_the_retry_budget(self):
+        with self.orchestrator() as orch:
+            self.advance(orch, "canary")
+            orch.approve("canary", approver="author", note="ok")
+            m1 = identity("M1")
+            unit = orch.schedule.by_key[m1.digest]
+            for attempt in range(MAX_RETRIES + 1):
+                with patch("fgcs_strengthening_v03.src.training._optimise_epoch", side_effect=KeyboardInterrupt):
+                    with self.assertRaises(KeyboardInterrupt):
+                        orch.run("inner")
+                self.assertEqual((orch.state(unit), orch.journal.quarantined(m1)), ("interrupted", attempt))
+            session = orch.run("inner")
+            self.assertEqual(session.executed, {"abandoned": 1})
+            self.assertEqual(orch.state(unit), "abandoned")
+            self.assertIn("retry budget exhausted", orch.abandoned(unit)["reason"])
+            self.advance(orch, "final", "diagnostics")
+            record = orch.close_fits()
+            self.assertIn(m1.digest, record["abandoned_identity_sha256"])
 
     def test_interrupted_and_infrastructure_failures_retry_twice_then_stop(self):
         with self.orchestrator() as orch:
@@ -182,7 +232,7 @@ class OrchestratorTests(unittest.TestCase):
                 executors = ProductionExecutors(amended, partitions=provider)
                 registration = orch._path("registration.txt")
                 registration.write_text("synthetic registration record\n")
-                again = Orchestrator(amended, orch.schedule, executors, registration=registration, workers=2)
+                again = Orchestrator(amended, orch.schedule, executors, registration=registration, workers=4)
                 again.run("inner")
                 self.assertEqual(again.state(again.schedule.by_key[m1.digest]), "complete")
                 s1 = identity("S1")

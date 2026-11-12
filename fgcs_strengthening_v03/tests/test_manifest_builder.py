@@ -25,7 +25,7 @@ from fgcs_strengthening_v03.src.statistics.endpoints import Cell
 from fgcs_strengthening_v03.src.statistics.schema import Provenance
 from fgcs_strengthening_v03.src.statistics.synthesis import DiagnosticCell, ResultTable
 from fgcs_strengthening_v03.src.systems import systems_fingerprints
-from fgcs_strengthening_v03.tests.training_fixtures import digest, identity, scratch_engine
+from fgcs_strengthening_v03.tests.training_fixtures import close_evaluation, close_fits, digest, identity, scratch_engine
 
 SETTINGS = read_config()
 BLOCK, ENTITY, FOLD = "fastStorage", "697", 1
@@ -110,23 +110,33 @@ class ManifestBuilderTests(unittest.TestCase):
                        for model, seed in (("S2", 0), ("M1", 0), ("M0", 0), ("S1", 0), ("persistence", None),
                                            ("Ridge-AR", None), ("Ridge-ARX", None))
                        for h in HORIZONS]
-        with scratch_engine(seal(), closed_fits=True) as engine:
+        s1 = replace(identity("S1"), phase="final", tasks=("CPU",))
+        diagnostic = DiagnosticCell(BLOCK, ENTITY, FOLD, 0, None).identity()
+        with scratch_engine(seal()) as engine:
+            for unit in (s2, m1, m0):
+                engine.fit_inner(unit, framed(unit))
+                engine.fit_final(replace(unit, phase="final"), framed(replace(unit, phase="final")))
+            builder = BundleBuilder(engine.journal, self.historical())
+            with self.assertRaisesRegex(ScheduleNotClosed, "fits closure"):
+                list(builder.cells(coordinates))
+            close_fits(engine.journal, abandoned={diagnostic.digest})  # S1 is not listed: still open
             evaluator = OuterEvaluator(engine.journal)
             for unit in (s2, m1, m0):
                 final = replace(unit, phase="final")
-                engine.fit_inner(unit, framed(unit))
-                engine.fit_final(final, framed(final))
                 if unit is m0:
                     with self.assertRaises(ValueError):
                         evaluator.evaluate(final, framed(final, broken=True))
                 else:
                     evaluator.evaluate(final, framed(final))
-            s1 = replace(identity("S1"), phase="final", tasks=("CPU",))
-            diagnostic = DiagnosticCell(BLOCK, ENTITY, FOLD, 0, None).identity()
+            with self.assertRaisesRegex(ScheduleNotClosed, "evaluation closure"):
+                list(BundleBuilder(engine.journal, self.historical()).cells(coordinates))
+            close_evaluation(engine.journal, abandoned={s1.digest})
             builder = BundleBuilder(engine.journal, self.historical())
-            with self.assertRaises(ScheduleNotClosed):
-                list(builder.cells(coordinates))
-            builder = BundleBuilder(engine.journal, self.historical(), abandoned={s1.digest, diagnostic.digest})
+            with self.assertRaisesRegex(ScheduleNotClosed, "no terminal record"):
+                list(builder.cells(coordinates))  # S1 abandoned for evaluation only, not as a fit
+            engine.journal._path("orchestrator", "gates", "fits.json").unlink()  # scratch-only rewrite
+            close_fits(engine.journal, abandoned={s1.digest, diagnostic.digest})
+            builder = BundleBuilder(engine.journal, self.historical())
             path = builder.build(self.root / "bundle", coordinates=coordinates,
                                  diagnostic_keys=[(BLOCK, ENTITY, FOLD, 0)])
             with self.assertRaises(FileExistsError):
