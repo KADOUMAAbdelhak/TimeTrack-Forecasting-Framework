@@ -110,7 +110,7 @@ class ManifestBuilderTests(unittest.TestCase):
                        for model, seed in (("S2", 0), ("M1", 0), ("M0", 0), ("S1", 0), ("persistence", None),
                                            ("Ridge-AR", None), ("Ridge-ARX", None))
                        for h in HORIZONS]
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             for unit in (s2, m1, m0):
                 final = replace(unit, phase="final")

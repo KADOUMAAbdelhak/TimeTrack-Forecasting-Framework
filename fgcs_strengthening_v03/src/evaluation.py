@@ -3,6 +3,7 @@
 from dataclasses import replace
 from hashlib import sha256
 import io
+import json
 from pathlib import Path
 
 import numpy as np
@@ -18,6 +19,7 @@ from .transfer.estimands import NativeMAECell
 
 _CONFIG = read_config()
 _SOURCES = (Path(__file__).resolve().relative_to(ROOT).as_posix(),)
+FIT_CLOSURE_PHASES = ("certify", "canary", "inner", "final", "diagnostics")
 NEURAL_ARMS = frozenset({"core", "capacity", "pcgrad", "gradnorm", "pairwise", "leave_one_out", "modern",
                          "checkpoint_request"})
 
@@ -28,6 +30,17 @@ def _digest(value):
 
 def prediction_sha256(values):
     return sha256(np.ascontiguousarray(values, dtype="<f8").tobytes(order="C")).hexdigest()
+
+
+def require_fits_closed(journal):
+    """C6: outer-test data are readable only after the orchestrator has closed every fit phase."""
+    path = journal._path("orchestrator", "gates", "fits.json")
+    try:
+        record = json.loads(path.read_text())
+    except FileNotFoundError:
+        raise ProvenanceError("Outer-test evaluation requires the closed fit phases (C6)") from None
+    if record.get("gate") != "fits" or not set(FIT_CLOSURE_PHASES) <= set(record.get("phases", ())):
+        raise ProvenanceError("The fit-closure record does not cover every fit phase (C6)")
 
 
 def evaluation_source(identity):
@@ -65,6 +78,7 @@ class OuterEvaluator:
 
     def evaluate(self, identity, partition):
         _require(identity, partition)
+        require_fits_closed(self.journal)
         source = evaluation_source(identity)
         final, final_hash = self.journal.completed_evidence(source)
         metadata = {"context": partition.context, "support_sha256": partition.support_sha256,

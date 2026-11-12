@@ -61,7 +61,7 @@ class LightGBMRunnerTests(unittest.TestCase):
             fit_objects.append((config, X.shape, model))
             return model
 
-        with scratch_engine(seal()) as engine, patch(
+        with scratch_engine(seal(), closed_fits=True) as engine, patch(
                 "fgcs_strengthening_v03.src.tree.runner.fit_horizon", side_effect=capture):
             runner = LightGBMRunner(engine.journal)
             with self.assertRaises(ProvenanceError):
@@ -143,7 +143,7 @@ class LightGBMRunnerTests(unittest.TestCase):
         final = final_identity("own")
         inner = replace(final, phase="inner", variant=GRID[0].variant)
         prepared, reads = generated(inner, invalid=True)
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             runner = LightGBMRunner(engine.journal)
             with self.assertRaisesRegex(ValueError, "Nonfinite LightGBM target"):
                 runner.fit_inner(inner, prepared)
@@ -163,7 +163,7 @@ class LightGBMRunnerTests(unittest.TestCase):
     def test_tampered_model_fails_evaluation_before_outer_access(self):
         final = final_identity("own")
         outer, reads = generated(final)
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             runner = LightGBMRunner(engine.journal)
             for config in GRID:
                 inner = replace(final, phase="inner", variant=config.variant)

@@ -132,7 +132,7 @@ class OuterEvaluationTests(unittest.TestCase):
             replace(identity("S2"), seed=4),
             replace(identity("M0"), arm="capacity", hidden_size=128, seed=3),
         )
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             for unit in units:
                 with self.subTest(unit=(unit.block, unit.arm, unit.formulation, unit.seed)):
@@ -144,7 +144,7 @@ class OuterEvaluationTests(unittest.TestCase):
                  (replace(base, arm="gradnorm", variant="gradnorm"), "gradnorm"),
                  (replace(identity("M0"), arm="pairwise", tasks=("CPU", "MEMORY")), "equal_loss"),
                  (replace(base, arm="leave_one_out", tasks=("CPU", "THROUGHPUT", "DISK_WRITE")), "equal_loss"))
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             for unit, mode in units:
                 with self.subTest(arm=unit.arm):
@@ -152,7 +152,7 @@ class OuterEvaluationTests(unittest.TestCase):
 
     def test_task_checkpoint_requests_evaluate_their_logged_epochs_once_each(self):
         losses = [[3.] * 4, [2.] * 4, [2.5, 2.5, 1.0, 2.5]] + [[2.] * 4] * 20
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             final, prepared, accesses, outer = fit_pair(engine, identity("M1"), losses=losses)
             requests = [ScientificIdentity(final.block, final.entity, final.fold, final.seed, "final",
@@ -174,7 +174,7 @@ class OuterEvaluationTests(unittest.TestCase):
             self.assertNotEqual(memory, task)
 
     def test_modern_families_route_own_inputs_and_shared_outputs(self):
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             runner = ModernRunner(engine.journal)
             evaluator = OuterEvaluator(engine.journal)
             for family in REGISTRY:
@@ -186,7 +186,7 @@ class OuterEvaluationTests(unittest.TestCase):
                         self.check(evaluator, *fit_pair(runner, unit))
 
     def test_failures_are_terminal_and_partitions_are_exact(self):
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             final, _, _, _ = fit_pair(engine, identity("S1"))
             broken, accesses, _ = heldout(final, broken=True)
@@ -211,6 +211,30 @@ class OuterEvaluationTests(unittest.TestCase):
             self.assertEqual(reads, [])
             with self.assertRaises(ValueError):
                 evaluator.evaluate(replace(other, phase="inner"), unfitted)
+
+    def test_outer_test_is_unreachable_before_fit_closure(self):
+        from fgcs_strengthening_v03.src.evaluation import FIT_CLOSURE_PHASES
+        from fgcs_strengthening_v03.src.orchestrator import FIT_PHASES
+        from fgcs_strengthening_v03.src.provenance import _atomic_publish
+        from fgcs_strengthening_v03.src.transfer.runner import TransferRunner
+        from fgcs_strengthening_v03.src.tree.runner import LightGBMRunner
+
+        self.assertEqual(FIT_CLOSURE_PHASES, ("certify", *FIT_PHASES))
+        with scratch_engine(seal()) as engine:
+            final, prepared, accesses, _ = fit_pair(engine, identity("S1"))
+            tree = ScientificIdentity("fastStorage", "697", 1, 0, "final", "lightgbm", "LightGBM", ("CPU",), "own",
+                                      None, "selected")
+            for call in (lambda: OuterEvaluator(engine.journal).evaluate(final, prepared),
+                         lambda: TransferRunner(engine).evaluate(final, prepared),
+                         lambda: LightGBMRunner(engine.journal).evaluate(tree, prepared)):
+                with self.assertRaisesRegex(ProvenanceError, "C6"):
+                    call()
+            _atomic_publish(engine.journal._path("orchestrator", "gates", "fits.json"),
+                            {"gate": "fits", "phases": ["canary", "inner", "final"]})
+            with self.assertRaisesRegex(ProvenanceError, "every fit phase"):
+                OuterEvaluator(engine.journal).evaluate(final, prepared)
+            self.assertEqual(accesses, [0])
+            self.assertFalse(engine.journal._path("evaluations").exists())
 
     def test_evaluator_requires_its_source_in_the_seal(self):
         with scratch_engine() as engine, self.assertRaises(ProvenanceError):

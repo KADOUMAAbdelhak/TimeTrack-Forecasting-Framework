@@ -172,6 +172,8 @@ class LightGBMRunner:
     def evaluate(self, identity, partition):
         """Read a verified completed final model, then materialise its test partition once."""
         require_tree(identity, "final")
+        from ..evaluation import require_fits_closed
+        require_fits_closed(self.journal)
         layout, evidence = _metadata(identity, partition)
         fitted, digest = self.journal.completed_evidence(identity)
         if (any(fitted.get(key) != value for key, value in evidence.items())

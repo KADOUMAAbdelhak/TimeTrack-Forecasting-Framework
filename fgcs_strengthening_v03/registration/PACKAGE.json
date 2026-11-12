@@ -1,0 +1,63 @@
+{
+  "author_decisions": {
+    "clarifications": "C1-C9 approved by the author without changes",
+    "date": "2026-11-12",
+    "origins": "C1 per partition",
+    "retry_policy": "C3 two infrastructure retries; code repairs by chained seal amendment",
+    "systems_population": "C2 seed 0, fold 1, every entity",
+    "training_workers": 4
+  },
+  "generated_files": {
+    "analysis_catalogue.json": "4b51bb3c22067c05e9b2f88dfebe18cb176b368485bdd5dcb3b05d08cd36df78",
+    "execution_seal.json": "9afdf4138ede0ae32dab8edba03225f8d872ee9459b2ecb5c7028fb756228776",
+    "host_manifest.json": "ba4910be3823079197a94ac96e272344b650e3b441169cfdbd5389e5c6408363",
+    "schedule.json": "e035717bdad456ae1aec856ebfdc2dbfae630d7a08cfa61e684b6573dff3f0fd",
+    "systems_population.json": "6478a2e7a1b0a4ccb416503cfcc686d343d88f1c0dac728cc5818ee35d7505f3"
+  },
+  "host": {
+    "conditions": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "device": "cpu",
+      "lightgbm_jobs": 1,
+      "torch_interop_threads": 1,
+      "torch_intraop_threads": 1,
+      "workers": 1
+    },
+    "hardware_sha256": "4438e9a938da55e74784fe83726d81f12e4d9546a26d9d8966744f0a1f4491bd",
+    "hardware_without_hostname": {
+      "cpu_model": "Apple M3",
+      "kernel": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:29 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8122",
+      "logical_cores": 8,
+      "os": "Darwin",
+      "physical_cores": 8,
+      "power_mode": "lowpowermode         0",
+      "ram_bytes": 25769803776
+    },
+    "software_sha256": "cd5369a41cce44adc796eed365ca38752b7099fe4d7573ef0558a1ddf6d364d6",
+    "software_versions": {
+      "lightgbm": "4.7.0",
+      "numpy": "2.5.1",
+      "python": "3.13.2",
+      "pytorch": "2.13.0",
+      "scikit_learn": "1.9.0"
+    }
+  },
+  "package": "fgcs-v03 registration package",
+  "package_sha256": "f6bd4ba54b1ea476f33c5e2e8ae1a068fe692cf28b4b915a95e78721648a7d82",
+  "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.3.md",
+  "referenced_files": {
+    "fgcs_strengthening_v03/STAGE03J_CLARIFICATIONS_DRAFT.md": "b6be1aa4b168649d4a452d38c08aff81fcf7080199885b243d4e2a99a5605644",
+    "fgcs_strengthening_v03/STAGE03J_SCOPE.md": "85e63471c4214f64372f05a5662578fda0068fcaac9943bfd7f5407652f71f63",
+    "fgcs_strengthening_v03/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
+    "fgcs_strengthening_v03/configs/protocol_v03.json": "59cda69a3e9b6b789aa09f70d2c606fce41a5d4b37d5a1d8dfe0a9b819cff62b",
+    "fgcs_strengthening_v03/feasibility/estimate.json": "c173d3f5bb0b7120654258197fb344af85cb2c2c451568390edfccb4ff34ff33",
+    "review_revision/fgcs_strengthening/analysis_plan_v0.3.md": "7b8f80be597148f5413582bf936d13a79bfc05d0725d734dfec83b5443246076"
+  },
+  "status": {
+    "external_registration": "not performed (author action)",
+    "scientific_execution": "none; the runtime journal is created at the start of Stage 4A",
+    "v0.3_author_approval": "to be confirmed by the author before external registration"
+  }
+}

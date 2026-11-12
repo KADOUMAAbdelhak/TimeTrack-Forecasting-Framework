@@ -52,7 +52,7 @@ class TransferRunnerTests(unittest.TestCase):
             final = replace(inner, phase="final")
             inner_partition, inner_reads = partition(inner)
             final_partition, reads = heldout_partition(final)
-            with self.subTest(arm=arm), scratch_engine(seal()) as engine:
+            with self.subTest(arm=arm), scratch_engine(seal(), closed_fits=True) as engine:
                 runner = TransferRunner(engine)
                 with self.assertRaises(ProvenanceError):
                     runner.fit(final, final_partition)
@@ -98,7 +98,7 @@ class TransferRunnerTests(unittest.TestCase):
     def test_failed_fit_is_terminal_and_does_not_enable_evaluation(self):
         inner = unit_for("leave_one_out", "own")
         final = replace(inner, phase="final")
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             runner = TransferRunner(engine)
             prepared, reads = partition(inner)
             with patch("fgcs_strengthening_v03.src.training._evaluate", return_value=[float("nan")] * 3):
@@ -121,7 +121,7 @@ class TransferRunnerTests(unittest.TestCase):
         inner = unit_for("pairwise", "all")
         final = replace(inner, phase="final")
         prepared, reads = heldout_partition(final, broken=True)
-        with scratch_engine(seal()) as engine:
+        with scratch_engine(seal(), closed_fits=True) as engine:
             runner = TransferRunner(engine)
             runner.fit(inner, partition(inner)[0])
             runner.fit(final, prepared)

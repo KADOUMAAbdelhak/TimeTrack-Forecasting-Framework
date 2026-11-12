@@ -95,6 +95,7 @@ Support and ordered-test-ID fingerprints are then taken from that partition, exa
 
 **C9 — Execution seal and diagnostics.**
 
-- The scientific runtime is sealed once with `execution_fingerprints()`: 36 inputs and 60 sources, current digest `efc1764d…f909`. It covers every engine, evaluation, historical, analysis, systems and orchestrator source.
+- The scientific runtime is sealed once with `execution_fingerprints()`: 36 inputs and 60 sources. It covers every engine, evaluation, historical, analysis, systems and orchestrator source. The registered digest is the one recorded in `registration/execution_seal.json`.
+- C6 is enforced in the evaluators themselves, not only by the orchestrator. Every outer-test entry point refuses unless the journal holds the fit-closure record covering all fit phases.
 - Diagnostics run after each core M0/M1 final fit, restoring live model, optimiser and shuffle state from the persisted, hash-bound terminal training state.
 - Each task-checkpoint logical request is evaluated exactly once, from its parent's E_r checkpoint.

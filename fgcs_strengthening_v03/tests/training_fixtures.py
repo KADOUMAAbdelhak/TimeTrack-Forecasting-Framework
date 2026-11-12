@@ -59,8 +59,20 @@ def _seal():
 
 
 @contextmanager
-def scratch_engine(seal=None):
+def scratch_engine(seal=None, *, closed_fits=False):
+    """closed_fits writes the C6 fit-closure record, standing in for a closed orchestrator schedule."""
     seal = _seal() if seal is None else seal
     with tempfile.TemporaryDirectory(dir=HOME) as scratch, patch(
             "fgcs_strengthening_v03.src.provenance.HOME", Path(scratch)):
-        yield TrainingEngine(Journal(seal))
+        engine = TrainingEngine(Journal(seal))
+        if closed_fits:
+            close_fits(engine.journal)
+        yield engine
+
+
+def close_fits(journal):
+    from fgcs_strengthening_v03.src.evaluation import FIT_CLOSURE_PHASES
+    from fgcs_strengthening_v03.src.provenance import _atomic_publish
+
+    _atomic_publish(journal._path("orchestrator", "gates", "fits.json"),
+                    {"gate": "fits", "phases": list(FIT_CLOSURE_PHASES), "synthetic": True})
