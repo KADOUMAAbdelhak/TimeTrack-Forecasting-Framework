@@ -1,0 +1,109 @@
+{
+  "description": "Authoritative reused v1 and Stage-18 result tables (v0.3 \u00a71, \u00a75). Every table is tracked and byte-identical to the frozen tag; metric and post-hoc hashes equal stage01_repository_audit.md \u00a78 and review_revision/stage18c1_evidence/posthoc_provenance.json.",
+  "frozen_tag": "jss-review-robustness-reproducibility-v1",
+  "models": {
+    "v1_metrics": {
+      "M1": "M1-H64-v1",
+      "S2": "S2-v1"
+    },
+    "v1_persistence": "persistence",
+    "s2_common": "S2-common-v1",
+    "h129": "M1-H129-v1",
+    "ridge": {
+      "AR": "Ridge-AR",
+      "ARX": "Ridge-ARX"
+    }
+  },
+  "tables": [
+    {
+      "kind": "v1_metrics",
+      "block": "TimeTrack",
+      "path": "multiresource/04_lstm_factorial/outputs/scientific/metrics.parquet",
+      "sha256": "3787d0026ee9cefcec64124e8686abb79d9b4dfc9554fd2312b808380bfff8b4"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "TimeTrack",
+      "path": "multiresource/04_lstm_factorial/outputs/scientific/persistence_metrics.parquet",
+      "sha256": "a9c320d4cc44bab0e85552c6e82b741bf1f3cbce4892b0e9c7f94361b8072007"
+    },
+    {
+      "kind": "v1_metrics",
+      "block": "fastStorage",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/metrics.parquet",
+      "sha256": "3edbbe0d74a76b4a99ee110ef9f42919700cf4b88273b568924816e828a05309"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "fastStorage",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/persistence_metrics.parquet",
+      "sha256": "729d66bff8f16160968270d35e7908f62eaa3ff654d00ba72311621b4628b8ef"
+    },
+    {
+      "kind": "v1_metrics",
+      "block": "Rnd",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/metrics.parquet",
+      "sha256": "4072332fde01457e7d1fc89086d840a730844d8a25366c0abaaf6d69c472de4c"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "Rnd",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/persistence_metrics.parquet",
+      "sha256": "151d3f12030c31ab42c2fad068ac1d9de6fd8d8afb2303ec1934e768f7bd1d59"
+    },
+    {
+      "kind": "v1_metrics",
+      "block": "Materna-T1",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/metrics.parquet",
+      "sha256": "f4ed6252ce72c3bb0b05b78cd471331c86ac9701a72756968207088c7f36d370"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "Materna-T1",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/persistence_metrics.parquet",
+      "sha256": "b151fc44a962270c42ed811d7ab06e702a622fdddaeeafaa937bb2c429731989"
+    },
+    {
+      "kind": "v1_metrics",
+      "block": "Materna-T2",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/metrics.parquet",
+      "sha256": "24b670e03c152018cccf9fc23a6d2b7fe1d9a693783d53b2290c167144b4720d"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "Materna-T2",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/persistence_metrics.parquet",
+      "sha256": "8b37b0e986886f40e7d177f95f846c95e1a60806bdddf335a7bf57df94eacbbc"
+    },
+    {
+      "kind": "v1_metrics",
+      "block": "Materna-T3",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/metrics.parquet",
+      "sha256": "50767c5f371a6dc5c528b6c5bd777a7660faa8176d7c1f8d2a7a443f18e8b843"
+    },
+    {
+      "kind": "v1_persistence",
+      "block": "Materna-T3",
+      "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/persistence_metrics.parquet",
+      "sha256": "f06a77a33b2056f74b423b054c7b4f2aa75dc28c30d1cc10f966e46015aae5eb"
+    },
+    {
+      "kind": "s2_common",
+      "block": null,
+      "path": "review_revision/experiments/s2_common_context/posthoc_metric_rows.parquet",
+      "sha256": "04fb0e3309ca8e121ede779bdcbe72f5614bd67b239ef37f2bcf3647a3acaf9a"
+    },
+    {
+      "kind": "h129",
+      "block": null,
+      "path": "review_revision/experiments/m1_capacity_matched/posthoc_metric_rows.parquet",
+      "sha256": "a8f407413e14147885a06685c758d1d288f809fcaa8d6edab20d5c34cc1e5fc4"
+    },
+    {
+      "kind": "ridge",
+      "block": null,
+      "path": "review_revision/experiments/ar_arx_baseline/posthoc_metric_rows.parquet",
+      "sha256": "78c1056e2188f0a621bd5abd3fafd4b619a7ce6ed0e76ef5b5548ecb531ae29a"
+    }
+  ]
+}

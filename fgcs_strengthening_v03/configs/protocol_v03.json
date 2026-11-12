@@ -1,0 +1,1013 @@
+{
+  "namespace": "fgcs-strengthening-v03",
+  "protocol": {
+    "path": "review_revision/fgcs_strengthening/analysis_plan_v0.3.md",
+    "sha256": "7b8f80be597148f5413582bf936d13a79bfc05d0725d734dfec83b5443246076"
+  },
+  "baseline": {
+    "branch": "paper/jss-review-revision",
+    "commit": "0e8cad884896a706f62f0fae4ab2b52812f9b033",
+    "tag": "jss-review-robustness-reproducibility-v1",
+    "scientific_freeze": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "blocks": {
+    "TimeTrack": {
+      "environment": "TimeTrack",
+      "entities": [
+        "machine01",
+        "machine02",
+        "machine03",
+        "machine04",
+        "machine05",
+        "machine06",
+        "machine07"
+      ],
+      "contexts": [
+        32,
+        64,
+        128
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "cohort_source": {
+        "path": "multiresource/04_lstm_factorial/configs/lstm_factorial.json",
+        "sha256": "fe985007ebd72417dcab8e8a1851c358d3d9a3da26f372595ac7ff6b499eedd6"
+      },
+      "common_context_source": {
+        "path": "multiresource/04_lstm_factorial/outputs/scientific/selected_contexts.csv",
+        "sha256": "412e3da33b93b639b491ff2bf185e620709f0a5ccbb56e443975b280e853f7b8"
+      },
+      "support_manifest": {
+        "path": "multiresource/04_lstm_factorial/outputs/scientific/support_manifest.parquet",
+        "sha256": "1a85e42d429cfac32c74586b48c73bcc864678c86c68e34228167dcfb0e24e65"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/TimeTrack.json",
+        "sha256": "fd21b33c430bf458f7ea4ef1c95da88615f7cc92c823843c6f6bad4a9bebdd0f"
+      },
+      "raw_input": {
+        "path": "discovery/02_dependency_analysis/outputs/canonical_panel.parquet",
+        "sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "multiresource/04_lstm_factorial/outputs/scientific/inner_run_registry.csv",
+          "sha256": "13601953140f788be23c731fd0011c759fdd56cca88785f8ed38e1e58db22ed2"
+        },
+        "final": {
+          "path": "multiresource/04_lstm_factorial/outputs/scientific/run_registry.csv",
+          "sha256": "d1280f3d6744d64d3a6d20ad64e52edc2f4cac61d9b07c9be0050c23d9cf1190"
+        }
+      }
+    },
+    "fastStorage": {
+      "environment": "GWA-T-12_Bitbrains_fastStorage",
+      "entities": [
+        "697",
+        "860",
+        "366",
+        "679",
+        "360",
+        "505",
+        "481",
+        "109",
+        "680",
+        "50",
+        "434",
+        "949",
+        "1161",
+        "513",
+        "79",
+        "396",
+        "1172",
+        "503",
+        "1164",
+        "742",
+        "330",
+        "880",
+        "480",
+        "326",
+        "410",
+        "678",
+        "516",
+        "1005",
+        "382",
+        "1044",
+        "504",
+        "450",
+        "530",
+        "703",
+        "854"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv",
+        "sha256": "a56192c6d0f7c3274b0899a18cc6b2748586d5a3950ca79a40692358e9617ccf"
+      },
+      "common_context_source": {
+        "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/selected_contexts.csv",
+        "sha256": "fb1946585217a48d7038a3d58c3ce8791b6e83b3047805d06b785cdf0a97e6da"
+      },
+      "support_manifest": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SUPPORT_MANIFEST.parquet",
+        "sha256": "690677c99d4e7cb3b790bf4ef60041282d28877deaa75d5cc53ced400490ce22"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/fastStorage.json",
+        "sha256": "5ad5cb0223e021372164426a316b1b64b2974ea158829c1b618b1337bf2e5726"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_12_fastStorage.zip",
+        "sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/inner_run_registry.csv",
+          "sha256": "4e4cf07bf308762f617850615ee19d839790e9da99f5718e36b9f57b95ab16f3"
+        },
+        "final": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/run_registry.csv",
+          "sha256": "900481ce2f15fe3dfdda7ed542215e8f37542001401a3d8998b921f0330f1281"
+        }
+      }
+    },
+    "Rnd": {
+      "environment": "GWA-T-12_Bitbrains_Rnd",
+      "entities": [
+        "99",
+        "409",
+        "269",
+        "493",
+        "474",
+        "97",
+        "118",
+        "233",
+        "142",
+        "151",
+        "387",
+        "115",
+        "232",
+        "488",
+        "413",
+        "158",
+        "109",
+        "92",
+        "93",
+        "154",
+        "22",
+        "204",
+        "1",
+        "241",
+        "29",
+        "198",
+        "143",
+        "436",
+        "252",
+        "85",
+        "304",
+        "332",
+        "120",
+        "306",
+        "462"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv",
+        "sha256": "a56192c6d0f7c3274b0899a18cc6b2748586d5a3950ca79a40692358e9617ccf"
+      },
+      "common_context_source": {
+        "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403"
+      },
+      "support_manifest": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SUPPORT_MANIFEST.parquet",
+        "sha256": "690677c99d4e7cb3b790bf4ef60041282d28877deaa75d5cc53ced400490ce22"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Rnd.json",
+        "sha256": "e9583b07ca805624837dfe3f0b70a1b439487bf614ca82c31137994867861764"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_12_rnd.zip",
+        "sha256": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/inner_run_registry.csv",
+          "sha256": "b2c6ce43d8764cef77a9e597e0dd258cda8ac25062b9ecd917e42e48ddfea150"
+        },
+        "final": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/run_registry.csv",
+          "sha256": "ec9817d3037c00c18ddea15f00970513a9bb9f5e63f9214d829474364292fb4b"
+        }
+      }
+    },
+    "Materna-T1": {
+      "environment": "Materna-T1",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/selected_contexts.csv",
+        "sha256": "1f67fbfed25e34b29d0f2e28a220a3f73e8cd795b746c0d8ef08a8794997cfea"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T1.json",
+        "sha256": "c9291567a3e2d11252c0b7aa68b126ba7379eb469345bb8f4b583e6f5d266e1a"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/inner_run_registry.csv",
+          "sha256": "24ee1986a19ab0edfccd2a0027ffb35b893d50d2bb79749cd458960bf1d7c52f"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/run_registry.csv",
+          "sha256": "165c0cb3f18c84790a3e71428184e0f886eb76f5c5ec790b716200a00d7aafb8"
+        }
+      }
+    },
+    "Materna-T2": {
+      "environment": "Materna-T2",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/selected_contexts.csv",
+        "sha256": "caf446c19e319c47d3ad345fe3110f0e804a01b051473ec408819edeab422f06"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T2.json",
+        "sha256": "a6e98e639784b3a3e6f1a7c5aad4ada8a6792e5c234bed09afd61a5f1e26bf5b"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/inner_run_registry.csv",
+          "sha256": "6ea968da2a898e7639aa6fbbcb8c12fa511900aee97ca73f0895eed640b1ec17"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/run_registry.csv",
+          "sha256": "e8d264dcec5c5f94f409bc8fbc5619af984450868492e4177a6a508288058aae"
+        }
+      }
+    },
+    "Materna-T3": {
+      "environment": "Materna-T3",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/selected_contexts.csv",
+        "sha256": "dc2f5d1772e039f6a9a0748ad2ae428fb4592b349282512d1d09ea3b2aaf067d"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T3.json",
+        "sha256": "614ed420f2c4cd97a37e7056488b370a563944270cff162531003339f22d3951"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/inner_run_registry.csv",
+          "sha256": "053cf6980beed999030b9ca7f05b3734906e80371bd1c97fdcc75008d2af09fe"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/run_registry.csv",
+          "sha256": "d58a959b2515d533c8f7d1132ea7933c177aa31a33151332957cc1fed2c0f399"
+        }
+      }
+    }
+  },
+  "historical_source_hashes": {
+    "multiresource/04_lstm_factorial/src/__init__.py": "97c77ec6e02ef6f2d9e31349f3f4189921f5fa6a000d0a5a583b76c626b0dfa8",
+    "multiresource/04_lstm_factorial/src/data.py": "d3cdee2b0743250065599c331d3263fb9cbb7a27a355ba262d347b8500b44f68",
+    "multiresource/04_lstm_factorial/src/support.py": "9bbd330f731feb29542ffe69cf2007ea5e546560972d9ba3cfeda85b13644796",
+    "multiresource/04_lstm_factorial/src/splits.py": "f7f2927928bc409888e4cffd025aa3d7ac416326a674065a0b504c296b9d081c",
+    "multiresource/04_lstm_factorial/src/transforms.py": "5ffe639620277ac5923e018db7099048bd3b8a9171c69601cd816dd2bfca8b86",
+    "independent_validation/05_bitbrains_factorial/src/__init__.py": "fb911e6f1087b07a4f42784d351367ea7f9a15c5949e062593976756fad7d167",
+    "independent_validation/05_bitbrains_factorial/src/ingestion.py": "6e1e97823392b331f3e15194f7f27c6324c028190849e081b1f244771e0d6727",
+    "independent_validation/05_bitbrains_factorial/src/cleaning.py": "c822024c88ffe9af593b7c97273b035898183d1d0677f2e2f59812b95a7fb614",
+    "independent_validation/05_bitbrains_factorial/src/panel.py": "9cb0d63e0611511f7b67d3e2e99b39201173ccb2e223e6a19985e52eba11d4a5",
+    "independent_validation/05_bitbrains_factorial/src/support.py": "3ca07daaf058c17b581e9239dafb9880cbbc3d0b31ff299578e329cb4c9e33ed",
+    "independent_validation/05_bitbrains_factorial/src/splits.py": "15125ade53b11ee2bd4cd52606001e2c4e2e158a38bc4cc0dcaf808a5d963994",
+    "independent_validation/05_bitbrains_factorial/src/transforms.py": "4a3da98f0787c4acbb531fa9aa482cbaceecf525e52bb3ea7b39a03edba938c4",
+    "benchmark/src/__init__.py": "cc120cf2669e8e5b0206de8ad2ca2c3c39345c118b8814f7e418bc03c6acedd8",
+    "benchmark/src/splits.py": "e56d7d580335701e9cbefd836a0fe15e1b6f69d2287b56b1f9523738b9e58cc7",
+    "benchmark/src/windows.py": "37b9b7019c3c7a08182daae7e43cb070d560db57493ba1fd47bbd557957c7d39"
+  },
+  "historical_reader_config": {
+    "path": "independent_validation/05_bitbrains_factorial/configs/bitbrains_lstm_factorial.json",
+    "sha256": "deedcd31616861f1f6ee4517cc0552a05d54d0b334364f9674b06a1dcab6dc1a"
+  },
+  "resources": [
+    "CPU",
+    "THROUGHPUT",
+    "MEMORY",
+    "DISK_WRITE"
+  ],
+  "folds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "core_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "phases": [
+    "inner",
+    "final"
+  ],
+  "common_context": {
+    "formulation": "M1",
+    "hidden_size": 64,
+    "field": "selected_L",
+    "retune": false
+  },
+  "support": {
+    "rule": "maximum context, common finite four-resource support and frozen origin identities",
+    "outer_boundaries": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "inner_validation_fraction": 0.15,
+    "purge": "latest training target timestamp strictly before first validation/test origin timestamp",
+    "external_max_gap_seconds": 450
+  },
+  "scaling": {
+    "fit_rows": "unique history and horizon rows of phase training origins only",
+    "transforms": {
+      "CPU": "identity",
+      "THROUGHPUT": "log1p",
+      "MEMORY": "identity",
+      "DISK_WRITE": "log1p"
+    },
+    "quantiles": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "nonpositive_iqr": "fail",
+    "projection": "max(0, expm1(x)) on log targets only, no upper clipping"
+  },
+  "formulations": {
+    "S1": {
+      "input_scope": "own",
+      "shared": false
+    },
+    "S2": {
+      "input_scope": "all",
+      "shared": false
+    },
+    "M0": {
+      "input_scope": "own",
+      "shared": true
+    },
+    "M1": {
+      "input_scope": "all",
+      "shared": true
+    }
+  },
+  "lstm": {
+    "primary_hidden_size": 64,
+    "m0_capacity_hidden_size": 128,
+    "layers": 2,
+    "dropout": 0.1,
+    "bidirectional": false,
+    "head_bias": true,
+    "resource_embedding": false,
+    "loss": "equal mean retained-task scaled MSE",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_inner_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "selection": "earliest minimum inner validation scaled MSE; final refit for selected seed-specific epoch",
+    "m0_parameter_counts": {
+      "64": [
+        52512,
+        51732
+      ],
+      "128": [
+        203296,
+        201748
+      ]
+    },
+    "s1_complement_parameters": [
+      203808,
+      203028
+    ],
+    "representation": "final recurrent output",
+    "head": "biased direct linear multi-horizon outputs",
+    "training_shuffle": "seeded minibatches within phase training only"
+  },
+  "secondary": {
+    "blocks": [
+      "fastStorage",
+      "Rnd"
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "task_subset_sizes": {
+      "pairwise": 2,
+      "leave_one_out": 3
+    },
+    "input_scopes": [
+      "own",
+      "all"
+    ],
+    "checkpoint_control": {
+      "base": "core M1",
+      "selection": "earliest best per-task observed validation scaled MSE",
+      "final_limit": "max of joint and task-selected epochs",
+      "primary_checkpoint": "joint epoch",
+      "outer_test_after_full_trajectory": true,
+      "task_state_count_per_identity": 4
+    },
+    "pcgrad": {
+      "comparator": "equal-loss M1",
+      "encoder_merge": "mean",
+      "reference_gradients": "immutable original",
+      "task_permutations": "independent, keyed by training seed/epoch/batch",
+      "heads": "mean task loss",
+      "project_negative_dot_only": true,
+      "skip_zero_reference_norm": true,
+      "global_clip_after_projection": true
+    },
+    "gradnorm": {
+      "comparator": "equal-loss M1",
+      "alpha": 1.5,
+      "weight_optimizer": "Adam",
+      "weight_lr": 0.025,
+      "norm_parameters": [
+        "weight_ih_l1",
+        "weight_hh_l1",
+        "bias_ih_l1",
+        "bias_hh_l1"
+      ],
+      "initial_weights": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "initial_loss": "first training batch pre-update scaled MSE divided by four",
+      "updates": "compute both gradients pre-update, weight step then model step then renormalise to sum four",
+      "invalid_update": "fail closed",
+      "initial_loss_minimum_exclusive": 0,
+      "norm_tie_subgradient": 0,
+      "weight_sum": 4,
+      "tune_alpha": false
+    }
+  },
+  "diagnostics": {
+    "formulations": [
+      "M0",
+      "M1"
+    ],
+    "slots": [
+      "epoch0",
+      "mid",
+      "final"
+    ],
+    "epoch_map": [
+      "0",
+      "ceil(E/2)",
+      "E"
+    ],
+    "pairs": 8,
+    "batch_size": 128,
+    "tasks_per_batch": 4,
+    "batches": [
+      "A",
+      "B"
+    ],
+    "sampling": "legal outer training, replacement, independently keyed PCG64",
+    "key": "fgcs-v03|block|exact_entity_id|fold|seed|slot|pair_index|A_or_B",
+    "seed_bytes": "first 8 digest bytes little-endian",
+    "primary_statistic": "mean over complete pairs of same-A cross-task negative-dot fraction minus same-task A/B negative-dot fraction",
+    "zero_gradient": "unavailable",
+    "parameters": [
+      "weight_ih_l0",
+      "weight_hh_l0",
+      "bias_ih_l0",
+      "bias_hh_l0",
+      "weight_ih_l1",
+      "weight_hh_l1",
+      "bias_ih_l1",
+      "bias_hh_l1"
+    ],
+    "dtype": "float32",
+    "device": "CPU",
+    "eval_mode": true,
+    "primary_slot": "final",
+    "clone": true,
+    "zero_dot_is_conflict": false,
+    "task_loss": "unweighted scaled MSE before joint loss factor",
+    "primary_requires_complete_pairs": true,
+    "cross_task_pairs": 6,
+    "same_task_pairs": 4,
+    "association_model": "M1"
+  },
+  "lightgbm": {
+    "seed": 0,
+    "scopes": [
+      "own",
+      "all"
+    ],
+    "grid": {
+      "leaves": [
+        15,
+        31
+      ],
+      "learning_rate": [
+        0.03,
+        0.05
+      ],
+      "estimators": [
+        200,
+        400
+      ]
+    },
+    "objective": "regression_l1",
+    "threads": 1,
+    "deterministic": true,
+    "row_subsample": 1.0,
+    "column_subsample": 1.0,
+    "selection": "native validation MAE mean across horizons, then leaves, learning rate, estimators ascending",
+    "estimators_per_wrapper": 5
+  },
+  "modern": {
+    "seed": 0,
+    "cohorts": {
+      "fastStorage": [
+        "697",
+        "860",
+        "366",
+        "679",
+        "360",
+        "505",
+        "481",
+        "109",
+        "680",
+        "50"
+      ],
+      "Rnd": [
+        "99",
+        "409",
+        "269",
+        "493",
+        "474",
+        "97",
+        "118",
+        "233",
+        "142",
+        "151"
+      ]
+    },
+    "families": {
+      "DLinear": {
+        "scope": "own",
+        "kernel_by_context": {
+          "4": 3,
+          "9": 9,
+          "18": 17
+        },
+        "padding": "replicate",
+        "optimizer": "Adam",
+        "kernel_cap": 25
+      },
+      "PatchTST": {
+        "scope": "own",
+        "patch": 2,
+        "stride": 1,
+        "position": "learned",
+        "pool": "mean",
+        "optimizer": "AdamW",
+        "patches_by_context": {
+          "4": 3,
+          "9": 8,
+          "18": 17
+        }
+      },
+      "iTransformer": {
+        "scope": "all",
+        "tokens": 4,
+        "token_projection": "Linear(L,64)",
+        "pool": "flatten",
+        "input_normalisation": false,
+        "resource_embedding": false,
+        "optimizer": "AdamW"
+      }
+    },
+    "transformer": {
+      "width": 64,
+      "heads": 4,
+      "layers": 2,
+      "feedforward": 128,
+      "dropout": 0.1,
+      "activation": "GELU",
+      "weight_decay": 0.0001,
+      "norm": "post",
+      "bias": true
+    },
+    "technical_gate": "synthetic conformance and finite, shape/support-exact inner path, never performance",
+    "pilot": [
+      {
+        "block": "fastStorage",
+        "entity": "697",
+        "fold": 1,
+        "context": 18
+      },
+      {
+        "block": "Rnd",
+        "entity": "99",
+        "fold": 1,
+        "context": 4
+      }
+    ],
+    "device": "CPU",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_inner_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "minimum_transformer_tokens": 2
+  },
+  "existing_only": {
+    "m1_h129": "review_revision/experiments/m1_capacity_matched",
+    "ridge": "review_revision/experiments/ar_arx_baseline",
+    "persistence": "v1",
+    "seasonal_naive": false
+  },
+  "endpoints": {
+    "primary": "log of ratio of native MAE aggregated equally across horizons, folds and seeds per entity",
+    "interaction": "D(M1:S2)-D(M0:S1)",
+    "materna": "same VMs across three traces, average trace log effects",
+    "timetrack": "descriptive only",
+    "zero_aggregate": "extended ratio/log, no epsilon; finite test unavailable",
+    "missing": "incomplete planned arm; no complete-case substitution",
+    "transfer": "F=log(independent/shared); Q=log(omitted-task/full), descriptive Q"
+  },
+  "inference_spec": {
+    "groups": [
+      "fastStorage",
+      "Rnd",
+      "Materna"
+    ],
+    "bootstrap_replicates": 10000,
+    "bootstrap_rng": "PCG64",
+    "bootstrap_seed": 20261110,
+    "bootstrap_unit": "paired entity cluster, full repeated measures",
+    "ci_percentiles": [
+      2.5,
+      97.5
+    ],
+    "percentile_method": "linear",
+    "test": "two-sided centred bootstrap plus-one with ties as exceedances",
+    "threshold": 0.05,
+    "holm_sizes": {
+      "primary": 24,
+      "gradient_association": 12,
+      "PCGrad": 8,
+      "GradNorm": 8,
+      "checkpoint": 8
+    },
+    "m1_predicted_penalty": [
+      "THROUGHPUT",
+      "MEMORY",
+      "DISK_WRITE"
+    ],
+    "interaction_predicted_sign": null,
+    "cpu_predicted_sign": null,
+    "bh_transfer_matrices": 8,
+    "bh_slots_per_matrix": 12,
+    "unavailable_p": 1,
+    "bootstrap_draws_per_group": 35,
+    "holm_tie_order": "lexicographic test ID",
+    "bh_tie_order": "lexicographic test ID",
+    "rejection_comparison": "strict adjusted p < threshold",
+    "rho_rank_ties": "average",
+    "constant_bootstrap_rho": "count as exceedance and omit numeric interval",
+    "predicted_signs": {
+      "gradient_association": "positive",
+      "PCGrad": "negative",
+      "GradNorm": "negative",
+      "checkpoint": "negative"
+    },
+    "primary_sharing_directional_slots": 9,
+    "primary_sharing_nondirectional_slots": 3,
+    "primary_interaction_slots": 12
+  },
+  "systems_spec": {
+    "device": "CPU",
+    "concurrent_workers": 1,
+    "threads": 1,
+    "batches": [
+      1,
+      128
+    ],
+    "warmup_forwards": 20,
+    "timed_forwards": 100,
+    "clock": "perf_counter_ns",
+    "latency_percentiles": [
+      50,
+      95
+    ],
+    "origins": "fixed hashed-run sample without replacement; batch 1 uses first origin",
+    "rss": "fresh process, Darwin bytes and Linux KiB",
+    "primary_fit_timing_excludes": [
+      "validation",
+      "checkpoint_tail",
+      "diagnostics"
+    ],
+    "power_mode": "record in machine manifest",
+    "torch_intraop_threads": 1,
+    "torch_interop_threads": 1,
+    "OMP_NUM_THREADS": 1,
+    "MKL_NUM_THREADS": 1,
+    "OPENBLAS_NUM_THREADS": 1,
+    "lightgbm_jobs": 1,
+    "timing": "CPU monotonic optimisation time and separately recorded validation",
+    "throughput": "batch_size/mean_latency_seconds",
+    "artifact_measurements": [
+      "parameter_count",
+      "raw_tensor_bytes",
+      "uncompressed_state_dict_bytes",
+      "deployed_checkpoint_count",
+      "deployed_checkpoint_bytes",
+      "logical_task_models",
+      "optimizer_bytes",
+      "baseline_rss",
+      "peak_rss",
+      "rss_increment"
+    ]
+  },
+  "budget": {
+    "core": [
+      45500,
+      45500
+    ],
+    "capacity": [
+      4550,
+      4550
+    ],
+    "pairwise": [
+      12600,
+      12600
+    ],
+    "leave_one_out": [
+      8400,
+      8400
+    ],
+    "pcgrad": [
+      1050,
+      1050
+    ],
+    "gradnorm": [
+      1050,
+      1050
+    ],
+    "modern": [
+      1500,
+      1500
+    ],
+    "lightgbm": [
+      22400,
+      2800
+    ],
+    "modern_pilot_subset": 30,
+    "diagnostic_slots": 27300,
+    "diagnostic_batch_pairs": 218400,
+    "gradient_extractions": 1747200,
+    "checkpoint_trajectories": 1050,
+    "checkpoint_requests": 4200,
+    "neural": [
+      74650,
+      74650
+    ],
+    "tree_scalar": [
+      112000,
+      14000
+    ],
+    "wrappers_total": [
+      97050,
+      77450
+    ],
+    "scalar_adjusted_total": 275300
+  }
+}
