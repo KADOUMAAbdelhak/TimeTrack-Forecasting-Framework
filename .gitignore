@@ -89,3 +89,6 @@ old_fgcs_rejected/results/paper/
 # Optuna binary studies (if placed outside **/optuna/)
 **/study.db
 **/*optuna*.db
+
+# FGCS v0.3 runtime journal (hundreds of thousands of files; never committed)
+fgcs_strengthening_v03/runtime/
