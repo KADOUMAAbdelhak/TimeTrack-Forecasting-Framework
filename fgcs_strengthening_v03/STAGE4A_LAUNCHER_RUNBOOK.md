@@ -18,7 +18,7 @@ The launcher, `fgcs_strengthening_v03/launch_stage4a.py`, is an operator tool. I
 
    Its report goes to `registration/OSF_VERIFICATION.json`. Only then set `EXECUTION_UNLOCKED = YES` in `REGISTRATION_EVIDENCE_TEMPLATE.md`; this is a human decision. Until then, every command that creates or opens the journal refuses.
 
-2. **Disk.** The full run is projected at about 40–62 GB; the canary needs under 0.1 GB. Free about **90 GB** before the inner phase. Every phase start requires at least **15 GB** free, and the running monitor stops gracefully below that.
+2. **Disk.** The full run is projected at about 40–62 GB; the canary needs under 0.1 GB. The inner and final phases refuse to start below **90 GB** free or without a fresh verified backup. Every phase start requires at least **15 GB** free, and the running monitor stops gracefully below that.
    - Never delete or move a sealed input. Preflight re-hashes all of them.
    - Never move or symlink `runtime/`: the journal refuses a symlinked runtime.
 
@@ -113,7 +113,50 @@ Then `final` and `diagnostics`. Fit closure, `systems` and `evaluation` follow t
 
   Slot and lease locks are released by the kernel when a process dies, so they can't go stale. `resume` refuses while workers are still running. It also refuses while a modern family is halted, until the author has reviewed it and passes `--acknowledge-modern-halt`. Phase runs refuse while a recovery check reports `REVIEW_REQUIRED`.
 - **Never** kill worker processes, run `kill -9`, or call `Journal.quarantine` or `Orchestrator.reopen` by hand. Code repairs go only through a chained seal amendment (C3).
-- **Backups (planned).** Back up to an external drive only with a verified copy, and never restore a backup into a live journal.
+
+## Backups
+
+The backup tool is `fgcs_strengthening_v03/backup_runtime.py`, an unsealed operator tool. Its destination is always explicit: create a folder on the external drive once, for example `/Volumes/<drive>/fgcs_runtime_backups`. Run it hourly in a second `screen` window:
+
+```bash
+$PY -B -m fgcs_strengthening_v03.backup_runtime backup --dest /Volumes/<drive>/fgcs_runtime_backups --every 3600
+$PY -B -m fgcs_strengthening_v03.backup_runtime status --dest /Volumes/<drive>/fgcs_runtime_backups
+$PY -B -m fgcs_strengthening_v03.backup_runtime verify --dest /Volumes/<drive>/fgcs_runtime_backups   # weekly: full re-hash
+```
+
+**How a backup works:**
+1. **Copy.** rsync (macOS `openrsync`) copies `runtime/` into `snapshots/<UTC>.partial/` at background CPU and I/O priority (`nice` plus `taskpolicy -b`), reading the source only. Unchanged files are hard-linked from the latest verified snapshot; `tmp*` and `launcher/workers/` are excluded.
+2. **Manifest and check.** Every file gets a SHA-256 in `MANIFEST.json`. New files are checked against the runtime, and a mismatch fails the backup.
+3. **Publish atomically.** The manifest is written via a temporary file, fsync and rename; then the snapshot is renamed from `.partial`; then `latest.json` is replaced.
+4. **Retention.** Only verified snapshots count, and the latest two are kept.
+
+**Refusals and detection:**
+
+| Problem | What happens |
+|---|---|
+| Destination missing | Refused (`DRIVE_MISSING`) |
+| Destination on the internal disk | Refused |
+| Destination inside the runtime | Refused |
+| Not enough space | Refused |
+| A second backup running at the same time | Refused |
+| Partial backup | Stays `.partial`, is never published, and is cleaned on the next run; `status` reports `PARTIAL` |
+| Corruption | `verify` reports corrupted, missing or unexpected files |
+| Stale backup | `status` and the launcher's health log report `STALE` after 2 hours |
+
+A failure never touches the runtime or the workers. It's recorded in `fgcs_strengthening_v03/backup_status.json` (git-ignored, outside the runtime), and the hourly loop simply tries again.
+
+**Restore only into a new, empty path, never into the live journal.** After a disaster:
+1. Stop.
+2. Move the damaged `runtime/` aside.
+3. Restore:
+
+   ```bash
+   $PY -B -m fgcs_strengthening_v03.backup_runtime restore --dest /Volumes/<drive>/fgcs_runtime_backups --into /path/new_runtime
+   ```
+
+   The command verifies the snapshot and the restored files.
+4. Move `new_runtime` into place as `fgcs_strengthening_v03/runtime`.
+5. Run `recover-check` before resuming.
 
 ## What the launcher checks
 
@@ -127,6 +170,7 @@ Then `final` and `diagnostics`. Fit closure, `systems` and `evaluation` follow t
 | Live execution seal equals `c0161b55…cc93` | preflight and every worker |
 | Live host equals `host_manifest.json`; torch intra/inter-op 1; CPU | preflight (fresh process) and every worker |
 | AC power; at least 15 GB free; recovery check OK | every phase start |
+| At least 90 GB free and a fresh (≤2 h) verified backup | inner and final phase start |
 | Free disk at least 15 GB; battery for no more than 2 minutes | every minute while running |
 | Thermal state nominal; 1-minute load at most 1.5; AC | systems phase start |
 | Exactly four fit workers (slot locks); certify and systems use one | orchestrator and launcher |

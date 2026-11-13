@@ -68,6 +68,8 @@ SINGLE_WORKER_PHASES = ("certify", "systems")
 EXIT_COMPLETE, EXIT_STOPPED, EXIT_INCOMPLETE = 0, 3, 4
 MAX_ROUNDS = 10
 MIN_FREE_GB = 15
+FULL_RUN_MIN_FREE_GB = 90  # inner and final phases (projected full run 40-62 GB)
+FULL_RUN_PHASES = ("inner", "final")
 BATTERY_GRACE_SECONDS = 120
 MONITOR_SECONDS = 60
 HEALTH_SECONDS = 600
@@ -148,6 +150,24 @@ def require_free_disk(minimum_gb=MIN_FREE_GB, probe=free_bytes):
     if free < minimum_gb * 1e9:
         raise LaunchRefused(f"Only {free / 1e9:.1f} GB free; at least {minimum_gb} GB is required")
     return free
+
+
+def require_backup_fresh(freshness=None):
+    """A verified backup no older than the stale limit (backup_runtime.py writes the status file)."""
+    from .backup_runtime import backup_freshness
+
+    state = (freshness or backup_freshness)()
+    if state.get("verdict") != "OK":
+        raise LaunchRefused(f"A fresh verified runtime backup is required before this phase: {state}")
+    return state
+
+
+def require_full_run_capacity(phase, *, free=free_bytes, freshness=None):
+    """Inner and final phases need >= FULL_RUN_MIN_FREE_GB free and a fresh verified backup."""
+    if phase not in FULL_RUN_PHASES:
+        return None
+    require_free_disk(FULL_RUN_MIN_FREE_GB, free)
+    return require_backup_fresh(freshness)
 
 
 def require_systems_conditions(thermal=thermal_state, load=load_average, power=on_ac_power):
@@ -348,6 +368,7 @@ class Monitor:
     thermal: object = thermal_state
     load: object = load_average
     clock: object = time.monotonic
+    backup: object = None
     battery_since: float | None = None
     stopped_reason: str | None = None
     last_free: tuple | None = None
@@ -373,6 +394,15 @@ class Monitor:
             self.request_stop(f"launcher guard: {reason}")
         return reason
 
+    def _backup(self):
+        try:
+            if self.backup is not None:
+                return self.backup()
+            from .backup_runtime import backup_freshness
+            return backup_freshness()
+        except Exception as error:  # reporting only; never affects the run
+            return {"verdict": "UNKNOWN", "error": f"{type(error).__name__}: {error}"}
+
     def snapshot(self, live_workers=0, stop_requested=None):
         now, free = self.clock(), self.free()
         rate = None
@@ -385,6 +415,7 @@ class Monitor:
                   "outcomes": self.count_outcomes() if self.count_outcomes else None,
                   "load_average": self.load(), "thermal_state": self.thermal(), "on_ac_power": self.power(),
                   "live_workers": live_workers, "stop_requested": stop_requested,
+                  "backup": self._backup(),
                   "guard_stop_reason": self.stopped_reason}
         self.snapshots.append(record)
         if self.health_dir is not None:
@@ -701,12 +732,15 @@ def status(orchestrator, phases):
     out["slots_held"] = slots_held()
     out["workers"] = worker_processes()
     out["free_gb"] = round(free_bytes() / 1e9, 1)
+    from .backup_runtime import backup_freshness
+    out["backup"] = backup_freshness()
     return out
 
 
 def run_phase(phase, report):
     require_ac_power()
     require_free_disk()
+    require_full_run_capacity(phase)
     if phase == "systems":
         require_systems_conditions()
     orchestrator = production_orchestrator(phase)
