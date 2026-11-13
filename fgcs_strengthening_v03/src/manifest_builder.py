@@ -60,7 +60,16 @@ def _closure(journal, name, phases):
         raise ScheduleNotClosed(f"The bundle requires the {name} closure record (C6)") from None
     if record.get("gate") != name or not set(phases) <= set(record.get("phases", ())):
         raise ScheduleNotClosed(f"The {name} closure record does not cover {', '.join(phases)}")
-    return record
+    try:
+        outcomes = json.loads(path.with_name(f"{name}.outcomes.json").read_text())
+    except FileNotFoundError:
+        raise ScheduleNotClosed(f"The {name} closure lacks its outcome map") from None
+    if sha256(canonical_json(outcomes)).hexdigest() != record.get("outcomes_sha256"):
+        raise ProvenanceError(f"The {name} outcome map differs from its closure record")
+    abandoned = set(record.get("abandoned_identity_sha256", ()))
+    if any(outcomes.get(digest, "") is not None for digest in abandoned):
+        raise ProvenanceError(f"The {name} closure lists an abandoned identity that has an outcome")
+    return record, outcomes
 
 
 class BundleBuilder:
@@ -77,23 +86,33 @@ class BundleBuilder:
     def _abandoned(self):
         """Abandoned fit and evaluation identities, read only from the closure records."""
         if not hasattr(self, "_closed"):
-            fits = _closure(self.journal, "fits", FIT_CLOSURE_PHASES)
-            evaluations = _closure(self.journal, "evaluation", ("systems", "evaluation"))
+            fits, fit_outcomes = _closure(self.journal, "fits", FIT_CLOSURE_PHASES)
+            evaluations, evaluation_outcomes = _closure(self.journal, "evaluation", ("systems", "evaluation"))
             if fits.get("schedule_sha256") != evaluations.get("schedule_sha256"):
                 raise ScheduleNotClosed("Fit and evaluation closures belong to different schedules")
-            self._closed = {False: frozenset(fits.get("abandoned_identity_sha256", ())),
-                            True: frozenset(evaluations.get("abandoned_identity_sha256", ()))}
+            self._closed = {False: (frozenset(fits.get("abandoned_identity_sha256", ())), fit_outcomes),
+                            True: (frozenset(evaluations.get("abandoned_identity_sha256", ())), evaluation_outcomes)}
         return self._closed
 
     def _record(self, identity, *, evaluation=False):
-        """(status, evidence, file hash) or None when no terminal record exists."""
-        abandoned = self._abandoned()[evaluation]
+        """(status, evidence, file hash) or None when no terminal record exists.
+
+        Every record must be exactly the one its closure recorded: an identity outside the closure, an
+        outcome created, removed or changed after closure, all stop the bundle (C6).
+        """
+        abandoned, closed = self._abandoned()[evaluation]
+        if identity.digest not in closed:
+            raise ScheduleNotClosed(f"Registered identity is not in its closure record: {identity.digest}")
         path = self.journal._record_path("outcomes", identity, evaluation)
         if not path.exists():
-            if identity.digest in abandoned:
+            if closed[identity.digest] is None and identity.digest in abandoned:
                 return None
+            if closed[identity.digest] is not None:
+                raise ProvenanceError(f"A closed outcome was removed after closure: {identity.digest}")
             raise ScheduleNotClosed(f"Registered identity has no terminal record: {identity.digest}")
         status, evidence, digest = self.journal.terminal_evidence(identity, evaluation=evaluation)
+        if digest != closed[identity.digest]:
+            raise ProvenanceError(f"Outcome differs from its closure record: {identity.digest}")
         self.inputs[path.relative_to(ROOT).as_posix()] = digest
         return status, evidence, digest
 

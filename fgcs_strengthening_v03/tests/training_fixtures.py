@@ -70,18 +70,28 @@ def scratch_engine(seal=None, *, closed_fits=False):
         yield engine
 
 
+def _synthetic_closure(journal, name, phases, abandoned, evaluation):
+    """Stand-in for Orchestrator.close: map every journalled outcome (and each abandonment) to its hash."""
+    from fgcs_strengthening_v03.src.identity import canonical_json
+    from fgcs_strengthening_v03.src.provenance import _atomic_publish, sha256_file
+
+    directory = journal._path(*(("evaluations",) if evaluation else ()), "outcomes")
+    outcomes = {path.stem: sha256_file(path) for path in directory.glob("*.json")} if directory.is_dir() else {}
+    outcomes.update({digest: None for digest in abandoned})
+    outcomes = dict(sorted(outcomes.items()))
+    gates = journal._path("orchestrator", "gates")
+    _atomic_publish(gates / f"{name}.outcomes.json", outcomes)
+    _atomic_publish(gates / f"{name}.json",
+                    {"gate": name, "phases": list(phases), "synthetic": True, "schedule_sha256": "synthetic",
+                     "outcomes_sha256": sha256(canonical_json(outcomes)).hexdigest(),
+                     "abandoned_identity_sha256": sorted(abandoned)})
+
+
 def close_fits(journal, abandoned=()):
     from fgcs_strengthening_v03.src.evaluation import FIT_CLOSURE_PHASES
-    from fgcs_strengthening_v03.src.provenance import _atomic_publish
 
-    _atomic_publish(journal._path("orchestrator", "gates", "fits.json"),
-                    {"gate": "fits", "phases": list(FIT_CLOSURE_PHASES), "synthetic": True,
-                     "schedule_sha256": "synthetic", "abandoned_identity_sha256": sorted(abandoned)})
+    _synthetic_closure(journal, "fits", FIT_CLOSURE_PHASES, abandoned, False)
 
 
 def close_evaluation(journal, abandoned=()):
-    from fgcs_strengthening_v03.src.provenance import _atomic_publish
-
-    _atomic_publish(journal._path("orchestrator", "gates", "evaluation.json"),
-                    {"gate": "evaluation", "phases": ["systems", "evaluation"], "synthetic": True,
-                     "schedule_sha256": "synthetic", "abandoned_identity_sha256": sorted(abandoned)})
+    _synthetic_closure(journal, "evaluation", ("systems", "evaluation"), abandoned, True)

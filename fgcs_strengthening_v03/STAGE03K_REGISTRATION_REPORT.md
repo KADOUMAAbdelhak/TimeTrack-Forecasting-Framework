@@ -6,11 +6,16 @@ Basis: tag `fgcs-v03-execution-candidate` (commit `fd45c2d5`), the author decisi
 
 The package is in `registration/`. It is built and re-verified by `python -m fgcs_strengthening_v03.build_registration --build | --verify`; verification recomputes every generated file from the repository and compares bytes.
 
-**Package digest (revision 2): `bf4232aef6c45be1e3b2284cbbc9fc6b3bf095c87f0d9977e5129d2eff8f209e`** (recomputed and verified). It supersedes the audited first package `f6bd4ba5…7d82` (tag `fgcs-v03-registration-package`); see Revision 2 below.
+**Package digest (revision 3): `cb577d295e18469214e141f153f00ae587dac8be284ad7cdab0c740ab3d5707e`** (recomputed and verified). It supersedes:
+
+- the first package `f6bd4ba5…7d82` (tag `fgcs-v03-registration-package`);
+- revision 2, `bf4232ae…209e` (tag `fgcs-v03-registration-package-r2`).
+
+Both were independently audited; see Revisions 2 and 3 below.
 
 | File | Content |
 |---|---|
-| `execution_seal.json` | `execution_fingerprints()`: 36 inputs, 60 sources, digest **`7d24169354dbf028449525ead1574bf3b6e1db6cce52ad6d109f4654a86792c7`** (revision 2; was `6ff4cfc0…a152`) |
+| `execution_seal.json` | `execution_fingerprints()`: 36 inputs, 60 sources, digest **`c0161b55c99929093b53742771fadf63cfcd036add1ad3caa43051cae06dcc93`** (revision 3; r2 `7d241693…92c7`, r1 `6ff4cfc0…a152`) |
 | `schedule.json` | Schedule digest `ad6c1693…7dfee2`, 283,635 units by phase; the budget from `validate_schedule()`; 206,000 unique identities (list SHA-256 `c84610a8…7681d`); the 96 canary and 30 pilot identities |
 | `analysis_catalogue.json` | All 832 registered analysis rows, 156 inferential; 1,085,800 required cells; 81,650 evaluation identities (list hash); the 15 historical tables |
 | `systems_population.json` | C2: 182 partitions, 1,380 deployments |
@@ -77,7 +82,7 @@ Referenced by hash:
   - The author registers the package digest and seal digest externally.
 - Stage 4A (the first execution):
   1. Verify that the live host equals `host_manifest.json`.
-  2. Create the runtime journal with `execution_fingerprints()`, whose digest must equal `7d241693…92c7`.
+  2. Create the runtime journal with `execution_fingerprints()`, whose digest must equal `c0161b55…cc93`.
   3. Run `certify` and `canary` with 4 workers, then stop at the canary gate.
 
 ## Revision 2 — independent audit findings (2026-11-12)
@@ -109,6 +114,52 @@ Revision 2 checks:
 **Open operational point (not changed):** a modern-family fit interrupted by Ctrl-C or a crash halts that family pending author review, as §8 and Stage 3G require. Planned pauses must use `Orchestrator.request_stop`.
 
 A second independent review of revision 2 is advisable before external registration.
+
+## Revision 3 — second independent audit (2026-11-13)
+
+The second independent audit, of tag `fgcs-v03-registration-package-r2`, returned AUDIT_FAIL on one blocking finding.
+
+**F1.** After fit closure, a failed (non-infrastructure) fit could be repaired: quarantined under the same seal, reopened and re-run, even after outer-test evaluations existed. The bundle builder then accepted the re-run as `ok`.
+
+The fixes, all enforced in code:
+
+- **Closure is final.** Once a closure record exists, its phases are refused by `Orchestrator.run`, and `Orchestrator.reopen` refuses their units.
+  - `Journal.quarantine` refuses records whose closure exists.
+  - `Journal.amend` refuses fit identities once fit closure exists.
+- **Same-seal retries are for infrastructure only.**
+  - `Journal.quarantine` refuses a failure whose error type is not an infrastructure type, unless it names a different successor seal.
+  - `Journal.start` refuses an identity whose quarantine awaits that amendment.
+  - The orchestrator reports such an identity as `awaiting_amendment`. It skips the identity and does not abandon it, and closure is blocked until the amendment runs.
+- **Closure pins outcomes.**
+  - Each closure writes `gates/<name>.outcomes.json`, the SHA-256 of every closed outcome or null for an abandoned unit, and records that file's digest.
+  - `BundleBuilder` verifies every record it reads against the map. It refuses an identity outside the closure, and any outcome changed or removed after closure.
+- **N1, single-threaded fits.** `configure_worker_process()` and `require_fit_threads()` require one torch intra-op thread, one inter-op thread, `OMP/MKL/OPENBLAS_NUM_THREADS = 1` and the CPU device before any non-systems phase.
+
+New tests:
+
+- `test_closed_fits_cannot_be_repaired_or_rerun` reproduces the audit's F1 sequence and shows every step refused.
+- `test_fit_workers_must_be_single_threaded` checks the thread requirement in fresh processes.
+- The amendment and bundle tests now cover the successor-bound quarantine and tampered outcomes.
+
+Notes not changed:
+
+- **N2:** systems units sit outside the retry mechanism, so planned pauses must use `request_stop`.
+- **N3:** 14 sealed inputs are untracked files. An external verifier needs copies, which the seal identifies by hash.
+
+Effect on the package:
+
+- Sealed sources changed: `provenance.py`, `orchestrator.py` and `manifest_builder.py`.
+- The schedule, analysis catalogue, systems population and host manifest are byte-unchanged.
+- No budget, identity, cohort, estimand or multiplicity family changed.
+
+Revision 3 checks:
+
+- 172 tests pass in 96 s.
+- LSTM trajectories remain byte-identical to the pre-3I reconstruction.
+- Whitespace is clean, and the unused-import scan finds nothing new.
+- `build_registration --verify` passes.
+
+A third independent audit of revision 3 is advisable before external registration.
 
 ## Protocol deviations
 

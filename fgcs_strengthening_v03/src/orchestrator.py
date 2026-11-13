@@ -21,7 +21,8 @@ from time import monotonic
 from uuid import uuid4
 
 from .identity import RESOURCES, ROOT, SCOPES, ScientificIdentity, canonical_json, read_config
-from .provenance import DuplicateIdentity, Journal, ProvenanceError, _atomic_publish, _atomic_publish_bytes, sha256_file
+from .provenance import (RETRYABLE, DuplicateIdentity, Journal, ProvenanceError, _atomic_publish,
+                         _atomic_publish_bytes, sha256_file)
 
 _CONFIG = read_config()
 _SOURCES = (Path(__file__).resolve().relative_to(ROOT).as_posix(),)
@@ -29,12 +30,45 @@ PHASES = ("certify", "canary", "inner", "final", "diagnostics", "systems", "eval
 FIT_PHASES = ("canary", "inner", "final", "diagnostics")
 MAX_RETRIES = 2
 TRAINING_WORKERS = 4  # C4: exactly four concurrent single-thread workers, enforced by slot locks
-RETRYABLE = frozenset({"OSError", "MemoryError", "TimeoutError", "InterruptedError", "BrokenPipeError",
-                       "ConnectionError", "BlockingIOError", "ChildProcessError", "KeyboardInterrupt"})
 
 
 def _digest(value):
     return sha256(canonical_json(value)).hexdigest()
+
+
+THREAD_ENVIRONMENT = ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")
+CLOSURES = {"fits": ("certify", *FIT_PHASES), "evaluation": ("systems", "evaluation")}
+
+
+def configure_worker_process():
+    """Call first in a fit-worker process: torch intra- and inter-op pools of one thread (C4, §9).
+
+    BLAS/OpenMP pools are sized when their libraries load, so the launcher must also export
+    OMP_NUM_THREADS=MKL_NUM_THREADS=OPENBLAS_NUM_THREADS=1; require_fit_threads verifies all of it.
+    """
+    import torch
+
+    try:
+        torch.set_num_interop_threads(1)
+    except RuntimeError:
+        pass  # already fixed for this process; require_fit_threads checks the value
+    torch.set_num_threads(1)
+
+
+def require_fit_threads():
+    """Refuse to fit unless every thread pool this process uses is single-threaded."""
+    import os
+
+    import torch
+
+    observed = {"torch_intra_op": torch.get_num_threads(), "torch_inter_op": torch.get_num_interop_threads(),
+                **{key: os.environ.get(key) for key in THREAD_ENVIRONMENT},
+                "device": torch.get_default_device().type}
+    expected = {"torch_intra_op": 1, "torch_inter_op": 1, **{key: "1" for key in THREAD_ENVIRONMENT},
+                "device": "cpu"}
+    if observed != expected:
+        raise ProvenanceError(f"Fit workers must be single-threaded on CPU (C4): {observed}")
+    return observed
 
 
 def execution_sources():
@@ -257,8 +291,13 @@ class Orchestrator:
             "unit": unit.key, "identity_sha256": None if unit.identity is None else unit.identity.digest,
             "reason": reason, "blocking": sorted(blocking)})
 
+    def _closed_phase(self, phase):
+        return next((name for name, phases in CLOSURES.items() if phase in phases and self.gate(name)), None)
+
     def reopen(self, unit, *, reason):
         """Move an abandonment aside after a documented amendment; the record is retained."""
+        if self._closed_phase(unit.phase):
+            raise ProvenanceError(f"{unit.phase} is closed; its units cannot be reopened (C6)")
         path = self._path("abandoned", f"{_digest(unit.key)}.json")
         if not path.exists() or not reason:
             raise ProvenanceError("Only an abandoned unit can be reopened, with a documented reason")
@@ -273,21 +312,25 @@ class Orchestrator:
                          if unit.identity is not None and self.abandoned(unit) is not None)
 
     def close_fits(self):
-        record = self.close("fits", ("certify", *FIT_PHASES))
+        record = self.close("fits", CLOSURES["fits"])
         self.cost_report()
         return record
 
     def close_evaluation(self):
-        return self.close("evaluation", ("systems", "evaluation"))
+        return self.close("evaluation", CLOSURES["evaluation"])
 
     def _retries(self, unit):
         return 0 if unit.identity is None else self.journal.quarantined(unit.identity, evaluation=unit.evaluation)
 
     def state(self, unit):
-        """complete | failed (terminal) | abandoned | retry | interrupted | pending."""
+        """complete | failed (terminal) | abandoned | retry | interrupted | awaiting_amendment | pending."""
         if self.abandoned(unit) is not None:
             return "abandoned"
         record = self._record(unit)
+        if record is None and unit.identity is not None:
+            bound = self.journal._pending_amendment(unit.identity.digest, unit.evaluation)
+            if bound is not None and bound != self.journal.seal.digest:
+                return "awaiting_amendment"  # quarantined for a code repair; never re-run under this seal
         if record is None:
             return "interrupted" if self._interrupted(unit) else "pending"
         status, evidence = record
@@ -359,7 +402,18 @@ class Orchestrator:
         if open_units:
             raise ProvenanceError(f"{len(open_units)} units are not terminal; cannot close {name}")
         states = {unit.key: self.state(unit) for unit in units}
+        outcomes = {}
+        for unit in units:
+            if unit.identity is None:
+                continue
+            path = self.journal._record_path("outcomes", unit.identity, unit.evaluation)
+            outcomes[unit.identity.digest] = (self.journal.terminal_evidence(unit.identity,
+                                                                             evaluation=unit.evaluation)[2]
+                                              if path.exists() else None)
+        outcome_map = self._path("gates", f"{name}.outcomes.json")
+        self._publish_exact(outcome_map, dict(sorted(outcomes.items())))
         record = {"gate": name, "phases": list(phases), "schedule_sha256": self.schedule.digest,
+                  "outcomes_sha256": _digest(dict(sorted(outcomes.items()))),
                   "counts": {state: sum(1 for value in states.values() if value == state)
                              for state in ("complete", "failed", "abandoned")},
                   "incomplete_identity_sha256": sorted(unit.identity.digest for unit in units
@@ -386,6 +440,11 @@ class Orchestrator:
             raise ProvenanceError("The canary stop gate has not been approved")
         if phase in ("systems", "evaluation") and self.gate("fits") is None:
             raise ProvenanceError("Fit and diagnostic phases are not closed")
+        closed = self._closed_phase(phase)
+        if closed:
+            raise ProvenanceError(f"{phase} is closed by the {closed} closure record; nothing in it runs again (C6)")
+        if phase != "systems":
+            require_fit_threads()
 
     # -- execution -------------------------------------------------------------------------------
     def _blocked(self, unit):
@@ -413,7 +472,7 @@ class Orchestrator:
                 session.stopped = True
                 break
             state = self.state(unit)
-            if state in {"complete", "failed", "abandoned"}:
+            if state in {"complete", "failed", "abandoned", "awaiting_amendment"}:
                 continue
             failed, waiting = self._blocked(unit)
             if failed:

@@ -1,6 +1,6 @@
 # v0.3 implementation clarifications — author-approved
 
-Status: C1–C9 approved by the author on 2026-11-12. Revision 2 (same day) follows the independent §11 audit of tag `fgcs-v03-registration-package`: the author authorised correcting C1, C2, C3, C4 and C9 so that each states exactly what the code does, with the code changes listed under "Revision 2" below. Not yet registered. These clarifications resolve points v0.3 leaves open. They are fixed before any scientific result exists. None changes a cohort, seed, model, architecture, endpoint, estimand, multiplicity family or budget. C4 records one declared departure from a §9 condition. Protocol `analysis_plan_v0.3.md` (SHA-256 `7b8f80be…6076`) and configuration `protocol_v03.json` (SHA-256 `59cda69a…f62b`) are unchanged.
+Status: C1–C9 approved by the author on 2026-11-12. Revision 2 (same day) follows the independent §11 audit of tag `fgcs-v03-registration-package`: the author authorised correcting C1, C2, C3, C4 and C9 so that each states exactly what the code does, with the code changes listed under "Revision 2" below. Revision 3 (2026-11-13) follows the second independent audit, of tag `fgcs-v03-registration-package-r2`. It closes the post-closure repair path (C3, C6) and enforces single-threaded fits (C4); the changes are listed under "Revision 3". Not yet registered. These clarifications resolve points v0.3 leaves open. They are fixed before any scientific result exists. None changes a cohort, seed, model, architecture, endpoint, estimand, multiplicity family or budget. C4 records one declared departure from a §9 condition. Protocol `analysis_plan_v0.3.md` (SHA-256 `7b8f80be…6076`) and configuration `protocol_v03.json` (SHA-256 `59cda69a…f62b`) are unchanged.
 
 ## Author decisions (2026-11-12)
 
@@ -29,10 +29,14 @@ Status: C1–C9 approved by the author on 2026-11-12. Revision 2 (same day) foll
 - An attempt with no outcome (interrupted), or a failed outcome whose recorded error type is an infrastructure error, is retried for the same identity under unchanged sources. Interruptions and infrastructure failures share one budget of two retries per identity. An identity interrupted again after two retries is abandoned with the reason "retry budget exhausted". The infrastructure types are `OSError`, `MemoryError`, `TimeoutError`, `InterruptedError`, `BrokenPipeError`, `ConnectionError`, `BlockingIOError`, `ChildProcessError` and `KeyboardInterrupt`.
 - An operator interrupt (Ctrl-C) during a fit leaves an interrupted attempt and so uses one retry. Planned pauses use the orchestrator's stop request instead: each worker finishes its current unit and then takes no new work, so no retry is used. A modern-family fit that is interrupted still halts its family pending author review, as §8 and Stage 3G require.
 - Before each retry, the earlier attempt's records and artifacts are moved, byte-for-byte, to a numbered quarantine with a documented reason.
-- Every other failure is terminal, including registered aborts such as GradNorm invalid updates and modern technical-check failures.
+- Every other failure is terminal, including registered aborts such as GradNorm invalid updates and modern technical-check failures. The journal enforces this: it refuses to quarantine such a failure under the same seal.
 - A unit refused before any attempt, such as a stopped modern family, is recorded as abandoned with its reason.
-- A code repair requires a chained seal amendment. The amendment records the predecessor and successor seal digests, the reason and the affected identities. Those identities must already be quarantined, and only they re-run. Records under earlier seals remain valid for unaffected identities.
-- No repair decision may use outer-test outcomes; C6 makes this structurally impossible during fitting.
+- A code repair requires a chained seal amendment.
+  - Each affected identity is first quarantined with the successor seal named in its quarantine record.
+  - Until the amendment exists, the identity cannot start under the old seal. The orchestrator shows it as awaiting its amendment, and it blocks closure.
+  - The amendment records the predecessor and successor seal digests, the reason and the affected identities. Only those identities re-run.
+  - Records under earlier seals remain valid for unaffected identities.
+- No repair decision may use outer-test outcomes. After the fit closure record exists, no fit or diagnostic identity can be quarantined, reopened, amended or run again. After the evaluation closure record exists, the same holds for evaluation identities (C6).
 - Terminal failures and abandonments become explicit `failed`, `nonfinite_prediction` or `missing` cells. The arm is then incomplete under §2.
 
 **C4 — Training concurrency: N = 4 (author decision, 2026-11-12; a declared departure from §9).** §9 requires "one worker at a time during benchmark measurements".
@@ -42,6 +46,7 @@ Status: C1–C9 approved by the author on 2026-11-12. Revision 2 (same day) foll
   - Training-cost seconds are therefore reported as cost under the registered four-worker load. They are not single-worker benchmark times.
   - Every cost record carries the registered worker count.
 - The orchestrator enforces the count. It refuses any worker count other than four, and each worker process must hold one of four slot locks for its whole session. A fifth worker is refused.
+- Each fit worker is single-threaded, and the orchestrator checks this. A worker process calls `configure_worker_process()` first; the launcher exports `OMP_NUM_THREADS`, `MKL_NUM_THREADS` and `OPENBLAS_NUM_THREADS` = 1. Before any non-systems phase runs, `require_fit_threads()` requires one torch intra-op thread, one inter-op thread, those three variables equal to 1, and the CPU device.
 - The supporting results are in `feasibility/estimate.json`.
 
 - The estimate times the actual training functions on generated windows at each partition's frozen L and support counts, with v1 mean epochs.
@@ -76,7 +81,10 @@ Status: C1–C9 approved by the author on 2026-11-12. Revision 2 (same day) foll
 1. Execution proceeds in a fixed order: modern structural certificates, canary, all inner fits, all final fits, diagnostics, then fit closure.
 2. Only after fit closure come systems benchmarks and outer-test evaluation, then evaluation closure, then the analysis bundle.
 3. Outer-test data are materialised only in the evaluation phase. That phase cannot start until every fit and diagnostic unit is terminal and the closure record exists.
-4. Workers and the orchestrator never display or aggregate outer-test values. The bundle builder runs only on a closed schedule.
+4. Closure is final. Once a closure record exists, the phases it covers never run again, and their units cannot be reopened, quarantined or amended.
+   - Each closure record carries the SHA-256 of every outcome it closed, with null for an abandoned unit.
+   - The bundle builder checks every record it reads against those hashes. It refuses any identity that is missing from the closure, and any outcome added, removed or changed after closure.
+5. Workers and the orchestrator never display or aggregate outer-test values. The bundle builder runs only on a closed schedule.
 
 **C7 — Canary stop gate.**
 
@@ -120,3 +128,12 @@ Support and ordered-test-ID fingerprints are then taken from that partition, exa
 | D4: costs summed only over the systems sample | The fit closure writes a cost report over every fit and diagnostic |
 | D5: C1 presented as a reading of §9 | C1 is stated as a chosen interpretation |
 | C6 note: bundle builder trusted a caller-supplied abandoned list | It reads the fit and evaluation closure records, which now list abandoned identities |
+
+## Revision 3 (2026-11-13, after the second independent audit)
+
+| Audit item | Change |
+|---|---|
+| F1: a failed fit could be quarantined, reopened and re-run after fit closure, and the bundle accepted it | Fit phases and `reopen` are refused once their closure exists. `Journal.quarantine` refuses closed records, and refuses non-infrastructure failures without a named successor seal. `Journal.start` refuses an identity awaiting its amendment. `amend` refuses fit identities after fit closure. Closure records pin every outcome hash, and the bundle builder verifies each record against them. |
+| N1: fits were single-threaded only by launch environment | `configure_worker_process()` and `require_fit_threads()` are checked before every non-systems phase |
+| N2: systems units are outside the retry and quarantine mechanism | Unchanged; planned pauses use `request_stop` |
+| N3: 14 sealed inputs are untracked files | Unchanged; an external verifier needs copies of those inputs, which the seal identifies by hash |

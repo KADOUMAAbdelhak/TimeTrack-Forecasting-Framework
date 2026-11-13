@@ -19,7 +19,7 @@ from fgcs_strengthening_v03.src.identity import CONFIG, HOME, ROOT, RESOURCES, r
 from fgcs_strengthening_v03.src.manifest_builder import (
     BundleBuilder, ScheduleNotClosed, required_coordinates,
 )
-from fgcs_strengthening_v03.src.provenance import Fingerprints, sha256_file
+from fgcs_strengthening_v03.src.provenance import Fingerprints, ProvenanceError, sha256_file
 from fgcs_strengthening_v03.src.statistics.design import BLOCKS
 from fgcs_strengthening_v03.src.statistics.endpoints import Cell
 from fgcs_strengthening_v03.src.statistics.schema import Provenance
@@ -132,15 +132,26 @@ class ManifestBuilderTests(unittest.TestCase):
                 list(BundleBuilder(engine.journal, self.historical()).cells(coordinates))
             close_evaluation(engine.journal, abandoned={s1.digest})
             builder = BundleBuilder(engine.journal, self.historical())
-            with self.assertRaisesRegex(ScheduleNotClosed, "no terminal record"):
+            with self.assertRaisesRegex(ScheduleNotClosed, "not in its closure record"):
                 list(builder.cells(coordinates))  # S1 abandoned for evaluation only, not as a fit
-            engine.journal._path("orchestrator", "gates", "fits.json").unlink()  # scratch-only rewrite
+            for name in ("fits.json", "fits.outcomes.json"):  # scratch-only rewrite
+                engine.journal._path("orchestrator", "gates", name).unlink()
             close_fits(engine.journal, abandoned={s1.digest, diagnostic.digest})
             builder = BundleBuilder(engine.journal, self.historical())
             path = builder.build(self.root / "bundle", coordinates=coordinates,
                                  diagnostic_keys=[(BLOCK, ENTITY, FOLD, 0)])
             with self.assertRaises(FileExistsError):
                 builder.build(self.root / "bundle", coordinates=coordinates)
+            # An outcome changed after closure (e.g. a post-closure re-run) stops the bundle.
+            outcome = engine.journal._record_path("outcomes", replace(m1, phase="final"), False)
+            original = outcome.read_bytes()
+            outcome.write_bytes(original + b"\n")
+            with self.assertRaisesRegex(ProvenanceError, "differs from its closure record"):
+                list(BundleBuilder(engine.journal, self.historical()).cells(coordinates))
+            outcome.unlink()
+            with self.assertRaisesRegex(ProvenanceError, "removed after closure"):
+                list(BundleBuilder(engine.journal, self.historical()).cells(coordinates))
+            outcome.write_bytes(original)
 
             manifest = json.loads(path.read_text())
             raw = Provenance(**manifest["provenance"])

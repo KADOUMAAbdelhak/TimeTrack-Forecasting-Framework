@@ -55,6 +55,11 @@ class OrchestratorTests(unittest.TestCase):
             registration.flush()
             executors = ProductionExecutors(engine.journal, partitions=provider)
             executors["systems"] = systems or (lambda unit: None)
+            # The real thread check needs a fresh process (inter-op pools are fixed at first use); it is
+            # exercised in test_fit_workers_must_be_single_threaded.
+            stack = patch("fgcs_strengthening_v03.src.orchestrator.require_fit_threads")
+            stack.start()
+            self.addCleanup(stack.stop)
             yield Orchestrator(engine.journal, schedule or tiny_schedule(), executors,
                                registration=registration.name, workers=4)
 
@@ -220,12 +225,22 @@ class OrchestratorTests(unittest.TestCase):
             journal = orch.journal
             with self.assertRaises(ProvenanceError):
                 journal.amend(seal(), reason="fix", affected=[m1])
-            journal.quarantine(m1, reason="documented technical repair of the validation path")
+            with self.assertRaisesRegex(ProvenanceError, "terminal unless repaired"):
+                journal.quarantine(m1, reason="same-seal retry of a code failure")
             with tempfile.NamedTemporaryFile(dir=HOME, suffix=".py") as source:
                 source.write(b"# repaired source\n")
                 source.flush()
                 relative = Path(source.name).relative_to(HOME.parent).as_posix()
                 successor = Fingerprints.capture_protocol(additional_sources=(*execution_sources(), relative))
+                journal.quarantine(m1, reason="documented technical repair of the validation path",
+                                   amendment=successor)
+                with self.assertRaisesRegex(ProvenanceError, "awaits its sealed amendment"):
+                    journal.start(m1)
+                self.assertEqual(orch.state(orch.schedule.by_key[m1.digest]), "awaiting_amendment")
+                self.assertEqual(orch.run("inner").executed, {})  # the old seal cannot re-run it
+                with self.assertRaisesRegex(ProvenanceError, "not terminal"):
+                    orch.close("inner-check", ("inner",))
+                self.assertFalse(journal._record_path("outcomes", m1, False).exists())
                 amended = journal.amend(successor, reason="validation repair", affected=[m1])
                 with self.assertRaises(ProvenanceError):
                     Journal(seal())
@@ -240,6 +255,64 @@ class OrchestratorTests(unittest.TestCase):
                 self.assertEqual(status, "complete")
                 record = json.loads(amended._path("outcomes", f"{m1.digest}.json").read_text())
                 self.assertEqual(record["fingerprint_sha256"], successor.digest)
+
+    def test_closed_fits_cannot_be_repaired_or_rerun(self):
+        """F1 (second audit): no quarantine, reopen, amendment or fit run after fit closure."""
+        with self.orchestrator() as orch:
+            self.advance(orch, "canary")
+            orch.approve("canary", approver="author", note="ok")
+            with patch("fgcs_strengthening_v03.src.training._evaluate", side_effect=ValueError("bug")):
+                orch.run("inner")
+            self.advance(orch, "final", "diagnostics")
+            m1, m1f = identity("M1"), replace(identity("M1"), phase="final")
+            orch.close_fits()
+            self.advance(orch, "systems", "evaluation")
+            orch.close_evaluation()
+            journal = orch.journal
+            with tempfile.NamedTemporaryFile(dir=HOME, suffix=".py") as source:
+                source.write(b"# repaired source\n")
+                source.flush()
+                relative = Path(source.name).relative_to(HOME.parent).as_posix()
+                successor = Fingerprints.capture_protocol(additional_sources=(*execution_sources(), relative))
+                for evaluation in (False, True):
+                    with self.assertRaisesRegex(ProvenanceError, "closed"):
+                        journal.quarantine(m1 if not evaluation else m1f, reason="repair", evaluation=evaluation,
+                                           amendment=successor)
+                with self.assertRaisesRegex(ProvenanceError, "awaits|Quarantine|quarantined"):
+                    journal.amend(successor, reason="repair", affected=[m1])
+            for unit in (orch.schedule.by_key[m1f.digest], orch.schedule.by_key["evaluate:" + m1f.digest]):
+                with self.assertRaisesRegex(ProvenanceError, "closed"):
+                    orch.reopen(unit, reason="repair")
+            for phase in PHASES:
+                with self.assertRaisesRegex(ProvenanceError, "closed"):
+                    orch.run(phase)
+            gate = orch.gate("fits")
+            outcomes = json.loads(orch._path("gates", "fits.outcomes.json").read_text())
+            self.assertEqual(_digest(outcomes), gate["outcomes_sha256"])
+            self.assertIsNotNone(outcomes[m1.digest])  # the failed outcome is pinned by hash
+            self.assertIsNone(outcomes[m1f.digest])  # abandoned: no outcome
+            self.assertIn(m1f.digest, gate["abandoned_identity_sha256"])
+
+    def test_fit_workers_must_be_single_threaded(self):
+        import os
+        import subprocess
+        import sys
+
+        code = ("from fgcs_strengthening_v03.src.orchestrator import configure_worker_process, require_fit_threads\n"
+                "configure_worker_process()\nprint(require_fit_threads())\n")
+        root = str(HOME.parent)
+        single = {**os.environ, "PYTHONPATH": root, "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1",
+                  "OPENBLAS_NUM_THREADS": "1"}
+        result = subprocess.run([sys.executable, "-B", "-c", code], env=single, capture_output=True, cwd=root)
+        self.assertEqual(result.returncode, 0, result.stderr.decode()[-2000:])
+        self.assertIn("'torch_inter_op': 1", result.stdout.decode())
+        threaded = {**single, "OMP_NUM_THREADS": "8"}
+        result = subprocess.run([sys.executable, "-B", "-c", code], env=threaded, capture_output=True, cwd=root)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("single-threaded", result.stderr.decode())
+        unconfigured = "from fgcs_strengthening_v03.src.orchestrator import require_fit_threads\nrequire_fit_threads()\n"
+        result = subprocess.run([sys.executable, "-B", "-c", unconfigured], env=single, capture_output=True, cwd=root)
+        self.assertNotEqual(result.returncode, 0)  # inter-op pool not configured
 
     def test_registered_schedule_shape(self):
         schedule = Schedule(registered_schedule())

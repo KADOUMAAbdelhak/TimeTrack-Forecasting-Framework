@@ -14,6 +14,10 @@ from uuid import uuid4
 
 from .identity import CONFIG, HOME, ROOT, ScientificIdentity, canonical_json, read_config
 
+# C3: the only error types retried without a code change.
+RETRYABLE = frozenset({"OSError", "MemoryError", "TimeoutError", "InterruptedError", "BrokenPipeError",
+                       "ConnectionError", "BlockingIOError", "ChildProcessError", "KeyboardInterrupt"})
+
 
 @contextmanager
 def measure_seconds(timings, name):
@@ -233,11 +237,21 @@ class Journal:
         if not isinstance(seal, Fingerprints) or not isinstance(reason, str) or not reason.strip():
             raise ProvenanceError("An amendment requires a successor seal and a documented reason")
         affected = sorted({identity.digest for identity in affected})
+        if not affected:
+            raise ProvenanceError("An amendment must name its affected identities")
         for digest in affected:
             for prefix in ((), ("evaluations",)):
                 for kind in ("attempts", "outcomes"):
                     if self._path(*prefix, kind, f"{digest}.json").exists():
                         raise ProvenanceError("Quarantine affected identities before amending the seal")
+            if not self._path("quarantine", digest).is_dir():
+                raise ProvenanceError("Every affected identity must have a quarantined attempt")
+            if self._closed(False) and self._path("quarantine", digest, "fit").is_dir():
+                raise ProvenanceError("Fit identities cannot be amended after fit closure (C6)")
+            for kind in ("fit", "evaluation"):
+                bound = self._pending_amendment(digest, kind == "evaluation")
+                if bound is not None and bound != seal.digest:
+                    raise ProvenanceError("A quarantine is bound to a different successor seal")
         seal.verify()
         sequence = len(self._amendments()) + 1
         record = {"sequence": sequence, "previous_digest": self.seal.digest, "digest": seal.digest,
@@ -255,16 +269,47 @@ class Journal:
             paths.append(self._path("optimizer_states", f"{identity.digest}.pt"))
         return [path for path in paths if path.exists()], prefix
 
-    def quarantine(self, identity, *, reason, evaluation=False):
-        """Move an interrupted or failed attempt's evidence aside, retaining every byte, so it can be retried."""
+    def _closed(self, evaluation):
+        """True once the orchestrator's closure record for this kind of record exists (C6)."""
+        return self._path("orchestrator", "gates", "evaluation.json" if evaluation else "fits.json").exists()
+
+    def _quarantine_records(self, digest, evaluation):
+        base = self._path("quarantine", digest, "evaluation" if evaluation else "fit")
+        return sorted(base.glob("*/quarantine.json")) if base.is_dir() else []
+
+    def _pending_amendment(self, digest, evaluation):
+        """The successor seal digest the latest quarantine waits for, if any."""
+        records = self._quarantine_records(digest, evaluation)
+        return json.loads(records[-1].read_text()).get("amendment_sha256") if records else None
+
+    def quarantine(self, identity, *, reason, evaluation=False, amendment=None):
+        """Move an interrupted or failed attempt's evidence aside, retaining every byte, so it can be retried.
+
+        Interrupted attempts and infrastructure failures may be retried under the same seal. Any other
+        failure is terminal unless it is repaired: the quarantine then names its successor seal, and the
+        identity cannot start again until that amendment is the journal's seal (C3). Nothing is quarantined
+        after the matching closure record exists (C6).
+        """
         if not isinstance(reason, str) or not reason.strip():
             raise ProvenanceError("Quarantine requires a documented reason")
+        if self._closed(evaluation):
+            raise ProvenanceError("Records cannot be quarantined after their phase is closed (C6)")
         paths, _ = self._artifact_paths(identity, evaluation)
         if not paths:
             raise ProvenanceError("Nothing to quarantine for this identity")
         outcome = self._record_path("outcomes", identity, evaluation)
-        if outcome.exists() and json.loads(outcome.read_text()).get("status") == "complete":
-            raise ProvenanceError("A complete outcome is never quarantined")
+        error_type = None
+        if outcome.exists():
+            stored = json.loads(outcome.read_text())
+            if stored.get("status") == "complete":
+                raise ProvenanceError("A complete outcome is never quarantined")
+            error_type = stored.get("evidence", {}).get("error", {}).get("type")
+        if amendment is not None:
+            if not isinstance(amendment, Fingerprints) or amendment.digest == self.seal.digest:
+                raise ProvenanceError("A repair quarantine must name a different successor seal")
+            amendment = amendment.digest
+        elif outcome.exists() and error_type not in RETRYABLE:
+            raise ProvenanceError("A non-infrastructure failure is terminal unless repaired by a sealed amendment (C3)")
         base = self._path("quarantine", identity.digest, "evaluation" if evaluation else "fit")
         sequence = len(list(base.glob("*"))) + 1 if base.is_dir() else 1
         target = base / f"{sequence:02d}"
@@ -276,7 +321,7 @@ class Journal:
         target.mkdir(parents=True, exist_ok=False)
         record = {"identity": identity.payload(), "identity_sha256": identity.digest, "evaluation": evaluation,
                   "sequence": sequence, "reason": reason, "fingerprint_sha256": self.seal.digest,
-                  "files": files, "utc": datetime.now(timezone.utc).isoformat()}
+                  "outcome_error_type": error_type, "amendment_sha256": amendment, "files": files, "utc": datetime.now(timezone.utc).isoformat()}
         _atomic_publish(target / "quarantine.json", record)
         for path in paths:
             destination = target / path.relative_to(self.runtime)
@@ -316,6 +361,9 @@ class Journal:
             self.completed_evidence(identity if source is None else source)
         if self._record_path("outcomes", identity, evaluation).exists():
             raise DuplicateIdentity(f"Outcome already exists: {identity.digest}")
+        bound = self._pending_amendment(identity.digest, evaluation)
+        if bound is not None and bound != self.seal.digest:
+            raise ProvenanceError("This identity awaits its sealed amendment before it can run again (C3)")
         attempt = Attempt(identity, uuid4().hex, evaluation)
         _atomic_publish(self._record_path("attempts", identity, evaluation), self._record(attempt, "started"))
         return attempt
