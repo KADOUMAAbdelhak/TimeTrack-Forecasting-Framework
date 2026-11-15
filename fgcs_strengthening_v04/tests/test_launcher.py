@@ -69,14 +69,18 @@ class LauncherGateTests(unittest.TestCase):
         self.assertEqual(launcher.main(["start"]), 2)
         self.assertEqual(runtime.exists(), existed)
 
-    def test_unregistered_gates_refuse(self):
-        # Until the v0.4 registration exists, every registered value is None and its gate refuses.
-        self.assertIsNone(launcher.REGISTERED_SEAL)
-        for gate in (launcher.check_repository, launcher.check_package, launcher.check_seal):
-            with self.assertRaisesRegex(launcher.LaunchRefused, "not recorded yet"):
-                gate()
+    def test_registered_package_gates_pass_and_osf_stays_unrecorded(self):
+        self.assertEqual(launcher.check_repository()["tag_commit"], launcher.REGISTERED_COMMIT)
+        self.assertEqual(launcher.check_package(), launcher.REGISTERED_PACKAGE)
+        self.assertEqual(launcher.check_seal(), launcher.REGISTERED_SEAL)
+        self.assertFalse(launcher.execution_unlocked())
+        # The v0.4 OSF registration does not exist yet, so its check refuses without any network read.
+        self.assertIsNone(launcher.OSF_REGISTRATION)
         with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
             launcher.verify_registration(fetch=lambda url: self.fail("no network read expected"))
+        with patch.object(launcher, "REGISTERED_SEAL", None):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "not recorded yet"):
+                launcher.check_seal()
 
     def test_six_workers_and_no_systems_phase(self):
         from fgcs_strengthening_v04.src.orchestrator import PHASES, TRAINING_WORKERS

@@ -21,8 +21,8 @@ passes:
 - the registration package verifies and has the registered digest;
 - the live execution seal equals the registered seal;
 - a fresh single-threaded worker process matches the frozen host manifest.
-Until the v0.4 registration exists, REGISTERED_COMMIT, REGISTERED_PACKAGE, REGISTERED_SEAL and
-OSF_REGISTRATION are None, and every gate that needs them refuses.
+The package values are recorded below; OSF_REGISTRATION is None until the v0.4 OSF registration
+exists, and the unlock flag stays NO until that registration is verified.
 
 Each phase run also requires AC power and at least MIN_FREE_GB of free disk. Workers are separate
 processes in their own session and write to log files, never to pipes. A terminal Ctrl-C or a hang-up
@@ -54,11 +54,12 @@ import urllib.request
 
 from .src.identity import HOME, ROOT, read_config
 
-# Filled in by the v0.4 registration step; None keeps every scientific command locked.
+# Recorded from the built package (tag fgcs-v04-registration-package, 2026-11-15). OSF_REGISTRATION stays
+# None until the new v0.4 OSF registration exists; verify-registration refuses until then.
 TAG = "fgcs-v04-registration-package"
-REGISTERED_COMMIT = None
-REGISTERED_PACKAGE = None
-REGISTERED_SEAL = None
+REGISTERED_COMMIT = "9b94a066d2818ac726205954cb53f52e0ec3371d"
+REGISTERED_PACKAGE = "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442"
+REGISTERED_SEAL = "babe1fefa7f48c462b7f628d3d98507ec03779a31df843cb7d6f044d257abd15"
 OSF_REGISTRATION = None  # the new v0.4 Secondary Data Preregistration (P9); links to OSF kuwra
 ZENODO_RECORD = "24189108"  # the reused v0.3 input archive (P7)
 

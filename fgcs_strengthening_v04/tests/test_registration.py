@@ -1,7 +1,6 @@
 """v0.4 registration builder: build, verify and tamper detection in scratch package folders only.
 
-The real package folder is never written: the protocol is still a draft, and building it is a later,
-author-approved step.
+The real, tagged package folder is only read (verified), never written.
 """
 
 from functools import lru_cache
@@ -43,8 +42,9 @@ class RegistrationTests(unittest.TestCase):
             self.addCleanup(item.stop)
 
     def test_the_real_package_folder_is_untouched_and_drafts_are_refused(self):
-        self.assertFalse((registration.PACKAGE / "PACKAGE.json").exists())
         patch.stopall()
+        # The tagged package verifies and these tests never write to its folder.
+        self.assertEqual(registration.verify()[1], [])
         registration.require_frozen_protocol()  # the configured v0.4 protocol is frozen
         for name, text in (("plan_DRAFT.md", "# Plan\n"), ("plan.md", "# Plan — DRAFT\n"),
                            ("plan2.md", "# Plan\n\n**Status: Not frozen.**\n")):
