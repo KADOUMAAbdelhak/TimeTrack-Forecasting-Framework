@@ -7,7 +7,7 @@ It is ported from the r3 Stage 4A launcher with the protocol P9 changes:
 - no systems phase;
 - the host is checked against `registration/host_manifest.json` by `host.py`, instead of r3's systems module.
 
-**Status: locked.** The v0.4 registration does not exist yet, so `REGISTERED_COMMIT`, `REGISTERED_PACKAGE`, `REGISTERED_SEAL` and `OSF_REGISTRATION` in `launch.py` are `None`, and there is no `REGISTRATION_EVIDENCE_TEMPLATE.md`. Every scientific or journal command refuses until the registration step fills these in. The r3 package and its launcher stay locked permanently.
+**Status: locked.** `launch.py` records the built package (tag `fgcs-v04-registration-package`, its commit, package digest and seal), but `OSF_REGISTRATION` is `None` until the v0.4 OSF registration exists, and `REGISTRATION_EVIDENCE_TEMPLATE.md` reads `EXECUTION_UNLOCKED = NO`. Every scientific or journal command refuses until both are filled in and the stored verification passes. The r3 package and its launcher stay locked permanently.
 
 ## Before the first run
 
@@ -23,7 +23,7 @@ It is ported from the r3 Stage 4A launcher with the protocol P9 changes:
    - every attachment's SHA-256 matches;
    - the Zenodo files (record `24189108`, reused from v0.3) match by name, size and MD5.
 
-   Its report goes to `registration/OSF_VERIFICATION.json`. Only then set `EXECUTION_UNLOCKED = YES` in `REGISTRATION_EVIDENCE_TEMPLATE.md`; this is a human decision.
+   Record the OSF ID as `OSF_REGISTRATION` in `launch.py` first. The report goes to `registration/OSF_VERIFICATION.json`; `start`, `run` and every worker refuse unless it records `passed: true` for that same ID, so the unlock flag alone never starts anything. Only then set `EXECUTION_UNLOCKED = YES` in `REGISTRATION_EVIDENCE_TEMPLATE.md`; this is a human decision.
 
 2. **Disk.** P9 projects about 5–6 GB for the whole run.
    - Every phase start needs at least **15 GB** free, and the running monitor stops gracefully below that.
@@ -63,7 +63,7 @@ It is ported from the r3 Stage 4A launcher with the protocol P9 changes:
 $PY -B -m fgcs_strengthening_v04.launch start
 ```
 
-1. It repeats every gate: unlock flag, threads, tag, package, seal, host, AC, disk and the recovery check.
+1. It repeats every gate: unlock flag, stored registration verification, threads, tag, package, seal, host, AC, disk and the recovery check.
 2. It creates the runtime journal with the registered seal.
 3. It runs the three modern structural certificates with one worker.
 4. It runs the **90** canary inner fits (P9 step 2) with exactly **six** single-threaded worker processes.
@@ -81,7 +81,7 @@ Then, one phase at a time and in order: `inner`, `final`, `diagnostics`, then `e
 $PY -B -m fgcs_strengthening_v04.launch run --phase inner
 ```
 
-The orchestrator closes the fit phases before evaluation and refuses anything out of order. The analysis (`analyse_study.py --run`) needs the closed evaluation gate.
+`run --phase X` refuses until every earlier phase is terminal (complete, failed or abandoned), in the controller and again in each worker (P9 run order). The orchestrator also closes the fit phases before evaluation. The analysis (`analyse_study.py --run`) needs the closed evaluation gate.
 
 ## While it runs
 
@@ -121,20 +121,22 @@ Failures never touch the runtime; they are recorded in `fgcs_strengthening_v04/b
 |---|---|
 | `EXECUTION_UNLOCKED = YES` (exactly one line; a missing file refuses) | every journal command |
 | v0.4 OSF registration public, unchanged and with a DOI; Zenodo files unchanged | `verify-registration` (before you unlock) |
+| `OSF_REGISTRATION` recorded and `OSF_VERIFICATION.json` passed for it | `start`, `run` and every worker |
 | Thread variables exported as 1 before Python | controller and every worker |
 | Tag resolves to the registered commit; registration files unchanged against the tag | preflight |
 | The v0.4 registration builder verifies the package digest | preflight |
 | Live execution seal equals the registered seal | preflight and every worker |
 | Live host equals `host_manifest.json`; torch intra/inter-op 1; CPU | preflight (fresh process) and every worker |
 | AC power; at least 15 GB free; recovery check OK | every phase start |
+| Every earlier phase terminal (P9 run order) | every phase start and every worker |
 | At least 20 GB free and a fresh verified backup | inner and final phase start |
 | Free disk at least 15 GB; battery for no more than 2 minutes | every minute while running |
 | Exactly six fit workers (slot locks); certify uses one | orchestrator and launcher |
 
 ## Tests
 
-`tests/test_launcher.py` (24 tests) and `tests/test_backup_runtime.py` use generated data, scratch journals and recorded API responses only:
-- **Gates:** unlock flag, missing evidence file, threads, power and disk; refusal while locked or unregistered, with no runtime created; six workers and no systems phase; `runtime/` git-ignored.
+`tests/test_launcher.py` (27 tests) and `tests/test_backup_runtime.py` use generated data, scratch journals and recorded API responses only:
+- **Gates:** unlock flag, missing evidence file, the stored registration verification, P9 phase order, threads, power and disk; refusal while locked or unregistered, with no runtime created; six workers and no systems phase; `runtime/` git-ignored.
 - **Host:** the live host matches its own capture; a changed kernel, library version or thread count is reported.
 - **Registration check:** a matching public registration passes; pending, no DOI, changed response or title, wrong attachment hash, withdrawn, embargoed or a changed Zenodo file all fail.
 - **Six-process canary:** run through the controller, each unit fitted exactly once.

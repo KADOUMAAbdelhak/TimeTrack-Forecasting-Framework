@@ -15,8 +15,9 @@ of protocol P9: exactly six single-threaded fit workers, no systems phase, and a
 v0.4 host manifest (host.py) instead of r3's systems module.
 
 Nothing scientific runs, and no runtime journal is created, unless the v0.4 registration is recorded
-below and REGISTRATION_EVIDENCE_TEMPLATE.md records EXECUTION_UNLOCKED = YES, and every preflight check
-passes:
+below, REGISTRATION_EVIDENCE_TEMPLATE.md records EXECUTION_UNLOCKED = YES, OSF_REGISTRATION is recorded
+and registration/OSF_VERIFICATION.json holds a passing verify-registration report for it, and every
+preflight check passes:
 - the v0.4 registration tag resolves to the registered commit;
 - the registration package verifies and has the registered digest;
 - the live execution seal equals the registered seal;
@@ -24,7 +25,8 @@ passes:
 The package values are recorded below; OSF_REGISTRATION is None until the v0.4 OSF registration
 exists, and the unlock flag stays NO until that registration is verified.
 
-Each phase run also requires AC power and at least MIN_FREE_GB of free disk. Workers are separate
+A phase starts only after every earlier phase is terminal (P9 run order), checked by the controller and by
+each worker. Each phase run also requires AC power and at least MIN_FREE_GB of free disk. Workers are separate
 processes in their own session and write to log files, never to pipes. A terminal Ctrl-C or a hang-up
 reaches only this controller, which turns it into Orchestrator.request_stop: each worker finishes its
 current unit and takes no new work, so no retry is used. While running, the controller holds a
@@ -259,10 +261,31 @@ def preflight():
     return report
 
 
+def require_registration_verified(path=OSF_VERIFICATION):
+    """The v0.4 OSF registration is recorded here and its stored verify-registration report passed for it.
+
+    A second gate beside the manual unlock flag: setting EXECUTION_UNLOCKED = YES alone never runs anything.
+    """
+    registration = _registered("OSF_REGISTRATION", OSF_REGISTRATION)
+    try:
+        report = json.loads(Path(path).read_text())
+    except FileNotFoundError:
+        raise LaunchRefused(f"No registration verification report at {path}: run verify-registration first") from None
+    except ValueError:
+        raise LaunchRefused(f"Unreadable registration verification report at {path}") from None
+    if not isinstance(report, dict) or report.get("passed") is not True or report.get("problems"):
+        raise LaunchRefused(f"The stored registration verification did not pass: {path}")
+    if report.get("osf_registration") != registration:
+        raise LaunchRefused(f"The stored verification is for {report.get('osf_registration')!r}, "
+                            f"not the recorded OSF registration {registration!r}")
+    return report
+
+
 def require_execution_allowed():
     if not execution_unlocked():
         raise LaunchRefused("EXECUTION_UNLOCKED = NO: scientific execution stays locked until the registration "
                             "evidence is verified (REGISTRATION_EVIDENCE_TEMPLATE.md)")
+    require_registration_verified()
     require_thread_env()
     return preflight()
 
@@ -274,6 +297,21 @@ def worker_env():
 # -- workers --------------------------------------------------------------------------------------
 def phase_complete(orchestrator, phase):
     return all(orchestrator.terminal(unit) for unit in orchestrator.schedule.phase(phase))
+
+
+def require_earlier_phases_terminal(orchestrator, phase):
+    """P9 run order: a phase starts only after every earlier phase is terminal (complete, failed or abandoned)."""
+    if phase not in PHASES:
+        raise LaunchRefused(f"Unknown phase {phase!r}")
+    open_phases = {}
+    for earlier in PHASES[:PHASES.index(phase)]:
+        units = orchestrator.schedule.phase(earlier)
+        remaining = sum(1 for unit in units if not orchestrator.terminal(unit))
+        if remaining:
+            open_phases[earlier] = remaining
+    if open_phases:
+        raise LaunchRefused(f"{phase} cannot start before the earlier phases finish (P9 run order); "
+                            f"units not yet terminal: {open_phases}")
 
 
 def run_worker(orchestrator, phase):
@@ -321,7 +359,10 @@ def production_orchestrator(*, worker=False):
 def worker_main(phase):
     if not execution_unlocked():
         raise LaunchRefused("EXECUTION_UNLOCKED = NO")
-    code, summary = run_worker(production_orchestrator(worker=True), phase)
+    require_registration_verified()
+    orchestrator = production_orchestrator(worker=True)
+    require_earlier_phases_terminal(orchestrator, phase)
+    code, summary = run_worker(orchestrator, phase)
     print(json.dumps(summary), flush=True)
     return code
 
@@ -751,6 +792,7 @@ def run_phase(phase, report):
     require_free_disk()
     require_full_run_capacity(phase)
     orchestrator = production_orchestrator()
+    require_earlier_phases_terminal(orchestrator, phase)
     if orchestrator.stop_requested():
         raise LaunchRefused("A stop request is active; run `recover-check`, then `resume` first")
     recovery = recovery_report()

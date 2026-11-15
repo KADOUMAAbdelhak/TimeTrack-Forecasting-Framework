@@ -82,6 +82,69 @@ class LauncherGateTests(unittest.TestCase):
             with self.assertRaisesRegex(launcher.LaunchRefused, "not recorded yet"):
                 launcher.check_seal()
 
+    def test_unlock_flag_alone_never_runs_without_a_verified_registration(self):
+        runtime = HOME / "runtime"
+        existed = runtime.exists()
+        with patch.object(launcher, "execution_unlocked", return_value=True), \
+                patch.object(launcher, "preflight", side_effect=AssertionError("preflight must not be reached")):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
+                launcher.require_execution_allowed()
+            for argv in (["start"], ["run", "--phase", "canary"]):
+                self.assertEqual(launcher.main(argv), 2, argv)
+            with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
+                launcher.worker_main("canary")
+        self.assertEqual(runtime.exists(), existed)
+
+    def test_registration_verification_report_must_pass_for_the_recorded_registration(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            path = Path(scratch) / "OSF_VERIFICATION.json"
+            with patch.object(launcher, "OSF_REGISTRATION", "abcd5"):
+                with self.assertRaisesRegex(launcher.LaunchRefused, "run verify-registration first"):
+                    launcher.require_registration_verified(path)
+                refused = ("not json", json.dumps([]),
+                           json.dumps({"passed": False, "problems": ["x"], "osf_registration": "abcd5"}),
+                           json.dumps({"passed": True, "problems": ["x"], "osf_registration": "abcd5"}),
+                           json.dumps({"passed": "true", "problems": [], "osf_registration": "abcd5"}),
+                           json.dumps({"passed": True, "problems": [], "osf_registration": "kuwra"}))
+                for text in refused:
+                    path.write_text(text)
+                    with self.assertRaises(launcher.LaunchRefused, msg=text):
+                        launcher.require_registration_verified(path)
+                path.write_text(json.dumps({"passed": True, "problems": [], "osf_registration": "abcd5"}))
+                self.assertTrue(launcher.require_registration_verified(path)["passed"])
+            with patch.object(launcher, "OSF_REGISTRATION", None):
+                with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
+                    launcher.require_registration_verified(path)
+
+    def test_phases_start_only_after_every_earlier_phase_is_terminal(self):
+        from types import SimpleNamespace
+
+        terminal = {phase: [True] for phase in launcher.PHASES}
+        orchestrator = SimpleNamespace(
+            schedule=SimpleNamespace(phase=lambda phase: [(phase, i) for i in range(len(terminal[phase]))]),
+            terminal=lambda unit: terminal[unit[0]][unit[1]])
+        for phase in launcher.PHASES:
+            launcher.require_earlier_phases_terminal(orchestrator, phase)
+        terminal["inner"] = [True, False, False]
+        for phase in launcher.PHASES[:3]:
+            launcher.require_earlier_phases_terminal(orchestrator, phase)  # certify, canary, inner itself
+        for phase in launcher.PHASES[3:]:
+            with self.assertRaisesRegex(launcher.LaunchRefused, r"'inner': 2"):
+                launcher.require_earlier_phases_terminal(orchestrator, phase)
+        terminal["certify"] = [False]
+        with self.assertRaisesRegex(launcher.LaunchRefused, "certify"):
+            launcher.require_earlier_phases_terminal(orchestrator, "canary")
+        with self.assertRaises(launcher.LaunchRefused):
+            launcher.require_earlier_phases_terminal(orchestrator, "systems")
+        # run_phase refuses before recovery, launch or any worker when an earlier phase is open.
+        with patch.object(launcher, "require_ac_power"), patch.object(launcher, "require_free_disk"), \
+                patch.object(launcher, "require_full_run_capacity"), \
+                patch.object(launcher, "production_orchestrator", return_value=orchestrator), \
+                patch.object(launcher, "recovery_report", side_effect=AssertionError("not reached")), \
+                patch.object(launcher, "launch", side_effect=AssertionError("not reached")):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "P9 run order"):
+                launcher.run_phase("final", {})
+
     def test_six_workers_and_no_systems_phase(self):
         from fgcs_strengthening_v04.src.orchestrator import PHASES, TRAINING_WORKERS
 
