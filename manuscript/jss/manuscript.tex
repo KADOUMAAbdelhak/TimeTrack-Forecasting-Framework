@@ -20,8 +20,9 @@
 \ead{abdelhak.kadouma@uwasa.fi}
 \credit{Conceptualization, Methodology, Software, Data curation, Formal analysis, Validation, Visualization, Writing -- original draft}
 
-\author[1]{Amit Shukla}
+\author[1,2]{Amit K. Shukla}
 \ead{amit.shukla@uwasa.fi}
+\ead{amitkshukla@sau.int}
 \credit{Supervision, Conceptualization, Methodology, Writing -- review \& editing}
 
 \author[1]{Mohammed Elmusrati}
@@ -32,6 +33,12 @@
   organization={University of Vaasa},
   city={Vaasa},
   country={Finland}
+}
+
+\affiliation[2]{
+  organization={Department of Computer Science and Engineering, South Asian University},
+  addressline={Gaushala Rd., Maidan Garhi, New Delhi-110068},
+  country={India}
 }
 
 \cortext[1]{Corresponding author}
@@ -967,6 +974,13 @@ causal isolation of model family from the specified context and model design.
 These post-hoc analyses introduce no additional significance test or pooled
 cross-block performance statistic.
 
+OpenAI ChatGPT and Codex were used under author supervision to assist with the
+development and review of selected post-hoc analysis and reproducibility code.
+All AI-assisted code was inspected, tested and validated by the authors against
+the frozen experimental artifacts and predefined analysis procedures before
+use. Generative AI was not used to generate or modify the underlying
+experimental observations or reported primary results.
+
 \section{Results}
 
 Figure~\ref{fig:primary-gains} reports frozen resource-overall MacroMAE gains
@@ -1489,18 +1503,38 @@ a universal verdict beyond the evaluated formulations and populations.
 \section{Conclusion}
 \label{sec:conclusion}
 
-Contextual input and representation sharing require separate design decisions.
-External memory recurs favourably, but Ridge and seed sensitivity bound
-contextual value by model and environment. The evaluated shared-LSTM model
-generally loses throughput, memory and disk-write accuracy while consolidating
-per-entity models. Adverse point directions survive separate post-hoc common-context
-and H129 approximate-capacity controls, without identifying sharing alone as
-the mechanism. Typical-cell penalties can be more modest than tail-sensitive
-MacroMAE suggests: per-entity consolidation may be attractive when
-target-specific accuracy penalties are acceptable, provided adverse tails
-are assessed. These findings do not universally reject multi-task forecasting.
-Validate contextual input and consolidation by resource and design, within
-the eligible population and against absolute persistence skill.
+Forecasting runtime telemetry involves two distinct design decisions: whether
+to include measurements from other resources and whether targets should share
+a predictive representation. In the evaluated settings, contextual input
+provides selective benefits that depend on the resource and environment.
+Memory forecasting in the external environments shows a recurring favourable
+pattern, but this does not establish a universal memory benefit, and some
+effects change sign across the recorded seeds.
+
+The evaluated shared-LSTM formulation generally reduces forecasting accuracy
+for throughput, memory and disk-write activity while consolidating four
+target-specific models into one model per entity. The adverse point estimates
+for these resources remain across all six blocks under separate post-hoc
+common-context and approximately capacity-matched H129 controls. Context
+selection and aggregate parameter capacity therefore do not fully explain
+the observed differences. These controls nevertheless do not isolate
+representation sharing as the causal mechanism.
+
+The magnitude of the accuracy trade-off also requires care. Matched-cell
+median MAE ratios are close to one in many comparisons, whereas some larger
+MacroMAE penalties reflect concentrated absolute-error tails. Per-entity
+consolidation may therefore be attractive where target-specific accuracy
+penalties are acceptable, provided that adverse tails are assessed alongside
+typical-cell behaviour. The matched-context Ridge AR/ARX comparison further
+indicates that contextual-input effects depend on the model family, limiting
+generalisations from the LSTM results.
+
+For software-engineering practice, these findings support evaluating
+contextual input and model consolidation separately for each resource and
+forecasting design. Relative gains must also be assessed against persistence
+skill within the eligible population. The evidence concerns the evaluated
+formulations and environments; it does not support a general rejection of
+shared or multi-task forecasting.
 
 \section*{Data availability}
 
@@ -1522,12 +1556,15 @@ and citation conditions, rather than a standard open-data licence. Readers
 should obtain third-party raw data from these original sources and consult
 each source's terms before redistribution.
 
-Source code, protocols, derived analysis outputs and SHA-256 inventories are
-publicly accessible in the
-\href{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/fee20c316040c57b69ba12a193530c955b539771}{project repository at scientific checkpoint \texttt{fee20c3}}.
-The public checkpoint does not include the full fitted-model or per-fit
-prediction collections; the checksum inventories do not themselves provide
-those files. No repository-wide reuse licence is asserted here.
+Source code, protocols, derived analysis outputs and SHA-256 inventories for
+the original experiments, post-hoc controls and robustness diagnostics are
+available at the
+\href{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/0e8cad884896a706f62f0fae4ab2b52812f9b033}{project repository checkpoint}:\newline
+\texttt{0e8cad884896a706f62f0fae4ab2b52812f9b033}.
+The Git checkpoint does not include the full fitted-model or per-fit prediction
+collections; checksum inventories identify but do not themselves provide those
+files. Third-party raw datasets remain available from their original sources
+under their respective terms.
 
 \printcredits
 
@@ -1535,6 +1572,23 @@ those files. No repository-wide reuse licence is asserted here.
 
 This research did not receive any specific grant from funding agencies in
 the public, commercial, or not-for-profit sectors.
+
+\section*{Declaration of Competing Interest}
+
+The authors declare that they have no known competing financial interests or
+personal relationships that could have appeared to influence the work reported
+in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+
+During the preparation of this work, the authors used OpenAI ChatGPT and Codex
+to assist with drafting and revising selected manuscript text, language editing
+and proofreading, and the development and review of portions of the code used
+for post-hoc analyses and reproducibility checks. After using these tools, the
+authors reviewed, edited, and validated the outputs as needed and take full
+responsibility for the content, accuracy, integrity, and originality of the
+published article. No figures, images, or visual elements were generated using
+generative AI tools.
 
 
 \bibliographystyle{cas-model2-names}
