@@ -185,8 +185,16 @@ Gradient diagnostics (D-4) add 600 extractions, not fits. D-1, D-2, D-3, D-6 and
 | DLinear | negligible | about 3,000 |
 | **Total** | | **about 928,000 (about 10.7 days)** |
 
-- **Four workers** (measured speedup 2.87): about **3.7 days**.
-- **Allowing 20–30 %** for thermal throttling on the fanless host and for retries: about **4.5–5 days**.
+- **Worker speedups** come from a sustained 12-minute synthetic benchmark on AC power (2026-11-14/15), so they already include thermal throttling: the thermal state reached "fair" (1) at every worker count, never "serious" (2) or "critical" (3), and there were no errors. The model classes and training mix match v0.4-min; the data were random tensors. The earlier short-probe speedup (2.87 for four workers) overstated sustained throughput.
+
+  | Workers | Sustained speedup | Fits per hour | Compute |
+  |---:|---:|---:|---:|
+  | 4 | 2.55 | about 267 | about **4.2 days** |
+  | 6 | 3.00 | about 314 | about **3.6 days** |
+  | 8 | 3.04 | about 319 | about 3.5 days; not used: the 1-minute load reached 87, leaving no headroom for the monitor or backups |
+
+- **Allowing about 10 %** for retries and real-fit overhead (data loading, checkpoints) that the synthetic benchmark excluded: about **4.6 days** with four workers, or about **3.9 days** with six.
+- **Worker count:** not yet fixed; it is set at freeze. The r3 orchestrator enforces exactly four. Six would need the v0.4 schedule and launcher to allow it, and training-cost seconds measured under six-worker load would not be comparable with r3's four-worker figures.
 - **Storage:** about 3–5 GB.
 
 **Execution.**
