@@ -76,13 +76,14 @@ def require_fit_threads():
 
 
 def execution_sources():
-    """Every engine source the runtime seal covers. The v0.4 analysis sources join when they exist."""
+    """Every engine and analysis source the runtime seal covers."""
+    from .analysis import SOURCES as analysis
     from .diagnostics.engine import _SOURCES as diagnostics
     from .evaluation import _SOURCES as evaluation
     from .modern.runner import _SOURCES as modern
     from .transfer.runner import _SOURCES as transfer
 
-    return tuple(dict.fromkeys((*diagnostics, *evaluation, *modern, *transfer, *_SOURCES)))
+    return tuple(dict.fromkeys((*diagnostics, *evaluation, *modern, *transfer, *analysis, *_SOURCES)))
 
 
 def execution_fingerprints():

@@ -113,11 +113,11 @@ If any check fails, no data fit of that backbone starts. The failure is recorded
   | Broad Negative | ≤ −1 % | ≤ 1/5 | ≤ 2/10 | ≤ 1/5 | ≤ 1/3 |
   | Neutral or Mixed | every remaining case | | | | |
 
-- **Uncertainty.** The paper's paired VM-cluster bootstrap, run within each block: 10 VMs resampled with replacement, all five folds and the paired cell structure kept, on seed-averaged matched MAEs. 10,000 replicates, percentile 95 % intervals, random seed 20261007. Intervals never enter the classification predicates.
+- **Uncertainty.** The paper's paired VM-cluster bootstrap, run within each block: 10 VMs resampled with replacement, all five folds and the paired cell structure kept, on seed-averaged matched MAEs. 10,000 replicates, percentile 95 % intervals, random seed 20261007. One draw matrix per block is generated once, in block order fastStorage then Rnd, and reused for every interval in that block (including D-3). Intervals never enter the classification predicates.
 - **Interaction.** Both sharing gains are reported side by side, together with the entity log-ratio I = ln A_M1 − ln A_S2 − ln A_M0 + ln A_S1 and its bootstrap interval. This is descriptive, not a test.
 - **Secondary descriptives:** the matched-cell median MAE ratio and win rate; persistence skill, computed per cell and averaged as in the paper, with undefined zero-denominator skills counted, not replaced.
 - **Cross-backbone summary.** For each contrast × resource × block, each backbone's class is tabulated. An effect **generalises across backbones** only if every backbone for which the contrast is defined has a non-neutral class of the same sign. Otherwise it is **backbone-dependent**. No pooled cross-backbone statistic is computed.
-- **Baseline accuracy (comment 1).** For each cell × resource × block, every backbone's MacroMAE and mean persistence skill are tabulated side by side, with the LSTM's ratio to the most accurate defined backbone. This shows whether the LSTM is competitive with the modern baselines. It is descriptive: no class, test or ranking claim.
+- **Baseline accuracy (comment 1).** For each cell × resource × block, every backbone's MacroMAE and mean persistence skill are tabulated side by side, with the LSTM's ratio to the most accurate defined backbone. Backbones are compared on their common available units: a unit missing for any backbone (P4 missing-fit rule) is excluded for all of them in this table, so the values share one support. This shows whether the LSTM is competitive with the modern baselines. It is descriptive: no class, test or ranking claim.
 - **Parameter counts** are reported per cell, because consolidation (four models into one) is part of the sharing question.
 - **Missing fits.** A fit that still fails after its v0.3 C3 retries makes that block × entity × fold × resource × seed missing for every cell of that backbone, so contrasts stay paired. Seed averages then use the remaining seeds. Each predicate keeps its numerator and denominator over the units still available (for example 7/9 VMs, not 7/10), and the thresholds become the same fractions (≥ 0.8, ≥ 0.5, ≤ 0.2 of available VMs). Every missing unit is listed in the results.
 
@@ -134,6 +134,12 @@ All diagnostics use the P1 cohort and are computed after fit closure (for the tr
 | **D-5** | Transfer lattice | All-input LSTM (H64, all four input channels) trained on each of the 6 pairwise and 4 leave-one-out task subsets, with retained-task heads only, the equal mean of retained-task losses, its own inner early stopping and a fixed-epoch refit. References: S2 per target; full model: M1 | Fits on training data; analysed after evaluation closure |
 | **D-6** | Task affinity (4×4) | Directed pairwise transfer F_i(j) = ln[A(S2_i) / A(pair_{i,j}, target i)] for i ≠ j. Leave-one-out contribution Q_{i,j} = ln[A(subset without j, target i) / A(M1, target i)] | From D-5 |
 | **D-7** | Per-task loss shares | Each task's share of M1's training MSE per epoch and at E: the loss-side counterpart of D-4's magnitude imbalance | Existing training journal fields (`train_task_mse`) |
+
+**Computation details.**
+- **D-1 series.** The series value at each inner-training origin is the last row of its transformed, robust-scaled inner-training window. A lag-k pair (t, t + k) is used only when both t and t + k are inner-training origins in the same contiguous segment; gaps and segment boundaries are never bridged.
+- **D-1 entity value for D-3.** For target j, the mean over the five folds of the mean, over the three sources i ≠ j, of the per-fold maximum absolute correlation (i→j).
+- **D-3 bootstrap.** D-3 reuses each block's P4 draw matrix. A VM lacking either value is dropped from the point estimate and from every replicate.
+- **D-6 missing units.** Each F or Q entry pairs only its own two cells: a unit missing in either is missing for both. Each entry is summarised by its mean and median over the available VMs and the number of VMs with a positive value; no intervals are computed.
 
 **Interpretation rules.**
 - These are descriptive associations, not causal identification.
@@ -204,8 +210,8 @@ Gradient diagnostics (D-4) add 600 extractions, not fits. D-1, D-2, D-3, D-6 and
 
 **Run order.** Each step starts only after the previous one is complete:
 1. structural checks for every new cell (P3), one worker;
-2. a canary of inner fits on six workers, with the v0.3 canary gate (technical evidence only, approved by the author);
-3. all inner fits;
+2. a canary of 90 inner fits on six workers, with the v0.3 canary gate (technical evidence only, approved by the author). Per block, the first P1 cohort VM (fastStorage 697, Rnd 99), fold 1, seed 0: the LSTM 2×2 (10 fits), every defined modern cell (DLinear 10, PatchTST 10, iTransformer 5) and the 10 transfer-lattice subsets, 45 fits per block. The canary fits are scheduled inner fits, not extra ones, and are not repeated in step 3;
+3. all remaining inner fits (13,410);
 4. all final fits;
 5. D-4 gradient extractions;
 6. fit closure;
