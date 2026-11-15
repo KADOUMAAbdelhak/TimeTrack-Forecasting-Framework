@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from fgcs_strengthening_v04 import backup_runtime as backup
 from fgcs_strengthening_v04 import launch as launcher
@@ -155,15 +156,22 @@ class BackupTests(unittest.TestCase):
 
 
 class LauncherBackupGateTests(unittest.TestCase):
-    def test_full_run_phases_need_20_gb_and_a_fresh_backup(self):
-        fresh = lambda: {"verdict": "OK", "age_hours": 0.5}
-        self.assertIsNone(launcher.require_full_run_capacity("canary", free=lambda: 1e9, freshness=fresh))
-        with self.assertRaisesRegex(launcher.LaunchRefused, "GB free"):
-            launcher.require_full_run_capacity("inner", free=lambda: 15e9, freshness=fresh)
-        self.assertEqual(launcher.require_full_run_capacity("final", free=lambda: 25e9, freshness=fresh)["verdict"], "OK")
+    def test_full_run_phases_need_20_gb_but_no_backup(self):
+        self.assertIsNone(launcher.require_full_run_capacity("canary", free=lambda: 1e9))
+        for phase in ("inner", "final"):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "at least 20 GB"):
+                launcher.require_full_run_capacity(phase, free=lambda: 19.9e9)
+            self.assertEqual(launcher.require_full_run_capacity(phase, free=lambda: 20e9), 20e9)
+        # The mandatory backup gate is gone: no missing, failed or stale backup blocks a phase start.
+        self.assertFalse(hasattr(launcher, "require_backup_fresh"))
         for state in ({"verdict": "STALE"}, {"verdict": "LAST_BACKUP_FAILED"}, {"verdict": "NO_BACKUP_RECORDED"}):
-            with self.assertRaisesRegex(launcher.LaunchRefused, "backup"):
-                launcher.require_full_run_capacity("inner", free=lambda: 25e9, freshness=lambda s=state: s)
+            with patch.object(backup, "backup_freshness", lambda *a, s=state, **k: s):
+                self.assertEqual(launcher.require_full_run_capacity("inner", free=lambda: 25e9), 25e9)
+        # The 15 GB running guard is unchanged.
+        self.assertEqual((launcher.MIN_FREE_GB, launcher.FULL_RUN_MIN_FREE_GB), (15, 20))
+        monitor = launcher.Monitor(request_stop=lambda r: None, free=lambda: 14.9e9, power=lambda: True,
+                                   thermal=lambda: 0, load=lambda: [0, 0, 0])
+        self.assertIn("below 15 GB", monitor.check())
 
     def test_health_snapshot_reports_backup_freshness_and_survives_errors(self):
         monitor = launcher.Monitor(request_stop=lambda r: None, free=lambda: 100e9, power=lambda: True,

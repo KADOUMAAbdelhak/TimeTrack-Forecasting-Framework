@@ -55,7 +55,9 @@ import time
 from .src.identity import HOME, ROOT, read_config
 
 # The final frozen state (P9, D1). Its commit, package digest and seal are read from the tag, never recorded here.
-TAG = "fgcs-v04-min-final"
+# fgcs-v04-min-final-r2 carries the same package and seal as fgcs-v04-min-final; it only drops the launcher's
+# mandatory backup gate, which no protocol section requires. fgcs-v04-min-final stays published and unused.
+TAG = "fgcs-v04-min-final-r2"
 PREDECESSOR_TAG = "fgcs-v04-registration-package"  # audited package before D1; kept, never used to run
 
 THREAD_ENV = {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1"}
@@ -159,22 +161,12 @@ def require_free_disk(minimum_gb=MIN_FREE_GB, probe=free_bytes):
     return free
 
 
-def require_backup_fresh(freshness=None):
-    """A verified backup no older than the stale limit (backup_runtime.py writes the status file)."""
-    from .backup_runtime import backup_freshness
-
-    state = (freshness or backup_freshness)()
-    if state.get("verdict") != "OK":
-        raise LaunchRefused(f"A fresh verified runtime backup is required before this phase: {state}")
-    return state
-
-
-def require_full_run_capacity(phase, *, free=free_bytes, freshness=None):
-    """Inner and final phases need >= FULL_RUN_MIN_FREE_GB free and a fresh verified backup."""
+def require_full_run_capacity(phase, *, free=free_bytes):
+    """Inner and final phases need >= FULL_RUN_MIN_FREE_GB free. Backups are optional (backup_runtime.py)
+    and only reported in health snapshots and status; no protocol section requires them."""
     if phase not in FULL_RUN_PHASES:
         return None
-    require_free_disk(FULL_RUN_MIN_FREE_GB, free)
-    return require_backup_fresh(freshness)
+    return require_free_disk(FULL_RUN_MIN_FREE_GB, free)
 
 
 def _git(*args):

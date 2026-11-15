@@ -7,7 +7,7 @@ It is ported from the r3 Stage 4A launcher with the protocol P9 changes:
 - no systems phase;
 - the host is checked against `registration/host_manifest.json` by `host.py`, instead of r3's systems module.
 
-**Freezing (protocol P9, deviation D1).** v0.4-min is frozen by Git, not by an external registration. The final state is the annotated tag `fgcs-v04-min-final`. The launcher reads the tagged commit, package digest (`registration/PACKAGE.json`) and execution seal (`registration/execution_seal.json`) from the tag itself, and refuses if any tracked file under `fgcs_strengthening_v04/` or the protocol differs from the tag. The only exception is `registration/REGISTRATION_EVIDENCE_TEMPLATE.md`, which holds the unlock flag. OSF `kuwra` (v0.3) is kept as superseded historical evidence; nothing in v0.4 reads it. The predecessor tag `fgcs-v04-registration-package` is kept and never used to run.
+**Freezing (protocol P9, deviation D1).** v0.4-min is frozen by Git, not by an external registration. The final state is the annotated tag `fgcs-v04-min-final-r2`. It carries exactly the package and seal of `fgcs-v04-min-final` (whose name the package's recorded decisions still cite) and differs only in this unsealed launcher: the mandatory backup gate, which no protocol section requires, was removed. `fgcs-v04-min-final` stays published and is never used to run. The launcher reads the tagged commit, package digest (`registration/PACKAGE.json`) and execution seal (`registration/execution_seal.json`) from the tag itself, and refuses if any tracked file under `fgcs_strengthening_v04/` or the protocol differs from the tag. The only exception is `registration/REGISTRATION_EVIDENCE_TEMPLATE.md`, which holds the unlock flag. OSF `kuwra` (v0.3) is kept as superseded historical evidence; nothing in v0.4 reads it. The predecessor tag `fgcs-v04-registration-package` is kept and never used to run.
 
 **Status: locked** until you set `EXECUTION_UNLOCKED = YES` in `registration/REGISTRATION_EVIDENCE_TEMPLATE.md`. The r3 package and its launcher stay locked permanently.
 
@@ -17,7 +17,7 @@ It is ported from the r3 Stage 4A launcher with the protocol P9 changes:
 
 2. **Disk.** P9 projects about 5–6 GB for the whole run.
    - Every phase start needs at least **15 GB** free, and the running monitor stops gracefully below that.
-   - The inner and final phases also need at least **20 GB** free and a fresh (≤ 2 h) verified backup.
+   - The inner and final phases also need at least **20 GB** free to start. A backup is not required (see Backups).
    - Never delete or move a sealed input; preflight re-hashes them. Never move or symlink `runtime/`.
 
 3. **Power and sleep.**
@@ -95,7 +95,7 @@ $PY -B -m fgcs_strengthening_v04.launch run --phase inner
 
 ## Backups
 
-`fgcs_strengthening_v04/backup_runtime.py` is ported unchanged from r3 (verified, hard-linked rsync snapshots on an external drive; the latest two kept). Run it hourly in a second `screen` window:
+Backups are **optional** and never block a phase: the frozen protocol does not require them. They are still recommended for a multi-day run. `fgcs_strengthening_v04/backup_runtime.py` is ported unchanged from r3 (verified, hard-linked rsync snapshots on an external drive; the latest two kept), and the health log and `status` report their freshness. To use it, run it hourly in a second `screen` window:
 
 ```bash
 $PY -B -m fgcs_strengthening_v04.backup_runtime backup --dest /Volumes/<drive>/fgcs_v04_runtime_backups --every 3600
@@ -111,13 +111,13 @@ Failures never touch the runtime; they are recorded in `fgcs_strengthening_v04/b
 |---|---|
 | `EXECUTION_UNLOCKED = YES` (exactly one line; a missing file refuses) | every journal command |
 | Thread variables exported as 1 before Python | controller and every worker |
-| `fgcs-v04-min-final` is an annotated tag; no tracked v0.4 file or the protocol differs from it (unlock flag excepted) | preflight and every worker |
+| `fgcs-v04-min-final-r2` is an annotated tag; no tracked v0.4 file or the protocol differs from it (unlock flag excepted) | preflight and every worker |
 | The package rebuilt from the repository equals the tagged digest | preflight |
 | Live execution seal equals the tagged seal | preflight and every worker |
 | Live host equals `host_manifest.json`; torch intra/inter-op 1; CPU | preflight (fresh process) and every worker |
 | AC power; at least 15 GB free; recovery check OK | every phase start |
 | Every earlier phase terminal (P9 run order) | every phase start and every worker |
-| At least 20 GB free and a fresh verified backup | inner and final phase start |
+| At least 20 GB free | inner and final phase start |
 | Free disk at least 15 GB; battery for no more than 2 minutes | every minute while running |
 | Exactly six fit workers (slot locks); certify uses one | orchestrator and launcher |
 
