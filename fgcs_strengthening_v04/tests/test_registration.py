@@ -83,10 +83,11 @@ class RegistrationTests(unittest.TestCase):
         registration.build(self.package)
         for name, edit in (("schedule.json", lambda text: text.replace("13410", "13411")),
                            ("host_manifest.json", lambda text: text.replace("Synthetic CPU", "Other CPU")),
-                           ("PACKAGE.json", lambda text: text.replace("not performed", "performed"))):
+                           ("PACKAGE.json", lambda text: text.replace("scientific_execution\": \"none", "scientific_execution\": \"started"))):
             with self.subTest(name=name):
                 path = self.package / name
                 original = path.read_text()
+                self.assertNotEqual(edit(original), original, "the tamper edit must change the file")
                 path.write_text(edit(original))
                 _, problems = registration.verify(self.package)
                 self.assertTrue(problems)
