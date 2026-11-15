@@ -1,4 +1,4 @@
-"""Registered transfer identities, directed matrix entries and BH family slots."""
+"""Registered v0.4 transfer-lattice identities and directed matrix entries (D-5, D-6)."""
 
 from collections import Counter
 from dataclasses import dataclass
@@ -31,7 +31,7 @@ def group_identities(block, entity, fold, seed, phase):
 
 def transfer_identities():
     for block in BLOCKS:
-        for entity, fold, seed, phase in product(_CONFIG["blocks"][block]["entities"], FOLDS, SEEDS,
+        for entity, fold, seed, phase in product(_CONFIG["cohort"][block], FOLDS, SEEDS,
                                                  _CONFIG["phases"]):
             yield from group_identities(block, entity, fold, seed, phase)
 
@@ -45,9 +45,9 @@ def dry_budget():
         seen.add(identity.digest)
         counts[identity.arm, identity.phase] += 1
     budget = {arm: {phase: counts[arm, phase] for phase in ("inner", "final")} for arm in ARMS}
-    if budget != {"pairwise": {"inner": 12600, "final": 12600},
-                  "leave_one_out": {"inner": 8400, "final": 8400}} or len(seen) != 42000:
-        raise RuntimeError(f"Transfer identity budget differs from v0.3: {budget}")
+    expected = {arm: dict(zip(("inner", "final"), _CONFIG["budget"][arm])) for arm in ARMS}
+    if budget != expected or len(seen) != sum(sum(_CONFIG["budget"][arm]) for arm in ARMS):
+        raise RuntimeError(f"Transfer identity budget differs from v0.4: {budget}")
     return budget
 
 
@@ -118,39 +118,6 @@ def transfer_matrices():
     for block, scope in product(BLOCKS, SCOPES):
         for arm, estimand in (("pairwise", "F"), ("leave_one_out", "F"), ("leave_one_out", "Q")):
             yield _matrix(block, scope, arm, estimand)
-
-
-@dataclass(frozen=True, slots=True)
-class TestSlot:
-    entry: MatrixEntry
-    available: bool
-    raw_p: float | None
-
-
-@dataclass(frozen=True, slots=True)
-class BHFamily:
-    matrix_id: str
-    q: float
-    slots: tuple[TestSlot, ...]
-
-
-def prepare_bh_families(availability=None):
-    """Register fixed F slots. An available slot's p-value remains pending."""
-    availability = {} if availability is None else availability
-    matrices = tuple(matrix for matrix in transfer_matrices() if matrix.estimand == "F")
-    valid_ids = {entry.test_id for matrix in matrices for entry in matrix.entries}
-    if availability.keys() - valid_ids or any(type(value) is not bool for value in availability.values()):
-        raise ValueError("Availability must be Boolean and keyed only by registered F test IDs")
-    spec = _CONFIG["inference_spec"]
-    if len(matrices) != 8 or len(valid_ids) != 96 or any(len(matrix.entries) != 12 for matrix in matrices):
-        raise RuntimeError("Transfer BH family differs from v0.3")
-    return tuple(
-        BHFamily(matrix.matrix_id, spec["threshold"], tuple(
-            TestSlot(entry, availability.get(entry.test_id, False),
-                     None if availability.get(entry.test_id, False) else spec["unavailable_p"])
-            for entry in matrix.entries))
-        for matrix in matrices
-    )
 
 
 if __name__ == "__main__":

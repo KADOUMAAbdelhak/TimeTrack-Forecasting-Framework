@@ -100,11 +100,11 @@ def entity_effect(entry, entity, numerator_cells, denominator_cells):
 
 
 def group_effect(entry, entities):
-    """Mean entity log effect for one complete frozen 35-entity matrix entry."""
+    """Mean entity log effect for one complete matrix entry over the block's 10 cohort VMs."""
     expected = BLOCK_ENTITIES[entry.block]
     if entities.keys() - expected:
         raise ValueError("Effect keys must be exact frozen cohort IDs")
     if entities.keys() != expected or any(not effect.available for effect in entities.values()):
         return None
-    cohort = _CONFIG["blocks"][entry.block]["entities"]
+    cohort = _CONFIG["cohort"][entry.block]
     return _mean([entities[entity].log_effect for entity in cohort])

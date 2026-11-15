@@ -52,7 +52,7 @@ class RoutingTests(unittest.TestCase):
 
     @torch.no_grad()
     def test_m0_reuses_encoder_and_isolates_every_other_history(self):
-        for width in (64, 128):
+        for width in (64,):
             model = self.model("M0", hidden_size=width)
             calls = []
             hook = model.encoder.register_forward_pre_hook(

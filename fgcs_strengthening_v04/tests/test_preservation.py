@@ -13,7 +13,7 @@ from fgcs_strengthening_v04.src.provenance import (
 
 
 def example():
-    return ScientificIdentity("TimeTrack", "machine01", 1, 4, "inner", "core",
+    return ScientificIdentity("Rnd", "151", 1, 2, "inner", "core",
                               "M1", RESOURCES, "all", 64, "baseline")
 
 
@@ -56,7 +56,7 @@ class PreservationTests(unittest.TestCase):
                 Journal(seal).start(identity)
             self.assertEqual(sha256_file(path), failure_sha)
             self.assertEqual(json.loads(path.read_text())["identity"], identity.payload())
-            other = replace(identity, seed=3)
+            other = replace(identity, seed=1)
             receipt = store.start(other)
             store.finish(receipt, status="complete", evidence={"synthetic": True})
             self.assertEqual(len(list((store.runtime / "attempts").iterdir())), 2)

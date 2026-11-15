@@ -47,7 +47,7 @@ def heldout_partition(unit, *, broken=False):
 
 class TransferRunnerTests(unittest.TestCase):
     def test_one_identity_fits_then_explicit_evaluation_once(self):
-        for arm, scope in (("pairwise", "own"), ("leave_one_out", "all")):
+        for arm, scope in (("pairwise", "all"), ("leave_one_out", "all")):
             inner = unit_for(arm, scope)
             final = replace(inner, phase="final")
             inner_partition, inner_reads = partition(inner)
@@ -96,7 +96,7 @@ class TransferRunnerTests(unittest.TestCase):
                 self.assertEqual(sha256_file(path), before)
 
     def test_failed_fit_is_terminal_and_does_not_enable_evaluation(self):
-        inner = unit_for("leave_one_out", "own")
+        inner = unit_for("leave_one_out", "all")
         final = replace(inner, phase="final")
         with scratch_engine(seal(), closed_fits=True) as engine:
             runner = TransferRunner(engine)

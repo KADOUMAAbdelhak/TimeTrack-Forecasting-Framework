@@ -7,7 +7,7 @@ from fgcs_strengthening_v04.src.transfer.design import transfer_matrices
 from fgcs_strengthening_v04.src.transfer.estimands import NativeMAECell, entity_effect, group_effect
 
 
-def select(arm="pairwise", scope="own", estimand="F"):
+def select(arm="pairwise", scope="all", estimand="F"):
     return next(m.entries[0] for m in transfer_matrices()
                 if (m.block, m.arm, m.scope, m.estimand) == ("fastStorage", arm, scope, estimand))
 
@@ -27,7 +27,7 @@ def grids(entry, first, second):
 
 class TransferEstimandTests(unittest.TestCase):
     def test_exact_references_and_signs(self):
-        for scope, independent, full in (("own", "S1", "M0"), ("all", "S2", "M1")):
+        for scope, independent, full in (("all", "S2", "M1"),):
             F = select(scope=scope)
             Q = select("leave_one_out", scope, "Q")
             f_ref, f_subset = F.model_identities("697", 1, 2)
@@ -59,7 +59,7 @@ class TransferEstimandTests(unittest.TestCase):
             entity_effect(F, "697", left + left[:1], right)
         with self.assertRaises(ValueError):
             entity_effect(F, "697", [replace(left[0], identity=replace(
-                left[0].identity, formulation="S2", input_scope="all")), *left[1:]], right)
+                left[0].identity, formulation="S1", input_scope="own")), *left[1:]], right)
 
     def test_missing_mismatched_zero_and_nonfinite_are_unavailable(self):
         F = select()

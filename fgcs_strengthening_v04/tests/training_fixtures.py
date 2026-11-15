@@ -94,4 +94,4 @@ def close_fits(journal, abandoned=()):
 
 
 def close_evaluation(journal, abandoned=()):
-    _synthetic_closure(journal, "evaluation", ("systems", "evaluation"), abandoned, True)
+    _synthetic_closure(journal, "evaluation", ("evaluation",), abandoned, True)

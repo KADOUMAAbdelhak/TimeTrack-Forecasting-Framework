@@ -1,8 +1,8 @@
 {
-  "namespace": "fgcs-strengthening-v03",
+  "namespace": "fgcs-strengthening-v04",
   "protocol": {
-    "path": "review_revision/fgcs_strengthening/analysis_plan_v0.3.md",
-    "sha256": "7b8f80be597148f5413582bf936d13a79bfc05d0725d734dfec83b5443246076"
+    "path": "review_revision/fgcs_strengthening/analysis_plan_v0.4_DRAFT.md",
+    "sha256": "dbbdf7907c9d34e30654ce5c6f4bc33556bd094c9926adc28dd6030ddc203330"
   },
   "baseline": {
     "branch": "paper/jss-review-revision",
@@ -516,10 +516,34 @@
   "core_seeds": [
     0,
     1,
-    2,
-    3,
-    4
+    2
   ],
+  "cohort": {
+    "fastStorage": [
+      "697",
+      "860",
+      "366",
+      "679",
+      "360",
+      "505",
+      "481",
+      "109",
+      "680",
+      "50"
+    ],
+    "Rnd": [
+      "99",
+      "409",
+      "269",
+      "493",
+      "474",
+      "97",
+      "118",
+      "233",
+      "142",
+      "151"
+    ]
+  },
   "phases": [
     "inner",
     "final"
@@ -627,52 +651,8 @@
       "leave_one_out": 3
     },
     "input_scopes": [
-      "own",
       "all"
-    ],
-    "checkpoint_control": {
-      "base": "core M1",
-      "selection": "earliest best per-task observed validation scaled MSE",
-      "final_limit": "max of joint and task-selected epochs",
-      "primary_checkpoint": "joint epoch",
-      "outer_test_after_full_trajectory": true,
-      "task_state_count_per_identity": 4
-    },
-    "pcgrad": {
-      "comparator": "equal-loss M1",
-      "encoder_merge": "mean",
-      "reference_gradients": "immutable original",
-      "task_permutations": "independent, keyed by training seed/epoch/batch",
-      "heads": "mean task loss",
-      "project_negative_dot_only": true,
-      "skip_zero_reference_norm": true,
-      "global_clip_after_projection": true
-    },
-    "gradnorm": {
-      "comparator": "equal-loss M1",
-      "alpha": 1.5,
-      "weight_optimizer": "Adam",
-      "weight_lr": 0.025,
-      "norm_parameters": [
-        "weight_ih_l1",
-        "weight_hh_l1",
-        "bias_ih_l1",
-        "bias_hh_l1"
-      ],
-      "initial_weights": [
-        1,
-        1,
-        1,
-        1
-      ],
-      "initial_loss": "first training batch pre-update scaled MSE divided by four",
-      "updates": "compute both gradients pre-update, weight step then model step then renormalise to sum four",
-      "invalid_update": "fail closed",
-      "initial_loss_minimum_exclusive": 0,
-      "norm_tie_subgradient": 0,
-      "weight_sum": 4,
-      "tune_alpha": false
-    }
+    ]
   },
   "diagnostics": {
     "formulations": [
@@ -721,67 +701,23 @@
     "primary_requires_complete_pairs": true,
     "cross_task_pairs": 6,
     "same_task_pairs": 4,
-    "association_model": "M1"
-  },
-  "lightgbm": {
-    "seed": 0,
-    "scopes": [
-      "own",
-      "all"
-    ],
-    "grid": {
-      "leaves": [
-        15,
-        31
-      ],
-      "learning_rate": [
-        0.03,
-        0.05
-      ],
-      "estimators": [
-        200,
-        400
-      ]
-    },
-    "objective": "regression_l1",
-    "threads": 1,
-    "deterministic": true,
-    "row_subsample": 1.0,
-    "column_subsample": 1.0,
-    "selection": "native validation MAE mean across horizons, then leaves, learning rate, estimators ascending",
-    "estimators_per_wrapper": 5
+    "association_model": "M1",
+    "extracted_slots": [
+      "final"
+    ]
   },
   "modern": {
-    "seed": 0,
-    "cohorts": {
-      "fastStorage": [
-        "697",
-        "860",
-        "366",
-        "679",
-        "360",
-        "505",
-        "481",
-        "109",
-        "680",
-        "50"
-      ],
-      "Rnd": [
-        "99",
-        "409",
-        "269",
-        "493",
-        "474",
-        "97",
-        "118",
-        "233",
-        "142",
-        "151"
-      ]
-    },
+    "seeds": [
+      0,
+      1,
+      2
+    ],
     "families": {
       "DLinear": {
-        "scope": "own",
+        "scopes": [
+          "own",
+          "all"
+        ],
         "kernel_by_context": {
           "4": 3,
           "9": 9,
@@ -800,7 +736,10 @@
         }
       },
       "PatchTST": {
-        "scope": "own",
+        "scopes": [
+          "own",
+          "all"
+        ],
         "patch": 2,
         "stride": 1,
         "position": "learned",
@@ -818,7 +757,9 @@
         }
       },
       "iTransformer": {
-        "scope": "all",
+        "scopes": [
+          "all"
+        ],
         "tokens": 4,
         "token_projection": "Linear(L,64)",
         "pool": "flatten",
@@ -839,20 +780,6 @@
       "bias": true
     },
     "technical_gate": "synthetic conformance and finite, shape/support-exact inner path, never performance",
-    "pilot": [
-      {
-        "block": "fastStorage",
-        "entity": "697",
-        "fold": 1,
-        "context": 18
-      },
-      {
-        "block": "Rnd",
-        "entity": "99",
-        "fold": 1,
-        "context": 4
-      }
-    ],
     "device": "CPU",
     "learning_rate": 0.001,
     "batch_size": 256,
@@ -867,160 +794,50 @@
     "persistence": "v1",
     "seasonal_naive": false
   },
-  "endpoints": {
-    "primary": "log of ratio of native MAE aggregated equally across horizons, folds and seeds per entity",
-    "interaction": "D(M1:S2)-D(M0:S1)",
-    "materna": "same VMs across three traces, average trace log effects",
-    "timetrack": "descriptive only",
-    "zero_aggregate": "extended ratio/log, no epsilon; finite test unavailable",
-    "missing": "incomplete planned arm; no complete-case substitution",
-    "transfer": "F=log(independent/shared); Q=log(omitted-task/full), descriptive Q"
-  },
-  "inference_spec": {
-    "groups": [
-      "fastStorage",
-      "Rnd",
-      "Materna"
-    ],
-    "bootstrap_replicates": 10000,
-    "bootstrap_rng": "PCG64",
-    "bootstrap_seed": 20261110,
-    "bootstrap_unit": "paired entity cluster, full repeated measures",
-    "ci_percentiles": [
-      2.5,
-      97.5
-    ],
-    "percentile_method": "linear",
-    "test": "two-sided centred bootstrap plus-one with ties as exceedances",
-    "threshold": 0.05,
-    "holm_sizes": {
-      "primary": 24,
-      "gradient_association": 12,
-      "PCGrad": 8,
-      "GradNorm": 8,
-      "checkpoint": 8
-    },
-    "m1_predicted_penalty": [
-      "THROUGHPUT",
-      "MEMORY",
-      "DISK_WRITE"
-    ],
-    "interaction_predicted_sign": null,
-    "cpu_predicted_sign": null,
-    "bh_transfer_matrices": 8,
-    "bh_slots_per_matrix": 12,
-    "unavailable_p": 1,
-    "bootstrap_draws_per_group": 35,
-    "holm_tie_order": "lexicographic test ID",
-    "bh_tie_order": "lexicographic test ID",
-    "rejection_comparison": "strict adjusted p < threshold",
-    "rho_rank_ties": "average",
-    "constant_bootstrap_rho": "count as exceedance and omit numeric interval",
-    "predicted_signs": {
-      "gradient_association": "positive",
-      "PCGrad": "negative",
-      "GradNorm": "negative",
-      "checkpoint": "negative"
-    },
-    "primary_sharing_directional_slots": 9,
-    "primary_sharing_nondirectional_slots": 3,
-    "primary_interaction_slots": 12
-  },
-  "systems_spec": {
-    "device": "CPU",
-    "concurrent_workers": 1,
-    "threads": 1,
-    "batches": [
-      1,
-      128
-    ],
-    "warmup_forwards": 20,
-    "timed_forwards": 100,
-    "clock": "perf_counter_ns",
-    "latency_percentiles": [
-      50,
-      95
-    ],
-    "origins": "fixed hashed-run sample without replacement; batch 1 uses first origin",
-    "rss": "fresh process, Darwin bytes and Linux KiB",
-    "primary_fit_timing_excludes": [
-      "validation",
-      "checkpoint_tail",
-      "diagnostics"
-    ],
-    "power_mode": "record in machine manifest",
-    "torch_intraop_threads": 1,
-    "torch_interop_threads": 1,
-    "OMP_NUM_THREADS": 1,
-    "MKL_NUM_THREADS": 1,
-    "OPENBLAS_NUM_THREADS": 1,
-    "lightgbm_jobs": 1,
-    "timing": "CPU monotonic optimisation time and separately recorded validation",
-    "throughput": "batch_size/mean_latency_seconds",
-    "artifact_measurements": [
-      "parameter_count",
-      "raw_tensor_bytes",
-      "uncompressed_state_dict_bytes",
-      "deployed_checkpoint_count",
-      "deployed_checkpoint_bytes",
-      "logical_task_models",
-      "optimizer_bytes",
-      "baseline_rss",
-      "peak_rss",
-      "rss_increment"
-    ]
-  },
   "budget": {
     "core": [
-      45500,
-      45500
-    ],
-    "capacity": [
-      4550,
-      4550
+      3000,
+      3000
     ],
     "pairwise": [
-      12600,
-      12600
+      1800,
+      1800
     ],
     "leave_one_out": [
-      8400,
-      8400
-    ],
-    "pcgrad": [
-      1050,
-      1050
-    ],
-    "gradnorm": [
-      1050,
-      1050
+      1200,
+      1200
     ],
     "modern": [
-      1500,
-      1500
+      7500,
+      7500
     ],
-    "lightgbm": [
-      22400,
-      2800
+    "modern_by_family": {
+      "DLinear": [
+        3000,
+        3000
+      ],
+      "PatchTST": [
+        3000,
+        3000
+      ],
+      "iTransformer": [
+        1500,
+        1500
+      ]
+    },
+    "fits": [
+      13500,
+      13500
     ],
-    "modern_pilot_subset": 30,
-    "diagnostic_slots": 27300,
-    "diagnostic_batch_pairs": 218400,
-    "gradient_extractions": 1747200,
-    "checkpoint_trajectories": 1050,
-    "checkpoint_requests": 4200,
-    "neural": [
-      74650,
-      74650
-    ],
-    "tree_scalar": [
-      112000,
-      14000
-    ],
-    "wrappers_total": [
-      97050,
-      77450
-    ],
-    "scalar_adjusted_total": 275300
+    "fit_total": 27000,
+    "diagnostic_slots": 600,
+    "diagnostic_batch_pairs": 4800,
+    "gradient_extractions": 38400
+  },
+  "execution": {
+    "fit_workers": 6,
+    "threads_per_worker": 1,
+    "device": "cpu",
+    "basis": "sustained synthetic benchmark 2026-11-14/15 (protocol P9)"
   }
 }

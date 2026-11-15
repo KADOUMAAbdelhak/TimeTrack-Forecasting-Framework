@@ -2,8 +2,10 @@
 
 Nothing executes on import. Phases run in a fixed order:
 
-    certify -> canary (stop gate) -> inner -> final -> diagnostics -> [fit closure] -> systems
+    certify -> canary (stop gate) -> inner -> final -> diagnostics -> [fit closure]
     -> evaluation -> [evaluation closure] -> bundle
+
+v0.4 runs no systems benchmarks (protocol P8), so r3's systems phase is gone.
 
 Outer-test data are materialised only in the evaluation phase, which refuses to start until every
 fit and diagnostic unit is terminal and closed. Repairs therefore never see outer-test outcomes.
@@ -26,10 +28,12 @@ from .provenance import (RETRYABLE, DuplicateIdentity, Journal, ProvenanceError,
 
 _CONFIG = read_config()
 _SOURCES = (Path(__file__).resolve().relative_to(ROOT).as_posix(),)
-PHASES = ("certify", "canary", "inner", "final", "diagnostics", "systems", "evaluation")
+PHASES = ("certify", "canary", "inner", "final", "diagnostics", "evaluation")
 FIT_PHASES = ("canary", "inner", "final", "diagnostics")
 MAX_RETRIES = 2
-TRAINING_WORKERS = 4  # C4: exactly four concurrent single-thread workers, enforced by slot locks
+TRAINING_WORKERS = 6  # P9: exactly six concurrent single-thread workers, enforced by slot locks
+if _CONFIG["execution"]["fit_workers"] != TRAINING_WORKERS:
+    raise RuntimeError("Registered fit workers differ from the configuration")
 
 
 def _digest(value):
@@ -37,7 +41,7 @@ def _digest(value):
 
 
 THREAD_ENVIRONMENT = ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS")
-CLOSURES = {"fits": ("certify", *FIT_PHASES), "evaluation": ("systems", "evaluation")}
+CLOSURES = {"fits": ("certify", *FIT_PHASES), "evaluation": ("evaluation",)}
 
 
 def configure_worker_process():
@@ -72,14 +76,17 @@ def require_fit_threads():
 
 
 def execution_sources():
-    from ..analyse_study import _sources
-    from .systems import _SOURCES as systems
+    """Every engine source the runtime seal covers. The v0.4 analysis sources join when they exist."""
+    from .diagnostics.engine import _SOURCES as diagnostics
+    from .evaluation import _SOURCES as evaluation
+    from .modern.runner import _SOURCES as modern
+    from .transfer.runner import _SOURCES as transfer
 
-    return (*_sources(), *systems, *_SOURCES)
+    return tuple(dict.fromkeys((*diagnostics, *evaluation, *modern, *transfer, *_SOURCES)))
 
 
 def execution_fingerprints():
-    """The single seal for the scientific runtime: every engine, analysis, systems and orchestrator source."""
+    """The single seal for the scientific runtime: every engine, analysis and orchestrator source."""
     from .provenance import Fingerprints
 
     return Fingerprints.capture_protocol(additional_sources=execution_sources())
@@ -104,65 +111,25 @@ def _fit_unit(phase, identity, requires=()):
 
 
 def _final_requires(identity):
-    if identity.arm == "lightgbm":
-        from .tree.design import GRID
-        return tuple(replace(identity, phase="inner", variant=config.variant).digest for config in GRID)
     return (replace(identity, phase="inner").digest,)
 
 
 def canary_identities():
-    """30 registered modern pilots plus, per block, the first entity's fold-1 seed-0 core and H128 inner fits."""
-    from .modern.design import pilot_identities
+    """Per block, the first cohort entity's fold-1 seed-0 inner fits of every v0.4 arm and cell.
 
-    width = _CONFIG["lstm"]["primary_hidden_size"]
-    yield from pilot_identities()
-    for block, spec in _CONFIG["blocks"].items():
-        group = (block, spec["entities"][0], 1, 0, "inner")
-        for model, scope in SCOPES.items():
-            for tasks in (((task,) for task in RESOURCES) if model.startswith("S") else (RESOURCES,)):
-                yield ScientificIdentity(*group, "core", model, tasks, scope, width, "baseline")
-        yield ScientificIdentity(*group, "capacity", "M0", RESOURCES, "own",
-                                 _CONFIG["lstm"]["m0_capacity_hidden_size"], "baseline")
+    That is the LSTM 2x2 (10 fits), every defined modern cell (DLinear 10, PatchTST 10, iTransformer 5)
+    and the 10 transfer-lattice subsets: 45 fits per block, 90 in all.
+    """
+    from ..plan_execution import core_identities
+    from .modern.design import FAMILIES, family_identities
+    from .transfer.design import group_identities
 
-
-def systems_population():
-    """C2: seed 0, fold 1, every registered entity; each deployment that exists there."""
-    from .modern.design import modern_identities
-
-    width = _CONFIG["lstm"]["primary_hidden_size"]
-    secondary = _CONFIG["secondary"]["blocks"]
-    modern = {(unit.block, unit.entity) for unit in modern_identities()}
-    for block, spec in _CONFIG["blocks"].items():
-        for entity in spec["entities"]:
-            group = (block, entity, 1, 0, "final")
-            deployments = [
-                tuple(ScientificIdentity(*group, "core", model, (task,), SCOPES[model], width, "baseline")
-                      for task in RESOURCES) for model in ("S1", "S2")]
-            deployments += [(ScientificIdentity(*group, "core", model, RESOURCES, SCOPES[model], width, "baseline"),)
-                            for model in ("M0", "M1")]
-            deployments.append((ScientificIdentity(*group, "capacity", "M0", RESOURCES, "own",
-                                                   _CONFIG["lstm"]["m0_capacity_hidden_size"], "baseline"),))
-            if block in secondary:
-                deployments += [(ScientificIdentity(*group, arm, "M1", RESOURCES, "all", width, arm),)
-                                for arm in ("pcgrad", "gradnorm")]
-                deployments.append(tuple(ScientificIdentity(*group, "checkpoint_request", "M1", (task,), "all",
-                                                            width, "task_selected") for task in RESOURCES))
-                deployments += [tuple(ScientificIdentity(*group, "lightgbm", "LightGBM", (task,), scope, None,
-                                                         "selected") for task in RESOURCES)
-                                for scope in ("own", "all")]
-            if (block, entity) in modern:
-                for family, settings in _CONFIG["modern"]["families"].items():
-                    scope = settings["scope"]
-                    deployments.append(tuple(ScientificIdentity(*group, "modern", family, (task,), scope, None,
-                                                                "independent") for task in RESOURCES))
-                    deployments.append((ScientificIdentity(*group, "modern", family, RESOURCES, scope, None,
-                                                           "shared"),))
-            yield (block, entity, 1), tuple(deployments)
-
-
-def _deployment_sources(deployment):
-    from .evaluation import evaluation_source
-    return tuple(dict.fromkeys(evaluation_source(identity).digest for identity in deployment))
+    for block, entities in _CONFIG["cohort"].items():
+        group = (block, entities[0], 1, 0, "inner")
+        yield from core_identities(*group, _CONFIG)
+        for family in FAMILIES:
+            yield from family_identities(*group, family)
+        yield from group_identities(*group)
 
 
 def registered_schedule():
@@ -187,12 +154,7 @@ def registered_schedule():
     units += [Unit("diagnostic", "diagnostics", identity.digest, identity,
                    (replace(identity, arm="core", variant="baseline").digest,))
               for identity in overhead if identity.arm == "diagnostic"]
-    for partition, deployments in systems_population():
-        requires = tuple(dict.fromkeys(key for deployment in deployments for key in _deployment_sources(deployment)))
-        units.append(Unit("systems", "systems", "systems:" + "/".join(map(str, partition)), None, requires,
-                          (partition, deployments)))
     deployments = [identity for identity in fits if identity.phase == "final"]
-    deployments += [identity for identity in overhead if identity.arm == "checkpoint_request"]
     from .evaluation import evaluation_source
     units += [Unit("evaluate", "evaluation", "evaluate:" + identity.digest, identity,
                    (evaluation_source(identity).digest,)) for identity in deployments]
@@ -269,9 +231,6 @@ class Orchestrator:
             if not path.exists():
                 return None
             return json.loads(path.read_text())["status"], {}
-        if unit.kind == "systems":
-            path = self._path("systems", f"{_digest(unit.key)}.json")
-            return (json.loads(path.read_text())["status"], {}) if path.exists() else None
         path = self.journal._record_path("outcomes", unit.identity, unit.evaluation)
         if not path.exists():
             return None
@@ -358,7 +317,7 @@ class Orchestrator:
                 fcntl.flock(handle, fcntl.LOCK_UN)
 
     def _host(self, unit):
-        return self._lock(self._path("host.lock"), fcntl.LOCK_EX if unit.kind == "systems" else fcntl.LOCK_SH)
+        return self._lock(self._path("host.lock"), fcntl.LOCK_SH)
 
     def _lease(self, unit):
         return self._lock(self._path("leases", f"{_digest(unit.key)}.lock"), fcntl.LOCK_EX)
@@ -438,13 +397,12 @@ class Orchestrator:
 
         if PHASES.index(phase) > PHASES.index("canary") and not approved("canary"):
             raise ProvenanceError("The canary stop gate has not been approved")
-        if phase in ("systems", "evaluation") and self.gate("fits") is None:
+        if phase == "evaluation" and self.gate("fits") is None:
             raise ProvenanceError("Fit and diagnostic phases are not closed")
         closed = self._closed_phase(phase)
         if closed:
             raise ProvenanceError(f"{phase} is closed by the {closed} closure record; nothing in it runs again (C6)")
-        if phase != "systems":
-            require_fit_threads()
+        require_fit_threads()
 
     # -- execution -------------------------------------------------------------------------------
     def _blocked(self, unit):
@@ -511,20 +469,13 @@ class Orchestrator:
             self.executors[unit.kind](unit)
         except Exception as error:
             kind = type(error).__name__
-            if unit.kind == "systems":
-                self._publish_exact(self._path("systems", f"{_digest(unit.key)}.json"),
-                                    {"unit": unit.key, "status": "failed",
-                                     "error": {"type": kind, "message": str(error)}})
-            if unit.kind in ("certify", "systems") or self._record(unit) is not None:
+            if unit.kind == "certify" or self._record(unit) is not None:
                 return "failed"
             if kind in RETRYABLE:
                 raise
             # Refused before any attempt (e.g. a stopped modern family): terminal, never silent.
             self._abandon(unit, f"refused before an attempt: {kind}: {error}")
             return "abandoned"
-        if unit.kind == "systems":
-            self._publish_exact(self._path("systems", f"{_digest(unit.key)}.json"),
-                                {"unit": unit.key, "status": "complete"})
         return "complete"
 
     def _finish(self, session):
@@ -547,7 +498,7 @@ class Orchestrator:
                 "session_seconds": sum(record["elapsed_seconds"] for record in records), "sessions": len(records)}
 
     def scheduler_elapsed(self):
-        """Elapsed schedule wall time per registered cost label (systems TrainingCost input)."""
+        """Elapsed schedule wall time per registered cost label."""
         mapping = {"selection_cost": ("canary", "inner"), "final_fit_cost": ("final",),
                    "diagnostic_cost": ("diagnostics",)}
         result = {}
@@ -558,7 +509,7 @@ class Orchestrator:
         return result
 
     def cost_report(self):
-        """C2: training costs over every fit and diagnostic unit in the journal, not only the systems sample.
+        """C2: training costs over every fit and diagnostic unit in the journal.
 
         Grouped by block, arm, formulation and phase. Seconds come from each terminal outcome's
         journalled timing; quarantined attempts are counted (their records stay in the quarantine).
@@ -637,14 +588,11 @@ def restore_live_state(journal, identity):
 class ProductionExecutors(dict):
     """Unit-kind executors over frozen adapters. Never returns or logs outer-test values."""
 
-    def __init__(self, journal, *, systems_manifest=None, partitions=None, scheduler_elapsed=None):
+    def __init__(self, journal, *, partitions=None):
         from .data_adapters import adapter_for
 
-        super().__init__(certify=self.certify, fit=self.fit, diagnostic=self.diagnostic,
-                         evaluate=self.evaluate, systems=self.systems)
+        super().__init__(certify=self.certify, fit=self.fit, diagnostic=self.diagnostic, evaluate=self.evaluate)
         self.journal = journal
-        self.systems_manifest = systems_manifest
-        self.scheduler_elapsed = scheduler_elapsed
         self._adapters = {}
         self._partitions = partitions or (lambda block, entity, fold, phase: self._adapter(block, adapter_for)
                                           .prepare(entity, fold, phase))
@@ -664,11 +612,6 @@ class ProductionExecutors(dict):
     def fit(self, unit):
         identity = unit.identity
         partition = self.partition(identity)
-        if identity.arm == "lightgbm":
-            from .tree.runner import LightGBMRunner
-            runner = LightGBMRunner(self.journal)
-            (runner.fit_inner if identity.phase == "inner" else runner.fit_final)(identity, partition)
-            return
         if identity.arm == "modern":
             from .modern.runner import ModernRunner
             runner = ModernRunner(self.journal)
@@ -676,8 +619,7 @@ class ProductionExecutors(dict):
             return
         from .training import TrainingEngine
         engine = TrainingEngine(self.journal)
-        mode = identity.arm if identity.arm in ("pcgrad", "gradnorm") else "equal_loss"
-        result = (engine.fit_inner if identity.phase == "inner" else engine.fit_final)(identity, partition, mode=mode)
+        result = (engine.fit_inner if identity.phase == "inner" else engine.fit_final)(identity, partition)
         if (identity.phase == "final" and identity.arm == "core"
                 and identity.formulation in _CONFIG["diagnostics"]["formulations"]):
             persist_resume_state(self.journal, identity, result)
@@ -692,36 +634,5 @@ class ProductionExecutors(dict):
     def evaluate(self, unit):
         identity = unit.identity
         partition = self.partition(identity, "final")
-        if identity.arm == "lightgbm":
-            from .tree.runner import LightGBMRunner
-            LightGBMRunner(self.journal).evaluate(identity, partition)
-        else:
-            from .evaluation import OuterEvaluator
-            OuterEvaluator(self.journal).evaluate(identity, partition)
-
-    def systems(self, unit):
-        from .systems import SystemsRunner, deployment_rows
-        from .systems_records import BATCHES, MODES
-
-        if self.systems_manifest is None:
-            raise ProvenanceError("Systems measurements require the frozen machine manifest")
-        runner = SystemsRunner(self.journal, self.systems_manifest)
-        (block, entity, fold), deployments = unit.payload
-        partition = self._partitions(block, entity, fold, "final")
-        for deployment in deployments:
-            plan = runner.prepare(deployment, partition)
-            footprints, summary = deployment_rows(plan.complement, plan.binding)
-            rows = [*footprints, summary, *runner.measure_complement(plan)]
-            for mode in MODES:
-                for batch in BATCHES:
-                    memory = runner.memory(plan, batch, mode)
-                    if memory is not None:
-                        rows.append(memory)
-            diagnostics = ()
-            if deployment[0].arm == "core" and deployment[0].formulation in _CONFIG["diagnostics"]["formulations"]:
-                diagnostics = tuple(replace(deployment[0], arm="diagnostic", variant=slot)
-                                    for slot in _CONFIG["diagnostics"]["slots"])
-            elapsed = None if self.scheduler_elapsed is None else self.scheduler_elapsed()
-            rows += runner.costs(plan, diagnostic_identities=diagnostics, scheduler_elapsed=elapsed)
-            for row in rows:
-                runner.publish(row)
+        from .evaluation import OuterEvaluator
+        OuterEvaluator(self.journal).evaluate(identity, partition)

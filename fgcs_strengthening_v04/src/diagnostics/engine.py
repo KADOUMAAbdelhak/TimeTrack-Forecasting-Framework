@@ -36,7 +36,7 @@ class DiagnosticEngine:
 
     def run(self, identity, partition, live_model, optimizer, shuffle_generator):
         if not isinstance(identity, ScientificIdentity) or identity.arm != "diagnostic":
-            raise ValueError("Expected a v0.3 diagnostic identity")
+            raise ValueError("Expected a diagnostic identity")
         if not isinstance(partition, PreparedPartition) or (
             partition.block, partition.entity, partition.fold, partition.phase
         ) != (identity.block, identity.entity, identity.fold, "final"):

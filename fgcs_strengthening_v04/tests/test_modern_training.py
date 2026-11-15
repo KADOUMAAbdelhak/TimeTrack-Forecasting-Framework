@@ -7,7 +7,8 @@ from unittest.mock import patch
 import numpy as np
 
 from fgcs_strengthening_v04.src.data_adapters import Windows
-from fgcs_strengthening_v04.src.modern.design import FAMILIES, pilot_identities
+from fgcs_strengthening_v04.src.models.registry import REGISTRY
+from fgcs_strengthening_v04.src.modern.design import FAMILIES, family_identities
 from fgcs_strengthening_v04.src.modern.runner import ModernRunner, modern_fingerprints
 from fgcs_strengthening_v04.src.provenance import DuplicateIdentity, ProvenanceError, sha256_file
 from fgcs_strengthening_v04.tests.training_fixtures import partition, scratch_engine
@@ -18,9 +19,11 @@ def seal():
     return modern_fingerprints()
 
 
-def pilot(family, variant="independent"):
-    return next(i for i in pilot_identities()
-                if (i.block, i.formulation, i.variant) == ("Rnd", family, variant))
+def cell(family, variant="independent", scope=None):
+    """A Rnd cohort inner identity of one modern cell (first own-input scope unless named)."""
+    scope = scope or REGISTRY[family].scopes[0]
+    return next(i for i in family_identities("Rnd", "99", 1, 0, "inner", family)
+                if (i.variant, i.input_scope) == (variant, scope))
 
 
 def synthetic_partition(identity, *, invalid_native_prediction=False):
@@ -40,8 +43,8 @@ def synthetic_partition(identity, *, invalid_native_prediction=False):
     return replace(prepared, _adapter=Adapter()), reads
 
 
-def run_synthetic(family, variant):
-    inner = pilot(family, variant)
+def run_synthetic(family, variant, scope):
+    inner = cell(family, variant, scope)
     final = replace(inner, phase="final")
     training, inner_reads = synthetic_partition(inner)
     refit, final_reads = synthetic_partition(final)
@@ -68,6 +71,7 @@ def run_synthetic(family, variant):
             assert optimizer["lr"] == .001
             assert evidence["architecture"]["variant"] == variant
             assert evidence["architecture"]["family"] == family
+            assert evidence["architecture"]["scope"] == scope
             assert evidence["context"] == 4
             assert evidence["parameter_count"] > 0
         return [{k: evidence[k] for k in ("architecture", "optimizer", "epochs", "selection",
@@ -76,42 +80,36 @@ def run_synthetic(family, variant):
 
 
 class ModernTrainingTests(unittest.TestCase):
-    def test_deterministic_inner_and_fresh_final_for_every_family_and_complement(self):
+    def test_deterministic_inner_and_fresh_final_for_every_defined_cell(self):
         for family in FAMILIES:
-            for variant in ("independent", "shared"):
-                with self.subTest(family=family, variant=variant):
-                    self.assertEqual(run_synthetic(family, variant), run_synthetic(family, variant))
+            for scope in REGISTRY[family].scopes:
+                for variant in ("independent", "shared"):
+                    with self.subTest(family=family, scope=scope, variant=variant):
+                        self.assertEqual(run_synthetic(family, variant, scope), run_synthetic(family, variant, scope))
 
-    def test_reuse_is_read_only_and_checks_context_fingerprints_and_checkpoint(self):
-        unit = pilot("DLinear")
+    def test_duplicates_are_refused_and_a_tampered_inner_checkpoint_blocks_the_final(self):
+        unit = cell("DLinear", "independent", "all")
+        final = replace(unit, phase="final")
         partition, reads = synthetic_partition(unit)
+        refit, _ = synthetic_partition(final)
         with scratch_engine(seal()) as engine:
             runner = ModernRunner(engine.journal)
             runner.validate_family("DLinear")
-            with self.assertRaisesRegex(ProvenanceError, "Pilot partition context"):
-                runner.fit_inner(unit, replace(partition, context=9))
-            self.assertEqual(reads, [])
             fit = runner.fit_inner(unit, partition)
             outcome = engine.journal.runtime / "outcomes" / f"{unit.digest}.json"
             original = sha256_file(outcome)
-            reused, digest = runner.reuse_pilot(unit, partition)
-            self.assertEqual(reused, fit.evidence)
-            self.assertEqual(digest, original)
             self.assertEqual(reads, [0, 1])
             with self.assertRaises(DuplicateIdentity):
                 runner.fit_inner(unit, partition)
-            with self.assertRaises(ProvenanceError):
-                runner.reuse_pilot(unit, replace(partition, scaler_sha256="changed"))
             self.assertEqual(sha256_file(outcome), original)
-            epoch = reused["selection"]["joint_epoch"]
-            checkpoint = engine.journal.runtime / reused["checkpoints"][str(epoch)]["path"]
+            epoch = fit.evidence["selection"]["joint_epoch"]
+            checkpoint = engine.journal.runtime / fit.evidence["checkpoints"][str(epoch)]["path"]
             checkpoint.write_bytes(b"tampered synthetic checkpoint")
             with self.assertRaisesRegex(ProvenanceError, "Checkpoint bytes differ"):
-                runner.reuse_pilot(unit, partition)
-            self.assertEqual(reads, [0, 1])
+                runner.fit_final(final, refit)
 
     def test_nonfinite_native_prediction_records_failure_and_halts_only_its_family(self):
-        unit = pilot("iTransformer")
+        unit = cell("iTransformer")
         prepared, accesses = synthetic_partition(unit, invalid_native_prediction=True)
         with scratch_engine(seal()) as engine:
             runner = ModernRunner(engine.journal)
@@ -126,7 +124,7 @@ class ModernTrainingTests(unittest.TestCase):
             self.assertEqual(record["fingerprint_sha256"], seal().digest)
             stopped = engine.journal.runtime / "modern/iTransformer/stop.json"
             self.assertEqual(json.loads(stopped.read_text())["outcome_sha256"], sha256_file(outcome))
-            other = pilot("iTransformer", "shared")
+            other = cell("iTransformer", "shared")
             second, reads = synthetic_partition(other)
             with self.assertRaisesRegex(ProvenanceError, "author review"):
                 ModernRunner(engine.journal).fit_inner(other, second)
@@ -134,7 +132,7 @@ class ModernTrainingTests(unittest.TestCase):
             self.assertEqual(runner.validate_family("DLinear")["status"], "complete")
 
     def test_structural_failure_is_persistent_and_data_free(self):
-        unit = pilot("PatchTST")
+        unit = cell("PatchTST")
         prepared, reads = synthetic_partition(unit)
         with scratch_engine(seal()) as engine:
             runner = ModernRunner(engine.journal)

@@ -20,8 +20,7 @@ from .transfer.estimands import NativeMAECell
 _CONFIG = read_config()
 _SOURCES = (Path(__file__).resolve().relative_to(ROOT).as_posix(),)
 FIT_CLOSURE_PHASES = ("certify", "canary", "inner", "final", "diagnostics")
-NEURAL_ARMS = frozenset({"core", "capacity", "pcgrad", "gradnorm", "pairwise", "leave_one_out", "modern",
-                         "checkpoint_request"})
+NEURAL_ARMS = frozenset({"core", "pairwise", "leave_one_out", "modern"})
 
 
 def _digest(value):
@@ -44,9 +43,7 @@ def require_fits_closed(journal):
 
 
 def evaluation_source(identity):
-    """The final fit whose checkpoint a deployment evaluates."""
-    if identity.arm == "checkpoint_request":
-        return replace(identity, arm="core", tasks=RESOURCES, variant="baseline")
+    """The final fit whose checkpoint a deployment evaluates (in v0.4, always the deployment itself)."""
     return identity
 
 
@@ -93,10 +90,7 @@ class OuterEvaluator:
             if (final.get("primary_checkpoint_epoch") != selection["joint_epoch"]
                     or len(final["epochs"]) != selection["final_epoch"]):
                 raise ProvenanceError("Final trajectory or primary checkpoint is incomplete")
-            if identity.arm == "checkpoint_request":
-                epoch = selection["task_epochs"][identity.tasks[0]]
-            else:
-                epoch = selection["joint_epoch"]
+            epoch = selection["joint_epoch"]
             reference = final["checkpoints"][str(epoch)]
             evidence.update(evaluated_epoch=epoch, checkpoint=reference)
             encoded = self.journal.checkpoint_bytes(source, epoch, reference)

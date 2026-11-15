@@ -10,14 +10,11 @@ MAX_EPOCHS = _CONFIG["lstm"]["max_inner_epochs"]
 PATIENCE = _CONFIG["lstm"]["patience"]
 
 
-def checkpoint_control_applies(identity):
-    reduced = _CONFIG["secondary"]
-    return (identity.arm == "core" and identity.formulation == "M1"
-            and identity.block in reduced["blocks"] and identity.seed in reduced["seeds"])
-
-
 def diagnostic_slots(joint_epoch):
-    """Map the three logical v0.3 slots to the joint trajectory's epochs."""
+    """Map v0.3's three checkpoint slots to the joint trajectory's epochs.
+
+    v0.4 still saves all three checkpoints, but D-4 extracts gradients only at the final slot (protocol P5).
+    """
     if type(joint_epoch) is not int or not 1 <= joint_epoch <= MAX_EPOCHS:
         raise ValueError("Invalid joint checkpoint epoch")
     return dict(zip(_CONFIG["diagnostics"]["slots"], (0, (joint_epoch + 1) // 2, joint_epoch), strict=True))

@@ -31,9 +31,10 @@ class TransferIdentityTests(unittest.TestCase):
     def test_transfer_and_full_dry_planners_have_the_same_identity_set(self):
         transfer = set(transfer_identities())
         self.assertEqual(transfer, {i for i in fit_identities() if i.arm in ARMS})
-        self.assertEqual(len(transfer), 42000)
-        self.assertEqual(dry_budget(), {"pairwise": {"inner": 12600, "final": 12600},
-                                       "leave_one_out": {"inner": 8400, "final": 8400}})
+        self.assertEqual(len(transfer), 6000)
+        self.assertEqual(dry_budget(), {"pairwise": {"inner": 1800, "final": 1800},
+                                       "leave_one_out": {"inner": 1200, "final": 1200}})
         for block in ("fastStorage", "Rnd"):
-            self.assertEqual(len({i.entity for i in transfer if i.block == block}), 35)
+            self.assertEqual(len({i.entity for i in transfer if i.block == block}), 10)
+        self.assertEqual({(i.formulation, i.input_scope) for i in transfer}, {("M1", "all")})
         self.assertEqual({i.seed for i in transfer}, {0, 1, 2})

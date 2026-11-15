@@ -1,4 +1,4 @@
-"""Standard-library-only modern study and exact pilot identities."""
+"""Standard-library-only v0.4 modern 2x2 identities (protocol P2)."""
 
 from collections import Counter
 from itertools import product
@@ -10,52 +10,44 @@ _CONFIG = read_config()
 _SETTINGS = _CONFIG["modern"]
 CONTEXTS = (4, 9, 18)
 FAMILIES = tuple(_SETTINGS["families"])
+SEEDS = tuple(_SETTINGS["seeds"])
 COHORTS = {
     "fastStorage": ("697", "860", "366", "679", "360", "505", "481", "109", "680", "50"),
     "Rnd": ("99", "409", "269", "493", "474", "97", "118", "233", "142", "151"),
 }
-_PILOTS = {("fastStorage", "697", 1): 18, ("Rnd", "99", 1): 4}
+SCOPES = {"DLinear": ("own", "all"), "PatchTST": ("own", "all"), "iTransformer": ("all",)}
+
+
+def family_identities(block, entity, fold, seed, phase, family):
+    """Every defined cell of one family: per scope, four independent targets and one shared model."""
+    group = (block, entity, fold, seed, phase, "modern", family)
+    for scope in _SETTINGS["families"][family]["scopes"]:
+        for resource in RESOURCES:
+            yield ScientificIdentity(*group, (resource,), scope, None, "independent")
+        yield ScientificIdentity(*group, RESOURCES, scope, None, "shared")
 
 
 def modern_identities():
-    for block, entities in _SETTINGS["cohorts"].items():
-        for entity, fold, phase, family in product(entities, _CONFIG["folds"], _CONFIG["phases"], FAMILIES):
-            group = (block, entity, fold, _SETTINGS["seed"], phase, "modern", family)
-            scope = _SETTINGS["families"][family]["scope"]
-            for resource in RESOURCES:
-                yield ScientificIdentity(*group, (resource,), scope, None, "independent")
-            yield ScientificIdentity(*group, RESOURCES, scope, None, "shared")
-
-
-def pilot_context(identity):
-    if identity.arm == "modern" and identity.phase == "inner" and identity.seed == 0:
-        return _PILOTS.get((identity.block, identity.entity, identity.fold))
-    return None
-
-
-def pilot_identities():
-    return tuple(identity for identity in modern_identities() if pilot_context(identity) is not None)
+    for block, entities in _CONFIG["cohort"].items():
+        for entity, fold, seed, phase, family in product(entities, _CONFIG["folds"], SEEDS,
+                                                         _CONFIG["phases"], FAMILIES):
+            yield from family_identities(block, entity, fold, seed, phase, family)
 
 
 def dry_budget():
-    configured = {block: tuple(entities) for block, entities in _SETTINGS["cohorts"].items()}
-    pilots = {(row["block"], row["entity"], row["fold"]): row["context"] for row in _SETTINGS["pilot"]}
-    if (configured != COHORTS or pilots != _PILOTS or _SETTINGS["seed"] != 0
+    configured = {block: tuple(entities) for block, entities in _CONFIG["cohort"].items()}
+    scopes = {family: tuple(spec["scopes"]) for family, spec in _SETTINGS["families"].items()}
+    if (configured != COHORTS or scopes != SCOPES or SEEDS != (0, 1, 2)
             or any(tuple(_CONFIG["blocks"][b]["entities"][:10]) != ids for b, ids in COHORTS.items())):
-        raise RuntimeError("Modern cohorts, pilots or seed differ from v0.3")
+        raise RuntimeError("Modern cohort, scopes or seeds differ from v0.4")
     units = tuple(modern_identities())
     counts = Counter((unit.formulation, unit.phase) for unit in units)
-    pilot = pilot_identities()
-    complements = tuple((task,) for task in RESOURCES) + (RESOURCES,)
-    expected = {(block, entity, family, tasks) for block, entity, _ in _PILOTS
-                for family, tasks in product(FAMILIES, complements)}
-    actual = {(unit.block, unit.entity, unit.formulation, unit.tasks) for unit in pilot}
-    if (len(units) != 3000 or len({unit.digest for unit in units}) != 3000
-            or len(pilot) != 30 or actual != expected or not set(pilot) <= set(units)
-            or any(counts[family, phase] != 500 for family in FAMILIES for phase in ("inner", "final"))):
-        raise RuntimeError("Modern study budget or pilot membership differs from v0.3")
-    return {"families": {family: {phase: counts[family, phase] for phase in ("inner", "final")}
-                         for family in FAMILIES}, "inner": 1500, "final": 1500, "pilot_subset": 30}
+    expected = {family: list(per_phase) for family, per_phase in _CONFIG["budget"]["modern_by_family"].items()}
+    observed = {family: [counts[family, phase] for phase in ("inner", "final")] for family in FAMILIES}
+    if observed != expected or len({unit.digest for unit in units}) != len(units) != 15000:
+        raise RuntimeError(f"Modern study budget differs from v0.4: {observed}")
+    return {"families": {family: dict(zip(("inner", "final"), counts)) for family, counts in observed.items()},
+            "inner": sum(c[0] for c in observed.values()), "final": sum(c[1] for c in observed.values())}
 
 
 if __name__ == "__main__":

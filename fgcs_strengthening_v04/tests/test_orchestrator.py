@@ -14,7 +14,7 @@ from unittest.mock import patch
 from fgcs_strengthening_v04.src.identity import HOME, RESOURCES, ScientificIdentity
 from fgcs_strengthening_v04.src.orchestrator import (
     FIT_PHASES, MAX_RETRIES, PHASES, TRAINING_WORKERS, Orchestrator, ProductionExecutors, Schedule, Unit, _digest, canary_identities,
-    execution_fingerprints, execution_sources, registered_schedule, systems_population,
+    execution_fingerprints, execution_sources, registered_schedule,
 )
 from fgcs_strengthening_v04.src.provenance import Fingerprints, Journal, ProvenanceError
 from fgcs_strengthening_v04.tests.test_evaluation import heldout
@@ -41,7 +41,6 @@ def tiny_schedule():
         Unit("fit", "final", s1f.digest, s1f, (s1.digest,)),
         Unit("fit", "final", m1f.digest, m1f, (m1.digest,)),
         Unit("diagnostic", "diagnostics", diagnostic.digest, diagnostic, (m1f.digest,)),
-        Unit("systems", "systems", "systems:test", None, (s1f.digest, m1f.digest), ()),
         Unit("evaluate", "evaluation", "evaluate:" + s1f.digest, s1f, (s1f.digest,)),
         Unit("evaluate", "evaluation", "evaluate:" + m1f.digest, m1f, (m1f.digest,)),
     ])
@@ -49,19 +48,18 @@ def tiny_schedule():
 
 class OrchestratorTests(unittest.TestCase):
     @contextmanager
-    def orchestrator(self, schedule=None, *, systems=None):
+    def orchestrator(self, schedule=None):
         with scratch_engine(seal()) as engine, tempfile.NamedTemporaryFile(dir=HOME) as registration:
             registration.write(b"synthetic registration record\n")
             registration.flush()
             executors = ProductionExecutors(engine.journal, partitions=provider)
-            executors["systems"] = systems or (lambda unit: None)
             # The real thread check needs a fresh process (inter-op pools are fixed at first use); it is
             # exercised in test_fit_workers_must_be_single_threaded.
             stack = patch("fgcs_strengthening_v04.src.orchestrator.require_fit_threads")
             stack.start()
             self.addCleanup(stack.stop)
             yield Orchestrator(engine.journal, schedule or tiny_schedule(), executors,
-                               registration=registration.name, workers=4)
+                               registration=registration.name, workers=6)
 
     def advance(self, orchestrator, *phases):
         for phase in phases:
@@ -79,17 +77,16 @@ class OrchestratorTests(unittest.TestCase):
             journal = orch.journal
             self.assertTrue(journal._path("resume_states", f"{replace(identity('M1'), phase='final').digest}.pt")
                             .is_file())
-            for phase in ("systems", "evaluation"):
-                with self.assertRaisesRegex(ProvenanceError, "not closed"):
-                    orch.run(phase)
+            with self.assertRaisesRegex(ProvenanceError, "not closed"):
+                orch.run("evaluation")
             orch.close_fits()
-            self.advance(orch, "systems", "evaluation")
+            self.advance(orch, "evaluation")
             orch.close_evaluation()
             self.assertTrue(all(orch.state(unit) == "complete" for unit in orch.schedule.units))
             sessions = [json.loads(path.read_text()) for path in journal._path("orchestrator", "sessions").glob("*")]
-            self.assertEqual(len(sessions), 6)  # refused runs open no session
+            self.assertEqual(len(sessions), 5)  # refused runs open no session
             self.assertNotIn("mae", json.dumps(sessions))
-            self.assertEqual({record["registered_workers"] for record in sessions}, {4})
+            self.assertEqual({record["registered_workers"] for record in sessions}, {6})
             self.assertEqual(set(orch.scheduler_elapsed()), {"selection_cost", "final_fit_cost", "diagnostic_cost"})
             self.assertGreaterEqual(orch.wall_time("final")["span_seconds"], 0)
             costs = json.loads(journal._path("orchestrator", "costs.json").read_text())
@@ -165,10 +162,9 @@ class OrchestratorTests(unittest.TestCase):
             self.assertIn("interrupted", json.loads(quarantine.read_text())["reason"])
             self.advance(orch, "diagnostics")
             orch.close_fits()
-            self.advance(orch, "systems", "evaluation")
+            self.advance(orch, "evaluation")
             self.assertEqual(orch.state(orch.schedule.by_key["evaluate:" + s1f.digest]), "abandoned")
             self.assertIn(s1f.digest, orch.abandoned_identities())
-            self.assertEqual(orch.state(orch.schedule.by_key["systems:test"]), "abandoned")
 
     def test_non_retryable_and_pre_attempt_refusals_are_terminal(self):
         with self.orchestrator() as orch:
@@ -190,9 +186,8 @@ class OrchestratorTests(unittest.TestCase):
             orch.run("final")
             self.assertEqual(orch.state(s1f), "complete")
 
-    def test_leases_and_exclusive_host_lock(self):
-        held = []
-        with self.orchestrator(systems=lambda unit: held.append(unit.key)) as orch:
+    def test_a_held_lease_defers_its_unit(self):
+        with self.orchestrator() as orch:
             self.advance(orch, "canary")
             orch.approve("canary", approver="author", note="ok")
             unit = orch.schedule.by_key[identity("M1").digest]
@@ -204,15 +199,6 @@ class OrchestratorTests(unittest.TestCase):
                 self.assertEqual(orch.state(unit), "pending")
             orch.run("inner")
             self.assertEqual(orch.state(unit), "complete")
-            self.advance(orch, "final", "diagnostics")
-            orch.close_fits()
-            host = orch._path("host.lock")
-            with host.open("a+b") as handle:
-                fcntl.flock(handle, fcntl.LOCK_SH)
-                orch.run("systems")
-                self.assertEqual(held, [])
-            orch.run("systems")
-            self.assertEqual(held, ["systems:test"])
 
     def test_seal_amendment_reruns_only_quarantined_identities(self):
         with self.orchestrator() as orch:
@@ -247,7 +233,7 @@ class OrchestratorTests(unittest.TestCase):
                 executors = ProductionExecutors(amended, partitions=provider)
                 registration = orch._path("registration.txt")
                 registration.write_text("synthetic registration record\n")
-                again = Orchestrator(amended, orch.schedule, executors, registration=registration, workers=4)
+                again = Orchestrator(amended, orch.schedule, executors, registration=registration, workers=6)
                 again.run("inner")
                 self.assertEqual(again.state(again.schedule.by_key[m1.digest]), "complete")
                 s1 = identity("S1")
@@ -266,7 +252,7 @@ class OrchestratorTests(unittest.TestCase):
             self.advance(orch, "final", "diagnostics")
             m1, m1f = identity("M1"), replace(identity("M1"), phase="final")
             orch.close_fits()
-            self.advance(orch, "systems", "evaluation")
+            self.advance(orch, "evaluation")
             orch.close_evaluation()
             journal = orch.journal
             with tempfile.NamedTemporaryFile(dir=HOME, suffix=".py") as source:
@@ -317,20 +303,21 @@ class OrchestratorTests(unittest.TestCase):
     def test_registered_schedule_shape(self):
         schedule = Schedule(registered_schedule())
         counts = {phase: len(schedule.phase(phase)) for phase in PHASES}
-        self.assertEqual(counts, {"certify": 3, "canary": 96, "inner": 96_954, "final": 77_450,
-                                  "diagnostics": 27_300, "systems": 182, "evaluation": 81_650})
-        self.assertEqual(counts["canary"] + counts["inner"], 97_050)
+        self.assertEqual(counts, {"certify": 3, "canary": 90, "inner": 13_410, "final": 13_500,
+                                  "diagnostics": 600, "evaluation": 13_500})
+        self.assertEqual(counts["canary"] + counts["inner"], 13_500)
         canary = list(canary_identities())
-        self.assertEqual(Counter(unit.arm for unit in canary), {"modern": 30, "core": 60, "capacity": 6})
+        self.assertEqual(Counter(unit.arm for unit in canary),
+                         {"core": 20, "modern": 50, "pairwise": 12, "leave_one_out": 8})
+        self.assertEqual(Counter(unit.formulation for unit in canary if unit.arm == "modern"),
+                         {"DLinear": 20, "PatchTST": 20, "iTransformer": 10})
         self.assertTrue(all(unit.phase == "inner" and unit.seed == 0 and unit.fold == 1 for unit in canary))
-        population = dict(systems_population())
-        self.assertEqual(len(population), 182)
-        self.assertEqual(len(population["TimeTrack", "machine01", 1]), 5)
-        self.assertEqual(len(population["fastStorage", "697", 1]), 16)
-        self.assertEqual(len(population["fastStorage", "434", 1]), 10)
-        self.assertEqual(sum(len(units) for units in population.values()),
-                         7 * 5 + 105 * 5 + 70 * 10 + 20 * 6)
-        self.assertEqual(set(FIT_PHASES) & {"systems", "evaluation"}, set())
+        self.assertEqual({(unit.block, unit.entity) for unit in canary}, {("fastStorage", "697"), ("Rnd", "99")})
+        diagnostics = schedule.phase("diagnostics")
+        self.assertEqual({unit.identity.variant for unit in diagnostics}, {"final"})
+        self.assertEqual("systems" in PHASES, False)
+        self.assertEqual(TRAINING_WORKERS, 6)
+        self.assertEqual(set(FIT_PHASES) & {"evaluation"}, set())
 
 
 if __name__ == "__main__":

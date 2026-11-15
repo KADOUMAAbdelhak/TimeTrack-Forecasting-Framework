@@ -50,41 +50,38 @@ def fit(engine, *, extended, formulation="M1"):
 
 
 class IsolationTests(unittest.TestCase):
-    def test_all_three_slots_and_extension_preserve_primary_endpoint_and_live_state(self):
+    def test_final_slot_preserves_primary_endpoint_and_live_state(self):
+        """v0.4 extracts only the final slot (P5); the fit still keeps v0.3's three diagnostic checkpoints."""
         self.assertEqual(diagnostic_slots(1), {"epoch0": 0, "mid": 1, "final": 1})
         self.assertEqual(diagnostic_slots(5), {"epoch0": 0, "mid": 3, "final": 5})
         scores = []
-        for extended in (False, True):
+        for longer_trajectory in (False, True):
             with scratch_engine(seal()) as trainer:
-                final, prepared, reads, live, optimizer, generator, fit_evidence = fit(trainer, extended=extended)
+                final, prepared, reads, live, optimizer, generator, fit_evidence = fit(
+                    trainer, extended=longer_trajectory)
+                self.assertEqual(set(fit_evidence["diagnostic_slots"]), {"epoch0", "mid", "final"})
                 before = live_state_hashes(live, optimizer, generator)
                 diag = DiagnosticEngine(trainer.journal)
-                records = {}
-                for slot in ("epoch0", "mid", "final"):
-                    unit = replace(final, arm="diagnostic", variant=slot)
-                    record = records[slot] = diag.run(unit, prepared, live, optimizer, generator)
-                    self.assertEqual(record["live_before"], before)
-                    self.assertEqual(record["live_after"], before)
-                    self.assertEqual(record["changed_live_state"], [])
-                    self.assertEqual(record["batch_manifest_sha256"], json_sha256(record["batch_manifest"]))
-                    self.assertEqual(record["summary"]["complete_pairs"], 8)
-                    self.assertEqual(record["final_identity"], final.payload())
-                    self.assertEqual(record["final_outcome_sha256"], sha256_file(
-                        trainer.journal.runtime / "outcomes" / f"{final.digest}.json"))
-                    outcome = trainer.journal.runtime / "outcomes" / f"{unit.digest}.json"
-                    self.assertEqual(json.loads(outcome.read_text())["fingerprint_sha256"], seal().digest)
-                    old = sha256_file(outcome)
-                    with self.assertRaises(DuplicateIdentity):
-                        diag.run(unit, prepared, live, optimizer, generator)
-                    self.assertEqual(sha256_file(outcome), old)
-                self.assertEqual(reads, [0] * 4)
-                self.assertEqual(fit_evidence["checkpoint_tail_epochs"], 2 if extended else 0)
-                self.assertEqual(records["mid"]["checkpoint"], records["final"]["checkpoint"])
-                self.assertNotEqual(records["mid"]["batch_manifest_sha256"], records["final"]["batch_manifest_sha256"])
-                self.assertEqual(records["final"]["slots_at_same_epoch"], ["mid", "final"])
-                self.assertIsNone(records["mid"]["primary_K"])
-                self.assertIsNotNone(records["final"]["primary_K"])
-                scores.append((records["final"]["checkpoint"]["model_sha256"], records["final"]["primary_K"]))
+                unit = replace(final, arm="diagnostic", variant="final")
+                record = diag.run(unit, prepared, live, optimizer, generator)
+                self.assertEqual((record["live_before"], record["live_after"]), (before, before))
+                self.assertEqual(record["changed_live_state"], [])
+                self.assertEqual(record["batch_manifest_sha256"], json_sha256(record["batch_manifest"]))
+                self.assertEqual(record["summary"]["complete_pairs"], 8)
+                self.assertEqual(record["final_identity"], final.payload())
+                self.assertEqual(record["final_outcome_sha256"], sha256_file(
+                    trainer.journal.runtime / "outcomes" / f"{final.digest}.json"))
+                self.assertEqual(record["checkpoint"], fit_evidence["checkpoints"][str(record["joint_epoch"])])
+                outcome = trainer.journal.runtime / "outcomes" / f"{unit.digest}.json"
+                self.assertEqual(json.loads(outcome.read_text())["fingerprint_sha256"], seal().digest)
+                old = sha256_file(outcome)
+                with self.assertRaises(DuplicateIdentity):
+                    diag.run(unit, prepared, live, optimizer, generator)
+                self.assertEqual(sha256_file(outcome), old)
+                self.assertEqual(reads, [0, 0])
+                self.assertEqual(fit_evidence["checkpoint_tail_epochs"], 0)
+                self.assertIsNotNone(record["primary_K"])
+                scores.append((record["checkpoint"]["model_sha256"], record["primary_K"]))
         self.assertEqual(scores[0], scores[1])
 
     def test_contamination_records_terminal_failure(self):
@@ -105,17 +102,19 @@ class IsolationTests(unittest.TestCase):
 
     def test_m0_slot_is_descriptive_and_tampered_checkpoint_fails(self):
         with scratch_engine(seal()) as trainer:
-            final, prepared, _, live, optimizer, generator, evidence = fit(trainer, extended=False, formulation="M0")
-            diag = DiagnosticEngine(trainer.journal)
-            unit = replace(final, arm="diagnostic", variant="final")
-            observed = diag.run(unit, prepared, live, optimizer, generator)
+            final, prepared, _, live, optimizer, generator, _ = fit(trainer, extended=False, formulation="M0")
+            observed = DiagnosticEngine(trainer.journal).run(replace(final, arm="diagnostic", variant="final"),
+                                                             prepared, live, optimizer, generator)
             self.assertIsNotNone(observed["summary"]["K"])
             self.assertIsNone(observed["primary_K"])
-            path = trainer.journal.runtime / evidence["diagnostic_checkpoints"]["0"]["path"]
+        with scratch_engine(seal()) as trainer:
+            final, prepared, _, live, optimizer, generator, evidence = fit(trainer, extended=False)
+            joint = evidence["selection"]["joint_epoch"]
+            path = trainer.journal.runtime / evidence["diagnostic_checkpoints"][str(joint)]["path"]
             path.write_bytes(b"tampered synthetic checkpoint")
             with self.assertRaises(ProvenanceError):
-                diag.run(replace(unit, variant="epoch0"), prepared, live, optimizer, generator)
-
+                DiagnosticEngine(trainer.journal).run(replace(final, arm="diagnostic", variant="final"),
+                                                      prepared, live, optimizer, generator)
 
     def test_guard_hashes_every_state_category(self):
         with scratch_engine(seal()) as trainer:

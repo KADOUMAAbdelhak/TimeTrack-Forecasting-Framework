@@ -15,10 +15,10 @@ from fgcs_strengthening_v04.src.evaluation import OuterEvaluator, evaluation_sou
 from fgcs_strengthening_v04.src.identity import RESOURCES, ScientificIdentity, canonical_json, read_config
 from fgcs_strengthening_v04.src.models.lstm import LSTM
 from fgcs_strengthening_v04.src.models.registry import REGISTRY
-from fgcs_strengthening_v04.src.modern.design import pilot_identities
+from fgcs_strengthening_v04.src.modern.design import family_identities
 from fgcs_strengthening_v04.src.modern.runner import ModernRunner
 from fgcs_strengthening_v04.src.provenance import DuplicateIdentity, ProvenanceError
-from fgcs_strengthening_v04.src.systems import systems_fingerprints
+from fgcs_strengthening_v04.src.orchestrator import execution_fingerprints
 from fgcs_strengthening_v04.src.training import TrainingEngine
 from fgcs_strengthening_v04.tests.training_fixtures import digest, identity, partition, scratch_engine
 
@@ -28,7 +28,7 @@ IDS = list(range(100, 104))
 
 @lru_cache(maxsize=1)
 def seal():
-    return systems_fingerprints()
+    return execution_fingerprints()
 
 
 def heldout(unit, *, broken=False):
@@ -62,8 +62,7 @@ def expected_cells(journal, unit, outer):
     """Independent recomputation from the journalled checkpoint and generated outer test."""
     source = evaluation_source(unit)
     final, _ = journal.completed_evidence(source)
-    epoch = (final["selection"]["task_epochs"][unit.tasks[0]] if unit.arm == "checkpoint_request"
-             else final["selection"]["joint_epoch"])
+    epoch = final["selection"]["joint_epoch"]
     reference = final["checkpoints"][str(epoch)]
     state = torch.load(io.BytesIO(journal.checkpoint_bytes(source, epoch, reference)), weights_only=True)
     inputs, native = outer
@@ -123,66 +122,47 @@ class OuterEvaluationTests(unittest.TestCase):
         self.assertTrue(all(cell.identity == unit and cell.context == prepared.context for cell in cells))
         return evidence
 
-    def test_core_and_capacity_outside_the_transfer_scope(self):
+    def test_core_cells_across_the_cohort_and_seeds(self):
         units = (
-            ScientificIdentity("TimeTrack", "machine01", 1, 4, "inner", "core", "S1", ("MEMORY",), "own", 64,
-                               "baseline"),
-            ScientificIdentity("Materna-T2", read_config()["blocks"]["Materna-T2"]["entities"][0], 3, 3, "inner",
-                               "core", "M1", RESOURCES, "all", 64, "baseline"),
-            replace(identity("S2"), seed=4),
-            replace(identity("M0"), arm="capacity", hidden_size=128, seed=3),
+            ScientificIdentity("Rnd", "151", 5, 2, "inner", "core", "S1", ("MEMORY",), "own", 64, "baseline"),
+            ScientificIdentity("Rnd", "99", 3, 1, "inner", "core", "M1", RESOURCES, "all", 64, "baseline"),
+            replace(identity("S2"), seed=2),
+            replace(identity("M0"), seed=1),
         )
         with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
             for unit in units:
-                with self.subTest(unit=(unit.block, unit.arm, unit.formulation, unit.seed)):
+                with self.subTest(unit=(unit.block, unit.formulation, unit.seed)):
                     self.check(evaluator, *fit_pair(engine, unit))
 
-    def test_interventions_and_transfer_subsets_use_their_own_final_fit(self):
+    def test_transfer_subsets_use_their_own_final_fit(self):
         base = identity("M1")
-        units = ((replace(base, arm="pcgrad", variant="pcgrad"), "pcgrad"),
-                 (replace(base, arm="gradnorm", variant="gradnorm"), "gradnorm"),
-                 (replace(identity("M0"), arm="pairwise", tasks=("CPU", "MEMORY")), "equal_loss"),
-                 (replace(base, arm="leave_one_out", tasks=("CPU", "THROUGHPUT", "DISK_WRITE")), "equal_loss"))
+        units = (replace(base, arm="pairwise", tasks=("CPU", "MEMORY")),
+                 replace(base, arm="leave_one_out", tasks=("CPU", "THROUGHPUT", "DISK_WRITE")))
         with scratch_engine(seal(), closed_fits=True) as engine:
             evaluator = OuterEvaluator(engine.journal)
-            for unit, mode in units:
+            for unit in units:
                 with self.subTest(arm=unit.arm):
-                    self.check(evaluator, *fit_pair(engine, unit, mode=mode))
+                    self.check(evaluator, *fit_pair(engine, unit))
 
-    def test_task_checkpoint_requests_evaluate_their_logged_epochs_once_each(self):
-        losses = [[3.] * 4, [2.] * 4, [2.5, 2.5, 1.0, 2.5]] + [[2.] * 4] * 20
+    def test_an_evaluation_may_not_name_another_fit_as_its_source(self):
         with scratch_engine(seal(), closed_fits=True) as engine:
-            evaluator = OuterEvaluator(engine.journal)
-            final, prepared, accesses, outer = fit_pair(engine, identity("M1"), losses=losses)
-            requests = [ScientificIdentity(final.block, final.entity, final.fold, final.seed, "final",
-                                           "checkpoint_request", "M1", (task,), "all", 64, "task_selected")
-                        for task in RESOURCES]
-            with self.assertRaises(ProvenanceError):
+            final, prepared, accesses, outer = fit_pair(engine, identity("M1"))
+            with self.assertRaisesRegex(ProvenanceError, "no parent"):
                 engine.journal.start(final, evaluation=True, source=final)
-            primary = self.check(evaluator, final, prepared, accesses, outer)
-            self.assertEqual(primary["evaluated_epoch"], 2)
-            for request in requests:
-                prepared, accesses, _ = heldout(final)
-                accesses.append(0)  # the parent final fit already read its training windows
-                evidence = self.check(evaluator, request, prepared, accesses, outer)
-                self.assertEqual(evidence["evaluated_epoch"], 3 if request.tasks == ("MEMORY",) else 2)
-                self.assertEqual(evidence["source_identity_sha256"], final.digest)
-                self.assertEqual({row["target"] for row in evidence["cells"]}, set(request.tasks))
-            memory = [r["mae"] for r in primary["cells"] if r["target"] == "MEMORY"]
-            task = [cell.mae for cell in evaluator.completed_cells(requests[2])]
-            self.assertNotEqual(memory, task)
+            self.assertEqual(self.check(OuterEvaluator(engine.journal), final, prepared, accesses, outer)
+                             ["source_identity_sha256"], final.digest)
 
-    def test_modern_families_route_own_inputs_and_shared_outputs(self):
+    def test_every_defined_modern_cell_routes_its_inputs_and_outputs(self):
         with scratch_engine(seal(), closed_fits=True) as engine:
             runner = ModernRunner(engine.journal)
             evaluator = OuterEvaluator(engine.journal)
             for family in REGISTRY:
                 runner.validate_family(family)
-                for variant in ("independent", "shared"):
-                    unit = next(i for i in pilot_identities()
-                                if (i.block, i.formulation, i.variant) == ("Rnd", family, variant))
-                    with self.subTest(family=family, variant=variant):
+                for unit in family_identities("Rnd", "99", 1, 0, "inner", family):
+                    if unit.variant == "independent" and unit.tasks != ("MEMORY",):
+                        continue
+                    with self.subTest(family=family, cell=unit.cell):
                         self.check(evaluator, *fit_pair(runner, unit))
 
     def test_failures_are_terminal_and_partitions_are_exact(self):
@@ -217,16 +197,12 @@ class OuterEvaluationTests(unittest.TestCase):
         from fgcs_strengthening_v04.src.orchestrator import FIT_PHASES
         from fgcs_strengthening_v04.src.provenance import _atomic_publish
         from fgcs_strengthening_v04.src.transfer.runner import TransferRunner
-        from fgcs_strengthening_v04.src.tree.runner import LightGBMRunner
 
         self.assertEqual(FIT_CLOSURE_PHASES, ("certify", *FIT_PHASES))
         with scratch_engine(seal()) as engine:
             final, prepared, accesses, _ = fit_pair(engine, identity("S1"))
-            tree = ScientificIdentity("fastStorage", "697", 1, 0, "final", "lightgbm", "LightGBM", ("CPU",), "own",
-                                      None, "selected")
             for call in (lambda: OuterEvaluator(engine.journal).evaluate(final, prepared),
-                         lambda: TransferRunner(engine).evaluate(final, prepared),
-                         lambda: LightGBMRunner(engine.journal).evaluate(tree, prepared)):
+                         lambda: TransferRunner(engine).evaluate(final, prepared)):
                 with self.assertRaisesRegex(ProvenanceError, "C6"):
                     call()
             _atomic_publish(engine.journal._path("orchestrator", "gates", "fits.json"),

@@ -1,4 +1,4 @@
-"""Sealed, one-identity modern fitting and explicit pilot reuse."""
+"""Sealed, one-identity modern fitting for the v0.4 2x2 (own- and all-input cells)."""
 
 from contextlib import contextmanager
 from dataclasses import replace
@@ -18,7 +18,7 @@ from ..models.registry import REGISTRY
 from ..provenance import Fingerprints, ProvenanceError, _atomic_publish, sha256_file
 from ..training import TrainingEngine, _state_hash, _windows
 from ..transfer.runner import _SOURCES as _TRANSFER_SOURCES
-from .design import dry_budget, pilot_context
+from .design import dry_budget
 from .structure import validate_family_structure
 
 _CONFIG = read_config()
@@ -112,9 +112,6 @@ class ModernRunner(TrainingEngine):
         self._check_fit_mode(identity, phase, mode)
         if not isinstance(partition, PreparedPartition):
             raise TypeError("Expected a verified Stage 3A partition")
-        expected_context = pilot_context(identity)
-        if expected_context is not None and partition.context != expected_context:
-            raise ProvenanceError("Pilot partition context differs from the registered frozen context")
         family = identity.formulation
         with self._family_lock(family):
             certificate = self._require_open_family(family)
@@ -166,7 +163,6 @@ class ModernRunner(TrainingEngine):
         optimizer = spec.make_optimizer(model)
         evidence["architecture"] = _architecture(identity, partition.context)
         evidence["optimizer"] = {"name": type(optimizer).__name__, **json.loads(canonical_json(optimizer.defaults))}
-        evidence["pilot_context"] = pilot_context(identity)
         certificate = self._family_paths(identity.formulation)[0]
         evidence["structural_certificate_sha256"] = sha256_file(certificate)
         return model, optimizer
@@ -211,24 +207,3 @@ class ModernRunner(TrainingEngine):
         outcome, _ = self.journal.completed_evidence(inner)
         self._verify_inner(inner, outcome, evidence["context"])
         return plan
-
-    def reuse_pilot(self, identity, partition):
-        """Read an existing exact pilot completion without a second fit or evaluation."""
-        self._check_fit_mode(identity, "inner", "equal_loss")
-        context = pilot_context(identity)
-        if context is None or not isinstance(partition, PreparedPartition) or (
-            partition.block, partition.entity, partition.fold, partition.phase, partition.context
-        ) != (identity.block, identity.entity, identity.fold, "inner", context):
-            raise ProvenanceError("Expected the exact registered pilot identity and partition")
-        with self._family_lock(identity.formulation):
-            self.journal.seal.verify()
-            certificate = self._require_open_family(identity.formulation)
-            self._read_certificate(identity.formulation, certificate)
-            observed, digest = self.journal.completed_evidence(identity)
-            expected = {"context": context, "pilot_context": context, "support_sha256": partition.support_sha256,
-                        "split_hashes": dict(partition.split_hashes), "scaler_sha256": partition.scaler_sha256,
-                        "configuration_sha256": self.journal.seal.configuration[1]}
-            if any(observed.get(key) != value for key, value in expected.items()):
-                raise ProvenanceError("Pilot completion differs from the exact requested input/context")
-            self._verify_inner(identity, observed, context)
-            return observed, digest

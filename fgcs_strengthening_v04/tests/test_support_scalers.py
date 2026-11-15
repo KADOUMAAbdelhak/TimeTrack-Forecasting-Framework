@@ -51,11 +51,11 @@ class FrozenSupportTests(unittest.TestCase):
                             checks += 1
         self.assertEqual(checks, 1820)
 
-    def test_phase_bound_windows_and_pilot_contexts(self):
+    def test_phase_bound_windows_and_canary_contexts(self):
         config = read_config()
-        for pilot in config["modern"]["pilot"]:
-            adapter = adapter_for(pilot["block"])
-            self.assertEqual(adapter.contexts[pilot["entity"], pilot["fold"]], pilot["context"])
+        # The v0.4 canary entities' frozen fold-1 contexts (r3 recorded them as its modern pilots).
+        for block, entity, context in (("fastStorage", "697", 18), ("Rnd", "99", 4)):
+            self.assertEqual(adapter_for(block).contexts[entity, 1], context)
         for block in config["blocks"]:
             with self.subTest(block=block):
                 adapter = adapter_for(block)

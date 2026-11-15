@@ -85,7 +85,7 @@ def _protocol_references(additional_sources):
             raise ProvenanceError(f"Conflicting frozen references: {ref['path']}")
     historical = config["historical_source_hashes"]
     foundation = ("plan_execution.py", "src/identity.py", "src/provenance.py",
-                  "src/data_adapters.py", "src/models/lstm.py", "src/transfer/design.py", "src/modern/design.py", "src/tree/design.py")
+                  "src/data_adapters.py", "src/models/lstm.py", "src/transfer/design.py", "src/modern/design.py")
     sources = (*historical, *((CONFIG.parents[1] / name).relative_to(ROOT).as_posix() for name in foundation),
                *(Path(name).as_posix() for name in additional_sources))
     return inputs, historical, sources
@@ -265,8 +265,7 @@ class Journal:
         paths = [self._record_path(kind, identity, evaluation) for kind in ("attempts", "outcomes")]
         if not evaluation:
             paths += [self._path(directory, identity.digest)
-                      for directory in ("checkpoints", "diagnostic_checkpoints", "lightgbm_models")]
-            paths.append(self._path("optimizer_states", f"{identity.digest}.pt"))
+                      for directory in ("checkpoints", "diagnostic_checkpoints")]
         return [path for path in paths if path.exists()], prefix
 
     def _closed(self, evaluation):
@@ -352,9 +351,8 @@ class Journal:
         return self._path(*prefix, kind, f"{identity.digest}.json")
 
     def start(self, identity, *, evaluation=False, source=None):
-        if source is not None and (not evaluation or identity.arm != "checkpoint_request"
-                                   or source.arm != "core" or source.phase != "final"):
-            raise ProvenanceError("Only a task-checkpoint evaluation may name its parent final fit")
+        if source is not None:
+            raise ProvenanceError("v0.4 evaluations score their own final fit; no parent may be named")
         if evaluation:
             if identity.phase != "final":
                 raise ProvenanceError("Evaluation requires a final-fit identity")
@@ -417,28 +415,6 @@ class Journal:
             raise ValueError("Invalid checkpoint epoch or encoded bytes")
         directory = "diagnostic_checkpoints" if diagnostic else "checkpoints"
         return self._save_artifact(attempt, encoded, directory, attempt.identity.digest, f"epoch-{epoch:02d}.pt")
-
-    def save_optimizer_state(self, attempt, encoded):
-        return self._save_artifact(attempt, encoded, "optimizer_states", f"{attempt.identity.digest}.pt")
-
-    def save_lightgbm_model(self, attempt, horizon, encoded):
-        if attempt.identity.arm != "lightgbm" or attempt.identity.phase != "final":
-            raise ProvenanceError("Expected a final LightGBM wrapper attempt")
-        return self._save_artifact(attempt, encoded, *self._lightgbm_model_path(attempt.identity, horizon))
-
-    def _lightgbm_model_path(self, identity, horizon):
-        if type(horizon) is not int or horizon not in (1, 2, 4, 9, 18):
-            raise ValueError("Unknown LightGBM horizon")
-        return "lightgbm_models", identity.digest, f"horizon-{horizon:02d}.txt"
-
-    def lightgbm_model_bytes(self, identity, horizon, reference):
-        path = self._path(*self._lightgbm_model_path(identity, horizon))
-        if path.relative_to(self.runtime).as_posix() != reference["path"]:
-            raise ProvenanceError("Artifact path differs from its recorded identity")
-        encoded = path.read_bytes()
-        if len(encoded) != reference["bytes"] or sha256(encoded).hexdigest() != reference["sha256"]:
-            raise ProvenanceError("Artifact bytes differ from the fit record")
-        return encoded
 
     def _save_artifact(self, attempt, encoded, *path_parts):
         if attempt.evaluation:

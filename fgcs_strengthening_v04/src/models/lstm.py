@@ -22,10 +22,7 @@ class LSTM(nn.Module):
         self.indices = tuple(RESOURCES.index(task) for task in self.tasks)
         if formulation in {"S1", "S2"} and len(self.tasks) != 1:
             raise ValueError("An independent network must declare exactly one target")
-        allowed = {_SETTINGS["primary_hidden_size"]}
-        if formulation == "M0" and self.tasks == RESOURCES:
-            allowed.add(_SETTINGS["m0_capacity_hidden_size"])
-        if type(hidden_size) is not int or hidden_size not in allowed:
+        if type(hidden_size) is not int or hidden_size != _SETTINGS["primary_hidden_size"]:
             raise ValueError("Unsupported hidden size for formulation/task subset")
         self.encoder = nn.LSTM(
             input_size=1 if self.input_scope == "own" else len(RESOURCES),

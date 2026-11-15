@@ -8,7 +8,6 @@ class ParameterCountTests(unittest.TestCase):
     def test_m0_exact_trainable_counts_and_encoder_shape(self):
         for block, width, expected in (
             ("TimeTrack", 64, 52512), ("fastStorage", 64, 51732),
-            ("TimeTrack", 128, 203296), ("fastStorage", 128, 201748),
         ):
             with self.subTest(block=block, width=width):
                 model = LSTM(formulation="M0", block=block, tasks=RESOURCES, hidden_size=width)
@@ -30,3 +29,7 @@ class ParameterCountTests(unittest.TestCase):
                 model = LSTM(formulation=formulation, block=block, tasks=tasks, hidden_size=64)
                 count = sum(p.numel() for p in model.parameters())
                 self.assertEqual(count * (1 if formulation == "M1" else 4), expected)
+
+    def test_the_h128_capacity_width_is_refused(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported hidden size"):
+            LSTM(formulation="M0", block="fastStorage", tasks=RESOURCES, hidden_size=128)

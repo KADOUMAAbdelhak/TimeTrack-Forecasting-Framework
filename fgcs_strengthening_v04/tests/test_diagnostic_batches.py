@@ -33,14 +33,17 @@ class DiagnosticBatchTests(unittest.TestCase):
             self.assertNotEqual(pair.A.indices, pair.B.indices)
 
     def test_repeatability_preserves_exact_order_and_string_ids(self):
-        unit = diagnostic_identity("mid")
+        unit = diagnostic_identity("final", "M0")
         ids = ["machine01:004", "machine01:008", "machine01:017"]
         first = [pair.payload() for pair in build_batch_pairs(unit, ids)]
         second = [pair.payload() for pair in build_batch_pairs(unit, ids)]
         self.assertEqual(first, second)
         self.assertEqual(json_sha256(first), json_sha256(second))
         self.assertTrue(set(first[0]["A"]["origin_ids"]) <= set(ids))
-        final = build_batch_pairs(diagnostic_identity(), ids)
-        self.assertNotEqual(first[0]["A"]["indices"], final[0].A.payload()["indices"])
+        # The v0.3 key omits the formulation, so M0 and M1 at the same slot share their batch draws (paired).
+        m1 = build_batch_pairs(diagnostic_identity(), ids)
+        self.assertEqual(first[0]["A"]["indices"], m1[0].A.payload()["indices"])
+        other_seed = build_batch_pairs(replace(diagnostic_identity(), seed=1), ids)
+        self.assertNotEqual(first[0]["A"]["indices"], other_seed[0].A.payload()["indices"])
         with self.assertRaises(ValueError):
             build_batch_pairs(unit, ["same", "same"])

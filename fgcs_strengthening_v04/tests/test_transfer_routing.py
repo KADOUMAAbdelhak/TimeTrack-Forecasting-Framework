@@ -15,16 +15,10 @@ def model_for(unit):
 
 
 class TransferRoutingTests(unittest.TestCase):
-    def test_own_input_pair_only_uses_the_targets_own_history(self):
-        unit = next(group_identities("fastStorage", "697", 1, 0, "inner"))
-        with cpu_seed_scope(0):
-            model = model_for(unit)
-            self.assertEqual(model.encoder.input_size, 1)
-            self.assertEqual(tuple(model.heads), unit.tasks)
-            X = torch.randn(3, 4, 4, requires_grad=True)
-            gradients, = torch.autograd.grad(model(X)[:, 0].sum(), X)
-            self.assertGreater(gradients[:, :, 0].abs().sum().item(), 0.)
-            self.assertEqual(gradients[:, :, 1:].count_nonzero().item(), 0)
+    def test_the_v04_lattice_is_all_input_only(self):
+        units = list(group_identities("fastStorage", "697", 1, 0, "inner"))
+        self.assertEqual(len(units), 10)
+        self.assertEqual({(unit.formulation, unit.input_scope) for unit in units}, {("M1", "all")})
 
     def test_all_input_subsets_keep_all_predictors_and_only_retained_heads(self):
         with cpu_seed_scope(0):

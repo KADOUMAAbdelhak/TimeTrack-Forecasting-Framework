@@ -66,7 +66,7 @@ class TrainingProvenanceTests(unittest.TestCase):
     def test_full_stage_seal_preserves_frozen_input_hashes(self):
         seal = training_fingerprints()
         self.assertEqual(len(seal.inputs), 36)
-        self.assertEqual(len(seal.sources), 27)
+        self.assertEqual(len(seal.sources), 24)  # r3's 27 minus tree/design.py and the two optim sources
         seal.verify()
 
     def test_engine_rejects_an_incomplete_journal_seal(self):

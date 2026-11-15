@@ -16,11 +16,10 @@ import numpy as np
 import torch
 from torch import nn
 
-from .checkpoints import EpochSelector, checkpoint_control_applies, diagnostic_slots
+from .checkpoints import EpochSelector, diagnostic_slots
 from .data_adapters import PARTITIONS, PreparedPartition
 from .identity import CONFIG, RESOURCES, ROOT, ScientificIdentity, canonical_json, read_config
 from .models.lstm import LSTM
-from .optim import gradnorm, pcgrad
 from .provenance import Fingerprints, Journal, ProvenanceError, measure_seconds, verify_file
 from .transfer.design import ARMS as TRANSFER_ARMS
 
@@ -29,7 +28,7 @@ _SETTINGS = _CONFIG["lstm"]
 _BATCH_SIZE = _SETTINGS["batch_size"]
 _SOURCE_FILES = tuple(
     (Path(__file__).resolve().parent / name).relative_to(ROOT).as_posix()
-    for name in ("training.py", "checkpoints.py", "optim/pcgrad.py", "optim/gradnorm.py")
+    for name in ("training.py", "checkpoints.py")
 )
 _RNG_LOCK = Lock()
 
@@ -105,42 +104,12 @@ def _optimise_epoch(model, optimizer, windows, generator):
     return (task_sums / len(inputs)).tolist(), sha256(order.numpy().astype("<i8", copy=False).tobytes()).hexdigest()
 
 
-def _intervention_epoch(model, optimizer, windows, generator, identity, epoch, mode, controller, steps, timings):
-    inputs, targets = windows
-    order = torch.randperm(len(inputs), generator=generator, device="cpu")
-    task_sums = torch.zeros(targets.shape[1], dtype=torch.float64, device="cpu")
-    model.train()
-    for batch, rows in enumerate(order.split(_BATCH_SIZE)):
-        record = {"batch": batch}
-        steps.append(record)
-        optimizer.zero_grad(set_to_none=True)
-        losses = task_mse(model(inputs[rows]), targets[rows])
-        if not torch.isfinite(losses).all():
-            raise FloatingPointError("Nonfinite intervention task MSE")
-        clip = _SETTINGS["gradient_clip"]
-        if mode == "pcgrad":
-            pcgrad.step(model, optimizer, losses, seed=identity.seed, epoch=epoch, batch=batch,
-                        clip=clip, record=record, timings=timings)
-        else:
-            controller.step(model, optimizer, losses, clip=clip, record=record, timings=timings)
-        if any(not torch.isfinite(parameter).all() for parameter in model.parameters()):
-            raise FloatingPointError("Nonfinite trained intervention parameters")
-        task_sums += losses.detach().double() * len(rows)
-    return (task_sums / len(inputs)).tolist(), sha256(order.numpy().astype("<i8", copy=False).tobytes()).hexdigest()
-
-
 def _check_mode(identity, phase, mode):
     if not isinstance(identity, ScientificIdentity) or identity.phase != phase:
         raise ValueError("Expected a scientific identity for this phase")
-    if mode == "equal_loss" and identity.arm in {"core", "capacity", *TRANSFER_ARMS}:
+    if mode == "equal_loss" and identity.arm in {"core", *TRANSFER_ARMS}:
         return
-    if mode in {"pcgrad", "gradnorm"} and identity.arm == mode and identity.formulation == "M1":
-        return
-    raise ValueError("Optimisation mode does not match the declared intervention identity")
-
-
-def _adam_configuration(optimizer):
-    return {"name": "Adam", **json.loads(canonical_json(optimizer.defaults))}
+    raise ValueError("v0.4 trains only core and transfer LSTM identities, with the equal-mean loss")
 
 
 @torch.no_grad()
@@ -240,8 +209,6 @@ class TrainingEngine:
             "timing_seconds": {"primary_optimisation": 0.0, "checkpoint_tail_optimisation": 0.0, "validation": 0.0},
         }
         plan = None
-        if mode != "equal_loss":
-            evidence["intervention"] = {"mode": mode, "algorithm_variant": f"v0.3-{mode}-M1", "epochs": []}
         if phase == "final":
             plan = self._selected_final_plan(identity, evidence, mode)
             evidence["selection"] = plan.payload()
@@ -249,19 +216,11 @@ class TrainingEngine:
         start = perf_counter()
         try:
             with cpu_seed_scope(identity.seed) as generator:
-                model, optimizer, controller = self._run(attempt, partition, evidence, generator, plan, mode)
+                model, optimizer = self._run(attempt, partition, evidence, generator, plan, mode)
                 evidence["terminal_model_sha256"] = _state_hash(model.state_dict())
                 evidence["optimizer_state_bytes"] = len(_encode(optimizer.state_dict()))
                 state = capture_epoch_state(model, optimizer, generator, identity=identity,
                                             fingerprint_sha256=self.journal.seal.digest, evidence=evidence)
-                if controller is not None:
-                    state["gradnorm"] = controller.state_dict()
-                    evidence["weight_optimizer_state_bytes"] = len(_encode(state["gradnorm"]["weight_optimizer"]))
-                    optimizer_state = {"identity": identity.payload(), "fingerprint_sha256": self.journal.seal.digest,
-                                       "epoch": len(evidence["epochs"]), "model_optimizer": state["optimizer"],
-                                       "gradnorm": state["gradnorm"]}
-                    evidence["intervention"]["optimizer_state"] = self.journal.save_optimizer_state(
-                        attempt, _encode(optimizer_state))
                 encoded_state = _encode(state)
                 evidence["resume_state_sha256"] = sha256(encoded_state).hexdigest()
                 evidence["timing_seconds"]["elapsed"] = perf_counter() - start
@@ -278,9 +237,9 @@ class TrainingEngine:
         observed, outcome_hash = self.journal.completed_evidence(inner)
         if any(observed.get(key) != evidence[key] for key in ("context", "split_hashes", "configuration_sha256")):
             raise ProvenanceError("Inner selection and final partition do not share the frozen design")
-        if observed.get("intervention", {}).get("mode", "equal_loss") != mode:
+        if "intervention" in observed or mode != "equal_loss":
             raise ProvenanceError("Inner and final optimisation modes differ")
-        selector = EpochSelector(identity.tasks, task_control=checkpoint_control_applies(identity))
+        selector = EpochSelector(identity.tasks, task_control=False)
         for expected_epoch, row in enumerate(observed["epochs"], start=1):
             if row["epoch"] != expected_epoch:
                 raise ProvenanceError("Inner validation history has a missing or duplicate epoch")
@@ -305,16 +264,10 @@ class TrainingEngine:
         identity = attempt.identity
         inner = identity.phase == "inner"
         if inner:
-            selector = EpochSelector(identity.tasks, task_control=checkpoint_control_applies(identity))
+            selector = EpochSelector(identity.tasks, task_control=False)
         training = self._prepare_windows(identity, partition, evidence)
         validation = self._prepare_windows(identity, partition, evidence, validation=True) if inner else None
         model, optimizer = self._model_and_optimizer(identity, partition, evidence)
-        controller = gradnorm.GradNorm(model) if mode == "gradnorm" else None
-        if mode != "equal_loss":
-            evidence["intervention"]["model_optimizer"] = _adam_configuration(optimizer)
-            if controller is not None:
-                evidence["intervention"].update(alpha=gradnorm.ALPHA, norm_parameters=list(gradnorm.NORM_PARAMETERS),
-                                                weight_optimizer=_adam_configuration(controller.weight_optimizer))
         evidence["parameter_count"] = sum(p.numel() for p in model.parameters() if p.requires_grad)
         evidence["initial_model_sha256"] = _state_hash(model.state_dict())
         slots = {}
@@ -331,14 +284,7 @@ class TrainingEngine:
             started = perf_counter()
             cost = "primary_optimisation" if inner or epoch <= plan.joint_epoch else "checkpoint_tail_optimisation"
             try:
-                if mode == "equal_loss":
-                    train_mse, order_hash = _optimise_epoch(model, optimizer, training, generator)
-                else:
-                    steps = []
-                    evidence["intervention"]["epochs"].append({"epoch": epoch, "steps": steps})
-                    train_mse, order_hash = _intervention_epoch(
-                        model, optimizer, training, generator, identity, epoch, mode, controller, steps,
-                        evidence["timing_seconds"])
+                train_mse, order_hash = _optimise_epoch(model, optimizer, training, generator)
             finally:
                 evidence["timing_seconds"][cost] += perf_counter() - started
             row = {"epoch": epoch, "train_task_mse": dict(zip(identity.tasks, train_mse, strict=True)),
@@ -376,4 +322,4 @@ class TrainingEngine:
         if not inner:
             evidence["primary_checkpoint_epoch"] = plan.joint_epoch
             evidence["checkpoint_tail_epochs"] = plan.final_epoch - plan.joint_epoch
-        return model, optimizer, controller
+        return model, optimizer
