@@ -1,0 +1,56 @@
+{
+  "author_decisions": {
+    "blinding": "v0.3 C6: no outer-test data before fit closure",
+    "canary": "90 inner fits (P9 step 2): first cohort VM per block, fold 1, seed 0, every arm and cell",
+    "inputs": "byte-identical to the sealed v0.3 inputs (Zenodo 10.5281/zenodo.24189108 plus tracked inputs)",
+    "protocol": "v0.4 minimal FGCS revision protocol (P0-P11); tier 2, descriptive, no confirmatory tests",
+    "retry_policy": "v0.3 C3: two infrastructure retries; code repairs only by chained seal amendment",
+    "supersedes": "v0.3 (registration package r3; OSF kuwra) before any v0.3 execution; kuwra is not withdrawn",
+    "training_workers": 6
+  },
+  "generated_files": {
+    "analysis_catalogue.json": "cbd1d9b8461ab69863748745c0e41f59f39235cf81ad41bf8360840b4206f17a",
+    "execution_seal.json": "fc76035d497e35937bd8984c74d877b2788118ba16a1e76e5f2d4c268440a2b8",
+    "host_manifest.json": "b16ec3968bb28c04a75ee6eeb38c5a177a5b1840bed735dcb5ae79091f4130d4",
+    "schedule.json": "a7074b5b61cc037b5df7ea2cc30d808d33690a2def80b48144054bc39560a626"
+  },
+  "host": {
+    "conditions": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "device": "cpu",
+      "torch_interop_threads": 1,
+      "torch_intraop_threads": 1
+    },
+    "hardware_without_hostname": {
+      "cpu_model": "Apple M3",
+      "kernel": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:29 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8122",
+      "logical_cores": 8,
+      "os": "Darwin",
+      "physical_cores": 8,
+      "power_mode": "lowpowermode         0",
+      "ram_bytes": 25769803776
+    },
+    "software_versions": {
+      "numpy": "2.5.1",
+      "pandas": "3.0.5",
+      "python": "3.13.2",
+      "pytorch": "2.13.0",
+      "torch_blas": "accelerate"
+    }
+  },
+  "package": "fgcs-v04 registration package",
+  "package_sha256": "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442",
+  "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.4.md",
+  "referenced_files": {
+    "fgcs_strengthening_v04/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
+    "fgcs_strengthening_v04/configs/protocol_v04.json": "9ab25364a2f416eeea1e05f32efd24d3c159a104f305a8fe900fb58a8fad8d67",
+    "review_revision/fgcs_strengthening/analysis_plan_v0.4.md": "76652ad9231eed63245f38d2c7a80a73752a9f3b9fefdb0bd31e3c225af4b80f"
+  },
+  "status": {
+    "external_registration": "not performed (author action)",
+    "scientific_execution": "none; the runtime journal is created by `launch start`",
+    "v0.4_author_approval": "to be confirmed by the author before external registration"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "evaluation_identity_count": 13500,
+  "evaluation_identity_list_sha256": "14b75f1dc1628cab43c8152b2ee3a303b739bb17f9c2b8387f9bfd8ff1dbedbc",
+  "format": "fgcs-v04-analysis/1",
+  "historical_tables": [
+    {
+      "block": "fastStorage",
+      "kind": "v1_persistence",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/persistence_metrics.parquet",
+      "sha256": "729d66bff8f16160968270d35e7908f62eaa3ff654d00ba72311621b4628b8ef"
+    },
+    {
+      "block": "Rnd",
+      "kind": "v1_persistence",
+      "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/persistence_metrics.parquet",
+      "sha256": "151d3f12030c31ab42c2fad068ac1d9de6fd8d8afb2303ec1934e768f7bd1d59"
+    },
+    {
+      "block": null,
+      "kind": "ridge",
+      "path": "review_revision/experiments/ar_arx_baseline/posthoc_metric_rows.parquet",
+      "sha256": "78c1056e2188f0a621bd5abd3fafd4b619a7ce6ed0e76ef5b5548ecb531ae29a"
+    }
+  ],
+  "plan": {
+    "P4": {
+      "baseline_rows": 32,
+      "contrast_rows": 104,
+      "cross_backbone_rows": 32,
+      "interaction_rows": 24,
+      "parameter_count_rows": 42
+    },
+    "P5": {
+      "D-1_entity_fold_rows": 100,
+      "D-2_entity_values": 80,
+      "D-3_associations": 32,
+      "D-4_entity_rows": 40,
+      "D-6_entries": 48,
+      "D-7_rows": 8
+    },
+    "bootstrap": {
+      "draw_matrices": [
+        "fastStorage",
+        "Rnd"
+      ],
+      "replicates": 10000,
+      "seed": 20261007
+    }
+  }
+}
