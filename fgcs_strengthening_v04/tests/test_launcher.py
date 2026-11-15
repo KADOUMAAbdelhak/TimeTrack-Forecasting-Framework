@@ -1,10 +1,9 @@
-"""v0.4 launcher: gates, supervision, guards, recovery, host and registration checks.
+"""v0.4 launcher: Git-tag freezing, gates, supervision, guards, recovery and host checks.
 
 Generated data, scratch journals and recorded API responses only; the real runtime is never created.
 """
 
 import fcntl
-import html
 import json
 import os
 from pathlib import Path
@@ -64,57 +63,60 @@ class LauncherGateTests(unittest.TestCase):
         runtime = HOME / "runtime"
         existed = runtime.exists()
         with patch.object(launcher, "EVIDENCE", HOME / "registration" / "absent.md"):
-            with self.assertRaisesRegex(launcher.LaunchRefused, "registration does not exist"):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "package has not been built"):
                 launcher.execution_unlocked(launcher.EVIDENCE)
         self.assertEqual(launcher.main(["start"]), 2)
         self.assertEqual(runtime.exists(), existed)
 
-    def test_registered_package_gates_pass_and_osf_stays_unrecorded(self):
-        self.assertEqual(launcher.check_repository()["tag_commit"], launcher.REGISTERED_COMMIT)
-        self.assertEqual(launcher.check_package(), launcher.REGISTERED_PACKAGE)
-        self.assertEqual(launcher.check_seal(), launcher.REGISTERED_SEAL)
+    def test_frozen_tag_gates_pass_and_no_external_registration_gate_exists(self):
+        state = launcher.tagged_state()
+        self.assertEqual(state["tag"], launcher.TAG)
+        self.assertEqual(launcher._git("cat-file", "-t", state["tag_object"]).stdout.strip(), "tag")
+        self.assertEqual(launcher.check_repository()["commit"], state["commit"])
+        self.assertEqual(launcher.check_package(), state["package_sha256"])
+        self.assertEqual(launcher.check_seal(), state["seal"])
         self.assertFalse(launcher.execution_unlocked())
-        # The v0.4 OSF registration does not exist yet, so its check refuses without any network read.
-        self.assertIsNone(launcher.OSF_REGISTRATION)
-        with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
-            launcher.verify_registration(fetch=lambda url: self.fail("no network read expected"))
-        with patch.object(launcher, "REGISTERED_SEAL", None):
-            with self.assertRaisesRegex(launcher.LaunchRefused, "not recorded yet"):
-                launcher.check_seal()
+        # Git-based freezing (P9, D1): no OSF or Zenodo gate, constant or command remains.
+        for name in ("OSF_REGISTRATION", "verify_registration", "require_registration_verified", "REGISTERED_SEAL"):
+            self.assertFalse(hasattr(launcher, name), name)
+        with self.assertRaises(SystemExit):
+            launcher.main(["verify-registration"])
+        with self.assertRaisesRegex(launcher.LaunchRefused, "not an annotated tag"):
+            launcher.tagged_state("fgcs-no-such-tag")
 
-    def test_unlock_flag_alone_never_runs_without_a_verified_registration(self):
+    def test_any_tracked_change_except_the_unlock_flag_refuses(self):
+        original = launcher._git
+        flag = "fgcs_strengthening_v04/registration/REGISTRATION_EVIDENCE_TEMPLATE.md"
+
+        def fake(changed):
+            def run(*args):
+                if args[0] == "diff":
+                    return subprocess.CompletedProcess(args, 0, "\n".join(changed) + "\n", "")
+                return original(*args)
+            return run
+
+        with patch.object(launcher, "_git", fake([flag])):
+            launcher.check_repository()
+        for changed in (["fgcs_strengthening_v04/launch.py", flag], ["fgcs_strengthening_v04/src/training.py"],
+                        ["review_revision/fgcs_strengthening/analysis_plan_v0.4.md"]):
+            with patch.object(launcher, "_git", fake(changed)):
+                with self.assertRaisesRegex(launcher.LaunchRefused, "differ from"):
+                    launcher.check_repository()
+
+    def test_the_unlock_flag_and_preflight_are_the_only_execution_gates(self):
+        sentinel = {"preflight": "passed"}
+        with patch.object(launcher, "execution_unlocked", return_value=True), \
+                patch.object(launcher, "preflight", return_value=sentinel), \
+                patch.object(launcher, "require_thread_env", return_value=None):
+            self.assertIs(launcher.require_execution_allowed(), sentinel)
         runtime = HOME / "runtime"
         existed = runtime.exists()
         with patch.object(launcher, "execution_unlocked", return_value=True), \
-                patch.object(launcher, "preflight", side_effect=AssertionError("preflight must not be reached")):
-            with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
-                launcher.require_execution_allowed()
-            for argv in (["start"], ["run", "--phase", "canary"]):
-                self.assertEqual(launcher.main(argv), 2, argv)
-            with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
+                patch.object(launcher, "check_repository", side_effect=launcher.LaunchRefused("changed")), \
+                patch.object(launcher, "production_orchestrator", side_effect=AssertionError("must not open")):
+            with self.assertRaisesRegex(launcher.LaunchRefused, "changed"):
                 launcher.worker_main("canary")
         self.assertEqual(runtime.exists(), existed)
-
-    def test_registration_verification_report_must_pass_for_the_recorded_registration(self):
-        with tempfile.TemporaryDirectory() as scratch:
-            path = Path(scratch) / "OSF_VERIFICATION.json"
-            with patch.object(launcher, "OSF_REGISTRATION", "abcd5"):
-                with self.assertRaisesRegex(launcher.LaunchRefused, "run verify-registration first"):
-                    launcher.require_registration_verified(path)
-                refused = ("not json", json.dumps([]),
-                           json.dumps({"passed": False, "problems": ["x"], "osf_registration": "abcd5"}),
-                           json.dumps({"passed": True, "problems": ["x"], "osf_registration": "abcd5"}),
-                           json.dumps({"passed": "true", "problems": [], "osf_registration": "abcd5"}),
-                           json.dumps({"passed": True, "problems": [], "osf_registration": "kuwra"}))
-                for text in refused:
-                    path.write_text(text)
-                    with self.assertRaises(launcher.LaunchRefused, msg=text):
-                        launcher.require_registration_verified(path)
-                path.write_text(json.dumps({"passed": True, "problems": [], "osf_registration": "abcd5"}))
-                self.assertTrue(launcher.require_registration_verified(path)["passed"])
-            with patch.object(launcher, "OSF_REGISTRATION", None):
-                with self.assertRaisesRegex(launcher.LaunchRefused, "OSF_REGISTRATION"):
-                    launcher.require_registration_verified(path)
 
     def test_phases_start_only_after_every_earlier_phase_is_terminal(self):
         from types import SimpleNamespace
@@ -222,83 +224,6 @@ class MonitorTests(unittest.TestCase):
             self.assertIsNotNone(process)
             self.assertIsNone(process.poll())
         self.assertIsNotNone(process.poll())
-
-
-class RegistrationVerificationTests(unittest.TestCase):
-    """Recorded-response checks against a generated field map; no network and no real registration."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.scratch = tempfile.TemporaryDirectory(dir=HOME)
-        root = Path(cls.scratch.name)
-        files = []
-        for index in range(7):
-            path = root / f"attachment{index}.json"
-            path.write_text(json.dumps({"index": index}))
-            files.append(path.relative_to(ROOT).as_posix())
-        archive = root / "archive.zip"
-        archive.write_bytes(b"synthetic archive")
-        fields = {"metadata": {"title": "A <synthetic> v0.4 registration", "description": "Generated & checked"},
-                  "registration_responses": {"72-46": "Answer with <markup> & quotes", "72-47": "Second"},
-                  "attachments": files}
-        cls.fields_path, cls.uploads_path = root / "fields.json", root / "uploads.json"
-        cls.fields_path.write_text(json.dumps(fields))
-        cls.uploads_path.write_text(json.dumps({"uploads": [{"upload_filename": "archive.zip", "size_bytes": 17,
-                                                             "source_path": archive.relative_to(ROOT).as_posix()}]}))
-        responses = {key: html.escape(value, quote=False) for key, value in fields["registration_responses"].items()}
-        names = [Path(path).name for path in files]
-        hashes = {Path(path).name: launcher._sha256(ROOT / path) for path in files}
-        responses["72-22"] = [{"file_name": name, "file_hashes": {"sha256": hashes[name]}} for name in names[:5]]
-        responses["72-26"] = [{"file_name": name, "file_hashes": {"sha256": hashes[name]}} for name in names[5:]]
-        cls.osf = {"data": {"attributes": {
-            "public": True, "pending_registration_approval": False, "withdrawn": False, "embargo_end_date": None,
-            "date_registered": "2026-12-01T00:00:00", "title": html.escape(fields["metadata"]["title"], quote=False),
-            "description": fields["metadata"]["description"], "registration_responses": responses},
-            "embeds": {"identifiers": {"data": [{"attributes": {"category": "doi", "value": "10.17605/OSF.IO/TEST4"}}]}}}}
-        cls.zenodo = {"entries": [{"key": "archive.zip", "size": 17, "checksum": "md5:" + launcher._md5(archive)}]}
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.scratch.cleanup()
-
-    def verify(self, osf=None, zenodo=None):
-        osf, zenodo = osf or self.osf, zenodo or self.zenodo
-        return launcher.verify_registration(fetch=lambda url: json.loads(json.dumps(osf if "osf" in url else zenodo)),
-                                            fields_path=self.fields_path, upload_list_path=self.uploads_path,
-                                            registration="test4")
-
-    def test_public_matching_registration_passes(self):
-        passed, report = self.verify()
-        self.assertTrue(passed, report["problems"])
-        self.assertEqual(report["responses_sha256"], report["expected_responses_sha256"])
-        self.assertEqual(report["osf_registration"], "test4")
-
-    def mutate(self, change):
-        osf = json.loads(json.dumps(self.osf))
-        change(osf["data"])
-        return self.verify(osf=osf)
-
-    def test_pending_undoi_changed_or_mismatched_registrations_fail(self):
-        cases = {
-            "pending": lambda d: d["attributes"].update(public=False, pending_registration_approval=True),
-            "no DOI": lambda d: d["embeds"]["identifiers"].update(data=[]),
-            "changed response": lambda d: d["attributes"]["registration_responses"].update({"72-46": "edited"}),
-            "changed title": lambda d: d["attributes"].update(title="Other"),
-            "attachment hash": lambda d: d["attributes"]["registration_responses"]["72-22"][0]["file_hashes"]
-            .update(sha256="0" * 64),
-            "withdrawn": lambda d: d["attributes"].update(withdrawn=True),
-            "embargoed": lambda d: d["attributes"].update(embargo_end_date="2027-01-01"),
-        }
-        for name, change in cases.items():
-            passed, report = self.mutate(change)
-            self.assertFalse(passed, name)
-
-    def test_zenodo_file_change_fails(self):
-        zenodo = json.loads(json.dumps(self.zenodo))
-        zenodo["entries"][0]["size"] += 1
-        passed, report = self.verify(zenodo=zenodo)
-        self.assertFalse(passed)
-        self.assertFalse(report["zenodo_files_match"])
 
 
 class HostTests(unittest.TestCase):

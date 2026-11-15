@@ -1,4 +1,4 @@
-"""Build or verify the v0.4 registration package. Reads no data values and no results.
+"""Build or verify the v0.4-min frozen package. Reads no data values and no results.
 
     python -m fgcs_strengthening_v04.host capture --out fgcs_strengthening_v04/registration/host_manifest.json
     python -m fgcs_strengthening_v04.build_registration --build
@@ -10,9 +10,11 @@ The host manifest is captured first, in a single-threaded worker environment (ho
 
 --build refuses while the protocol is still a draft, and never overwrites an existing package. It also
 writes REGISTRATION_EVIDENCE_TEMPLATE.md with EXECUTION_UNLOCKED = NO; that file is outside the package
-digest because the author changes it after verifying the external registration.
+digest because the author changes it to authorise execution.
 
-After a build, the registration step records the tag, commit, package digest and seal in launch.py.
+Freezing is Git-based (protocol P9, deviation D1): after a build, the package is committed and the commit
+gets the annotated tag launch.TAG. The launcher reads the commit, package digest and seal from that tag.
+No external registration is made for v0.4; OSF kuwra (v0.3) is kept as superseded historical evidence.
 """
 
 import argparse
@@ -27,18 +29,29 @@ PACKAGE = HOME / "registration"
 GENERATED = ("execution_seal.json", "schedule.json", "analysis_catalogue.json")
 DECISIONS = {
     "protocol": "v0.4 minimal FGCS revision protocol (P0-P11); tier 2, descriptive, no confirmatory tests",
-    "supersedes": "v0.3 (registration package r3; OSF kuwra) before any v0.3 execution; kuwra is not withdrawn",
+    "supersedes": "v0.3 (registration package r3; OSF kuwra) before any v0.3 execution; kuwra is kept as "
+                  "superseded historical evidence and is not withdrawn",
+    "freezing": "Git-based (P9, deviation D1 of 2026-11-15): annotated tag fgcs-v04-min-final on the package commit, "
+                "with this package digest and execution seal; no external registration of v0.4",
+    "predecessor": {"tag": "fgcs-v04-registration-package", "commit": "9b94a066d2818ac726205954cb53f52e0ec3371d",
+                    "package_sha256": "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442",
+                    "execution_seal": "babe1fefa7f48c462b7f628d3d98507ec03779a31df843cb7d6f044d257abd15",
+                    "audit": "independent audit 2026-11-15: AUDIT_PASS_WITH_NOTES (non-blocking)"},
     "training_workers": 6,
     "canary": "90 inner fits (P9 step 2): first cohort VM per block, fold 1, seed 0, every arm and cell",
     "retry_policy": "v0.3 C3: two infrastructure retries; code repairs only by chained seal amendment",
     "blinding": "v0.3 C6: no outer-test data before fit closure",
     "inputs": "byte-identical to the sealed v0.3 inputs (Zenodo 10.5281/zenodo.24189108 plus tracked inputs)",
 }
-EVIDENCE_TEMPLATE = """# v0.4 registration evidence
+EVIDENCE_TEMPLATE = """# v0.4-min execution authorisation
 
-Record here the public v0.4 OSF registration (ID, DOI, date), the output of
-`python -m fgcs_strengthening_v04.launch verify-registration`, and the author's decision.
-Change the line below to YES only after that check prints REGISTRATION VERIFIED.
+v0.4-min is frozen by Git (protocol P9, deviation D1): the annotated tag fgcs-v04-min-final, its package
+digest and its execution seal. No external registration is made; OSF kuwra (v0.3) is superseded historical
+evidence only.
+
+Before changing the line below to YES, run `python -m fgcs_strengthening_v04.launch preflight` and record
+here its output (tag object, commit, package, seal, host check), the date and your decision. This file is
+the only tracked v0.4 file the launcher allows to differ from the tag.
 
 EXECUTION_UNLOCKED = NO
 """
@@ -126,15 +139,15 @@ def package_record(files, package=None):
     listed = {**{name: _sha(content) for name, content in files.items()},
               "host_manifest.json": _sha(host_path.read_bytes())}
     return {
-        "package": "fgcs-v04 registration package",
+        "package": "fgcs-v04-min frozen package",
         "protocol": protocol_path(),
         "generated_files": dict(sorted(listed.items())),
         "referenced_files": {path: _sha((ROOT / path).read_bytes()) for path in references()},
         "host": {"hardware_without_hostname": hardware, "software_versions": host["software"],
                  "conditions": host["conditions"]},
         "author_decisions": DECISIONS,
-        "status": {"v0.4_author_approval": "to be confirmed by the author before external registration",
-                   "external_registration": "not performed (author action)",
+        "status": {"v0.4_author_approval": "freezing by Git tag approved by the author (deviation D1, 2026-11-15)",
+                   "external_registration": "none for v0.4 (D1); OSF kuwra (v0.3) retained as superseded evidence",
                    "scientific_execution": "none; the runtime journal is created by `launch start`"},
     }
 

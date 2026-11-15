@@ -1,6 +1,6 @@
 # Analysis plan v0.4 (minimal): FGCS revision protocol
 
-**Status: frozen, 2026-11-15. Not yet sealed or registered; nothing has run.** It replaces the earlier v0.4 draft (commit `00111dcb`) with the smallest design that addresses the three revision comments. Any change after freezing is a deviation, logged with its date, reason and affected components (P9).
+**Status: frozen, 2026-11-15; amended 2026-11-15 by deviation D1 (P9: Git-based freezing replaces a new OSF registration). Nothing has run.** It replaces the earlier v0.4 draft (commit `00111dcb`) with the smallest design that addresses the three revision comments. Any change after freezing is a deviation, logged with its date, reason and affected components (P9).
 
 - **Supersedes:** v0.3 (`analysis_plan_v0.3.md`; registration package r3; OSF `kuwra`) **before any v0.3 execution**. No v0.3 scientific fit, outer-test evaluation or analysis has occurred.
 - **Baseline:** manuscript "Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems" (repository tag `jss-review-robustness-reproducibility-v1`).
@@ -149,7 +149,7 @@ All diagnostics use the P1 cohort and are computed after fit closure (for the tr
 
 ## P6. Interventions
 
-None in v0.4. Huber loss, PCGrad, GradNorm and task-grouping interventions require a separate, later amendment, justified by the P5 diagnostics and registered before any such run.
+None in v0.4. Huber loss, PCGrad, GradNorm and task-grouping interventions require a separate, later amendment, justified by the P5 diagnostics and frozen by a new Git tag and execution seal before any such run.
 
 ## P7. Reused without re-running
 
@@ -221,9 +221,10 @@ r3's systems phase is dropped: v0.4 runs no systems benchmarks (P8).
 
 **Execution.**
 - New code: DLinear S2/M1, PatchTST S2/M1, the D-1/D-3/D-6 analyses, the P4 analysis, and the v0.4 schedule.
-- Then: a new execution seal and registration package, an independent audit, and the launcher re-pointed to the v0.4 seal, with six worker slots and no systems phase. The r3 package stays locked permanently (`EXECUTION_UNLOCKED = NO`).
-- **Registration:** a new OSF registration (Secondary Data Preregistration), registered before any v0.4 run. It links to OSF `kuwra`, states that v0.3 was superseded before execution, and reuses the Zenodo input archive. `kuwra` is not withdrawn.
+- Then: a new execution seal and package, an independent audit, and the launcher pointed at the final v0.4 Git tag, with six worker slots and no systems phase. The r3 package stays locked permanently (`EXECUTION_UNLOCKED = NO`).
+- **Freezing and provenance (amended by D1):** v0.4 is frozen by an annotated Git tag on the package commit, together with the package digest and the execution seal recorded in that commit. The launcher refuses to run unless the live code, configuration and inputs reproduce them and the author has set `EXECUTION_UNLOCKED = YES`. No new external (OSF) registration is made for v0.4. OSF `kuwra` (v0.3) is kept as superseded historical evidence and is not withdrawn. The sealed inputs not held in Git remain archived at Zenodo `10.5281/zenodo.24189108`.
 - **Deviations:** any change after freezing is logged with its date, reason and affected components, through a chained seal amendment.
+  - **D1 (2026-11-15, before any v0.4 run).** Reason: author decision to freeze v0.4 by Git tag, package digest and execution seal instead of a new OSF registration. Affected: P9 (this section), the P6 wording on how a later intervention amendment is frozen, and P11 item 12. No design, model, schedule, endpoint or analysis changes. The predecessor package (tag `fgcs-v04-registration-package`, package `24277248…8442`, seal `babe1fef…bd15`) passed an independent audit with non-blocking notes before D1.
 
 ## P10. Reporting (comment 3; after results are fixed)
 
@@ -249,3 +250,4 @@ r3's systems phase is dropped: v0.4 runs no systems benchmarks (P8).
 9. **Affinity comes from empirical pairwise transfer**, not training-time lookahead.
 10. **Dependence evidence partly reuses post-hoc Ridge outcomes** already observed (tier 2). Only D-1 is new and training-only.
 11. **No interventions.** The explanation of sharing degradation remains associational.
+12. **No external preregistration of v0.4.** v0.4 is frozen by a Git tag, package digest and execution seal made before any run (D1), not by a time-stamped third-party registration. The superseded v0.3 registration (OSF `kuwra`) is reported as historical evidence only.

@@ -2,15 +2,23 @@
   "author_decisions": {
     "blinding": "v0.3 C6: no outer-test data before fit closure",
     "canary": "90 inner fits (P9 step 2): first cohort VM per block, fold 1, seed 0, every arm and cell",
+    "freezing": "Git-based (P9, deviation D1 of 2026-11-15): annotated tag fgcs-v04-min-final on the package commit, with this package digest and execution seal; no external registration of v0.4",
     "inputs": "byte-identical to the sealed v0.3 inputs (Zenodo 10.5281/zenodo.24189108 plus tracked inputs)",
+    "predecessor": {
+      "audit": "independent audit 2026-11-15: AUDIT_PASS_WITH_NOTES (non-blocking)",
+      "commit": "9b94a066d2818ac726205954cb53f52e0ec3371d",
+      "execution_seal": "babe1fefa7f48c462b7f628d3d98507ec03779a31df843cb7d6f044d257abd15",
+      "package_sha256": "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442",
+      "tag": "fgcs-v04-registration-package"
+    },
     "protocol": "v0.4 minimal FGCS revision protocol (P0-P11); tier 2, descriptive, no confirmatory tests",
     "retry_policy": "v0.3 C3: two infrastructure retries; code repairs only by chained seal amendment",
-    "supersedes": "v0.3 (registration package r3; OSF kuwra) before any v0.3 execution; kuwra is not withdrawn",
+    "supersedes": "v0.3 (registration package r3; OSF kuwra) before any v0.3 execution; kuwra is kept as superseded historical evidence and is not withdrawn",
     "training_workers": 6
   },
   "generated_files": {
     "analysis_catalogue.json": "cbd1d9b8461ab69863748745c0e41f59f39235cf81ad41bf8360840b4206f17a",
-    "execution_seal.json": "fc76035d497e35937bd8984c74d877b2788118ba16a1e76e5f2d4c268440a2b8",
+    "execution_seal.json": "d9e2aa65143d02b9181eb32903a52ea4058a84bc5645952d3ab1fe04f53839c7",
     "host_manifest.json": "b16ec3968bb28c04a75ee6eeb38c5a177a5b1840bed735dcb5ae79091f4130d4",
     "schedule.json": "a7074b5b61cc037b5df7ea2cc30d808d33690a2def80b48144054bc39560a626"
   },
@@ -40,17 +48,17 @@
       "torch_blas": "accelerate"
     }
   },
-  "package": "fgcs-v04 registration package",
-  "package_sha256": "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442",
+  "package": "fgcs-v04-min frozen package",
+  "package_sha256": "cb3bd38719ca1a29d1e3dca063e1eeb4ad15a7720e60c7e3d6fa17364445e6a0",
   "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.4.md",
   "referenced_files": {
     "fgcs_strengthening_v04/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
-    "fgcs_strengthening_v04/configs/protocol_v04.json": "9ab25364a2f416eeea1e05f32efd24d3c159a104f305a8fe900fb58a8fad8d67",
-    "review_revision/fgcs_strengthening/analysis_plan_v0.4.md": "76652ad9231eed63245f38d2c7a80a73752a9f3b9fefdb0bd31e3c225af4b80f"
+    "fgcs_strengthening_v04/configs/protocol_v04.json": "ee861d18b55b5942ad574eae3129ac5c208bf3f19fb62e278323cc54333f9e91",
+    "review_revision/fgcs_strengthening/analysis_plan_v0.4.md": "f0f93d62da8fe904bf634977dc6781fe1f45712349a285ad6c5af3bd87dc4e11"
   },
   "status": {
-    "external_registration": "not performed (author action)",
+    "external_registration": "none for v0.4 (D1); OSF kuwra (v0.3) retained as superseded evidence",
     "scientific_execution": "none; the runtime journal is created by `launch start`",
-    "v0.4_author_approval": "to be confirmed by the author before external registration"
+    "v0.4_author_approval": "freezing by Git tag approved by the author (deviation D1, 2026-11-15)"
   }
 }

@@ -111,9 +111,11 @@ class RegistrationTests(unittest.TestCase):
 
     def test_the_launcher_package_gate_uses_the_builder(self):
         digest = registration.build(self.package)
-        with patch.object(registration, "PACKAGE", self.package), patch.object(launcher, "REGISTERED_PACKAGE", digest):
+        with patch.object(registration, "PACKAGE", self.package), \
+                patch.object(launcher, "tagged_state", lambda tag=None: {"package_sha256": digest}):
             self.assertEqual(launcher.check_package(), digest)
-        with patch.object(registration, "PACKAGE", self.package), patch.object(launcher, "REGISTERED_PACKAGE", "0" * 64):
+        with patch.object(registration, "PACKAGE", self.package), \
+                patch.object(launcher, "tagged_state", lambda tag=None: {"package_sha256": "0" * 64}):
             with self.assertRaisesRegex(launcher.LaunchRefused, "does not verify"):
                 launcher.check_package()
 

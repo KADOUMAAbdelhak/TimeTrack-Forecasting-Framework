@@ -1,7 +1,6 @@
-"""Launcher for the registered FGCS v0.4 execution (operator tool, not a sealed source).
+"""Launcher for the frozen FGCS v0.4-min execution (operator tool, not a sealed source).
 
     python -m fgcs_strengthening_v04.launch preflight
-    python -m fgcs_strengthening_v04.launch verify-registration     # OSF + Zenodo, anonymous, read-only
     python -m fgcs_strengthening_v04.launch start                   # certify, 90-fit canary, then STOP
     python -m fgcs_strengthening_v04.launch status [--phase canary]
     python -m fgcs_strengthening_v04.launch stop --reason "..."      # graceful pause between units
@@ -14,16 +13,18 @@ Ported from the r3 Stage 4A launcher (fgcs_strengthening_v03/launch_stage4a.py) 
 of protocol P9: exactly six single-threaded fit workers, no systems phase, and a host check against the
 v0.4 host manifest (host.py) instead of r3's systems module.
 
-Nothing scientific runs, and no runtime journal is created, unless the v0.4 registration is recorded
-below, REGISTRATION_EVIDENCE_TEMPLATE.md records EXECUTION_UNLOCKED = YES, OSF_REGISTRATION is recorded
-and registration/OSF_VERIFICATION.json holds a passing verify-registration report for it, and every
-preflight check passes:
-- the v0.4 registration tag resolves to the registered commit;
-- the registration package verifies and has the registered digest;
-- the live execution seal equals the registered seal;
+Freezing is Git-based (protocol P9, deviation D1): there is no external registration gate. The frozen
+state is the annotated tag TAG. Its commit, its package digest (registration/PACKAGE.json) and its
+execution seal (registration/execution_seal.json) are read from the tag itself, so the launcher, which
+is part of the tagged tree, needs no values recorded after tagging. Nothing scientific runs, and no
+runtime journal is created, unless the author has set EXECUTION_UNLOCKED = YES in
+registration/REGISTRATION_EVIDENCE_TEMPLATE.md and every preflight check passes:
+- TAG is an annotated tag, and no tracked file under fgcs_strengthening_v04/ or the protocol differs from it
+  (the unlock-flag file excepted);
+- the package rebuilt from the repository verifies and equals the tagged digest;
+- the live execution seal equals the tagged seal;
 - a fresh single-threaded worker process matches the frozen host manifest.
-The package values are recorded below; OSF_REGISTRATION is None until the v0.4 OSF registration
-exists, and the unlock flag stays NO until that registration is verified.
+Every launcher record in the runtime names the tag object and commit.
 
 A phase starts only after every earlier phase is terminal (P9 run order), checked by the controller and by
 each worker. Each phase run also requires AC power and at least MIN_FREE_GB of free disk. Workers are separate
@@ -40,8 +41,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import fcntl
-from hashlib import md5, sha256
-import html
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -51,19 +51,12 @@ import signal
 import subprocess
 import sys
 import time
-import urllib.error
-import urllib.request
 
 from .src.identity import HOME, ROOT, read_config
 
-# Recorded from the built package (tag fgcs-v04-registration-package, 2026-11-15). OSF_REGISTRATION stays
-# None until the new v0.4 OSF registration exists; verify-registration refuses until then.
-TAG = "fgcs-v04-registration-package"
-REGISTERED_COMMIT = "9b94a066d2818ac726205954cb53f52e0ec3371d"
-REGISTERED_PACKAGE = "242772484617d4c21b6694b124540eebab60588d5e856b4b4a613498aa2e8442"
-REGISTERED_SEAL = "babe1fefa7f48c462b7f628d3d98507ec03779a31df843cb7d6f044d257abd15"
-OSF_REGISTRATION = None  # the new v0.4 Secondary Data Preregistration (P9); links to OSF kuwra
-ZENODO_RECORD = "24189108"  # the reused v0.3 input archive (P7)
+# The final frozen state (P9, D1). Its commit, package digest and seal are read from the tag, never recorded here.
+TAG = "fgcs-v04-min-final"
+PREDECESSOR_TAG = "fgcs-v04-registration-package"  # audited package before D1; kept, never used to run
 
 THREAD_ENV = {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1"}
 MODULE = "fgcs_strengthening_v04.launch"
@@ -71,10 +64,8 @@ REGISTRATION = HOME / "registration"
 EVIDENCE = REGISTRATION / "REGISTRATION_EVIDENCE_TEMPLATE.md"
 HOST_MANIFEST = REGISTRATION / "host_manifest.json"
 PACKAGE = REGISTRATION / "PACKAGE.json"
-OSF_FIELDS = REGISTRATION / "OSF_SECONDARY_DATA_FIELDS.json"
-UPLOAD_LIST = REGISTRATION / "EXTERNAL_ARCHIVE_UPLOAD_LIST.json"
-OSF_VERIFICATION = REGISTRATION / "OSF_VERIFICATION.json"
-REGISTRATION_FILES = ("PACKAGE.json", "execution_seal.json", "schedule.json", "host_manifest.json")
+FROZEN_PATHS = ("fgcs_strengthening_v04", "review_revision/fgcs_strengthening/analysis_plan_v0.4.md")
+UNFROZEN_FILES = ("fgcs_strengthening_v04/registration/REGISTRATION_EVIDENCE_TEMPLATE.md",)  # the unlock flag
 FIT_WORKERS = 6  # P9; the orchestrator enforces the same count with slot locks
 SINGLE_WORKER_PHASES = ("certify",)
 PHASES = ("certify", "canary", "inner", "final", "diagnostics", "evaluation")
@@ -86,7 +77,6 @@ FULL_RUN_PHASES = ("inner", "final")
 BATTERY_GRACE_SECONDS = 120
 MONITOR_SECONDS = 60
 HEALTH_SECONDS = 600
-ATTACHMENT_QUESTIONS = ("72-22", "72-26")
 
 if read_config()["execution"]["fit_workers"] != FIT_WORKERS:
     raise RuntimeError("The launcher's worker count differs from the v0.4 configuration")
@@ -102,12 +92,6 @@ def _utc():
 
 def runtime_dir():
     return HOME / "runtime"
-
-
-def _registered(name, value):
-    if value is None:
-        raise LaunchRefused(f"{name} is not recorded yet: the v0.4 registration does not exist")
-    return value
 
 
 # -- host probes (read-only) ----------------------------------------------------------------------
@@ -149,7 +133,7 @@ def execution_unlocked(path=EVIDENCE):
     try:
         text = Path(path).read_text()
     except FileNotFoundError:
-        raise LaunchRefused(f"No registration evidence file at {path}: the v0.4 registration does not exist") from None
+        raise LaunchRefused(f"No authorisation file at {path}: the frozen v0.4 package has not been built") from None
     lines = [line.strip() for line in text.splitlines() if line.strip().startswith("EXECUTION_UNLOCKED")]
     if len(lines) != 1 or not re.fullmatch(r"EXECUTION_UNLOCKED = (YES|NO)", lines[0]):
         raise LaunchRefused(f"Expected exactly one EXECUTION_UNLOCKED = YES|NO line in {path}")
@@ -197,38 +181,52 @@ def _git(*args):
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
 
 
-def check_repository():
-    """The registered tag and commit exist; the registration files are unchanged against the tag."""
-    commit = _registered("REGISTERED_COMMIT", REGISTERED_COMMIT)
-    tagged = _git("rev-parse", f"{TAG}^{{commit}}").stdout.strip()
-    if tagged != commit:
-        raise LaunchRefused(f"{TAG} resolves to {tagged or 'nothing'}, not {commit}")
-    files = [f"fgcs_strengthening_v04/registration/{name}" for name in REGISTRATION_FILES]
-    if _git("diff", "--quiet", TAG, "--", *files).returncode != 0:
-        raise LaunchRefused("Registration package files differ from the registered tag")
-    return {"tag_commit": tagged, "head": _git("rev-parse", "HEAD").stdout.strip()}
+def tagged_state(tag=None):
+    """The frozen values read from the annotated tag: tag object, commit, package digest and seal."""
+    tag = tag or TAG
+    if _git("cat-file", "-t", f"refs/tags/{tag}").stdout.strip() != "tag":
+        raise LaunchRefused(f"{tag} is not an annotated tag in this repository: the final freeze does not exist yet")
+
+    def tagged_json(name):
+        shown = _git("show", f"{tag}:fgcs_strengthening_v04/registration/{name}")
+        if shown.returncode != 0:
+            raise LaunchRefused(f"{tag} has no registration/{name}")
+        return json.loads(shown.stdout)
+
+    return {"tag": tag, "tag_object": _git("rev-parse", f"refs/tags/{tag}").stdout.strip(),
+            "commit": _git("rev-parse", f"{tag}^{{commit}}").stdout.strip(),
+            "package_sha256": tagged_json("PACKAGE.json")["package_sha256"],
+            "seal": tagged_json("execution_seal.json")["digest"]}
 
 
-def check_package():
-    package = _registered("REGISTERED_PACKAGE", REGISTERED_PACKAGE)
-    try:
-        from .build_registration import verify
-    except ImportError:
-        raise LaunchRefused("The v0.4 registration builder does not exist yet") from None
+def check_repository(tag=None):
+    """No tracked v0.4 file (code, configuration, package, protocol) differs from the tag, except the unlock flag."""
+    state = tagged_state(tag)
+    changed = [path for path in _git("diff", "--name-only", state["tag"], "--", *FROZEN_PATHS).stdout.split()
+               if path not in UNFROZEN_FILES]
+    if changed:
+        raise LaunchRefused(f"Tracked v0.4 files differ from {state['tag']}: {changed[:10]}")
+    return {**state, "head": _git("rev-parse", "HEAD").stdout.strip()}
+
+
+def check_package(tag=None):
+    from .build_registration import verify
+
+    expected = tagged_state(tag)["package_sha256"]
     digest, problems = verify()
-    if problems or digest != package:
-        raise LaunchRefused(f"Registration package does not verify: {digest} {problems}")
+    if problems or digest != expected:
+        raise LaunchRefused(f"Package does not verify against the tag: {digest} {problems}")
     return digest
 
 
-def check_seal():
+def check_seal(tag=None):
     from .src.orchestrator import execution_fingerprints
 
-    registered = _registered("REGISTERED_SEAL", REGISTERED_SEAL)
+    expected = tagged_state(tag)["seal"]
     digest = execution_fingerprints().digest
     recorded = json.loads((REGISTRATION / "execution_seal.json").read_text())["digest"]
-    if digest != registered or recorded != registered:
-        raise LaunchRefused(f"Live execution seal {digest} differs from the registered {registered}")
+    if digest != expected or recorded != expected:
+        raise LaunchRefused(f"Live execution seal {digest} differs from the tagged seal {expected}")
     return digest
 
 
@@ -261,31 +259,10 @@ def preflight():
     return report
 
 
-def require_registration_verified(path=OSF_VERIFICATION):
-    """The v0.4 OSF registration is recorded here and its stored verify-registration report passed for it.
-
-    A second gate beside the manual unlock flag: setting EXECUTION_UNLOCKED = YES alone never runs anything.
-    """
-    registration = _registered("OSF_REGISTRATION", OSF_REGISTRATION)
-    try:
-        report = json.loads(Path(path).read_text())
-    except FileNotFoundError:
-        raise LaunchRefused(f"No registration verification report at {path}: run verify-registration first") from None
-    except ValueError:
-        raise LaunchRefused(f"Unreadable registration verification report at {path}") from None
-    if not isinstance(report, dict) or report.get("passed") is not True or report.get("problems"):
-        raise LaunchRefused(f"The stored registration verification did not pass: {path}")
-    if report.get("osf_registration") != registration:
-        raise LaunchRefused(f"The stored verification is for {report.get('osf_registration')!r}, "
-                            f"not the recorded OSF registration {registration!r}")
-    return report
-
-
 def require_execution_allowed():
     if not execution_unlocked():
-        raise LaunchRefused("EXECUTION_UNLOCKED = NO: scientific execution stays locked until the registration "
-                            "evidence is verified (REGISTRATION_EVIDENCE_TEMPLATE.md)")
-    require_registration_verified()
+        raise LaunchRefused("EXECUTION_UNLOCKED = NO: scientific execution stays locked until the author sets "
+                            "EXECUTION_UNLOCKED = YES (registration/REGISTRATION_EVIDENCE_TEMPLATE.md)")
     require_thread_env()
     return preflight()
 
@@ -347,8 +324,8 @@ def production_orchestrator(*, worker=False):
         require_fit_threads()
         require_host(HOST_MANIFEST)
     seal = execution_fingerprints()
-    if seal.digest != _registered("REGISTERED_SEAL", REGISTERED_SEAL):
-        raise LaunchRefused("Live execution seal differs from the registered seal")
+    if seal.digest != tagged_state()["seal"]:
+        raise LaunchRefused(f"Live execution seal differs from the seal frozen by {TAG}")
     if TRAINING_WORKERS != FIT_WORKERS:
         raise LaunchRefused("Registered training worker count changed")
     journal = Journal(seal)
@@ -359,7 +336,7 @@ def production_orchestrator(*, worker=False):
 def worker_main(phase):
     if not execution_unlocked():
         raise LaunchRefused("EXECUTION_UNLOCKED = NO")
-    require_registration_verified()
+    check_repository()
     orchestrator = production_orchestrator(worker=True)
     require_earlier_phases_terminal(orchestrator, phase)
     code, summary = run_worker(orchestrator, phase)
@@ -575,7 +552,7 @@ def _record(name, payload):
     path = runtime_dir() / "launcher" / f"{_utc():%Y%m%dT%H%M%S%fZ}-{name}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {"launcher_sha256": sha256(Path(__file__).read_bytes()).hexdigest(), "argv": sys.argv,
-               "utc": _utc().isoformat(), **payload}
+               "utc": _utc().isoformat(), "frozen": tagged_state(), **payload}
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
@@ -668,105 +645,6 @@ def recovery_report(runtime=None):
     return report
 
 
-# -- registration verification (anonymous, read-only) --------------------------------------------
-def _fetch_json(url):
-    request = urllib.request.Request(url, headers={"User-Agent": "registration-verifier/1.0",
-                                                   "Accept": "application/vnd.api+json, application/json"})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)
-
-
-def _sha256(path):
-    digest = sha256()
-    with open(path, "rb") as stream:
-        for block in iter(lambda: stream.read(1 << 20), b""):
-            digest.update(block)
-    return digest.hexdigest()
-
-
-def _md5(path):
-    digest = md5()
-    with open(path, "rb") as stream:
-        for block in iter(lambda: stream.read(1 << 20), b""):
-            digest.update(block)
-    return digest.hexdigest()
-
-
-def _canonical_responses(title, description, responses):
-    payload = json.dumps({"title": title, "description": description,
-                          "responses": {key: responses[key] for key in sorted(responses)}},
-                         ensure_ascii=False, separators=(",", ":"))
-    return sha256(payload.encode()).hexdigest()
-
-
-def verify_registration(fetch=_fetch_json, fields_path=OSF_FIELDS, upload_list_path=UPLOAD_LIST, root=ROOT,
-                        registration=None):
-    """Check the public v0.4 OSF registration and the Zenodo archive against the local frozen records.
-
-    Uses only anonymous public API reads. Returns (passed, report); never edits the unlock flag.
-    """
-    registration = registration or _registered("OSF_REGISTRATION", OSF_REGISTRATION)
-    fields = json.loads(Path(fields_path).read_text())
-    expected = fields["registration_responses"]
-    meta = fields["metadata"]
-    problems, report = [], {"utc": _utc().isoformat(), "osf_registration": registration,
-                            "zenodo_record": ZENODO_RECORD}
-
-    try:
-        osf = fetch(f"https://api.osf.io/v2/registrations/{registration}/?embed=identifiers")["data"]
-    except urllib.error.HTTPError as error:
-        problems.append(f"OSF registration is not publicly readable (HTTP {error.code}); it is not public yet")
-        report.update(problems=problems, passed=False, osf_http_status=error.code)
-        return False, report
-    attributes = osf["attributes"]
-    identifiers = osf.get("embeds", {}).get("identifiers", {}).get("data", []) or []
-    doi = next((item["attributes"]["value"] for item in identifiers if item["attributes"]["category"] == "doi"), None)
-    report.update(public=attributes.get("public"), pending=attributes.get("pending_registration_approval"),
-                  withdrawn=attributes.get("withdrawn"), embargo=attributes.get("embargo_end_date"), osf_doi=doi,
-                  date_registered=attributes.get("date_registered"))
-    if attributes.get("public") is not True:
-        problems.append("OSF registration is not public")
-    if attributes.get("pending_registration_approval"):
-        problems.append("OSF registration is still pending approval")
-    if attributes.get("withdrawn"):
-        problems.append("OSF registration is withdrawn")
-    if attributes.get("embargo_end_date"):
-        problems.append("OSF registration is embargoed")
-    if not doi:
-        problems.append("OSF registration has no DOI yet")
-    stored = attributes.get("registration_responses") or {}
-    unescaped = {key: html.unescape(stored[key]) for key in expected if isinstance(stored.get(key), str)}
-    missing = sorted(set(expected) - set(unescaped))
-    if missing:
-        problems.append(f"OSF responses missing: {missing}")
-    observed_hash = _canonical_responses(html.unescape(attributes.get("title", "")),
-                                         html.unescape(attributes.get("description", "")), unescaped)
-    expected_hash = _canonical_responses(meta["title"], meta["description"], expected)
-    report.update(responses_sha256=observed_hash, expected_responses_sha256=expected_hash)
-    if observed_hash != expected_hash:
-        problems.append("OSF title, description or responses differ from the approved field map")
-    attachments = {}
-    for question in ATTACHMENT_QUESTIONS:
-        for item in stored.get(question) or []:
-            attachments[item["file_name"]] = item.get("file_hashes", {}).get("sha256")
-    local = {Path(path).name: _sha256(Path(root) / path) for path in fields["attachments"]}
-    report["attachments"] = {name: attachments.get(name) == digest for name, digest in local.items()}
-    if set(attachments) != set(local) or not all(report["attachments"].values()):
-        problems.append("OSF attachments differ from the local registration files")
-
-    uploads = json.loads(Path(upload_list_path).read_text())["uploads"]
-    zenodo = fetch(f"https://zenodo.org/api/records/{ZENODO_RECORD}/files")
-    remote = {entry["key"]: (entry["size"], entry.get("checksum")) for entry in zenodo["entries"]}
-    expected_files = {item["upload_filename"]: (item["size_bytes"], "md5:" + _md5(Path(root) / item["source_path"]))
-                      for item in uploads}
-    report["zenodo_files_match"] = remote == expected_files
-    if remote != expected_files:
-        problems.append("Zenodo files differ from the upload list (names, sizes or MD5)")
-    report["problems"] = problems
-    report["passed"] = not problems
-    return not problems, report
-
-
 # -- commands -------------------------------------------------------------------------------------
 def status(orchestrator, phases):
     out = {}
@@ -818,7 +696,6 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("preflight")
-    sub.add_parser("verify-registration")
     sub.add_parser("start")
     run = sub.add_parser("run")
     run.add_argument("--phase", required=True, choices=PHASES)
@@ -847,12 +724,6 @@ def main(argv=None):
             require_thread_env()
             print(json.dumps(preflight(), indent=2))
             return 0
-        if args.command == "verify-registration":
-            passed, report = verify_registration()
-            OSF_VERIFICATION.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
-            print(json.dumps(report, indent=2))
-            print("REGISTRATION VERIFIED" if passed else "REGISTRATION NOT VERIFIED")
-            return 0 if passed else 1
         if args.command in ("status", "stop", "resume", "approve-canary", "recover-check"):
             # Control commands open an existing journal only; they never create one.
             if not execution_unlocked():
