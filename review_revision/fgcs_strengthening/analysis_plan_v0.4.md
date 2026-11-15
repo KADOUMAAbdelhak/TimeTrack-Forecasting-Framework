@@ -1,6 +1,6 @@
-# Analysis plan v0.4 (minimal): FGCS revision protocol — DRAFT
+# Analysis plan v0.4 (minimal): FGCS revision protocol
 
-**Status: draft, 2026-11-15. Not frozen, sealed or registered; nothing has run.** It replaces the earlier v0.4 draft (commit `00111dcb`) with the smallest design that addresses the three revision comments.
+**Status: frozen, 2026-11-15. Not yet sealed or registered; nothing has run.** It replaces the earlier v0.4 draft (commit `00111dcb`) with the smallest design that addresses the three revision comments. Any change after freezing is a deviation, logged with its date, reason and affected components (P9).
 
 - **Supersedes:** v0.3 (`analysis_plan_v0.3.md`; registration package r3; OSF `kuwra`) **before any v0.3 execution**. No v0.3 scientific fit, outer-test evaluation or analysis has occurred.
 - **Baseline:** manuscript "Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems" (repository tag `jss-review-robustness-reproducibility-v1`).

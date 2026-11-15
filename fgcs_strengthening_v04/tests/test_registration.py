@@ -14,7 +14,7 @@ from unittest.mock import patch
 from fgcs_strengthening_v04 import build_registration as registration
 from fgcs_strengthening_v04 import launch as launcher
 from fgcs_strengthening_v04.host import EXPECTED_CONDITIONS
-from fgcs_strengthening_v04.src.identity import HOME, read_config
+from fgcs_strengthening_v04.src.identity import HOME, ROOT, read_config
 
 HOST = {"hardware": {"hostname": "synthetic.local", "cpu_model": "Synthetic CPU", "physical_cores": 8,
                      "logical_cores": 8, "ram_bytes": 1, "os": "Darwin", "kernel": "synthetic", "power_mode": "x"},
@@ -45,10 +45,18 @@ class RegistrationTests(unittest.TestCase):
     def test_the_real_package_folder_is_untouched_and_drafts_are_refused(self):
         self.assertFalse((registration.PACKAGE / "PACKAGE.json").exists())
         patch.stopall()
-        with self.assertRaisesRegex(registration.RegistrationRefused, "still a draft"):
-            registration.require_frozen_protocol()
-        with self.assertRaisesRegex(registration.RegistrationRefused, "still a draft"):
-            registration.build(self.package)
+        registration.require_frozen_protocol()  # the configured v0.4 protocol is frozen
+        for name, text in (("plan_DRAFT.md", "# Plan\n"), ("plan.md", "# Plan — DRAFT\n"),
+                           ("plan2.md", "# Plan\n\n**Status: Not frozen.**\n")):
+            draft = self.package / name
+            draft.write_text(text)
+            with self.assertRaisesRegex(registration.RegistrationRefused, "still a draft"):
+                registration.require_frozen_protocol(draft.relative_to(ROOT).as_posix())
+            draft.unlink()
+        with patch.object(registration, "require_frozen_protocol",
+                          side_effect=registration.RegistrationRefused("still a draft")):
+            with self.assertRaisesRegex(registration.RegistrationRefused, "still a draft"):
+                registration.build(self.package)
         self.assertEqual(sorted(p.name for p in self.package.iterdir()), ["host_manifest.json"])
 
     def test_build_then_verify_records_the_v04_design(self):
