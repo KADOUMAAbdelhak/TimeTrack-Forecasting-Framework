@@ -60,7 +60,8 @@ COVER = [
           "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
     ("p", "The original experiment, the extension and its loss-balancing amendment were each frozen before execution, and later sensitivity "
           "controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived "
-          "analysis outputs are deposited on Zenodo (doi:10.5281/zenodo.24339239); third-party traces remain "
+          "analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo "
+          "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain "
           "available from their original archives. Generative AI use is disclosed in the manuscript as required by "
           "Elsevier's policy."),
     ("p", "[AUTHOR TO CONFIRM BEFORE UPLOAD: This manuscript is not under consideration by any other journal. "
