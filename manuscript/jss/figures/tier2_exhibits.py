@@ -236,7 +236,9 @@ def mechanism(P5):
     colours = {"CPU": "#1b9e77", "THROUGHPUT": "#d95f02", "MEMORY": "#7570b3", "DISK_WRITE": "#e7298a"}
     marker = {"fastStorage": "o", "Rnd": "s"}
     fig = plt.figure(figsize=(174 / 25.4, 120 / 25.4))
-    grid = fig.add_gridspec(2, 4, height_ratios=(1, 1), hspace=0.5, wspace=0.55)
+    outer = fig.add_gridspec(2, 1, height_ratios=(1, 1), hspace=0.5)
+    grid = outer[0].subgridspec(1, 4, wspace=0.55)
+    lower = outer[1].subgridspec(1, 4, wspace=0.3)
     ax = fig.add_subplot(grid[0, 0:2])
     for block in BLOCKS:
         pts = [r for r in P5["D-4"] if r["block"] == block and r["formulation"] == "M1"]
@@ -269,7 +271,7 @@ def mechanism(P5):
     letters = iter("defg")
     vmax = max(abs(r["median"]) for r in P5["D-6"])
     for k, (estimand, block) in enumerate((("F", "fastStorage"), ("F", "Rnd"), ("Q", "fastStorage"), ("Q", "Rnd"))):
-        ax = fig.add_subplot(grid[1, k])
+        ax = fig.add_subplot(lower[0, k])
         m = np.full((4, 4), np.nan)
         for i, t in enumerate(RESOURCES):
             for j, s in enumerate(RESOURCES):
@@ -280,8 +282,11 @@ def mechanism(P5):
             for j, s in enumerate(RESOURCES):
                 if i != j:
                     r = d6[estimand, block, t, s]
-                    ax.text(j, i, f"{r['median']:+.3f}\n{r['positive_entities']}/{r['entities']}", ha="center",
-                            va="center", fontsize=5.0)
+                    fill = image.cmap(image.norm(r["median"]))
+                    ink = "white" if 0.2126 * fill[0] + 0.7152 * fill[1] + 0.0722 * fill[2] < 0.45 else "black"
+                    label = f"{r['median']:+.3f}".replace("0.", ".", 1)
+                    ax.text(j, i, f"{label}\n{r['positive_entities']}/{r['entities']}", ha="center",
+                            va="center", fontsize=6.5, linespacing=1.05, color=ink)
         ax.set_xticks(range(4), [SHORT[r] for r in RESOURCES], fontsize=6.5)
         ax.set_yticks(range(4), [SHORT[r] for r in RESOURCES], fontsize=6.5)
         ax.set_xlabel("Source j" if estimand == "F" else "Omitted j", fontsize=7)
