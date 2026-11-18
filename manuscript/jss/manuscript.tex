@@ -65,7 +65,8 @@ backbone, resource and environment cells. Magnitudes varied by backbone and
 were sometimes tail- or scale-dominated, with typical-cell ratios often near
 one. In the shared LSTM, task gradients were
 near-orthogonal without excess conflict but strongly unequal in magnitude
-and loss share, while cross-resource dependence did not track the effects;
+and loss share, while cross-resource dependence was not consistently
+associated with the effects;
 these are associations, not causal identification. Shared models used
 about a quarter of the parameters for most backbones, so consolidation is a
 resource-specific accuracy trade-off. Relative gains do not ensure
@@ -157,8 +158,8 @@ were backbone-dependent, and some large penalties were concentrated in a few
 VMs while matched-cell median ratios stayed close to one
 (Section~\ref{sec:results-rq2}). In the shared LSTM, task gradients were
 near-orthogonal without excess conflict, but their magnitudes and loss
-shares were strongly unequal; cross-resource dependence did not track the
-effects. These diagnostics are associations, not causal identification.
+shares were strongly unequal; cross-resource dependence was not
+consistently associated with the effects. These diagnostics are associations, not causal identification.
 Shared LSTM and transformer-style models used about a quarter of their
 independent complements' parameters, so per-entity consolidation is a
 resource-specific accuracy trade-off, bounded by seed sensitivity and
@@ -1852,8 +1853,8 @@ gradient-magnitude imbalance was largest in Rnd, where the LSTM sharing
 penalty was broadest. This is consistent
 with one task's loss dominating the shared parameters despite equal nominal
 weights (Section~\ref{sec:m1}), the imbalance that loss-balancing methods
-address \citep{Chen2018GradNorm}. Cross-resource dependence did not track
-the context or sharing effects, and no single resource was a consistently
+address \citep{Chen2018GradNorm}. Cross-resource dependence was not
+consistently associated with the context or sharing effects, and no single resource was a consistently
 helpful or harmful partner in pairwise transfer. These are associations on
 20 VMs in two environments, measured for the LSTM only and without
 intervention; representation interference and capacity competition were
