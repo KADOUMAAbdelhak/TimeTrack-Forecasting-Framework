@@ -93,7 +93,7 @@ Rnd & LSTM & CPU & M1:M0 & $-$2.72 & BN & [$-$11.31, $-$1.29] & 1.038 & 0.35 & 1
 Rnd & LSTM & Throughput & M1:M0 & $-$0.94 & N & [$-$6.86, $-$0.16] & 1.009 & 0.34 & 2/10 \\
 Rnd & LSTM & Memory & M1:M0 & $-$3.26 & N & [$-$16.85, 2.27] & 0.995 & 0.56 & 5/10 \\
 Rnd & LSTM & Disk write & M1:M0 & $-$9.69 & N & [$-$20.92, $-$1.30] & 1.034 & 0.30 & 3/10 \\
-Rnd & DLinear & CPU & M1:M0 & +46.18 & CP & [$-$0.38, 49.61] & 0.928 & 0.64 & 7/10 \\
+Rnd & DLinear & CPU & M1:M0 & +46.18$^{\dagger}$ & CP & [$-$0.38, 49.61] & 0.928 & 0.64 & 7/10 \\
 Rnd & DLinear & Throughput & M1:M0 & $-$14.73 & N & [$-$17.18, 4.93] & 1.006 & 0.45 & 5/10 \\
 Rnd & DLinear & Memory & M1:M0 & +13.61 & BP & [$-$7.60, 20.28] & 0.940 & 0.83 & 8/10 \\
 Rnd & DLinear & Disk write & M1:M0 & +13.74 & N & [$-$13.77, 27.92] & 0.985 & 0.62 & 4/10 \\
@@ -105,7 +105,7 @@ Rnd & LSTM & CPU & M0:S1 & $-$20.08 & BN & [$-$25.79, $-$0.82] & 1.018 & 0.33 & 
 Rnd & LSTM & Throughput & M0:S1 & $-$4.63 & N & [$-$5.38, 0.74] & 1.000 & 0.48 & 6/10 \\
 Rnd & LSTM & Memory & M0:S1 & $-$5.98 & BN & [$-$8.47, $-$0.45] & 1.003 & 0.33 & 1/10 \\
 Rnd & LSTM & Disk write & M0:S1 & $-$5.08 & BN & [$-$11.59, $-$0.21] & 1.007 & 0.33 & 1/10 \\
-Rnd & DLinear & CPU & M0:S1 & $-$139.61 & BN & [$-$174.63, 5.65] & 1.051 & 0.34 & 2/10 \\
+Rnd & DLinear & CPU & M0:S1 & $-$139.61$^{\dagger}$ & BN & [$-$174.63, 5.65] & 1.051 & 0.34 & 2/10 \\
 Rnd & DLinear & Throughput & M0:S1 & $-$0.07 & N & [$-$2.31, 0.69] & 0.996 & 0.61 & 6/10 \\
 Rnd & DLinear & Memory & M0:S1 & $-$17.29 & BN & [$-$23.56, $-$2.14] & 1.059 & 0.16 & 2/10 \\
 Rnd & DLinear & Disk write & M0:S1 & $-$23.04 & BN & [$-$49.65, $-$1.25] & 1.023 & 0.18 & 0/10 \\
@@ -131,7 +131,7 @@ Rnd & iTransformer & Memory & M1:S2 & $-$5.48 & N & [$-$8.44, 1.53] & 1.006 & 0.
 Rnd & iTransformer & Disk write & M1:S2 & $-$4.90 & BN & [$-$10.13, $-$0.54] & 1.014 & 0.32 & 1/10 \\
 \end{longtable}
 \normalsize\setlength{\tabcolsep}{4pt}
-\noindent{\footnotesize $G$: MacroMAE gain, positive favours the candidate. Med. ratio: median candidate/reference MAE over seed-averaged matched cells (entity $\times$ fold $\times$ horizon). Win: fraction of matched cells with strictly lower candidate MAE. VMs+: VMs with positive gain. BP, CP, N, BN: broad positive, conditionally positive, neutral or mixed, broad negative.}
+\noindent{\footnotesize $G$: MacroMAE gain, positive favours the candidate. Med. ratio: median candidate/reference MAE over seed-averaged matched cells (entity $\times$ fold $\times$ horizon). Win: fraction of matched cells with strictly lower candidate MAE. VMs+: VMs with positive gain. BP, CP, N, BN: broad positive, conditionally positive, neutral or mixed, broad negative. $^{\dagger}$Valid under the frozen aggregation but scale-dominated by one VM (VM233); the negative M0:S1 direction is broad. See the DLinear Rnd CPU audit at the end of this supplement.}
 
 \small
 \setlength{\tabcolsep}{3pt}
@@ -163,7 +163,7 @@ Rnd & LSTM & CPU & $-$20.08 & $-$24.56 & +0.031 & [0.006, 0.058] & 10 \\
 Rnd & LSTM & Throughput & $-$4.63 & $-$8.71 & +0.028 & [0.013, 0.045] & 10 \\
 Rnd & LSTM & Memory & $-$5.98 & $-$10.92 & +0.023 & [0.007, 0.041] & 10 \\
 Rnd & LSTM & Disk write & $-$5.08 & $-$9.92 & +0.060 & [0.022, 0.099] & 10 \\
-Rnd & DLinear & CPU & $-$139.61 & $-$33.11 & $-$0.166 & [$-$0.343, $-$0.009] & 10 \\
+Rnd & DLinear & CPU & $-$139.61$^{\dagger}$ & $-$33.11 & $-$0.166 & [$-$0.343, $-$0.009] & 10 \\
 Rnd & DLinear & Throughput & $-$0.07 & $-$9.54 & +0.173 & [$-$0.005, 0.488] & 10 \\
 Rnd & DLinear & Memory & $-$17.29 & $-$3.77 & $-$0.060 & [$-$0.127, $-$0.001] & 10 \\
 Rnd & DLinear & Disk write & $-$23.04 & $-$1.51 & $-$0.059 & [$-$0.154, $-$0.000] & 10 \\
@@ -173,7 +173,7 @@ Rnd & PatchTST & Memory & $-$9.08 & $-$2.51 & $-$0.007 & [$-$0.039, 0.021] & 10 
 Rnd & PatchTST & Disk write & $-$7.11 & $-$4.23 & +0.002 & [$-$0.028, 0.039] & 10 \\
 \end{longtable}
 \normalsize\setlength{\tabcolsep}{4pt}
-\noindent{\footnotesize $I>0$: sharing costs more, in log-error terms, with all-resource than with own-resource input. Defined only for backbones with all four cells.}
+\noindent{\footnotesize $I>0$: sharing costs more, in log-error terms, with all-resource than with own-resource input. Defined only for backbones with all four cells. $^{\dagger}$Valid under the frozen aggregation but scale-dominated by one VM (VM233); the negative M0:S1 direction is broad. See the DLinear Rnd CPU audit at the end of this supplement.}
 
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -387,7 +387,7 @@ Rnd & M0 (descriptive) & 142 & 15 & +0.040 & 42.8 & 0.093 \\
 Rnd & M0 (descriptive) & 151 & 15 & +0.012 & 69.2 & 0.087 \\
 \end{longtable}
 \normalsize\setlength{\tabcolsep}{4pt}
-\noindent{\footnotesize $K$: cross-task minus same-task gradient sign-conflict rate. Norm ratio: largest over smallest task-gradient L2 norm. Slots: keyed batch-pair extractions available.}
+\noindent{\footnotesize $K$: cross-task minus same-task gradient sign-conflict rate. Norm ratio: largest over smallest task-gradient L2 norm. Slots: fold $\times$ seed extractions available (at most 15), each computed over eight keyed batch pairs; values are means over slots.}
 
 \footnotesize
 \setlength{\tabcolsep}{3pt}

@@ -28,6 +28,9 @@ BLOCKS = ("fastStorage", "Rnd")
 RES = ("CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE")
 LAB = {"CPU": "CPU", "THROUGHPUT": "Throughput", "MEMORY": "Memory", "DISK_WRITE": "Disk write"}
 BB = ("LSTM", "DLinear", "PatchTST", "iTransformer")
+SCALE_DOMINATED = {("DLinear", "Rnd", "CPU")}
+SCALE_NOTE = (r"$^{\dagger}$Valid under the frozen aggregation but scale-dominated by one VM (VM233); the negative "
+              r"M0:S1 direction is broad. See the DLinear Rnd CPU audit at the end of this supplement.")
 CL = {"Broad Positive": "BP", "Conditionally Positive": "CP", "Neutral or Mixed": "N", "Broad Negative": "BN"}
 
 
@@ -88,7 +91,9 @@ def main():
     rows = []
     for c in P4["contrasts"]:
         lo, hi = c["interval"]
-        rows.append([c["block"], c["backbone"], LAB[c["resource"]], c["contrast"], f(c["gain_percent"], 2, True),
+        mark = r"$^{\dagger}$" if (c["backbone"], c["block"], c["resource"]) in SCALE_DOMINATED \
+            and c["contrast"] in ("M0:S1", "M1:M0") else ""
+        rows.append([c["block"], c["backbone"], LAB[c["resource"]], c["contrast"], f(c["gain_percent"], 2, True) + mark,
                      CL[c["class"]], f"[{f(lo)}, {f(hi)}]", f(c["median_ratio"], 3), f(c["win_rate"], 2),
                      f"{c['counts']['vms'][0]}/{c['counts']['vms'][1]}"])
     rows.sort(key=lambda r: (BLOCKS.index(r[0]), ("S2:S1", "M1:M0", "M0:S1", "M1:S2").index(r[3]), BB.index(r[1])))
@@ -100,12 +105,14 @@ def main():
                            r"$G$: MacroMAE gain, positive favours the candidate. Med. ratio: median candidate/reference "
                            r"MAE over seed-averaged matched cells (entity $\times$ fold $\times$ horizon). Win: fraction of "
                            r"matched cells with strictly lower candidate MAE. VMs+: VMs with positive gain. BP, CP, N, BN: "
-                           r"broad positive, conditionally positive, neutral or mixed, broad negative.", "footnotesize"))
+                           r"broad positive, conditionally positive, neutral or mixed, broad negative. " + SCALE_NOTE,
+                           "footnotesize"))
 
     rows = []
     for x in P4["interaction"]:
         lo, hi = x["interval"]
-        rows.append([x["block"], x["backbone"], LAB[x["resource"]], f(x["sharing_gain_own_input"], 2, True),
+        mark = r"$^{\dagger}$" if (x["backbone"], x["block"], x["resource"]) in SCALE_DOMINATED else ""
+        rows.append([x["block"], x["backbone"], LAB[x["resource"]], f(x["sharing_gain_own_input"], 2, True) + mark,
                      f(x["sharing_gain_all_input"], 2, True), f(x["interaction_log_ratio"], 3, True),
                      f"[{f(lo, 3)}, {f(hi, 3)}]", str(x["entities"])])
     parts.append(longtable("@{}lllrrrlr@{}", r"Tier-2 interaction $I=\ln A_{\mathrm{M1}}-\ln A_{\mathrm{S2}}"
@@ -113,7 +120,7 @@ def main():
                            "tab:supp-t2-interaction",
                            r"Block & Backbone & Resource & $G$(M0:S1) & $G$(M1:S2) & $I$ & 95\% interval & VMs", rows,
                            r"$I>0$: sharing costs more, in log-error terms, with all-resource than with own-resource "
-                           r"input. Defined only for backbones with all four cells."))
+                           r"input. Defined only for backbones with all four cells. " + SCALE_NOTE))
 
     rows = []
     for x in P4["baseline_accuracy"]:
@@ -169,7 +176,8 @@ def main():
                            "epoch.", "tab:supp-t2-d4", r"Block & Formulation & VM & Slots & $K$ & Norm ratio & "
                            r"Median $|\cos|$", rows,
                            r"$K$: cross-task minus same-task gradient sign-conflict rate. Norm ratio: largest over "
-                           r"smallest task-gradient L2 norm. Slots: keyed batch-pair extractions available."))
+                           r"smallest task-gradient L2 norm. Slots: fold $\times$ seed extractions available (at most "
+                           r"15), each computed over eight keyed batch pairs; values are means over slots."))
 
     rows = [[x["estimand"], x["block"], LAB[x["target"]], LAB[x["source"]], f(x["mean"], 3, True),
              f(x["median"], 3, True), f"{x['positive_entities']}/{x['entities']}"] for x in P5["D-6"]]

@@ -1484,7 +1484,7 @@ The DLinear Rnd CPU M0:S1 gain of $-139.61\%$ and M1:M0 gain of $+46.18\%$
 reproduce exactly under the frozen aggregation, but their magnitudes are
 dominated by one VM. MacroMAE averages native-unit MAE across VMs without
 rescaling, and VM233's CPU errors are on a much larger native scale than the
-cohort's (persistence MAE 8.85 against 0.05--1.40 for the other nine VMs).
+cohort's (persistence MAE 8.85 against 0.04--1.40 for the other nine VMs).
 VM233 contributes $98.6\%$ of the summed M0$-$S1 excess and $96.3\%$ of the
 summed M0$-$M1 difference. Its M0 MAE exceeded S1 in every fold (1.9--4.6
 times) and every seed (36.56--39.81 against 13.47--13.51 native units), and
@@ -1572,9 +1572,11 @@ excess sign-conflict rate $K$ was $-0.037$ in fastStorage and $-0.021$ in Rnd,
 and the median absolute task-gradient cosine was 0.171 and 0.134. Gradient
 magnitudes were strongly unequal: the median ratio of the largest to the
 smallest task-gradient norm was 10.8 in fastStorage and 89.2 in Rnd.
-Training-loss shares at the selected epoch (D-7) were similarly uneven,
-from 0.114 (fastStorage throughput) to 0.421 (Rnd throughput) against an
-equal share of 0.25. The larger imbalance in Rnd coincides with the block in
+Training-loss shares at the selected epoch (D-7) were also uneven in both
+blocks, from 0.114 (fastStorage throughput) to 0.421 (Rnd throughput)
+against an equal share of 0.25, without a consistently larger imbalance in
+either block. The larger gradient-magnitude imbalance in Rnd coincides with
+the block in
 which every LSTM M1:S2 and three of four LSTM M0:S1 cells were broadly
 negative. With two blocks, this coincidence cannot establish an association
 across environments, and VM-level associations between imbalance and
@@ -1845,8 +1847,9 @@ without identifying a cause (Section~\ref{sec:results-diagnostics}). Task
 gradients in the shared encoder were close to orthogonal and showed no
 excess sign conflict, so destructive gradient conflict of the kind gradient
 surgery targets \citep{Yu2020GradientSurgery} was not observed. Task-gradient
-magnitudes and training-loss shares were instead strongly unequal, most of
-all in Rnd, where the LSTM sharing penalty was broadest. This is consistent
+magnitudes and training-loss shares were instead strongly unequal, and the
+gradient-magnitude imbalance was largest in Rnd, where the LSTM sharing
+penalty was broadest. This is consistent
 with one task's loss dominating the shared parameters despite equal nominal
 weights (Section~\ref{sec:m1}), the imbalance that loss-balancing methods
 address \citep{Chen2018GradNorm}. Cross-resource dependence did not track
@@ -1977,9 +1980,9 @@ epoch, so mechanism attribution remains limited.
 Tier~2 also uses three seeds, fixed and untuned hyperparameters, and
 LSTM-selected H64-M1 contexts imposed on every backbone; the modern
 backbones may therefore be under-tuned, and fairness rests on identical
-treatment rather than equal tuning effort. Seed variation did not drive the
-largest tier-2 aggregate: in the DLinear Rnd CPU audit, per-VM seed spreads
-outside the two highest-error VMs were at most 0.046 native units, and the
+treatment rather than equal tuning effort. The largest tier-2 aggregate was
+stable across seeds: in the DLinear Rnd CPU audit, per-VM seed spreads
+outside VMs 233 and 269 were at most 0.046 native units, and the
 dominant VM's M0 penalty held in all three seeds. Part of the dependence
 evidence (D-2) reuses Ridge outcomes already observed, and pairwise affinity
 (D-6) comes from empirical subset fits rather than training-time lookahead.
@@ -2074,10 +2077,11 @@ but is dominated by one high-scale VM while its negative direction is broad.
 The tier-2 diagnostics did not find the explanation most often assumed. In
 the shared LSTM encoder, task gradients were close to orthogonal with no
 excess sign conflict, whereas gradient magnitudes and training-loss shares
-were strongly unequal, most of all where the sharing penalty was broadest.
-Cross-resource dependence and pairwise transfer did not account for the
-effects. These are associations on 20 VMs without intervention; they suggest
-that loss-balancing remedies, rather than conflict-resolving ones, are the
+were strongly unequal, with the gradient-magnitude imbalance largest where
+the sharing penalty was broadest. Cross-resource dependence and pairwise
+transfer were not consistently associated with the effects. These are
+associations on 20 VMs without intervention; they suggest that
+loss-balancing remedies, rather than conflict-resolving ones, are the
 first to test, but they do not identify a cause.
 
 For software-engineering practice, contextual input and model consolidation
