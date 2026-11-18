@@ -25,8 +25,11 @@ tag `fgcs-v04-a1-intervention` (commit `7660bde98c`), and its analysis output ha
 **Pre-A1 sources:** kept as `tools/manuscript_16pp_before_a1.tex` and `tools/supplement_before_a1.tex`.
 
 **Author actions before upload:**
-- Push the tag `fgcs-v04-a1-intervention`. The Data availability link 404s until it is pushed.
-- Decide whether to add the A1 outputs to the Zenodo record as a new version. The text cites only the hash.
+- ~~Push the tag `fgcs-v04-a1-intervention`.~~ Pushed 2026-11-18.
+- ~~Decide whether to add the A1 outputs to Zenodo.~~ Done: doi:10.5281/zenodo.24353235 (published 2026-11-19,
+  26 files, the six A1 uploads checksum-verified). It is cited in Data availability and Section S-F.
+  The Zenodo metadata (title, version v0.4-a1-outputs, description, keywords, link to the A1 tag) was
+  corrected by a metadata edit, published 2026-11-19 and checked through the Zenodo API.
 
 
 **Journal:** Future Generation Computer Systems (ISSN 0167-739X).
