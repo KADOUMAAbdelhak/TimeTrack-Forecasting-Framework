@@ -1,0 +1,5 @@
+- A 2x2 design separates cross-resource input from representation sharing.
+- Context gains are small and depend on resource, environment and backbone.
+- All-input sharing lowered accuracy in 29 of 32 cells across four backbones.
+- Shared LSTM gradients were unequal in magnitude, not excessively conflicting.
+- Most shared models need a quarter of the parameters, at an accuracy cost.
