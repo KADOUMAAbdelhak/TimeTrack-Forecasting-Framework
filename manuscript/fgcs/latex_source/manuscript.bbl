@@ -1,4 +1,4 @@
-\begin{thebibliography}{37}
+\begin{thebibliography}{40}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 \providecommand{\url}[1]{\texttt{#1}}
 \providecommand{\href}[2]{#2}
@@ -61,6 +61,15 @@
 \newblock \bibinfo{journal}{Future Generation Computer Systems}
   \bibinfo{volume}{166} (\bibinfo{year}{2025}) \bibinfo{pages}{107692}.
   \DOIprefix\doi{10.1016/j.future.2024.107692}.
+%Type = Article
+\bibitem[{Han et~al.(2024)Han, Ye, and Zhan}]{Han2024ChannelIndependent}
+\bibinfo{author}{L.~Han}, \bibinfo{author}{H.-J. Ye}, \bibinfo{author}{D.-C.
+  Zhan},
+\newblock \bibinfo{title}{The capacity and robustness trade-off: Revisiting the
+  channel independent strategy for multivariate time series forecasting},
+\newblock \bibinfo{journal}{IEEE Transactions on Knowledge and Data
+  Engineering} \bibinfo{volume}{36} (\bibinfo{year}{2024})
+  \bibinfo{pages}{7129--7142}. \DOIprefix\doi{10.1109/TKDE.2024.3400008}.
 %Type = Article
 \bibitem[{Caruana(1997)}]{Caruana1997Multitask}
 \bibinfo{author}{R.~Caruana},
@@ -209,6 +218,28 @@
 \newblock in: \bibinfo{booktitle}{ICC 2025 - IEEE International Conference on
   Communications}, \bibinfo{publisher}{IEEE}, \bibinfo{year}{2025}, pp.
   \bibinfo{pages}{1978--1983}. \DOIprefix\doi{10.1109/ICC52391.2025.11161298}.
+%Type = Inproceedings
+\bibitem[{Chen et~al.(2024)Chen, Lenssen, Feng, Hu, Fey, Tassiulas, Leskovec,
+  and Ying}]{Chen2024ChannelClustering}
+\bibinfo{author}{J.~Chen}, \bibinfo{author}{J.~E. Lenssen},
+  \bibinfo{author}{A.~Feng}, \bibinfo{author}{W.~Hu}, \bibinfo{author}{M.~Fey},
+  \bibinfo{author}{L.~Tassiulas}, \bibinfo{author}{J.~Leskovec},
+  \bibinfo{author}{R.~Ying},
+\newblock \bibinfo{title}{From similarity to superiority: Channel clustering
+  for time series forecasting},
+\newblock in: \bibinfo{booktitle}{Advances in Neural Information Processing
+  Systems}, volume~\bibinfo{volume}{37}, \bibinfo{year}{2024}.
+%Type = Inproceedings
+\bibitem[{Wang et~al.(2024)Wang, Wu, Dong, Qin, Zhang, Liu, Qiu, Wang, and
+  Long}]{Wang2024TimeXer}
+\bibinfo{author}{Y.~Wang}, \bibinfo{author}{H.~Wu}, \bibinfo{author}{J.~Dong},
+  \bibinfo{author}{G.~Qin}, \bibinfo{author}{H.~Zhang},
+  \bibinfo{author}{Y.~Liu}, \bibinfo{author}{Y.~Qiu},
+  \bibinfo{author}{J.~Wang}, \bibinfo{author}{M.~Long},
+\newblock \bibinfo{title}{{TimeXer}: Empowering transformers for time series
+  forecasting with exogenous variables},
+\newblock in: \bibinfo{booktitle}{Advances in Neural Information Processing
+  Systems}, volume~\bibinfo{volume}{37}, \bibinfo{year}{2024}.
 %Type = Inproceedings
 \bibitem[{Nie et~al.(2023)Nie, Nguyen, Sinthong, and
   Kalagnanam}]{Nie2023PatchTST}

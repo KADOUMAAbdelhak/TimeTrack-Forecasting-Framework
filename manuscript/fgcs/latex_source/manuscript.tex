@@ -27,7 +27,7 @@
 
 \begin{frontmatter}
 
-\title{Contextual Input and Representation Sharing Are Separable Design Decisions in Multi-Metric Runtime Forecasting}
+\title{Contextual Input versus Representation Sharing in Multi-Metric Runtime Forecasting: Selective Gains and a Recurring Sharing Cost}
 
 \author[uva]{Abdelhak Kadouma\corref{cor1}}
 \ead{abdelhak.kadouma@uwasa.fi}
@@ -49,33 +49,29 @@
   country={India}}
 
 \begin{abstract}
-Multi-metric runtime forecasting involves two design decisions: whether a
-target's forecaster receives other resources' telemetry (contextual input)
-and whether targets share model parameters (representation sharing). We
-separate them with a $2\times2$ design of independent or shared models with
-own-resource or all-resource input. A frozen long short-term memory (LSTM)
-study evaluates three cells for central processing unit (CPU) utilisation,
-throughput, memory and disk-write activity across TimeTrack development
-data, Bitbrains fastStorage and Rnd external environments and dependent
-Materna T1--T3 temporal blocks, with post-hoc context, capacity and Ridge
-controls. A separately frozen extension completes the $2\times2$ on 20
-Bitbrains virtual machines for LSTM, DLinear, PatchTST-style and
-iTransformer-style backbones and adds mechanism diagnostics. Contextual
-value was small and selective, depending on resource, environment and model
-family. Sharing carried a recurring cost: adverse LSTM throughput, memory
-and disk-write estimates persisted in all six blocks under both controls,
-and in the extension all-input sharing lowered accuracy in 29 of 32
-backbone, resource and environment cells. Magnitudes varied by backbone and
-were sometimes tail- or scale-dominated, with typical-cell ratios often near
-one. In the shared LSTM, task gradients were
-near-orthogonal without excess conflict but strongly unequal in magnitude
-and loss share, while cross-resource dependence was not consistently
-associated with the effects;
-these are associations, not causal identification. Shared models used
-about a quarter of the parameters for most backbones, so consolidation is a
-resource-specific accuracy trade-off. Relative gains do not ensure
-superiority to persistence. Contextual input and representation sharing
-should be decided and validated separately.
+Engineers who forecast cloud runtime telemetry make two separate choices:
+whether a target's forecaster receives other resources' histories (contextual
+input) and whether several resource targets share one model (representation
+sharing). We separate them with a $2\times2$ design of independent or shared
+models with own-resource or all-resource input, and evaluate central
+processing unit (CPU), throughput, memory and disk-write forecasting with long
+short-term memory (LSTM) networks on TimeTrack development data, the
+Bitbrains fastStorage and Rnd environments and three dependent Materna
+blocks, and with LSTM, DLinear, PatchTST-style and iTransformer-style
+backbones on 20 Bitbrains virtual machines. Three findings emerge. First,
+contextual input helps selectively: across backbones, typical-cell error
+ratios against own-resource models stayed between 0.981 and 1.035, no context
+effect held for every backbone, and external memory benefited most
+consistently. Second, sharing carries a small but recurring cost: in typical
+cells the shared model was less accurate in all 24 original LSTM comparisons
+and in 30 of 32 backbone, resource and environment cells, while the largest
+aggregate penalties came from a few high-scale machines. Third, in the shared
+LSTM, task gradients were close to orthogonal but strongly unequal in
+magnitude, which points to loss balancing rather than conflict resolution as
+the first remedy to test; this is an association, not a causal result.
+Shared models needed about a quarter of the parameters for most backbones,
+so consolidation is a resource-specific accuracy trade-off. On the 20
+Bitbrains VMs, no backbone beat persistence for CPU or throughput.
 \end{abstract}
 
 \begin{keyword}
@@ -89,26 +85,27 @@ runtime forecasting \sep cloud telemetry \sep multi-metric forecasting \sep mult
 \label{sec:introduction}
 
 Cloud telemetry forecasting can inform adaptation and resource management
-\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}.
-Engineers must decide whether a target's forecaster should include other
-resources' telemetry and whether several targets should share a predictive
-representation. These choices change input information and model organisation,
-respectively. Consolidation reduces the models to manage but need not improve
-every resource's forecast. We evaluate accuracy and model consolidation,
-not downstream control effectiveness.
+\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. Engineers must decide
+whether a target's forecaster should include other resources' telemetry and
+whether several targets should share a predictive model. These choices change
+the input information and the model organisation, respectively.
+Consolidation reduces the number of models to manage but need not improve
+every resource's forecast. We evaluate accuracy and model consolidation, not
+downstream control effectiveness.
 
-Runtime-series benchmarking spans classical statistical, neural and zero-shot
-foundation models \citep{DiMenna2026RuntimeForecasting}, and cloud studies
-combine multivariate resource inputs, recurrent architectures and joint
-multi-output prediction \citep{Ullah2023CloudBiLSTM,Tripathi2025MMRP}.
-\emph{Contextual input} supplies other resources' histories to a target model
-without requiring shared parameters; \emph{representation sharing} learns
-several targets jointly. Multi-task learning offers inductive transfer through
-related tasks \citep{Caruana1997Multitask}, but task combinations and sharing
-arrangements require evaluation
+Runtime-series benchmarking spans statistical, neural and foundation models
+\citep{DiMenna2026RuntimeForecasting}, and cloud studies combine multivariate
+resource inputs with joint multi-output prediction
+\citep{Ullah2023CloudBiLSTM,Tripathi2025MMRP}. In multivariate forecasting
+more broadly, the same question appears as channel-independent versus
+channel-dependent modelling \citep{Han2024ChannelIndependent}. Those
+comparisons, however, usually change two things at once: a
+channel-independent model shares one set of weights across channels that it
+processes separately, whereas a channel-dependent model mixes channels inside
+one shared model. Multi-task learning offers inductive transfer between
+related tasks \citep{Caruana1997Multitask}, but which tasks to share, and
+how, must be evaluated
 \citep{Standley2020TaskGrouping,Fifty2021TaskGroupings,Nochumsohn2025MTLinear}.
-Our bounded contribution is a within-study comparison that separates the two
-decisions, not a new forecasting architecture (Section~\ref{sec:related-work}).
 
 We separate the two decisions with a $2\times2$ design
 (Figure~\ref{fig:sharing-framework}). Independent target models receive
@@ -116,60 +113,51 @@ own-resource histories (S1) or all-resource histories (S2); one shared model
 with resource-specific outputs receives own-resource histories (M0) or
 all-resource histories (M1). Context is then varied with sharing held fixed
 (S2:S1, M1:M0), and sharing with input held fixed (M0:S1, M1:S2). The
-formulations are instruments for this question, not proposed architectures.
-The evaluated resources are CPU utilisation, throughput, memory usage and
-disk-write activity.
+independent all-input control S2 is what channel-independent versus
+channel-dependent comparisons lack. The targets are CPU utilisation,
+throughput, memory usage and disk-write activity.
 
-The evidence has two tiers that are always reported separately. Tier~1 is
-the original frozen study of S1, S2 and M1 with a conventional LSTM across
-TimeTrack development data, the Bitbrains fastStorage and Rnd external
-environments and the dependent Materna T1--T3 temporal blocks, with
-post-hoc controls for context selection, aggregate capacity and model family
-(Section~\ref{sec:posthoc-controls}). Tier~2 is a separately frozen
-extension on 20 Bitbrains VMs that adds M0, repeats the $2\times2$ for
-DLinear, PatchTST-style and iTransformer-style backbones, and measures
-cross-resource dependence, gradient conflict and magnitude, loss shares and
-pairwise transfer (Section~\ref{sec:tier2-design}).
+The evidence comes in two parts, reported separately. The original study
+(tier~1) evaluates S1, S2 and M1 with an LSTM on TimeTrack development data,
+the Bitbrains fastStorage and Rnd environments and three dependent Materna
+blocks, with post-hoc controls for context selection, capacity and model
+family (Section~\ref{sec:posthoc-controls}). An extension (tier~2) adds M0
+and repeats the $2\times2$ for DLinear, PatchTST-style and iTransformer-style
+backbones on 20 Bitbrains VMs, together with diagnostics of dependence,
+gradients, loss shares and transfer (Section~\ref{sec:tier2-design}). Five
+questions (Section~\ref{sec:research-questions}) cover baseline accuracy
+(RQ1), contextual input (RQ2), sharing (RQ3), diagnostics (RQ4) and
+heterogeneity and consolidation (RQ5).
 
-The five questions in Section~\ref{sec:research-questions} address backbone
-baseline accuracy (RQ1), contextual input (RQ2), representation sharing and
-the complete joint system (RQ3), diagnostics of the sharing penalty (RQ4), and
-heterogeneity and accuracy--consolidation trade-offs (RQ5).
-
-The two decisions had different consequences. Contextual value was small
-and selective: external memory benefited most often, but directions depended
-on resource, environment and model family, and no tier-2 context effect held
-across backbones. Sharing carried a recurring cost. Tier-1 M1:S2 throughput,
-memory and disk-write estimates remained adverse in all six blocks under both
-separate LSTM controls, and in tier~2 all-input sharing lowered MacroMAE
-accuracy in 29 of 32 backbone, resource and environment cells. Magnitudes
-were backbone-dependent, and some large penalties were concentrated in a few
-VMs while matched-cell median ratios stayed close to one
-(Section~\ref{sec:results-rq2}). In the shared LSTM, task gradients were
-near-orthogonal without excess conflict, but their magnitudes and loss
-shares were strongly unequal; cross-resource dependence was not
-consistently associated with the effects. These diagnostics are associations, not causal identification.
-Shared LSTM and transformer-style models used about a quarter of their
-independent complements' parameters, so per-entity consolidation is a
-resource-specific accuracy trade-off, bounded by seed sensitivity and
-persistence skill, and establishes no production savings. We make four
+The results support three findings. \emph{Contextual input helps
+selectively:} external memory benefited most consistently, but directions
+depended on the resource, the environment and the model family, and no
+tier-2 context effect held for every backbone. \emph{Sharing carries a small
+but recurring cost:} in typical cells the shared model was less accurate in
+all 24 original LSTM M1:S2 comparisons and in 30 of 32 tier-2 backbone,
+resource and environment cells. Typical-cell ratios were often close to one,
+and larger aggregate penalties came from a few high-scale machines
+(Section~\ref{sec:results-rq2}). \emph{The sharing penalty accompanies
+unequal task-gradient magnitudes, not gradient conflict:} task gradients in
+the shared LSTM were close to orthogonal, whereas their magnitudes and loss
+shares were strongly unequal. Shared LSTM and transformer-style models used
+about a quarter of their independent complements' parameters, so per-entity
+consolidation is a resource-specific accuracy trade-off. We make four
 contributions:
 
 \begin{enumerate}
-  \item A $2\times2$ decomposition that separates contextual input from
-    representation sharing, applied to four backbone families and
-    reported in two separately frozen evidence tiers.
+  \item A $2\times2$ decomposition, with the independent all-input control
+    S2, that varies contextual input and representation sharing one at a
+    time, applied to four backbone families.
   \item Evidence that contextual value is selective and model-dependent,
-    whereas the direction of the all-input sharing penalty recurs across
-    backbones, with resource-, environment- and tail-dependent magnitudes
-    that are distinguished from typical-cell behaviour.
-  \item Training-side and outcome-side diagnostics that associate the
-    LSTM sharing penalty with unequal task-gradient magnitudes and loss
-    shares rather than excess gradient conflict or cross-resource
-    dependence, stated without causal claims.
+    whereas the typical-cell cost of sharing recurs across backbones, with
+    resource-, environment- and tail-dependent magnitudes.
+  \item Training-side and outcome-side diagnostics that associate the LSTM
+    sharing penalty with unequal task-gradient magnitudes and loss shares
+    rather than gradient conflict or cross-resource dependence.
   \item An account of the accuracy--consolidation trade-off across
-    backbones, bounded by typical-cell behaviour, seed sensitivity,
-    persistence skill and the eligible populations studied.
+    backbones, bounded by typical-cell behaviour, seed sensitivity and
+    persistence skill.
 \end{enumerate}
 
 \section{Related Work}
@@ -194,53 +182,51 @@ BiLSTM on fastStorage and Rnd. TimeTrack's reported resource correlations
 \citep{Meliani2025TimeTrack} motivate contextual inputs but do not establish
 predictive value conditional on the target's own history.
 
-Input channels, output targets and parameter sharing are separate choices.
-MMRP compares univariate and multivariate single-target forecasts
-\citep{Tripathi2025MMRP}, a substantive S1--S2-related precedent without a
+\paragraph{Channel independence and dependence.} In multivariate forecasting,
+the closest debate contrasts channel-independent (CI) and channel-dependent
+(CD) models. \citet{Han2024ChannelIndependent} show that CD models have
+higher capacity but are less robust to distribution drift, whereas CI trades
+capacity for robustness. Channel clustering groups similar channels between
+these extremes \citep{Chen2024ChannelClustering}, and TimeXer treats other
+series as exogenous inputs to a target \citep{Wang2024TimeXer}. PatchTST
+reuses embedding and Transformer weights across independently processed
+channels \citep{Nie2023PatchTST}, so channel independence is shared
+parameters with own-channel input, the arrangement our design calls M0; a CD
+model that mixes channels in one network corresponds to M1. DLinear
+forecasts trend and residual components with linear maps
+\citep{Zeng2023DLinear}, and iTransformer models relationships between
+variate tokens through attention \citep{Liu2024iTransformer}; tier~2
+evaluates declared adaptations of all three. DeepAR and global forecasting
+share functions across series rather than presenting them as simultaneous
+covariates \citep{Salinas2020DeepAR,MonteroManso2021GlobalForecasting}. Our
+design differs from CI-versus-CD comparisons in three ways: it adds the
+independent all-input control S2 and the independent own-input S1, so that
+input scope and sharing are varied one at a time; it evaluates each resource
+target separately, including the consolidation it buys; and it uses cloud
+telemetry with matched, leakage-controlled support. In cloud resource
+forecasting, MMRP compares univariate and multivariate single-target
+forecasts \citep{Tripathi2025MMRP}, an S1--S2-related precedent without a
 joint resource-sharing arm, and Ullah's joint BiLSTM shares a representation
-without an independent all-input target-model bridge. PatchTST reuses
-embedding and Transformer weights across independently processed channels
-\citep{Nie2023PatchTST}: channel independence is shared parameters with
-own-channel input, the arrangement our design calls M0. DLinear forecasts
-trend and residual components with linear maps \citep{Zeng2023DLinear}, and
-iTransformer models relationships between variate tokens through attention
-\citep{Liu2024iTransformer}; tier~2 evaluates declared adaptations of all
-three. DeepAR and global forecasting share functions across series rather
-than presenting them as simultaneous covariates
-\citep{Salinas2020DeepAR,MonteroManso2021GlobalForecasting}.
+without an independent all-input target-model bridge.
 
-Shared learning can provide an inductive bias \citep{Caruana1997Multitask},
-but its value depends on tasks, data and sharing structure
-\citep{Yu2025MultitaskFundamentals}. Task grouping explicitly examines which
-tasks should learn together under accuracy and computational constraints
-\citep{Standley2020TaskGrouping,Fifty2021TaskGroupings}.
+\paragraph{Multi-task learning and adverse transfer.} Shared learning can
+provide an inductive bias \citep{Caruana1997Multitask}, but its value depends
+on tasks, data and sharing structure \citep{Yu2025MultitaskFundamentals}.
+Task grouping examines which tasks should learn together under accuracy and
+computational constraints \citep{Standley2020TaskGrouping,Fifty2021TaskGroupings}.
 Multi-objective and gradient-modification methods address conflicting updates
 \citep{Sener2018MultiObjective,Yu2020GradientSurgery}, and loss-balancing
 methods address unequal task-gradient magnitudes \citep{Chen2018GradNorm}.
-These are established responses to adverse transfer, not evidence of a
-mechanism in our resource forecasters. Our tier-2 diagnostics measure
-gradient conflict, gradient magnitude, loss shares and empirical pairwise
-transfer descriptively for the LSTM, without applying any of these methods
-(Section~\ref{sec:tier2-analysis}).
-
 \citet{Nikentari2022NARMAXLSTM} combine lagged station inputs with shared LSTM
 layers and discuss negative transfer, MTLinear analyses gradient conflict,
 balance and grouping for variate groups \citep{Nochumsohn2025MTLinear}, and
 \citet{Bi2019CloudMultitask} report training-speed comparisons for cloud
-multi-task forecasting. None establishes an independent all-input
+multi-task forecasting. None of these establishes an independent all-input
 target-model bridge or a measured target-consolidation trade-off;
-Supplementary Table~S14 codes these designs
-against ours (Supplementary Section~S-A).
-
-The contribution is therefore the within-study comparison, not an
-architecture or priority claim. S2 is the intermediate control: each target
-model receives all resource histories but keeps separate parameters, so S1--S2
-examines contextual input and S2--M1 the move to a shared predictor.
-Capacity, optimisation and selected settings also differ, so these are not
-pure causal interventions. Tier~2 adds M0 to complete the $2\times2$ on a
-reduced Bitbrains cohort and repeats it across backbones, while post-hoc
-common-context, capacity and Ridge controls qualify the tier-1 contrasts
-(Section~\ref{sec:posthoc-controls}).
+Supplementary Table~S14 codes these designs against ours (Supplementary
+Section~S-A). Our diagnostics measure gradient conflict, gradient magnitude,
+loss shares and pairwise transfer for the LSTM without applying any of these
+methods (Section~\ref{sec:tier2-analysis}).
 
 \section{Multi-Metric Runtime Forecasting Framework}
 \label{sec:framework}
@@ -480,11 +466,8 @@ tiers where both apply.
 \end{description}
 
 These specify estimands, not expected benefits; efficiency is assessed
-separately from accuracy. The original frozen protocol named its four
-questions RQ1--RQ4; they correspond to S2:S1 (now within RQ2), M1:S2 and
-M1:S1 (now within RQ3) and heterogeneity and efficiency (now RQ5). The
-supplementary decision criteria retain the original numbering, and no
-original estimand, predicate or threshold changes.
+separately from accuracy. Supplementary Section~S-E maps them to the
+original protocol's question numbering.
 
 \subsection{Data, Targets and Leakage Control}
 \label{sec:datasets}
@@ -496,8 +479,8 @@ original estimand, predicate or threshold changes.
 Table~\ref{tab:dataset-summary} summarises the sources. TimeTrack, telemetry
 from the OpenAirInterface (OAI) CI/CD system on seven machines between
 24 June and 19 July 2024, is framework-development evidence with a measured
-median sampling interval of 42.285164 seconds; gaps longer than 84.57 seconds
-start a new segment. The Bitbrains fastStorage and Rnd traces are two separate
+median sampling interval of about 42.3 seconds; gaps longer than twice that
+interval start a new segment. The Bitbrains fastStorage and Rnd traces are two separate
 external environments with five-minute sampling, in which physically invalid
 rows are removed and gaps longer than 450 seconds delimit segments. Materna
 T1--T3 are consecutive, dependent blocks from one source on a 300-second grid
@@ -527,7 +510,7 @@ purged. The latest 15\% of outer-training origins form inner validation,
 purged again; scalers, contexts and epochs use only training and validation
 data, and each final model is refitted once on the complete outer-training
 support and evaluated once on its test block. Horizons are
-$\{1,2,4,8,16,32,64,128\}$ samples in TimeTrack (about 0.705 to 90.208
+$\{1,2,4,8,16,32,64,128\}$ samples in TimeTrack (about 0.7 to 90
 minutes) and $\{1,2,4,9,18\}$ samples externally (5, 10, 20, 45 and 90
 minutes), with candidate contexts of 32, 64 and 128 and of 4, 9 and 18
 samples. Bitbrains environments and Materna blocks are analysed separately
@@ -720,16 +703,11 @@ declared adaptations, not canonical implementations, and every new cell
 passed structural checks before any data fit. Full specifications are in
 Supplementary Section~S-B5.
 
-\paragraph{Freezing and execution.} The tier-2 protocol, code, configuration
-and input digests were frozen in an annotated Git tag together with a package
-digest and an execution seal before any tier-2 run; the launcher refused to
-run unless the live code and inputs reproduced them. A planned external
-preregistration was replaced by this Git-based freezing before any run
-(a logged deviation); the earlier preregistration of a superseded protocol
-version is retained as historical evidence (Data availability). Outer-test
-data were not read before all fits were closed. All 13{,}500 inner fits,
-13{,}500 final fits, 600 gradient extractions and 13{,}500 outer-test
-evaluations completed without retries, and no unit was missing.
+\paragraph{Freezing and execution.} The tier-2 protocol, code and inputs
+were frozen by an annotated Git tag before any tier-2 run, and outer-test
+data were not read before all fits were closed. All 13{,}500 final fits and
+outer-test evaluations completed without retries, and no unit was missing
+(details in Supplementary Section~S-E).
 
 \subsection{Tier-2 Analysis and Diagnostics}
 \label{sec:tier2-analysis}
@@ -780,14 +758,13 @@ robust loss, gradient surgery, loss balancing or task grouping, is evaluated.
 
 \section{Results}
 
-Figure~\ref{fig:primary-gains} reports the frozen tier-1 resource-overall
-MacroMAE gains for each evidence block; positive values favour the candidate.
-Consistency classes and VM-cluster intervals are reported separately, and the
-post-hoc controls supplement rather than replace them (Supplementary
-Tables~S1--S2 and Table~\ref{tab:posthoc-controls}). Tier-2 results come from the
-separately frozen extension of Section~\ref{sec:tier2-design}; they are
-descriptive, never replace tier-1 results and are reported in separate
-paragraphs.
+Figure~\ref{fig:primary-gains} reports the tier-1 resource-overall MacroMAE
+gains for each evidence block; positive values favour the candidate. Because
+MacroMAE is scale-weighted, the sharing results below first give the
+matched-cell median ratio and win rate, which describe a typical entity, and
+then the prespecified MacroMAE gain and class. Post-hoc controls are in
+Table~\ref{tab:posthoc-controls} and Supplementary Tables~S1--S2, and tier-2
+results are reported in separate paragraphs.
 
 \begin{figure*}[t]
 \centering
@@ -911,32 +888,32 @@ backbone as well as on the resource and environment.
 \subsection{RQ3 Representation Sharing}
 \label{sec:results-rq2}
 
-RQ3 first compares M1 with S2. Throughput, memory and disk write had negative
-primary gains in all six blocks (Figure~\ref{fig:primary-gains}(b)); CPU was
-positive only in TimeTrack, fastStorage and Materna T1, and these small
-exceptions do not support uniformly beneficial sharing. Rnd and Materna T2
-were broadly negative for every resource with intervals below zero, and most
-other throughput, memory and disk-write cells were broadly negative. Under
-both post-hoc controls, H64 M1 against common-context S2 and H129 M1 against
-S2, throughput, memory and disk-write point estimates remained adverse in all
-six blocks (Table~\ref{tab:posthoc-controls}), so
-context-selection freedom and the original capacity difference are
-incomplete explanations, although the controls do not identify sharing alone
-as the cause. In all 24 original M1:S2 block/resource summaries the
+RQ3 first compares M1 with S2. In typical cells, sharing cost accuracy in
+every comparison: in all 24 original M1:S2 block/resource summaries the
 matched-cell median MAE ratio exceeded one and the win rate was below $50\%$
-(Supplementary Table~S1), yet magnitudes were tail-concentrated: Materna T1/T3
-disk-write median ratios were approximately $1.0246/1.0347$ despite MacroMAE
-gains of $-27.46\%/-71.30\%$, with VM266 and VM272 contributing $82.10\%$ and
-$86.97\%$ of positive excess error. Existing-seed diagnostics find sign
-changes in 4/24 M1:S2 summaries, and sign stability need not imply magnitude
-stability (Supplementary Section~S-C2).
+(Supplementary Table~S1), including the small positive CPU MacroMAE
+exceptions. The size of that cost varied. Materna T1/T3 disk-write median
+ratios were approximately $1.0246/1.0347$, whereas their MacroMAE gains of
+$-27.46\%/-71.30\%$ were concentrated in VM266 and VM272, which contributed
+$82.10\%$ and $86.97\%$ of positive excess error. In MacroMAE terms,
+throughput, memory and disk write had negative gains in all six blocks
+(Figure~\ref{fig:primary-gains}(b)) and CPU was positive only in TimeTrack,
+fastStorage and Materna T1; Rnd and Materna T2 were broadly negative for
+every resource with intervals below zero. Under both post-hoc controls, H64
+M1 against common-context S2 and H129 M1 against S2, throughput, memory and
+disk-write point estimates remained adverse in all six blocks
+(Table~\ref{tab:posthoc-controls}), so context-selection freedom and the
+original capacity difference do not explain the pattern, although the
+controls do not isolate sharing as its cause. Gains change sign across seeds
+in 4/24 M1:S2 summaries (Supplementary Section~S-C2).
 
 \paragraph{Tier-2 sharing across backbones.}
 Figure~\ref{fig:tier2-contrasts}(d) repeats the all-input sharing contrast
-for all four backbones. M1:S2 gains were negative in 29 of 32
-backbone/resource/block cells; the matched-cell median M1/S2 ratio exceeded
-one and the candidate win rate was below $50\%$ in 30 of 32. All 16 Rnd cells
-were negative, from $-1.51\%$ to $-33.11\%$. The three non-negative cells were
+for all four backbones. In typical cells, the shared model was less accurate
+in 30 of 32 backbone/resource/block cells: the matched-cell median M1/S2
+ratio exceeded one and the candidate win rate was below $50\%$. MacroMAE
+gains were negative in 29 of 32 cells, and all 16 Rnd cells were negative,
+from $-1.51\%$ to $-33.11\%$. The three non-negative cells were
 all fastStorage CPU (LSTM $+0.60\%$, PatchTST $+0.91\%$, iTransformer
 $+5.48\%$), mirroring the tier-1 CPU exceptions. Twelve cells were broadly
 negative and one, iTransformer fastStorage CPU, conditionally positive. The
@@ -1058,8 +1035,7 @@ Section~S-C4.
 
 Seven descriptive diagnostics examine what accompanies the LSTM sharing
 penalty (Figure~\ref{fig:tier2-mechanism}, Supplementary
-Table~S15). None was used to change any model, and
-none establishes a cause.
+Table~S15).
 
 \emph{Dependence.} Training-window dependence was moderate: the median D-1
 value was 0.31 in fastStorage and 0.28 in Rnd (maxima 0.92 and 0.94). It was
@@ -1094,9 +1070,8 @@ helpful or harmful partner for any target.
 
 Taken together, the LSTM sharing penalty was accompanied by large imbalance
 in task-gradient magnitude and loss share rather than by excess gradient
-conflict or by high cross-resource dependence. These are associations from
-20 VMs without intervention; representation interference and capacity
-competition were not measured, and gradient diagnostics cover only the LSTM.
+conflict or by high cross-resource dependence; Section~\ref{sec:threats}
+states the limits of this association.
 
 \begin{figure*}[t]
 \centering
@@ -1215,8 +1190,8 @@ The original H64 M1 consolidates the target-model complement for one entity,
 outer fold and seed (Table~\ref{tab:efficiency}): one joint network and
 52,500 parameters against four networks and 206,100 parameters for S2,
 approximately $74.5\%$ fewer parameters and $75\%$ fewer models. The frozen
-Materna totals are 85.594240 worker fit-hours for S1, 75.303186 for S2 and
-20.405083 for M1; they are not elapsed wall time, energy or deployment cost,
+Materna totals are 85.6 worker fit-hours for S1, 75.3 for S2 and
+20.4 for M1; they are not elapsed wall time, energy or deployment cost,
 and the post-hoc H129 comparison does not inherit H64's parameter-reduction
 claim. In tier~2, shared LSTM, PatchTST-style and iTransformer-style models
 used roughly a quarter of their independent complements' parameters, whereas
@@ -1350,20 +1325,22 @@ The same limit applies to foundation forecasters
 independent all-input controls and resource-specific assessment, and test
 the imbalance association directly by intervention.
 
-\subsection{Contextual Input and Representation Sharing as Separate Decisions}
+\subsection{What the Separation Means in Practice}
 \label{sec:discussion-separability}
 
-Across both tiers, the two design decisions had different consequences.
-Adding other resources' histories produced small, selective effects whose
-direction depended on the resource, the environment and the backbone.
-Sharing parameters across targets produced a recurring loss of accuracy
-whose direction held across backbones but whose magnitude was resource-,
-environment- and tail-dependent. The completed $2\times2$ shows that the two
-are not interchangeable: context can be valuable for a target while sharing
-still costs accuracy, as for LSTM Rnd memory, and in Rnd the sharing cost
-appeared with own-resource input as well as with all-resource input. Practitioners should therefore decide
-and validate them separately, per resource: a contextual benefit is not a
-reason to consolidate, and a consolidation saving is not evidence that
+The two decisions behaved differently, which changes how they should be
+tested. Adding other resources' histories produced small effects whose
+direction depended on the resource, the environment and the backbone, so a
+contextual input should be adopted only after a per-resource, per-model check
+against the own-resource model. Sharing parameters across targets produced a
+typical-cell cost whose direction held across backbones but whose size
+depended on the resource, the environment and a few high-scale machines, so
+consolidation should be justified by its savings and checked for adverse
+tails rather than assumed free. The two can disagree for the same target:
+context helped LSTM Rnd memory while sharing still cost accuracy, and in Rnd
+the sharing cost appeared with own-resource input as well. A contextual
+benefit is not a reason to consolidate, and a consolidation saving is not
+evidence that
 cross-resource information is being used.
 
 \section{Threats to Validity}

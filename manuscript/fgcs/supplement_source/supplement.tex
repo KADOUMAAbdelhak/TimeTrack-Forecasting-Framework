@@ -2449,6 +2449,26 @@ Persistence failures in main-text Section~5.7 limit absolute
 skill claims. Neither relative gains nor descriptive source summaries support
 a universal verdict beyond the evaluated formulations and populations.
 
+\clearpage
+\section*{S-E Protocol provenance and question mapping (moved from the main text)}
+These specify estimands, not expected benefits; efficiency is assessed
+separately from accuracy. The original frozen protocol named its four
+questions RQ1--RQ4; they correspond to S2:S1 (now within RQ2), M1:S2 and
+M1:S1 (now within RQ3) and heterogeneity and efficiency (now RQ5). The
+supplementary decision criteria retain the original numbering, and no
+original estimand, predicate or threshold changes.
+
+\paragraph{Freezing and execution.} The tier-2 protocol, code, configuration
+and input digests were frozen in an annotated Git tag together with a package
+digest and an execution seal before any tier-2 run; the launcher refused to
+run unless the live code and inputs reproduced them. A planned external
+preregistration was replaced by this Git-based freezing before any run
+(a logged deviation); the earlier preregistration of a superseded protocol
+version is retained as historical evidence (Data availability). Outer-test
+data were not read before all fits were closed. All 13{,}500 inner fits,
+13{,}500 final fits, 600 gradient extractions and 13{,}500 outer-test
+evaluations completed without retries, and no unit was missing.
+
 \bibliographystyle{elsarticle-num-names}
 \bibliography{references}
 \end{document}

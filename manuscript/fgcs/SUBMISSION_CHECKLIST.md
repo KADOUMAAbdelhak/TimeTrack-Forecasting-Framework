@@ -13,8 +13,8 @@
 | `submission_files/Manuscript.pdf` | Manuscript built from the zip below (**16 pages**, two-column) | Manuscript |
 | `submission_files/FGCS_LaTeX_Source.zip` | **Flat** source: `manuscript.tex`, `references.bib`, `manuscript.bbl`, `Figure_1.pdf`–`Figure_4.pdf` (no subfolders) | LaTeX source files |
 | `latex_source/` | The same seven files unzipped, for inspection | — |
-| `submission_files/Highlights.docx` (+ `.txt`) | 5 highlights, 72–77 characters each | Highlights |
-| `submission_files/Supplementary_Material.pdf` | Supplement built from its zip (42 pages, including S-A to S-D moved from the main text) | Supplementary material |
+| `submission_files/Highlights.docx` (+ `.txt`) | 5 highlights, 67–73 characters each | Highlights |
+| `submission_files/Supplementary_Material.pdf` | Supplement built from its zip (43 pages, including S-A to S-E moved from the main text) | Supplementary material |
 | `submission_files/FGCS_Supplement_Source.zip` / `supplement_source/` | Flat supplement source (`supplement.tex`, `references.bib`, `supplement.bbl`) | Keep for revision; do not upload LaTeX as a Supplemental item |
 | `submission_files/Cover_Letter.pdf` (+ `.docx`, `.tex`) | Cover letter, **with one paragraph you must complete** | Cover letter |
 | `submission_files/Author_Biographies.docx` | Biographies of 47, 68 and 50 words (photos not supplied) | Vitae / author biography |
@@ -31,6 +31,26 @@ Suggested caption for the supplement: "Supplementary material: tier-1 matched-ce
 - **Figures:** renamed `Figure_1`–`Figure_4` in order of appearance. They are byte-identical PDFs.
 - **Float placement:** the preamble float fractions were relaxed. Without this, all seven tables and two figures were deferred to the end; now each sits near its first mention.
 - **Supplement:** flattened into one file, with `tier2_supplement.tex` inlined verbatim. Two frozen fragments from the same commit were appended at the end: `decision_criteria.tex`, which the main text cites as "supplementary decision criteria", and `overall_bootstrap_intervals.tex`, the source of the tier-1 intervals quoted in Results. The existing S1–S2 and tier-2 table numbers are unchanged.
+
+## Readability and positioning pass (review step 2)
+
+Changes in response to the pre-submission review, without new experiments:
+
+- **New title.** "Contextual Input versus Representation Sharing in Multi-Metric Runtime Forecasting: Selective Gains and a Recurring Sharing Cost". It replaces "...Are Separable Design Decisions...", which could read as true by definition.
+- **Abstract** (241 words) and **introduction** rewritten around three findings. The scale-free typical-cell results (matched-cell median ratios and win rates) now come first; MacroMAE stays the prespecified endpoint.
+- **Related Work:** a new paragraph positions the design against channel-independent versus channel-dependent forecasting. It cites Han, Ye and Zhan (TKDE 2024), CCM (NeurIPS 2024) and TimeXer (NeurIPS 2024), each checked against its publisher or proceedings record, and states what S1/S2 add.
+- **Results:** the sharing paragraphs lead with typical-cell statistics, then the MacroMAE gains and classes.
+- **Caveats:** repeated caveats were cut from Results and RQ4 and point to Threats to Validity.
+- **Supplement:** the RQ-renumbering paragraph and the full tier-2 freezing and execution paragraph moved verbatim to the new Supplementary Section S-E.
+- **Precision:** 42.285164 s became about 42.3 s; 0.705–90.208 min became about 0.7–90 min; worker-hours became 85.6, 75.3 and 20.4. These roundings are the only numbers not found verbatim in the original.
+- **Discussion:** "Separate Decisions" became "What the Separation Means in Practice", with actionable guidance.
+- **Highlights and cover letter** were updated to match. The persistence statement is limited to the 20 tier-2 Bitbrains VMs, because tier-1 Rnd S1 throughput skill was slightly positive.
+- **Checks:**
+  - no citation lost;
+  - 40 references, all cited;
+  - every −139.61 % keeps its caveat;
+  - the 16 pages, all identifiers, and builds without undefined references are unchanged.
+- **Not done** (it needs new frozen experiments): tuned modern baselines, the loss-balancing intervention, larger or modern traces, more seeds.
 
 ## Length reduction (Option B, implemented)
 
@@ -54,8 +74,8 @@ Suggested caption for the supplement: "Supplementary material: tier-1 matched-ce
 - **Before condensation**, the 25-page body was checked against `b186ee6e47`: re-applying the packaging changes reproduced it exactly. **After condensation**, the abstract, title, keywords, bibliography, all four figures, every kept table and equation, and every `%%KEEP` passage are byte-identical to that 25-page body. The removed material appears verbatim in supplement sections S-A to S-D.
 - Every block of the four original supplement source files appears verbatim in `supplement.tex`.
 - Both documents were built from the extracted zips:
-  - **Manuscript:** 16 pages, no undefined references or citations, Tables 1–5, Figures 1–4, 37 references (all 37 `.bib` entries cited in the main text).
-  - **Supplement:** 42 pages, no warnings.
+  - **Manuscript:** 16 pages, no undefined references or citations, Tables 1–5, Figures 1–4, 40 references (all 40 `.bib` entries cited in the main text).
+  - **Supplement:** 43 pages, no warnings.
 - These strings were found in the manuscript PDF:
   - DOIs and identifiers: `10.5281/zenodo.24339239`, `10.5281/zenodo.24189108`, tag `fgcs-v04-min-final-r2`, and both SHA-256 values.
   - Key numbers: −139.61, 98.6 %, 0.046, 29 of 32, 11/24, 29/32 and 0.04–1.40.
@@ -73,9 +93,9 @@ Suggested caption for the supplement: "Supplementary material: tier-1 matched-ce
 | Title concise; no undefined abbreviations | ✅ |
 | Author names; affiliations with lowercase superscript letters, **full postal address and country** | ⚠️ South Asian University has a full address. **University of Vaasa has only city and country: add the street address and postcode.** |
 | Corresponding author marked; e-mail on the title page | ✅ |
-| Abstract at most 250 words, no references, abbreviations defined | ✅ 248 words |
+| Abstract at most 250 words, no references, abbreviations defined | ✅ 241 words |
 | 6–10 keywords, English, avoiding "and"/"of" | ✅ 7 keywords |
-| Highlights: 3–5 bullets, at most 85 characters each, separate editable file with "highlights" in the name | ✅ 5 bullets, 72–77 characters, `Highlights.docx` |
+| Highlights: 3–5 bullets, at most 85 characters each, separate editable file with "highlights" in the name | ✅ 5 bullets, 67–73 characters, `Highlights.docx` |
 | Editable `.tex` source; a PDF is not a source file | ✅ |
 | Equations editable, numbered | ✅ |
 | Tables editable, captioned, cited, numbered, notes below, no vertical rules | ✅ |

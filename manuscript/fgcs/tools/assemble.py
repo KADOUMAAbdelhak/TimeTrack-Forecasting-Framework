@@ -46,6 +46,7 @@ MOVED = [
     ("S-C4 Joint system, heterogeneity, synthesis, persistence and efficiency (moved from the main text)",
      [(1737, 1760), (1877, 1916), (1921, 1949), (1957, 1959), (1964, 1978), (2005, 2023), (2079, 2120)]),
     ("S-D Full-length discussion and threats to validity (moved from the main text)", [(2122, 2381)]),
+    ("S-E Protocol provenance and question mapping (moved from the main text)", [(723, 728), (1275, 1284)]),
 ]
 # Labels whose sections now live only in the supplement: map to the supplement section name.
 SUPP_SECTION_OF = {
