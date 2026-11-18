@@ -1,0 +1,41 @@
+{
+  "evaluation_identity_count": 600,
+  "evaluation_identity_list_sha256": "ae0523ac1f4d46ff5c65c3dc5314a46b3749d2f96e0aed1de5a4477c9f743463",
+  "format": "fgcs-v04-a1-analysis/1",
+  "plan": {
+    "bootstrap": {
+      "draw_matrices": [
+        "fastStorage",
+        "Rnd"
+      ],
+      "replicates": 10000,
+      "seed": 20261007
+    },
+    "comparisons": [
+      "M1-GN:M1",
+      "M1-GN:S2",
+      "M1-GN:S1",
+      "M1-UW:M1",
+      "M1-UW:S2",
+      "M1-UW:S1",
+      "M1:S2"
+    ],
+    "decisions": [
+      "gradnorm",
+      "uncertainty"
+    ],
+    "endpoint_rows": 56,
+    "manipulation_rows": 6,
+    "threshold": "6 of 8 resource x block cells"
+  },
+  "references": {
+    "cells": [
+      "M1",
+      "S2",
+      "S1"
+    ],
+    "journal": "read only, closed",
+    "package": "fgcs_strengthening_v04",
+    "v04_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac"
+  }
+}

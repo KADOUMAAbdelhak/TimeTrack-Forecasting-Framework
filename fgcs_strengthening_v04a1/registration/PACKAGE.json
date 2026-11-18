@@ -1,0 +1,66 @@
+{
+  "amendment": "review_revision/fgcs_strengthening/intervention_amendment_A1.md",
+  "author_decisions": {
+    "approval": "A1 approved by the authors as written on 2026-11-18, all four section 9 decisions as recommended",
+    "architecture": "derived package fgcs_strengthening_v04a1 with its own namespace, runtime, seal and tag: the closed v0.4 journal accepts no new fits (C6); v0.4 references are read read-only",
+    "blinding": "v0.3 C6: no outer-test data before fit closure",
+    "canary": "4 inner fits: first cohort VM per block, fold 1, seed 0, both A1 modes",
+    "freezing": "Git-based, as v0.4 (P9, D1): annotated tag fgcs-v04-a1-intervention on the package commit, with this package digest and execution seal; no external registration",
+    "inputs": "byte-identical to the sealed v0.3/v0.4 inputs (Zenodo 10.5281/zenodo.24189108 plus tracked inputs)",
+    "predecessor": {
+      "commit": "7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a",
+      "execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac",
+      "package_sha256": "cb3bd38719ca1a29d1e3dca063e1eeb4ad15a7720e60c7e3d6fa17364445e6a0",
+      "tag": "fgcs-v04-min-final-r2"
+    },
+    "protocol": "v0.4 amendment A1: loss-balancing intervention for the shared LSTM (GradNorm primary, uncertainty weighting secondary); tier 2, descriptive, no confirmatory tests",
+    "retry_policy": "v0.3 C3: two infrastructure retries; code repairs only by chained seal amendment",
+    "training_workers": 6
+  },
+  "generated_files": {
+    "analysis_catalogue.json": "65764971b4b4b75bcce7de0346d6ac76f4ddd4c4c40a6647ecdb9f5080c47434",
+    "execution_seal.json": "f9ff736cf5bb022268798411a48c178ae489e66ffcd14d57d702b40c428016de",
+    "host_manifest.json": "b16ec3968bb28c04a75ee6eeb38c5a177a5b1840bed735dcb5ae79091f4130d4",
+    "schedule.json": "5702c7c1034c23d16cd435d90f02e28a0ff821b9624ffc3d6a7cb061ffaf8a28"
+  },
+  "host": {
+    "conditions": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "device": "cpu",
+      "torch_interop_threads": 1,
+      "torch_intraop_threads": 1
+    },
+    "hardware_without_hostname": {
+      "cpu_model": "Apple M3",
+      "kernel": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:29 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8122",
+      "logical_cores": 8,
+      "os": "Darwin",
+      "physical_cores": 8,
+      "power_mode": "lowpowermode         0",
+      "ram_bytes": 25769803776
+    },
+    "software_versions": {
+      "numpy": "2.5.1",
+      "pandas": "3.0.5",
+      "python": "3.13.2",
+      "pytorch": "2.13.0",
+      "torch_blas": "accelerate"
+    }
+  },
+  "package": "fgcs-v04-a1 frozen package",
+  "package_sha256": "416c4bb6bd9fd824da39822340b057073dfa9a900bf240ecaae3d71a66919f04",
+  "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.4.md",
+  "referenced_files": {
+    "fgcs_strengthening_v04a1/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
+    "fgcs_strengthening_v04a1/configs/protocol_v04a1.json": "7f5c2bde8ab8ff69e314aacf761facd9ed88ef874e1fe3ef43b1d5a0701e03f0",
+    "review_revision/fgcs_strengthening/analysis_plan_v0.4.md": "f0f93d62da8fe904bf634977dc6781fe1f45712349a285ad6c5af3bd87dc4e11",
+    "review_revision/fgcs_strengthening/intervention_amendment_A1.md": "5471552d31494b71c833fc9efa49eff20ba76f710fba2e271f0909192ce8d83c"
+  },
+  "status": {
+    "a1_author_approval": "A1 approved as written by the authors (2026-11-18); freezing by Git tag",
+    "external_registration": "none for A1 or v0.4 (D1)",
+    "scientific_execution": "none; the runtime journal is created by `launch start`"
+  }
+}

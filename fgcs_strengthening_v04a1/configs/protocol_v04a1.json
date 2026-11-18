@@ -1,0 +1,946 @@
+{
+  "namespace": "fgcs-strengthening-v04a1",
+  "protocol": {
+    "path": "review_revision/fgcs_strengthening/analysis_plan_v0.4.md",
+    "sha256": "f0f93d62da8fe904bf634977dc6781fe1f45712349a285ad6c5af3bd87dc4e11"
+  },
+  "baseline": {
+    "branch": "paper/jss-review-revision",
+    "commit": "0e8cad884896a706f62f0fae4ab2b52812f9b033",
+    "tag": "jss-review-robustness-reproducibility-v1",
+    "scientific_freeze": "fee20c316040c57b69ba12a193530c955b539771"
+  },
+  "blocks": {
+    "TimeTrack": {
+      "environment": "TimeTrack",
+      "entities": [
+        "machine01",
+        "machine02",
+        "machine03",
+        "machine04",
+        "machine05",
+        "machine06",
+        "machine07"
+      ],
+      "contexts": [
+        32,
+        64,
+        128
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "cohort_source": {
+        "path": "multiresource/04_lstm_factorial/configs/lstm_factorial.json",
+        "sha256": "fe985007ebd72417dcab8e8a1851c358d3d9a3da26f372595ac7ff6b499eedd6"
+      },
+      "common_context_source": {
+        "path": "multiresource/04_lstm_factorial/outputs/scientific/selected_contexts.csv",
+        "sha256": "412e3da33b93b639b491ff2bf185e620709f0a5ccbb56e443975b280e853f7b8"
+      },
+      "support_manifest": {
+        "path": "multiresource/04_lstm_factorial/outputs/scientific/support_manifest.parquet",
+        "sha256": "1a85e42d429cfac32c74586b48c73bcc864678c86c68e34228167dcfb0e24e65"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/TimeTrack.json",
+        "sha256": "fd21b33c430bf458f7ea4ef1c95da88615f7cc92c823843c6f6bad4a9bebdd0f"
+      },
+      "raw_input": {
+        "path": "discovery/02_dependency_analysis/outputs/canonical_panel.parquet",
+        "sha256": "c5a878881afb06b7406a922c06f0c8e9104b2bb89d9519c4f7869b8ddc15625a"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "multiresource/04_lstm_factorial/outputs/scientific/inner_run_registry.csv",
+          "sha256": "13601953140f788be23c731fd0011c759fdd56cca88785f8ed38e1e58db22ed2"
+        },
+        "final": {
+          "path": "multiresource/04_lstm_factorial/outputs/scientific/run_registry.csv",
+          "sha256": "d1280f3d6744d64d3a6d20ad64e52edc2f4cac61d9b07c9be0050c23d9cf1190"
+        }
+      }
+    },
+    "fastStorage": {
+      "environment": "GWA-T-12_Bitbrains_fastStorage",
+      "entities": [
+        "697",
+        "860",
+        "366",
+        "679",
+        "360",
+        "505",
+        "481",
+        "109",
+        "680",
+        "50",
+        "434",
+        "949",
+        "1161",
+        "513",
+        "79",
+        "396",
+        "1172",
+        "503",
+        "1164",
+        "742",
+        "330",
+        "880",
+        "480",
+        "326",
+        "410",
+        "678",
+        "516",
+        "1005",
+        "382",
+        "1044",
+        "504",
+        "450",
+        "530",
+        "703",
+        "854"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv",
+        "sha256": "a56192c6d0f7c3274b0899a18cc6b2748586d5a3950ca79a40692358e9617ccf"
+      },
+      "common_context_source": {
+        "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/selected_contexts.csv",
+        "sha256": "fb1946585217a48d7038a3d58c3ce8791b6e83b3047805d06b785cdf0a97e6da"
+      },
+      "support_manifest": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SUPPORT_MANIFEST.parquet",
+        "sha256": "690677c99d4e7cb3b790bf4ef60041282d28877deaa75d5cc53ced400490ce22"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/fastStorage.json",
+        "sha256": "5ad5cb0223e021372164426a316b1b64b2974ea158829c1b618b1337bf2e5726"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_12_fastStorage.zip",
+        "sha256": "11313f528a0cbcbe57e63162f8ae5a41a9c7e7c1a79872e294ff3c5bbaa2e671"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/inner_run_registry.csv",
+          "sha256": "4e4cf07bf308762f617850615ee19d839790e9da99f5718e36b9f57b95ab16f3"
+        },
+        "final": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage/run_registry.csv",
+          "sha256": "900481ce2f15fe3dfdda7ed542215e8f37542001401a3d8998b921f0330f1281"
+        }
+      }
+    },
+    "Rnd": {
+      "environment": "GWA-T-12_Bitbrains_Rnd",
+      "entities": [
+        "99",
+        "409",
+        "269",
+        "493",
+        "474",
+        "97",
+        "118",
+        "233",
+        "142",
+        "151",
+        "387",
+        "115",
+        "232",
+        "488",
+        "413",
+        "158",
+        "109",
+        "92",
+        "93",
+        "154",
+        "22",
+        "204",
+        "1",
+        "241",
+        "29",
+        "198",
+        "143",
+        "436",
+        "252",
+        "85",
+        "304",
+        "332",
+        "120",
+        "306",
+        "462"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SELECTED_COHORTS.csv",
+        "sha256": "a56192c6d0f7c3274b0899a18cc6b2748586d5a3950ca79a40692358e9617ccf"
+      },
+      "common_context_source": {
+        "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/selected_contexts.csv",
+        "sha256": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403"
+      },
+      "support_manifest": {
+        "path": "independent_validation/05_bitbrains_factorial/protocol_amendment/PHASE4C_V2_SUPPORT_MANIFEST.parquet",
+        "sha256": "690677c99d4e7cb3b790bf4ef60041282d28877deaa75d5cc53ced400490ce22"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Rnd.json",
+        "sha256": "e9583b07ca805624837dfe3f0b70a1b439487bf614ca82c31137994867861764"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_12_rnd.zip",
+        "sha256": "d3d9ddebb689c0b5463f2e4cfd8956e84bdcdf138b4476320855393e2b229a06"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/inner_run_registry.csv",
+          "sha256": "b2c6ce43d8764cef77a9e597e0dd258cda8ac25062b9ecd917e42e48ddfea150"
+        },
+        "final": {
+          "path": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd/run_registry.csv",
+          "sha256": "ec9817d3037c00c18ddea15f00970513a9bb9f5e63f9214d829474364292fb4b"
+        }
+      }
+    },
+    "Materna-T1": {
+      "environment": "Materna-T1",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/selected_contexts.csv",
+        "sha256": "1f67fbfed25e34b29d0f2e28a220a3f73e8cd795b746c0d8ef08a8794997cfea"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T1.json",
+        "sha256": "c9291567a3e2d11252c0b7aa68b126ba7379eb469345bb8f4b583e6f5d266e1a"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/inner_run_registry.csv",
+          "sha256": "24ee1986a19ab0edfccd2a0027ffb35b893d50d2bb79749cd458960bf1d7c52f"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1/run_registry.csv",
+          "sha256": "165c0cb3f18c84790a3e71428184e0f886eb76f5c5ec790b716200a00d7aafb8"
+        }
+      }
+    },
+    "Materna-T2": {
+      "environment": "Materna-T2",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/selected_contexts.csv",
+        "sha256": "caf446c19e319c47d3ad345fe3110f0e804a01b051473ec408819edeab422f06"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T2.json",
+        "sha256": "a6e98e639784b3a3e6f1a7c5aad4ada8a6792e5c234bed09afd61a5f1e26bf5b"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/inner_run_registry.csv",
+          "sha256": "6ea968da2a898e7639aa6fbbcb8c12fa511900aee97ca73f0895eed640b1ec17"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2/run_registry.csv",
+          "sha256": "e8d264dcec5c5f94f409bc8fbc5619af984450868492e4177a6a508288058aae"
+        }
+      }
+    },
+    "Materna-T3": {
+      "environment": "Materna-T3",
+      "entities": [
+        "74",
+        "134",
+        "397",
+        "266",
+        "380",
+        "281",
+        "393",
+        "227",
+        "128",
+        "299",
+        "272",
+        "08",
+        "75",
+        "133",
+        "440",
+        "306",
+        "343",
+        "305",
+        "26",
+        "302",
+        "498",
+        "103",
+        "303",
+        "76",
+        "493",
+        "416",
+        "478",
+        "442",
+        "246",
+        "345",
+        "04",
+        "98",
+        "105",
+        "92",
+        "508"
+      ],
+      "contexts": [
+        4,
+        9,
+        18
+      ],
+      "horizons": [
+        1,
+        2,
+        4,
+        9,
+        18
+      ],
+      "cohort_source": {
+        "path": "independent_validation/06_materna_replication/manifests/CANDIDATE_35_VM_COHORT.csv",
+        "sha256": "0dde5060b06b0ff7a216c561c55353be4df465cf56942b9998fe1075835deca8"
+      },
+      "common_context_source": {
+        "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/selected_contexts.csv",
+        "sha256": "dc2f5d1772e039f6a9a0748ad2ae428fb4592b349282512d1d09ea3b2aaf067d"
+      },
+      "support_manifest": {
+        "path": "independent_validation/06_materna_replication/manifests/MATERNA_SUPPORT_MANIFEST.parquet",
+        "sha256": "c1896375bd0dfec1192ed336028b6b01e80993eb7484a9320484017f538fe239"
+      },
+      "frozen_scaler_reference": {
+        "path": "review_revision/experiments/m1_capacity_matched/plans/Materna-T3.json",
+        "sha256": "614ed420f2c4cd97a37e7056488b370a563944270cff162531003339f22d3951"
+      },
+      "raw_input": {
+        "path": "data/external/raw/gwa_t_13_materna.zip",
+        "sha256": "1380879f0de17cb57619e55c312b41f26ef95743a382f41692db72168fd9afb4"
+      },
+      "v1_registries": {
+        "inner": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/inner_run_registry.csv",
+          "sha256": "053cf6980beed999030b9ca7f05b3734906e80371bd1c97fdcc75008d2af09fe"
+        },
+        "final": {
+          "path": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3/run_registry.csv",
+          "sha256": "d58a959b2515d533c8f7d1132ea7933c177aa31a33151332957cc1fed2c0f399"
+        }
+      }
+    }
+  },
+  "historical_source_hashes": {
+    "multiresource/04_lstm_factorial/src/__init__.py": "97c77ec6e02ef6f2d9e31349f3f4189921f5fa6a000d0a5a583b76c626b0dfa8",
+    "multiresource/04_lstm_factorial/src/data.py": "d3cdee2b0743250065599c331d3263fb9cbb7a27a355ba262d347b8500b44f68",
+    "multiresource/04_lstm_factorial/src/support.py": "9bbd330f731feb29542ffe69cf2007ea5e546560972d9ba3cfeda85b13644796",
+    "multiresource/04_lstm_factorial/src/splits.py": "f7f2927928bc409888e4cffd025aa3d7ac416326a674065a0b504c296b9d081c",
+    "multiresource/04_lstm_factorial/src/transforms.py": "5ffe639620277ac5923e018db7099048bd3b8a9171c69601cd816dd2bfca8b86",
+    "independent_validation/05_bitbrains_factorial/src/__init__.py": "fb911e6f1087b07a4f42784d351367ea7f9a15c5949e062593976756fad7d167",
+    "independent_validation/05_bitbrains_factorial/src/ingestion.py": "6e1e97823392b331f3e15194f7f27c6324c028190849e081b1f244771e0d6727",
+    "independent_validation/05_bitbrains_factorial/src/cleaning.py": "c822024c88ffe9af593b7c97273b035898183d1d0677f2e2f59812b95a7fb614",
+    "independent_validation/05_bitbrains_factorial/src/panel.py": "9cb0d63e0611511f7b67d3e2e99b39201173ccb2e223e6a19985e52eba11d4a5",
+    "independent_validation/05_bitbrains_factorial/src/support.py": "3ca07daaf058c17b581e9239dafb9880cbbc3d0b31ff299578e329cb4c9e33ed",
+    "independent_validation/05_bitbrains_factorial/src/splits.py": "15125ade53b11ee2bd4cd52606001e2c4e2e158a38bc4cc0dcaf808a5d963994",
+    "independent_validation/05_bitbrains_factorial/src/transforms.py": "4a3da98f0787c4acbb531fa9aa482cbaceecf525e52bb3ea7b39a03edba938c4",
+    "benchmark/src/__init__.py": "cc120cf2669e8e5b0206de8ad2ca2c3c39345c118b8814f7e418bc03c6acedd8",
+    "benchmark/src/splits.py": "e56d7d580335701e9cbefd836a0fe15e1b6f69d2287b56b1f9523738b9e58cc7",
+    "benchmark/src/windows.py": "37b9b7019c3c7a08182daae7e43cb070d560db57493ba1fd47bbd557957c7d39"
+  },
+  "historical_reader_config": {
+    "path": "independent_validation/05_bitbrains_factorial/configs/bitbrains_lstm_factorial.json",
+    "sha256": "deedcd31616861f1f6ee4517cc0552a05d54d0b334364f9674b06a1dcab6dc1a"
+  },
+  "resources": [
+    "CPU",
+    "THROUGHPUT",
+    "MEMORY",
+    "DISK_WRITE"
+  ],
+  "folds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "core_seeds": [
+    0,
+    1,
+    2
+  ],
+  "cohort": {
+    "fastStorage": [
+      "697",
+      "860",
+      "366",
+      "679",
+      "360",
+      "505",
+      "481",
+      "109",
+      "680",
+      "50"
+    ],
+    "Rnd": [
+      "99",
+      "409",
+      "269",
+      "493",
+      "474",
+      "97",
+      "118",
+      "233",
+      "142",
+      "151"
+    ]
+  },
+  "phases": [
+    "inner",
+    "final"
+  ],
+  "common_context": {
+    "formulation": "M1",
+    "hidden_size": 64,
+    "field": "selected_L",
+    "retune": false
+  },
+  "support": {
+    "rule": "maximum context, common finite four-resource support and frozen origin identities",
+    "outer_boundaries": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "inner_validation_fraction": 0.15,
+    "purge": "latest training target timestamp strictly before first validation/test origin timestamp",
+    "external_max_gap_seconds": 450
+  },
+  "scaling": {
+    "fit_rows": "unique history and horizon rows of phase training origins only",
+    "transforms": {
+      "CPU": "identity",
+      "THROUGHPUT": "log1p",
+      "MEMORY": "identity",
+      "DISK_WRITE": "log1p"
+    },
+    "quantiles": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "nonpositive_iqr": "fail",
+    "projection": "max(0, expm1(x)) on log targets only, no upper clipping"
+  },
+  "formulations": {
+    "S1": {
+      "input_scope": "own",
+      "shared": false
+    },
+    "S2": {
+      "input_scope": "all",
+      "shared": false
+    },
+    "M0": {
+      "input_scope": "own",
+      "shared": true
+    },
+    "M1": {
+      "input_scope": "all",
+      "shared": true
+    }
+  },
+  "lstm": {
+    "primary_hidden_size": 64,
+    "m0_capacity_hidden_size": 128,
+    "layers": 2,
+    "dropout": 0.1,
+    "bidirectional": false,
+    "head_bias": true,
+    "resource_embedding": false,
+    "loss": "equal mean retained-task scaled MSE",
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_inner_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "selection": "earliest minimum inner validation scaled MSE; final refit for selected seed-specific epoch",
+    "m0_parameter_counts": {
+      "64": [
+        52512,
+        51732
+      ],
+      "128": [
+        203296,
+        201748
+      ]
+    },
+    "s1_complement_parameters": [
+      203808,
+      203028
+    ],
+    "representation": "final recurrent output",
+    "head": "biased direct linear multi-horizon outputs",
+    "training_shuffle": "seeded minibatches within phase training only"
+  },
+  "secondary": {
+    "blocks": [
+      "fastStorage",
+      "Rnd"
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "task_subset_sizes": {
+      "pairwise": 2,
+      "leave_one_out": 3
+    },
+    "input_scopes": [
+      "all"
+    ]
+  },
+  "diagnostics": {
+    "formulations": [
+      "M0",
+      "M1"
+    ],
+    "slots": [
+      "epoch0",
+      "mid",
+      "final"
+    ],
+    "epoch_map": [
+      "0",
+      "ceil(E/2)",
+      "E"
+    ],
+    "pairs": 8,
+    "batch_size": 128,
+    "tasks_per_batch": 4,
+    "batches": [
+      "A",
+      "B"
+    ],
+    "sampling": "legal outer training, replacement, independently keyed PCG64",
+    "key": "fgcs-v03|block|exact_entity_id|fold|seed|slot|pair_index|A_or_B",
+    "seed_bytes": "first 8 digest bytes little-endian",
+    "primary_statistic": "mean over complete pairs of same-A cross-task negative-dot fraction minus same-task A/B negative-dot fraction",
+    "zero_gradient": "unavailable",
+    "parameters": [
+      "weight_ih_l0",
+      "weight_hh_l0",
+      "bias_ih_l0",
+      "bias_hh_l0",
+      "weight_ih_l1",
+      "weight_hh_l1",
+      "bias_ih_l1",
+      "bias_hh_l1"
+    ],
+    "dtype": "float32",
+    "device": "CPU",
+    "eval_mode": true,
+    "primary_slot": "final",
+    "clone": true,
+    "zero_dot_is_conflict": false,
+    "task_loss": "unweighted scaled MSE before joint loss factor",
+    "primary_requires_complete_pairs": true,
+    "cross_task_pairs": 6,
+    "same_task_pairs": 4,
+    "association_model": "M1",
+    "extracted_slots": [
+      "final"
+    ]
+  },
+  "modern": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "families": {
+      "DLinear": {
+        "scopes": [
+          "own",
+          "all"
+        ],
+        "kernel_by_context": {
+          "4": 3,
+          "9": 9,
+          "18": 17
+        },
+        "padding": "replicate",
+        "optimizer": "Adam",
+        "kernel_cap": 25,
+        "all_scope": {
+          "inputs": "trend and residual of all four channels, channel-major, flattened to 8L",
+          "S2": "Linear(8L, 5)",
+          "M1_bottleneck": 16,
+          "M1_bottleneck_bias": false,
+          "M1_activation": null,
+          "M1_heads": "Linear(16, 5) per target"
+        }
+      },
+      "PatchTST": {
+        "scopes": [
+          "own",
+          "all"
+        ],
+        "patch": 2,
+        "stride": 1,
+        "position": "learned",
+        "pool": "mean",
+        "optimizer": "AdamW",
+        "patches_by_context": {
+          "4": 3,
+          "9": 8,
+          "18": 17
+        },
+        "all_scope": {
+          "token": "channel-dependent: the four channels' values within one patch, channel-major",
+          "token_projection": "Linear(4 * patch, width)",
+          "heads": "Linear(width, 5) per target"
+        }
+      },
+      "iTransformer": {
+        "scopes": [
+          "all"
+        ],
+        "tokens": 4,
+        "token_projection": "Linear(L,64)",
+        "pool": "flatten",
+        "input_normalisation": false,
+        "resource_embedding": false,
+        "optimizer": "AdamW"
+      }
+    },
+    "transformer": {
+      "width": 64,
+      "heads": 4,
+      "layers": 2,
+      "feedforward": 128,
+      "dropout": 0.1,
+      "activation": "GELU",
+      "weight_decay": 0.0001,
+      "norm": "post",
+      "bias": true
+    },
+    "technical_gate": "synthetic conformance and finite, shape/support-exact inner path, never performance",
+    "device": "CPU",
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_inner_epochs": 50,
+    "patience": 7,
+    "gradient_clip": 1.0,
+    "minimum_transformer_tokens": 2
+  },
+  "existing_only": {
+    "m1_h129": "review_revision/experiments/m1_capacity_matched",
+    "ridge": "review_revision/experiments/ar_arx_baseline",
+    "persistence": "v1",
+    "seasonal_naive": false
+  },
+  "budget": {
+    "intervention": [
+      600,
+      600
+    ],
+    "intervention_by_mode": {
+      "gradnorm": [
+        300,
+        300
+      ],
+      "uncertainty": [
+        300,
+        300
+      ]
+    },
+    "fits": [
+      600,
+      600
+    ],
+    "fit_total": 1200,
+    "diagnostic_slots": 600,
+    "diagnostic_batch_pairs": 4800,
+    "gradient_extractions": 38400
+  },
+  "v04_budget": {
+    "note": "the v0.4 schedule, kept for the defined but unscheduled v0.4 code paths",
+    "core": [
+      3000,
+      3000
+    ],
+    "pairwise": [
+      1800,
+      1800
+    ],
+    "leave_one_out": [
+      1200,
+      1200
+    ],
+    "modern": [
+      7500,
+      7500
+    ],
+    "modern_by_family": {
+      "DLinear": [
+        3000,
+        3000
+      ],
+      "PatchTST": [
+        3000,
+        3000
+      ],
+      "iTransformer": [
+        1500,
+        1500
+      ]
+    },
+    "fits": [
+      13500,
+      13500
+    ],
+    "fit_total": 27000,
+    "diagnostic_slots": 600,
+    "diagnostic_batch_pairs": 4800,
+    "gradient_extractions": 38400
+  },
+  "execution": {
+    "fit_workers": 6,
+    "threads_per_worker": 1,
+    "device": "cpu",
+    "basis": "sustained synthetic benchmark 2026-11-14/15 (protocol P9); A1 keeps the v0.4 worker settings"
+  },
+  "amendment": {
+    "id": "A1",
+    "path": "review_revision/fgcs_strengthening/intervention_amendment_A1.md",
+    "sha256": "5471552d31494b71c833fc9efa49eff20ba76f710fba2e271f0909192ce8d83c"
+  },
+  "lineage": {
+    "derived_from": "fgcs_strengthening_v04 at its final frozen tag; read only, never modified",
+    "v04_tag": "fgcs-v04-min-final-r2",
+    "v04_tag_object": "5ae544f85595ff59bad83f7ee2def3f5376d30fd",
+    "v04_commit": "7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a",
+    "v04_package_sha256": "cb3bd38719ca1a29d1e3dca063e1eeb4ad15a7720e60c7e3d6fa17364445e6a0",
+    "v04_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac",
+    "v04_configuration_sha256": "ee861d18b55b5942ad574eae3129ac5c208bf3f19fb62e278323cc54333f9e91",
+    "v04_runtime": "fgcs_strengthening_v04/runtime (closed journal; fits and evaluation gates closed)"
+  },
+  "intervention": {
+    "hypothesis": "H-A1: equalising task contributions to the shared encoder reduces the shared LSTM's typical-cell penalty against the equal-weight loss",
+    "formulation": "M1",
+    "backbone": "LSTM",
+    "hidden_size": 64,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "modes": {
+      "gradnorm": {
+        "label": "M1-GN",
+        "role": "primary",
+        "reference": "Chen et al., ICML 2018 (GradNorm)",
+        "alpha": 1.5,
+        "task_weight_sum": 4,
+        "shared_layer": [
+          "weight_ih_l1",
+          "weight_hh_l1",
+          "bias_ih_l1",
+          "bias_hh_l1"
+        ],
+        "initial_weight": 1.0,
+        "weight_optimizer": "Adam",
+        "weight_learning_rate": 0.001,
+        "initial_losses": "unweighted task MSE of the first training mini-batch of epoch 1 (step t = 0)",
+        "target": "mean weighted shared-layer norm x (relative inverse training rate)^alpha, held constant",
+        "gradnorm_loss": "sum over tasks of |w_i ||grad_W L_i|| - target_i| (L1)",
+        "weight_floor": 0.001,
+        "renormalise": "after each weight step: clamp at weight_floor, then rescale to sum task_weight_sum",
+        "model_loss": "sum_i w_i L_i with the weights before their update in the same step"
+      },
+      "uncertainty": {
+        "label": "M1-UW",
+        "role": "secondary",
+        "reference": "Kendall, Gal and Cipolla, CVPR 2018 (uncertainty weighting)",
+        "model_loss": "sum_i exp(-s_i) L_i + s_i",
+        "initial_log_variance": 0.0,
+        "log_variance_optimizer": "Adam with the model's learning rate; Adam is per-parameter, so a separate instance is the same optimiser",
+        "effective_weight": "exp(-s_i)"
+      }
+    },
+    "clipping": "global norm 1.0 over the model parameters after weighting; balancing parameters are not clipped",
+    "selection": "unchanged: earliest minimum unweighted equal-mean inner validation scaled MSE, patience 7",
+    "final_refit": "selected epoch, same weighting rule as the inner fit, restarted from initialisation",
+    "diagnostics": {
+      "slot": "final",
+      "batches": "the v0.4 D-4 draws of the same slot (same keys)",
+      "manipulation_check": "max/min effective task-gradient norm ratio, effective = weight x unweighted D-4 norm at the selected epoch; unweighted ratio reported"
+    },
+    "references": {
+      "package": "fgcs_strengthening_v04",
+      "cells": [
+        "M1",
+        "S2",
+        "S1"
+      ],
+      "backbone": "core LSTM",
+      "refit": false
+    },
+    "canary": "first cohort VM per block, fold 1, seed 0, inner fits of both modes (4 fits)"
+  }
+}

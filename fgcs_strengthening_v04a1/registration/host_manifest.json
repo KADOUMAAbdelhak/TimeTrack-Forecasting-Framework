@@ -1,0 +1,27 @@
+{
+  "conditions": {
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "device": "cpu",
+    "torch_interop_threads": 1,
+    "torch_intraop_threads": 1
+  },
+  "hardware": {
+    "cpu_model": "Apple M3",
+    "hostname": "Fingleteks-MacBook-Air-2.local",
+    "kernel": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:29 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8122",
+    "logical_cores": 8,
+    "os": "Darwin",
+    "physical_cores": 8,
+    "power_mode": "lowpowermode         0",
+    "ram_bytes": 25769803776
+  },
+  "software": {
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "python": "3.13.2",
+    "pytorch": "2.13.0",
+    "torch_blas": "accelerate"
+  }
+}

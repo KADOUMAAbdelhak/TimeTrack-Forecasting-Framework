@@ -1,0 +1,226 @@
+{
+  "budget": {
+    "diagnostic_batch_pairs": 4800,
+    "diagnostic_slots": 600,
+    "fit_total": 1200,
+    "fits": [
+      600,
+      600
+    ],
+    "gradient_extractions": 38400,
+    "identity_total": 1800,
+    "intervention": [
+      600,
+      600
+    ],
+    "intervention_by_mode": {
+      "gradnorm": [
+        300,
+        300
+      ],
+      "uncertainty": [
+        300,
+        300
+      ]
+    }
+  },
+  "canary": [
+    {
+      "arm": "intervention",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a1",
+      "phase": "inner",
+      "schema_version": 1,
+      "seed": 0,
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "gradnorm"
+    },
+    {
+      "arm": "intervention",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a1",
+      "phase": "inner",
+      "schema_version": 1,
+      "seed": 0,
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "uncertainty"
+    },
+    {
+      "arm": "intervention",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a1",
+      "phase": "inner",
+      "schema_version": 1,
+      "seed": 0,
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "gradnorm"
+    },
+    {
+      "arm": "intervention",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a1",
+      "phase": "inner",
+      "schema_version": 1,
+      "seed": 0,
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "uncertainty"
+    }
+  ],
+  "cohort": {
+    "Rnd": [
+      "99",
+      "409",
+      "269",
+      "493",
+      "474",
+      "97",
+      "118",
+      "233",
+      "142",
+      "151"
+    ],
+    "fastStorage": [
+      "697",
+      "860",
+      "366",
+      "679",
+      "360",
+      "505",
+      "481",
+      "109",
+      "680",
+      "50"
+    ]
+  },
+  "execution": {
+    "basis": "sustained synthetic benchmark 2026-11-14/15 (protocol P9); A1 keeps the v0.4 worker settings",
+    "device": "cpu",
+    "fit_workers": 6,
+    "threads_per_worker": 1
+  },
+  "identity_count": 1800,
+  "identity_list_sha256": "a0cf8e29adc42b1ad73839fa8a06c1ce4f29a521e7ea34da5e47ae66f30436d3",
+  "intervention": {
+    "backbone": "LSTM",
+    "canary": "first cohort VM per block, fold 1, seed 0, inner fits of both modes (4 fits)",
+    "clipping": "global norm 1.0 over the model parameters after weighting; balancing parameters are not clipped",
+    "diagnostics": {
+      "batches": "the v0.4 D-4 draws of the same slot (same keys)",
+      "manipulation_check": "max/min effective task-gradient norm ratio, effective = weight x unweighted D-4 norm at the selected epoch; unweighted ratio reported",
+      "slot": "final"
+    },
+    "final_refit": "selected epoch, same weighting rule as the inner fit, restarted from initialisation",
+    "formulation": "M1",
+    "hidden_size": 64,
+    "hypothesis": "H-A1: equalising task contributions to the shared encoder reduces the shared LSTM's typical-cell penalty against the equal-weight loss",
+    "modes": {
+      "gradnorm": {
+        "alpha": 1.5,
+        "gradnorm_loss": "sum over tasks of |w_i ||grad_W L_i|| - target_i| (L1)",
+        "initial_losses": "unweighted task MSE of the first training mini-batch of epoch 1 (step t = 0)",
+        "initial_weight": 1.0,
+        "label": "M1-GN",
+        "model_loss": "sum_i w_i L_i with the weights before their update in the same step",
+        "reference": "Chen et al., ICML 2018 (GradNorm)",
+        "renormalise": "after each weight step: clamp at weight_floor, then rescale to sum task_weight_sum",
+        "role": "primary",
+        "shared_layer": [
+          "weight_ih_l1",
+          "weight_hh_l1",
+          "bias_ih_l1",
+          "bias_hh_l1"
+        ],
+        "target": "mean weighted shared-layer norm x (relative inverse training rate)^alpha, held constant",
+        "task_weight_sum": 4,
+        "weight_floor": 0.001,
+        "weight_learning_rate": 0.001,
+        "weight_optimizer": "Adam"
+      },
+      "uncertainty": {
+        "effective_weight": "exp(-s_i)",
+        "initial_log_variance": 0.0,
+        "label": "M1-UW",
+        "log_variance_optimizer": "Adam with the model's learning rate; Adam is per-parameter, so a separate instance is the same optimiser",
+        "model_loss": "sum_i exp(-s_i) L_i + s_i",
+        "reference": "Kendall, Gal and Cipolla, CVPR 2018 (uncertainty weighting)",
+        "role": "secondary"
+      }
+    },
+    "references": {
+      "backbone": "core LSTM",
+      "cells": [
+        "M1",
+        "S2",
+        "S1"
+      ],
+      "package": "fgcs_strengthening_v04",
+      "refit": false
+    },
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "selection": "unchanged: earliest minimum unweighted equal-mean inner validation scaled MSE, patience 7"
+  },
+  "lineage": {
+    "derived_from": "fgcs_strengthening_v04 at its final frozen tag; read only, never modified",
+    "v04_commit": "7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a",
+    "v04_configuration_sha256": "ee861d18b55b5942ad574eae3129ac5c208bf3f19fb62e278323cc54333f9e91",
+    "v04_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac",
+    "v04_package_sha256": "cb3bd38719ca1a29d1e3dca063e1eeb4ad15a7720e60c7e3d6fa17364445e6a0",
+    "v04_runtime": "fgcs_strengthening_v04/runtime (closed journal; fits and evaluation gates closed)",
+    "v04_tag": "fgcs-v04-min-final-r2",
+    "v04_tag_object": "5ae544f85595ff59bad83f7ee2def3f5376d30fd"
+  },
+  "phases": {
+    "canary": 4,
+    "certify": 0,
+    "diagnostics": 600,
+    "evaluation": 600,
+    "final": 600,
+    "inner": 596
+  },
+  "schedule_sha256": "df1a3befd11a0c98d61b73c01dbe0006b0cde1155116894d2a7de3f20a052ae1",
+  "units": 2400
+}
