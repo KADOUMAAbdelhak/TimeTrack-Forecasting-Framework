@@ -3,8 +3,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{stix}
 \usepackage{booktabs,longtable}
+\usepackage{seqsplit}
 \usepackage[hidelinks]{hyperref}
-\hypersetup{pdftitle={Evaluating Contextual Input and Shared Representation in Multi-Metric Runtime Forecasting for Cloud Software Systems}}
+\hypersetup{pdftitle={Contextual Input and Representation Sharing Are Separable Design Decisions in Multi-Metric Runtime Forecasting}}
 % The first argument preserves the source decimal; the second is display rounding.
 \newcommand{\evidencevalue}[2]{#2}
 \renewcommand{\thetable}{S\arabic{table}}
@@ -13,16 +14,18 @@
 \begin{document}
 \begin{center}
 {\Large Supplementary evidence}\par\medskip
-Evaluating Contextual Input and Shared Representation in Multi-Metric
-Runtime Forecasting for Cloud Software Systems
+Contextual Input and Representation Sharing Are Separable Design
+Decisions in Multi-Metric Runtime Forecasting
 \end{center}
 
-These post-hoc diagnostic tables accompany the original frozen experiment;
-they do not replace its primary estimates or prespecified classifications.
+The first two sections contain post-hoc diagnostic tables for the original
+frozen experiment (tier~1); they do not replace its primary estimates or
+prespecified classifications. The final sections report the separately
+frozen tier-2 extension and its audit.
 All numeric inputs retain the existing result-file decimal strings in the
 LaTeX source; values are rounded to at most six decimal places for display.
-Positive gain means lower candidate MacroMAE. No additional fits, seeds,
-intervals or significance tests are introduced.
+Positive gain means lower candidate MacroMAE. The tier-1 sections introduce
+no additional fits, seeds, intervals or significance tests.
 
 \section*{Original sharing comparison: matched-cell robustness}
 In Table~\ref{tab:supp-m1-robustness}, the candidate is M1 and reference S2.
@@ -179,4 +182,5 @@ Materna-T3 / Memory & \evidencevalue{-6.9819977243822695}{-6.981998} & \evidence
 Materna-T3 / Disk write & \evidencevalue{-54.651898792047113}{-54.651899} & \evidencevalue{-71.546503749038322}{-71.546504} & \evidencevalue{-87.841536226429625}{-87.841536} & \evidencevalue{33.189637434382512}{33.189637} & \evidencevalue{13.550349700767439}{13.550350} & stable \\
 \end{longtable}
 \normalsize
+\input{tier2_supplement}
 \end{document}

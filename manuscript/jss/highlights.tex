@@ -1,6 +1,7 @@
 \begin{itemize}
-  \item S1/S2/M1 separate cross-resource context from shared representation.
-  \item Cross-resource context benefits depend on resource, environment and time.
-  \item The tested shared long short-term memory model shows repeated adverse transfer.
-  \item M1 vs S2: about 74.5\% fewer parameters and 75\% fewer models, with accuracy losses.
+  \item A 2x2 design separates cross-resource input from representation sharing.
+  \item Context gains are small and depend on resource, environment and backbone.
+  \item All-input sharing lowered accuracy in 29 of 32 cells across four backbones.
+  \item Shared LSTM gradients were unequal in magnitude, not excessively conflicting.
+  \item Most shared models need a quarter of the parameters, at an accuracy cost.
 \end{itemize}

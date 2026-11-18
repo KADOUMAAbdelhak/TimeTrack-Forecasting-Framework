@@ -97,3 +97,25 @@ classification-variable and global trace decisions are identical.
 \textsc{Temporal Heterogeneity Not Supported} applies when no pair is
 classification-variable and global trace decisions are identical.  Post-hoc
 regime mining is not permitted.
+
+\subsection*{Tier-2 extension criteria (separately frozen)}
+
+The tier-2 extension evaluates each backbone, contrast, resource and Bitbrains
+environment on ten VMs per environment. The four classes above apply with seed
+and fold thresholds unchanged and with horizon and VM thresholds rescaled,
+rounding conservatively: \textsc{Broad Positive} requires at least $4/5$
+horizons and $8/10$ VMs positive; \textsc{Conditionally Positive} at least
+$3/5$ horizons and $5/10$ VMs; and \textsc{Broad Negative} at most $1/5$
+horizons and $2/10$ VMs. If a fit fails after its permitted retries, the
+affected entity, fold, resource and seed unit is missing for every cell of
+that backbone, and each predicate keeps its numerator and denominator over the
+units still available, with the thresholds applied as the same fractions. No
+unit was missing.
+
+An effect \textsc{Generalises Across Backbones} for a contrast, resource and
+environment only if every backbone for which the contrast is defined has a
+non-neutral class of the same sign; otherwise it is \textsc{Backbone-Dependent}.
+No pooled cross-backbone statistic, synthesis decision or significance test is
+defined for tier~2. VM-cluster intervals (10{,}000 replicates, seed 20261007,
+one draw matrix per environment) are reported beside the classes and never
+enter them. The original RQ1--RQ4 decisions above are not applied to tier~2.
