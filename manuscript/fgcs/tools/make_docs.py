@@ -13,7 +13,7 @@ HIGHLIGHTS = [
     "A 2x2 design varies cross-resource input and model sharing one at a time.",
     "Context helps selectively; no context effect holds for every backbone.",
     "Shared models are less accurate in typical cells in 30 of 32 comparisons.",
-    "Shared LSTM gradients are near-orthogonal but unequal in magnitude.",
+    "Balancing unequal LSTM task gradients narrows but does not remove that cost.",
     "On 20 Bitbrains VMs, no backbone beats persistence for CPU or throughput.",
 ]
 
@@ -53,11 +53,12 @@ COVER = [
           "accurate in 30 of 32 backbone, resource and environment cells, while larger aggregate penalties came from a few "
           "high-scale machines. We position the design against channel-independent versus channel-dependent forecasting, "
           "which changes input scope and sharing together. In the shared LSTM, task gradients were close to "
-          "orthogonal without excess conflict but strongly unequal in magnitude; these diagnostics are reported as "
-          "associations, not causal identification. We believe the work fits FGCS's scope on distributed dynamic "
+          "orthogonal without excess conflict but strongly unequal in magnitude. A separately frozen loss-balancing "
+          "amendment then made the shared LSTM slightly more accurate in every resource and environment cell, but "
+          "it did not remove the sharing cost. We believe the work fits FGCS's scope on distributed dynamic "
           "resource management, monitoring tools and cloud infrastructures, because it gives practitioners "
           "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
-    ("p", "The original experiment and the extension were each frozen before execution, and later sensitivity "
+    ("p", "The original experiment, the extension and its loss-balancing amendment were each frozen before execution, and later sensitivity "
           "controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived "
           "analysis outputs are deposited on Zenodo (doi:10.5281/zenodo.24339239); third-party traces remain "
           "available from their original archives. Generative AI use is disclosed in the manuscript as required by "

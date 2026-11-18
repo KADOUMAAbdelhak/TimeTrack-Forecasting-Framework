@@ -1,5 +1,5 @@
 - A 2x2 design varies cross-resource input and model sharing one at a time.
 - Context helps selectively; no context effect holds for every backbone.
 - Shared models are less accurate in typical cells in 30 of 32 comparisons.
-- Shared LSTM gradients are near-orthogonal but unequal in magnitude.
+- Balancing unequal LSTM task gradients narrows but does not remove that cost.
 - On 20 Bitbrains VMs, no backbone beats persistence for CPU or throughput.

@@ -1,6 +1,7 @@
 %% Future Generation Computer Systems -- Full Length Article (elsarticle, two-column).
 %% Generated from repository commit b186ee6e47 (manuscript/jss/manuscript.tex); only the class,
-%% front matter, file layout and bibliography style differ. Scientific content is unchanged.
+%% front matter, file layout and bibliography style differ. Amendment A1 (loss-balancing intervention,
+%% tag fgcs-v04-a1-intervention) was added afterwards from its frozen analysis output.
 \documentclass[5p,twocolumn]{elsarticle}
 
 \usepackage{amsmath}
@@ -67,8 +68,9 @@ cells the shared model was less accurate in all 24 original LSTM comparisons
 and in 30 of 32 backbone, resource and environment cells, while the largest
 aggregate penalties came from a few high-scale machines. Third, in the shared
 LSTM, task gradients were close to orthogonal but strongly unequal in
-magnitude, which points to loss balancing rather than conflict resolution as
-the first remedy to test; this is an association, not a causal result.
+magnitude, and a prespecified loss-balancing intervention made it slightly
+more accurate in all eight resource and environment cells without removing
+the sharing cost.
 Shared models needed about a quarter of the parameters for most backbones,
 so consolidation is a resource-specific accuracy trade-off. On the 20
 Bitbrains VMs, no backbone beat persistence for CPU or throughput.
@@ -124,7 +126,9 @@ blocks, with post-hoc controls for context selection, capacity and model
 family (Section~\ref{sec:posthoc-controls}). An extension (tier~2) adds M0
 and repeats the $2\times2$ for DLinear, PatchTST-style and iTransformer-style
 backbones on 20 Bitbrains VMs, together with diagnostics of dependence,
-gradients, loss shares and transfer (Section~\ref{sec:tier2-design}). Five
+gradients, loss shares and transfer (Section~\ref{sec:tier2-design}). A
+separately frozen amendment (A1) then tests loss balancing in the shared
+LSTM (Section~\ref{sec:a1-design}). Five
 questions (Section~\ref{sec:research-questions}) cover baseline accuracy
 (RQ1), contextual input (RQ2), sharing (RQ3), diagnostics (RQ4) and
 heterogeneity and consolidation (RQ5).
@@ -140,7 +144,9 @@ and larger aggregate penalties came from a few high-scale machines
 (Section~\ref{sec:results-rq2}). \emph{The sharing penalty accompanies
 unequal task-gradient magnitudes, not gradient conflict:} task gradients in
 the shared LSTM were close to orthogonal, whereas their magnitudes and loss
-shares were strongly unequal. Shared LSTM and transformer-style models used
+shares were strongly unequal. Balancing the task losses (A1) made the shared
+LSTM slightly more accurate in every resource and environment cell, but it
+stayed less accurate than the independent all-input models. Shared LSTM and transformer-style models used
 about a quarter of their independent complements' parameters, so per-entity
 consolidation is a resource-specific accuracy trade-off. We make four
 contributions:
@@ -154,7 +160,9 @@ contributions:
     resource-, environment- and tail-dependent magnitudes.
   \item Training-side and outcome-side diagnostics that associate the LSTM
     sharing penalty with unequal task-gradient magnitudes and loss shares
-    rather than gradient conflict or cross-resource dependence.
+    rather than gradient conflict or cross-resource dependence, and a
+    prespecified loss-balancing intervention showing that equalising task
+    contributions narrows, but does not remove, that penalty.
   \item An account of the accuracy--consolidation trade-off across
     backbones, bounded by typical-cell behaviour, seed sensitivity and
     persistence skill.
@@ -457,7 +465,9 @@ tiers where both apply.
   \item[RQ4:] Which training-side and outcome-side diagnostics accompany the
     sharing penalty? Tier~2 relates the LSTM contrasts to cross-resource
     dependence, gradient conflict and magnitude, loss shares and empirical
-    transfer (Section~\ref{sec:tier2-analysis}), as descriptive associations.
+    transfer (Section~\ref{sec:tier2-analysis}), as descriptive associations;
+    amendment A1 tests whether loss balancing reduces the LSTM penalty
+    (Section~\ref{sec:a1-design}).
   \item[RQ5:] How stable are these effects across resources, environments,
     temporal blocks, horizons and evaluation units, and what
     accuracy--consolidation trade-offs arise? Stability is examined without
@@ -753,8 +763,41 @@ training loss. Definitions are in Supplementary Section~S-B6.
 The diagnostics are descriptive associations, not causal identification.
 Gradient conflict was not assumed to explain any sharing penalty, null or
 opposite-direction associations are reported as such, and no diagnostic
-changes another component's design or analysis. No intervention, such as a
-robust loss, gradient surgery, loss balancing or task grouping, is evaluated.
+changes another component's design or analysis. Apart from amendment A1
+below, no intervention, such as a robust loss, gradient surgery, loss
+balancing or task grouping, is evaluated.
+
+\subsection{Loss-Balancing Amendment (A1)}
+\label{sec:a1-design}
+
+The diagnostics motivated one intervention, added as amendment A1 after the
+tier-2 results were known and frozen before any A1 fit. The closed tier-2
+journal accepts no new fits, so A1 runs in a derived package with its own
+configuration, execution seal and annotated Git tag. It reuses the tier-2
+cohort, folds, contexts, scalers, LSTM architecture and training settings,
+and it reads the tier-2 equal-loss M1, S2 and S1 outcomes without refitting
+them. The hypothesis was stated in advance: \emph{equalising the tasks'
+contributions to the shared encoder's training reduces the shared LSTM's
+typical-cell accuracy penalty, compared with the equal-weight loss.}
+
+Only the training loss of the shared all-input LSTM changes. M1-GN (primary)
+applies GradNorm \citep{Chen2018GradNorm} to the second LSTM layer, with
+$\alpha=1.5$ and task weights summing to four. M1-UW (secondary) applies
+uncertainty weighting, $\sum_i (e^{-s_i}L_i+s_i)$ with learnable $s_i$
+\citep{Kendall2018Uncertainty}. Settings were fixed without tuning, epoch
+selection still uses the unweighted equal-mean validation error, and each A1
+fit starts from the same initialisation and batch order as its tier-2 M1 fit.
+
+The primary endpoint is the matched-cell median ratio and win rate against
+equal-loss M1 in each of the eight resource $\times$ block cells. An arm is
+\emph{supported} if it beats M1 (ratio below one and win rate above 0.5) in
+at least six cells and its effective task-gradient norm ratio is below M1's
+in both blocks; the effective ratio uses each task's D-4 norm times its
+training weight. An arm \emph{removes the penalty} if, in addition, its ratio
+against S2 is at most one in at least six cells. MacroMAE gains, classes and
+intervals are reported but do not enter the rule. All 1{,}200 A1 fits, 600
+gradient extractions and 600 evaluations completed, and no unit was missing
+(Supplementary Section~S-F).
 
 \section{Results}
 
@@ -1068,10 +1111,66 @@ the all-input shared model (D-6 $Q$) changed accuracy little, with medians
 between $-0.040$ and $+0.009$. No single source therefore stands out as a
 helpful or harmful partner for any target.
 
+\emph{Loss-balancing intervention (A1).} Uncertainty weighting met the
+frozen support criterion (Table~\ref{tab:a1}).
+\begin{itemize}
+  \item \emph{Against equal-loss M1:} M1-UW was more accurate in all eight
+    cells, with median ratios of 0.996 to 1.000 and win rates of 0.52 to
+    0.64.
+  \item \emph{Manipulation check:} M1-UW lowered the effective norm ratio from
+    10.76 to 6.22 in fastStorage and from 89.18 to 41.37 in Rnd.
+\end{itemize}
+GradNorm beat M1 in seven of eight cells (median ratios 0.989 to 1.001), but
+its effective norm ratio rose to 15.23 in fastStorage, so by the frozen rule
+it does not test the hypothesis.
+
+Neither arm removed the sharing penalty. Against S2, median ratios stayed
+above one in all eight cells for both arms: 1.002 to 1.043 for M1-UW, against
+1.001 to 1.057 for equal-loss M1. M1-UW did narrow the ratio in six cells,
+most in fastStorage throughput (1.053 to 1.037) and Rnd CPU (1.057 to 1.043).
+
+MacroMAE gains over M1 were largest for Rnd CPU: $+8.01\%$ for M1-UW and
+$+9.70\%$ for M1-GN. Every interval included zero, and no class was
+\textsc{Broad Positive} (Supplementary Section~S-F). The unweighted norm ratios
+stayed close to their equal-loss values and $K$ stayed negative, so the
+weighting mainly changed how much each task contributed, not the size or
+conflict of its own gradients.
+
 Taken together, the LSTM sharing penalty was accompanied by large imbalance
 in task-gradient magnitude and loss share rather than by excess gradient
-conflict or by high cross-resource dependence; Section~\ref{sec:threats}
-states the limits of this association.
+conflict or by high cross-resource dependence. Reducing the effective
+imbalance improved the shared LSTM consistently but only slightly: in this
+design, equalising task contributions recovered a small part of the penalty,
+not the penalty itself. Section~\ref{sec:threats} states the limits of these
+results.
+
+\begin{table*}[t]
+\centering
+\caption{Amendment A1: matched-cell median MAE ratio (win rate) of the
+loss-balanced shared LSTM against equal-loss M1, and median ratio against the
+independent all-input models S2, per block and resource. M1:S2 is the
+equal-loss tier-2 sharing contrast. A ratio below one favours the first
+model. Gains, intervals and classes are in Supplementary Section~S-F.}
+\label{tab:a1}
+\small
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+Block & Resource & M1:S2 & M1-UW:M1 & M1-UW:S2 & M1-GN:M1 & M1-GN:S2 \\
+\midrule
+fastStorage & CPU & 1.036 & 0.996 (0.60) & 1.036 & 0.999 (0.55) & 1.027 \\
+ & Throughput & 1.053 & 0.996 (0.64) & 1.037 & 0.996 (0.63) & 1.036 \\
+ & Memory & 1.001 & 1.000 (0.59) & 1.002 & 0.999 (0.59) & 1.001 \\
+ & Disk write & 1.006 & 1.000 (0.52) & 1.002 & 1.001 (0.42) & 1.008 \\
+Rnd & CPU & 1.057 & 0.996 (0.60) & 1.043 & 0.989 (0.64) & 1.030 \\
+ & Throughput & 1.016 & 0.998 (0.61) & 1.011 & 0.998 (0.54) & 1.020 \\
+ & Memory & 1.015 & 0.999 (0.59) & 1.015 & 0.999 (0.56) & 1.012 \\
+ & Disk write & 1.039 & 0.998 (0.60) & 1.028 & 0.997 (0.62) & 1.027 \\
+\midrule
+\multicolumn{3}{@{}l}{Effective norm ratio (fS / Rnd)} & \multicolumn{2}{c}{6.22 / 41.37 (M1: 10.76 / 89.18)} & \multicolumn{2}{c}{15.23 / 17.13} \\
+\multicolumn{3}{@{}l}{Frozen-rule verdict} & \multicolumn{2}{c}{supported; penalty not removed} & \multicolumn{2}{c}{not supported (check failed)} \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \begin{figure*}[t]
 \centering
@@ -1281,13 +1380,18 @@ weights (Section~\ref{sec:m1}), the imbalance that loss-balancing methods
 address \citep{Chen2018GradNorm}. Cross-resource dependence was not
 consistently associated with the context or sharing effects, and no single resource was a consistently
 helpful or harmful partner in pairwise transfer. These are associations on
-20 VMs in two environments, measured for the LSTM only and without
-intervention; representation interference and capacity competition were
-not measured, and architecture, optimisation and selection remain coupled.
-Gradient-aware, multi-objective and loss-balancing designs
-\citep{Sener2018MultiObjective,Yu2020GradientSurgery,Chen2018GradNorm} are
-therefore candidate remedies to test, not demonstrated remedies for these
-models.
+20 VMs in two environments, measured for the LSTM only; representation
+interference and capacity competition were not measured, and architecture,
+optimisation and selection remain coupled.
+
+Amendment A1 tested the imbalance account directly. Uncertainty weighting
+reduced the effective imbalance and improved the shared LSTM in every cell,
+but by at most 0.4\% in median matched-cell error, and the shared model
+stayed less accurate than S2. For this model, loss balancing is therefore a
+partial remedy, not a removal of the sharing cost. Gradient-aware,
+multi-objective and task-grouping designs
+\citep{Sener2018MultiObjective,Yu2020GradientSurgery,Fifty2021TaskGroupings}
+remain untested.
 
 \subsection{Implications and the Accuracy-Consolidation Trade-Off}
 \label{sec:discussion-systems}
@@ -1323,7 +1427,7 @@ Global models remain outside this evaluation
 The same limit applies to foundation forecasters
 \citep{DiMenna2026RuntimeForecasting}. Future comparisons should retain
 independent all-input controls and resource-specific assessment, and test
-the imbalance association directly by intervention.
+loss balancing beyond the LSTM, which is the only backbone A1 covered.
 
 \subsection{What the Separation Means in Practice}
 \label{sec:discussion-separability}
@@ -1387,7 +1491,8 @@ samples of all VMs, and Materna's blocks are repeated-within-source evidence.
 Tier~2 covers 20 of the 70 Bitbrains VMs, with no Materna or TimeTrack data;
 tier~1 remains the full-cohort evidence. Canonical or tuned transformer
 forecasters, mixture-of-experts, selective grouping, adaptive sharing,
-gradient surgery, loss balancing and foundation forecasters were not tested,
+gradient surgery and foundation forecasters were not tested, loss balancing
+was tested for the LSTM only,
 and four resource semantics do not establish accuracy for application
 latency, QoS or downstream SLA outcomes.
 
@@ -1403,7 +1508,11 @@ With ten VMs per block, tier-2 intervals are wide, and tier~2 makes no
 confirmatory claim. Its diagnostics are associations across at most ten VMs
 per block and two environments; the coincidence of larger gradient
 imbalance and broader sharing penalties in Rnd is one comparison of two
-blocks, not an estimated relationship.
+blocks, not an estimated relationship. Amendment A1 was motivated by those
+diagnostics, so its hypothesis was chosen after they were seen, although it
+was frozen before any A1 fit. It covers one backbone, 20 VMs, three seeds
+and fixed balancing settings. Its verdict depends on a manipulation check,
+which GradNorm failed in one block.
 
 Paired VM-cluster bootstrap intervals condition on the evaluated cohorts and
 are not classical significance claims; overlapping folds, multiple horizons,
@@ -1441,10 +1550,12 @@ the shared LSTM encoder, task gradients were close to orthogonal with no
 excess sign conflict, whereas gradient magnitudes and training-loss shares
 were strongly unequal, with the gradient-magnitude imbalance largest where
 the sharing penalty was broadest. Cross-resource dependence and pairwise
-transfer were not consistently associated with the effects. These are
-associations on 20 VMs without intervention; they suggest that
-loss-balancing remedies, rather than conflict-resolving ones, are the
-first to test, but they do not identify a cause.
+transfer were not consistently associated with the effects. A prespecified
+loss-balancing amendment then reduced the effective imbalance and made the
+shared LSTM slightly more accurate in every resource and environment cell.
+The shared model nevertheless remained less accurate than the independent
+all-input models, so in this design unequal task contributions explain only
+a small part of the sharing cost.
 
 Contextual input and model consolidation should therefore be evaluated
 separately for each resource and forecasting design, checking typical-cell
@@ -1490,7 +1601,13 @@ archived on Zenodo
 (\href{https://doi.org/10.5281/zenodo.24339239}{doi:\allowbreak 10.5281/\allowbreak zenodo.24339239},
 version v0.4-outputs; launcher records with local paths redacted, model
 weights not included), and the tier-2 figures and tables are generated by
-scripts that verify these digests. An earlier preregistration of a superseded
+scripts that verify these digests. Amendment A1 (protocol, code,
+configuration, package and execution seal) is frozen by the annotated tag
+\href{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/fgcs-v04-a1-intervention}{\texttt{fgcs-v04-a1-intervention}}
+(commit \texttt{\seqsplit{7660bde98cb4f47d51226877b8f8c8235d1b9201}}); its
+analysis output has SHA-256
+\texttt{\seqsplit{ad0c4151dc9283c90336794f82bc3b5e7e2b9d90e92d52b416c55c6c7d720062}}.
+An earlier preregistration of a superseded
 protocol version (\href{https://osf.io/kuwra}{OSF kuwra}) is retained as
 historical evidence.
 
