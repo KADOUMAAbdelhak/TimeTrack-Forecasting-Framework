@@ -58,7 +58,7 @@ COVER = [
           "it did not remove the sharing cost. We believe the work fits FGCS's scope on distributed dynamic "
           "resource management, monitoring tools and cloud infrastructures, because it gives practitioners "
           "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
-    ("p", "The original experiment, the extension and its loss-balancing amendment were each frozen before execution, and later sensitivity "
+    ("p", "The tier-1 experiment, the tier-2 extension and its loss-balancing amendment were each frozen before execution, and later sensitivity "
           "controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived "
           "analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo "
           "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain "

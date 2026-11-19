@@ -64,7 +64,7 @@ contextual input helps selectively: across backbones, typical-cell error
 ratios against own-resource models stayed between 0.981 and 1.035, no context
 effect held for every backbone, and external memory benefited most
 consistently. Second, sharing carries a small but recurring cost: in typical
-cells the shared model was less accurate in all 24 original LSTM comparisons
+cells the shared model was less accurate in all 24 LSTM comparisons across the six data blocks
 and in 30 of 32 backbone, resource and environment cells, while the largest
 aggregate penalties came from a few high-scale machines. Third, in the shared
 LSTM, task gradients were close to orthogonal but strongly unequal in
@@ -119,11 +119,11 @@ independent all-input control S2 is what channel-independent versus
 channel-dependent comparisons lack. The targets are CPU utilisation,
 throughput, memory usage and disk-write activity.
 
-The evidence comes in two parts, reported separately. The original study
-(tier~1) evaluates S1, S2 and M1 with an LSTM on TimeTrack development data,
+The evidence comes from two parts of this study, reported separately. The first
+part (tier~1) evaluates S1, S2 and M1 with an LSTM on TimeTrack development data,
 the Bitbrains fastStorage and Rnd environments and three dependent Materna
 blocks, with post-hoc controls for context selection, capacity and model
-family (Section~\ref{sec:posthoc-controls}). An extension (tier~2) adds M0
+family (Section~\ref{sec:posthoc-controls}). The second part (tier~2), a separately frozen extension, adds M0
 and repeats the $2\times2$ for DLinear, PatchTST-style and iTransformer-style
 backbones on 20 Bitbrains VMs, together with diagnostics of dependence,
 gradients, loss shares and transfer (Section~\ref{sec:tier2-design}). A
@@ -138,7 +138,7 @@ selectively:} external memory benefited most consistently, but directions
 depended on the resource, the environment and the model family, and no
 tier-2 context effect held for every backbone. \emph{Sharing carries a small
 but recurring cost:} in typical cells the shared model was less accurate in
-all 24 original LSTM M1:S2 comparisons and in 30 of 32 tier-2 backbone,
+all 24 tier-1 LSTM M1:S2 comparisons and in 30 of 32 tier-2 backbone,
 resource and environment cells. Typical-cell ratios were often close to one,
 and larger aggregate penalties came from a few high-scale machines
 (Section~\ref{sec:results-rq2}). \emph{The sharing penalty accompanies
@@ -249,7 +249,7 @@ histories a target's forecaster receives (\emph{contextual input}) and
 whether the four targets are forecast by independent models or by one model
 whose parameters they share (\emph{representation sharing}).
 Figure~\ref{fig:sharing-framework} crosses the two decisions. S1, S2 and M1
-form the original tier-1 design; M0, shared parameters with own-resource
+form the tier-1 design; M0, shared parameters with own-resource
 input only, completes the $2\times2$ in the tier-2 extension. Each decision
 can then be varied with the other held fixed.
 
@@ -482,7 +482,7 @@ tiers where both apply.
 
 These specify estimands, not expected benefits; efficiency is assessed
 separately from accuracy. Supplementary Section~S-E maps them to the
-original protocol's question numbering.
+question numbering of the tier-1 protocol.
 
 \subsection{Data, Targets and Leakage Control}
 \label{sec:datasets}
@@ -656,7 +656,7 @@ no such intervals.
 \subsection{Post-Hoc Sensitivity Analyses}
 \label{sec:posthoc-controls}
 
-Three analyses were added after the original experiment was frozen. They are
+Three analyses were added after the tier-1 experiment was frozen. They are
 post-hoc sensitivity controls, not amendments to the prospective design or
 replacements for its results, and retain the frozen cohorts, folds, horizons,
 purging, support, transforms, scalers and native-unit evaluation.
@@ -937,7 +937,7 @@ backbone as well as on the resource and environment.
 \label{sec:results-rq2}
 
 RQ3 first compares M1 with S2. In typical cells, sharing cost accuracy in
-every comparison: in all 24 original M1:S2 block/resource summaries the
+every comparison: in all 24 tier-1 M1:S2 block/resource summaries the
 matched-cell median MAE ratio exceeded one and the win rate was below $50\%$
 (Supplementary Table~S1), including the small positive CPU MacroMAE
 exceptions. The size of that cost varied. Materna T1/T3 disk-write median
@@ -951,7 +951,7 @@ every resource with intervals below zero. Under both post-hoc controls, H64
 M1 against common-context S2 and H129 M1 against S2, throughput, memory and
 disk-write point estimates remained adverse in all six blocks
 (Table~\ref{tab:posthoc-controls}), so context-selection freedom and the
-original capacity difference do not explain the pattern, although the
+tier-1 capacity difference do not explain the pattern, although the
 controls do not isolate sharing as its cause. Gains change sign across seeds
 in 4/24 M1:S2 summaries (Supplementary Section~S-C2).
 
@@ -1203,7 +1203,7 @@ change direction across evidence blocks, whereas memory is positive in five
 and nearly zero and negative only in Materna T1. For sharing, fastStorage CPU
 was near zero while the other three resources were negative, Rnd was broadly
 negative for all four, and Materna M1-versus-S2 CPU changed from positive in
-T1 to negative in T2--T3. The prespecified original-RQ4 criterion for temporal
+T1 to negative in T2--T3. The prespecified tier-1 criterion (RQ4 of the tier-1 protocol) for temporal
 heterogeneity was met: seven of the 12 resource--comparison pairs changed
 frozen classification across T1--T3 and five changed raw sign. This is a
 descriptive criterion, not an inferential claim (Supplementary
@@ -1290,7 +1290,7 @@ by VM233 ($-6.7$) and VM269 ($-1.81$).
 \subsection{Accuracy-Efficiency Trade-Off}
 \label{sec:results-efficiency}
 
-The original H64 M1 consolidates the target-model complement for one entity,
+The tier-1 H64 M1 consolidates the target-model complement for one entity,
 outer fold and seed (Table~\ref{tab:efficiency}): one joint network and
 52,500 parameters against four networks and 206,100 parameters for S2,
 approximately $74.5\%$ fewer parameters and $75\%$ fewer models. The frozen
@@ -1464,7 +1464,7 @@ iTransformer S1 and M0 are undefined, DLinear M0 ties one map across all four
 resources without resource-specific outputs, and DLinear M1's width-16
 bottleneck has lower rank than four S2 maps at context 4, so DLinear M1:S2
 partly reflects reduced capacity. The transformer-style backbones are declared
-adaptations. Original capacity and context differences are addressed
+adaptations. Tier-1 capacity and context differences are addressed
 separately, not jointly, by the post-hoc controls, and resource mappings are
 source-specific rather than perfectly equivalent. MacroMAE gains describe one
 error estimand; metric choice can alter rankings \citep{Hyndman2006Accuracy},
@@ -1475,7 +1475,7 @@ and scaled-space training differs from native-unit evaluation.
 
 Chronology, purging and training-only preprocessing constrain leakage
 \citep{Cerqueira2020Evaluation,Hyndman2021Forecasting}, but matched support and
-provenance cannot exclude all implementation or data errors. Original
+provenance cannot exclude all implementation or data errors. Tier-1
 external criteria were prospective; the later controls are post-hoc, and the
 tier-2 protocol was frozen by a Git tag, package digest and execution seal
 before any tier-2 run, not by a time-stamped external preregistration. Only
@@ -1541,7 +1541,7 @@ depended on the resource, the environment and the model family, and no
 tier-2 context effect held across backbones.
 
 Representation sharing carried a small but recurring accuracy cost. In
-typical cells, the shared model was less accurate in all 24 original LSTM
+typical cells, the shared model was less accurate in all 24 tier-1 LSTM
 comparisons and in 30 of 32 tier-2 backbone, resource and environment cells,
 with matched-cell median ratios often close to one. Tier-1 throughput, memory
 and disk-write penalties remained in all six blocks under separate
@@ -1589,7 +1589,7 @@ specify acknowledgement and citation conditions rather than a standard
 open-data licence, and readers should obtain the raw data from these sources.
 
 Source code, protocols, derived analysis outputs and SHA-256 inventories for
-the original experiments, post-hoc controls and robustness diagnostics are at
+the tier-1 experiments, post-hoc controls and robustness diagnostics are at
 the
 \href{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/0e8cad884896a706f62f0fae4ab2b52812f9b033}{project repository checkpoint}
 \texttt{\seqsplit{0e8cad884896a706f62f0fae4ab2b52812f9b033}}; fitted-model and
@@ -1597,8 +1597,9 @@ per-fit prediction collections are identified by checksum inventories but not
 included. The tier-2 protocol, code, configuration, input digests, execution
 seal and launcher are frozen by the annotated tag
 \href{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework/tree/fgcs-v04-min-final-r2}{\texttt{fgcs-v04-min-final-r2}}
-(commit \texttt{\seqsplit{7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a}}), and
-sealed inputs not held in Git are archived on Zenodo
+(commit \texttt{\seqsplit{7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a}}; the suffix
+``r2'' marks a second tag of the same frozen package, created before any tier-2
+run, not a manuscript revision), and sealed inputs not held in Git are archived on Zenodo
 (\href{https://doi.org/10.5281/zenodo.24189108}{doi:\allowbreak 10.5281/\allowbreak zenodo.24189108}).
 The tier-2 analysis output (SHA-256
 \texttt{\seqsplit{308841865ec87b04e10ecb64f20bc13ce2e671511a1574056028f7b5710dd17a}})
@@ -1618,8 +1619,8 @@ analysis output (SHA-256
 and closed journal records are archived on Zenodo
 (\href{https://doi.org/10.5281/zenodo.24353235}{doi:\allowbreak 10.5281/\allowbreak zenodo.24353235};
 launcher records with local paths redacted, model weights not included).
-An earlier preregistration of a superseded
-protocol version (\href{https://osf.io/kuwra}{OSF kuwra}) is retained as
+The OSF registration (\href{https://osf.io/kuwra}{kuwra}) of an earlier draft
+of the tier-2 protocol, superseded before any tier-2 run, is retained as
 historical evidence.
 
 \section*{CRediT authorship contribution statement}
@@ -1644,7 +1645,7 @@ During the preparation of this work, the authors used OpenAI ChatGPT and Codex
 to assist with drafting and revising selected manuscript text, language editing
 and proofreading, and the development and review of portions of the code used
 for post-hoc analyses and reproducibility checks. For the tier-2 extension and
-this revision, the authors also used Anthropic Claude (Claude Code) to assist
+its amendments, the authors also used Anthropic Claude (Claude Code) to assist
 with developing and reviewing extension, analysis, audit and
 figure-generation code, and with drafting and revising manuscript and
 supplementary text. After using these tools, the
