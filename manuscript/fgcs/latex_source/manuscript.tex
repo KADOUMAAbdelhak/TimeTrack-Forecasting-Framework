@@ -68,8 +68,8 @@ cells the shared model was less accurate in all 24 original LSTM comparisons
 and in 30 of 32 backbone, resource and environment cells, while the largest
 aggregate penalties came from a few high-scale machines. Third, in the shared
 LSTM, task gradients were close to orthogonal but strongly unequal in
-magnitude, and a prespecified loss-balancing intervention made it slightly
-more accurate in all eight resource and environment cells without removing
+magnitude, and a loss-balancing intervention, specified before any of its
+fits, made it slightly more accurate in all eight resource and environment cells without removing
 the sharing cost.
 Shared models needed about a quarter of the parameters for most backbones,
 so consolidation is a resource-specific accuracy trade-off. On the 20
@@ -161,7 +161,8 @@ contributions:
   \item Training-side and outcome-side diagnostics that associate the LSTM
     sharing penalty with unequal task-gradient magnitudes and loss shares
     rather than gradient conflict or cross-resource dependence, and a
-    prespecified loss-balancing intervention showing that equalising task
+    loss-balancing intervention, specified before any of its fits, showing
+    that equalising task
     contributions narrows, but does not remove, that penalty.
   \item An account of the accuracy--consolidation trade-off across
     backbones, bounded by typical-cell behaviour, seed sensitivity and
@@ -190,7 +191,7 @@ BiLSTM on fastStorage and Rnd. TimeTrack's reported resource correlations
 \citep{Meliani2025TimeTrack} motivate contextual inputs but do not establish
 predictive value conditional on the target's own history.
 
-\paragraph{Channel independence and dependence.} In multivariate forecasting,
+\paragraph{Channel independence and dependence} In multivariate forecasting,
 the closest debate contrasts channel-independent (CI) and channel-dependent
 (CD) models. \citet{Han2024ChannelIndependent} show that CD models have
 higher capacity but are less robust to distribution drift, whereas CI trades
@@ -217,7 +218,7 @@ forecasts \citep{Tripathi2025MMRP}, an S1--S2-related precedent without a
 joint resource-sharing arm, and Ullah's joint BiLSTM shares a representation
 without an independent all-input target-model bridge.
 
-\paragraph{Multi-task learning and adverse transfer.} Shared learning can
+\paragraph{Multi-task learning and adverse transfer} Shared learning can
 provide an inductive bias \citep{Caruana1997Multitask}, but its value depends
 on tasks, data and sharing structure \citep{Yu2025MultitaskFundamentals}.
 Task grouping examines which tasks should learn together under accuracy and
@@ -233,8 +234,12 @@ multi-task forecasting. None of these establishes an independent all-input
 target-model bridge or a measured target-consolidation trade-off;
 Supplementary Table~S14 codes these designs against ours (Supplementary
 Section~S-A). Our diagnostics measure gradient conflict, gradient magnitude,
-loss shares and pairwise transfer for the LSTM without applying any of these
-methods (Section~\ref{sec:tier2-analysis}).
+loss shares and pairwise transfer for the LSTM
+(Section~\ref{sec:tier2-analysis}). Amendment A1 then applies two
+loss-balancing methods, GradNorm \citep{Chen2018GradNorm} and uncertainty
+weighting \citep{Kendall2018Uncertainty}, to test the magnitude account
+(Section~\ref{sec:a1-design}); gradient-modification and task-grouping
+methods are not applied.
 
 \section{Multi-Metric Runtime Forecasting Framework}
 \label{sec:framework}
@@ -549,9 +554,9 @@ protocol.
       & Eligibility & Executed cohort & Forecast protocol \\
     \midrule
     TimeTrack & Framework development
-      & 42.285 s median; 9 gap-bounded segments
+      & 42.3 s median; 9 gap-bounded segments
       & Seven machines; 41,356-row canonical panel
-      & 7 machines & 0.705--90.208 min (eight leads) \\
+      & 7 machines & 0.7--90.2 min (eight leads) \\
     \addlinespace
     Bitbrains fastStorage & External confirmation
       & Separate environment; 5 min; per-VM segments
@@ -680,7 +685,7 @@ Tier~2 is a separately frozen extension that completes the $2\times2$ design
 and repeats it across backbone families. It reuses, without refitting, every
 tier-1 result and post-hoc control above, and it changes no tier-1 estimand.
 
-\paragraph{Cohort and data.} Tier~2 uses 20 Bitbrains VMs: the first ten per
+\paragraph{Cohort and data} Tier~2 uses 20 Bitbrains VMs: the first ten per
 environment by the frozen cohort rank, chosen by rank rather than outcome
 (fastStorage 697, 860, 366, 679, 360, 505, 481, 109, 680, 50; Rnd 99, 409,
 269, 493, 474, 97, 118, 233, 142, 151). Origins, legal support, the five
@@ -694,7 +699,7 @@ selection; the tier-2 LSTM S1 and S2 fits therefore differ from tier~1, which
 selected contexts per target. All four LSTM cells are refitted with one
 pipeline so that the $2\times2$ is not confounded by mixing pipelines.
 
-\paragraph{Backbones.} Hyperparameters are fixed in advance and identical
+\paragraph{Backbones} Hyperparameters are fixed in advance and identical
 across cells except where a cell's definition requires otherwise (learning
 rate $10^{-3}$, batch size 256, at most 50 inner epochs, patience 7, clipping
 at 1.0, seeds 0--2), with no hyperparameter search. The LSTM is as in tier~1,
@@ -713,7 +718,7 @@ declared adaptations, not canonical implementations, and every new cell
 passed structural checks before any data fit. Full specifications are in
 Supplementary Section~S-B5.
 
-\paragraph{Freezing and execution.} The tier-2 protocol, code and inputs
+\paragraph{Freezing and execution} The tier-2 protocol, code and inputs
 were frozen by an annotated Git tag before any tier-2 run, and outer-test
 data were not read before all fits were closed. All 13{,}500 final fits and
 outer-test evaluations completed without retries, and no unit was missing
@@ -722,7 +727,7 @@ outer-test evaluations completed without retries, and no unit was missing
 \subsection{Tier-2 Analysis and Diagnostics}
 \label{sec:tier2-analysis}
 
-\paragraph{Endpoints.} Tier~2 uses the gain in
+\paragraph{Endpoints} Tier~2 uses the gain in
 Equation~\ref{eq:macro-gain} and the consistency classes of
 Section~\ref{sec:evaluation} for each backbone, contrast, resource and
 block, with seed thresholds unchanged and VM thresholds rescaled to ten VMs
@@ -735,7 +740,7 @@ contrasts paired; none failed. Matched-cell median ratios, win rates,
 persistence skill and parameter counts are reported as descriptives.
 Backbones are compared on their common available units.
 
-\paragraph{Uncertainty and cross-backbone summary.} The paired VM-cluster
+\paragraph{Uncertainty and cross-backbone summary} The paired VM-cluster
 bootstrap of Section~\ref{sec:evaluation} is run within each block by
 resampling its ten VMs, with 10{,}000 replicates, percentile 95\% intervals
 and seed 20261007. One draw matrix per block, generated in the order
@@ -745,7 +750,7 @@ if every backbone for which the contrast is defined has a non-neutral class
 of the same sign; otherwise it is \emph{backbone-dependent}. No pooled
 cross-backbone statistic is computed.
 
-\paragraph{Diagnostics.} Seven diagnostics are computed on the same cohort,
+\paragraph{Diagnostics} Seven diagnostics are computed on the same cohort,
 after fit closure for training-side measures and after evaluation closure for
 anything involving outcomes; none alters a model.
 D-1 is the maximum absolute lagged cross-correlation (lags 1--18) between
@@ -908,7 +913,7 @@ block/resource summaries (Supplementary Table~S2), so seed-varying point gains
 are not seed-invariant improvements. Block-by-block classes, intervals and the
 Ridge audit are in Supplementary Section~S-C1.
 
-\paragraph{Tier-2 contextual input across backbones.}
+\paragraph{Tier-2 contextual input across backbones}
 Figure~\ref{fig:tier2-contrasts}(a)--(b) reports the two context contrasts
 for the three backbones with a complete $2\times2$. S2:S1 gains were small
 and mixed: they ranged from $-9.22\%$ to $+3.97\%$, 8 of 24
@@ -950,7 +955,7 @@ original capacity difference do not explain the pattern, although the
 controls do not isolate sharing as its cause. Gains change sign across seeds
 in 4/24 M1:S2 summaries (Supplementary Section~S-C2).
 
-\paragraph{Tier-2 sharing across backbones.}
+\paragraph{Tier-2 sharing across backbones}
 Figure~\ref{fig:tier2-contrasts}(d) repeats the all-input sharing contrast
 for all four backbones. In typical cells, the shared model was less accurate
 in 30 of 32 backbone/resource/block cells: the matched-cell median M1/S2
@@ -986,7 +991,7 @@ S1, whereas DLinear M1, whose sharing is a 16-dimensional linear bottleneck,
 had more parameters than S2 at contexts 4 and 9 (852 and 1{,}492 against 660
 and 1{,}460) and fewer at context 18 (2{,}644 against 2{,}900).
 
-\paragraph{Scale dominance in DLinear Rnd CPU.}
+\paragraph{Scale dominance in DLinear Rnd CPU}
 The DLinear Rnd CPU M0:S1 gain of $-139.61\%$ and M1:M0 gain of $+46.18\%$
 reproduce exactly under the frozen aggregation, but their magnitudes are
 dominated by one VM. MacroMAE averages native-unit MAE across VMs without
@@ -1309,9 +1314,9 @@ accuracy penalties above and establish no production savings.
     \toprule
     Formulation & Models & Parameters & Worker h \\
     \midrule
-    S1 & 4 & 203,028 & 85.59 \\
-    S2 & 4 & 206,100 & 75.30 \\
-    M1 & 1 &  52,500 & 20.41 \\
+    S1 & 4 & 203,028 & 85.6 \\
+    S2 & 4 & 206,100 & 75.3 \\
+    M1 & 1 &  52,500 & 20.4 \\
     \bottomrule
   \end{tabular}
 
@@ -1535,23 +1540,26 @@ environments showed the most consistent favourable pattern, but directions
 depended on the resource, the environment and the model family, and no
 tier-2 context effect held across backbones.
 
-Representation sharing carried a recurring accuracy cost. Tier-1 throughput,
-memory and disk-write penalties remained in all six blocks under separate
-common-context and approximately capacity-matched controls, and in tier~2
-all-input sharing lowered accuracy in 29 of 32 backbone, resource and
-environment cells, with own-resource sharing adverse throughout Rnd.
-Magnitudes were not uniform: matched-cell median ratios were close to one in
-many comparisons, and the largest tier-2 penalty, $-139.61\%$ for DLinear Rnd
-CPU own-input sharing, is valid under the frozen aggregation but is dominated
-by one high-scale VM while its negative direction is broad.
+Representation sharing carried a small but recurring accuracy cost. In
+typical cells, the shared model was less accurate in all 24 original LSTM
+comparisons and in 30 of 32 tier-2 backbone, resource and environment cells,
+with matched-cell median ratios often close to one. Tier-1 throughput, memory
+and disk-write penalties remained in all six blocks under separate
+common-context and approximately capacity-matched controls, and own-resource
+sharing was adverse throughout Rnd. Aggregate MacroMAE penalties were larger
+and less uniform, because a few high-scale machines dominate native-unit
+errors. The largest, $-139.61\%$ for DLinear Rnd CPU own-input sharing, is
+valid under the frozen aggregation but comes mostly from one VM, although its
+negative direction is broad.
 
 The tier-2 diagnostics did not find the explanation most often assumed. In
 the shared LSTM encoder, task gradients were close to orthogonal with no
 excess sign conflict, whereas gradient magnitudes and training-loss shares
 were strongly unequal, with the gradient-magnitude imbalance largest where
 the sharing penalty was broadest. Cross-resource dependence and pairwise
-transfer were not consistently associated with the effects. A prespecified
-loss-balancing amendment then reduced the effective imbalance and made the
+transfer were not consistently associated with the effects. A
+loss-balancing amendment, specified after these diagnostics but before any of
+its fits, then reduced the effective imbalance and made the
 shared LSTM slightly more accurate in every resource and environment cell.
 The shared model nevertheless remained less accurate than the independent
 all-input models, so in this design unequal task contributions explain only

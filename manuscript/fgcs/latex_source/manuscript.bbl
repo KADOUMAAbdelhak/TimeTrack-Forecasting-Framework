@@ -356,13 +356,6 @@
 \newblock \bibinfo{journal}{IEEE Robotics and Automation Letters}
   \bibinfo{volume}{4} (\bibinfo{year}{2019}) \bibinfo{pages}{2401--2406}.
   \DOIprefix\doi{10.1109/LRA.2019.2899224}.
-%Type = Article
-\bibitem[{Hochreiter and Schmidhuber(1997)}]{Hochreiter1997LSTM}
-\bibinfo{author}{S.~Hochreiter}, \bibinfo{author}{J.~Schmidhuber},
-\newblock \bibinfo{title}{Long short-term memory},
-\newblock \bibinfo{journal}{Neural Computation} \bibinfo{volume}{9}
-  (\bibinfo{year}{1997}) \bibinfo{pages}{1735--1780}.
-  \DOIprefix\doi{10.1162/neco.1997.9.8.1735}.
 %Type = Inproceedings
 \bibitem[{Kendall et~al.(2018)Kendall, Gal, and
   Cipolla}]{Kendall2018Uncertainty}
@@ -373,6 +366,13 @@
 \newblock in: \bibinfo{booktitle}{Proceedings of the IEEE Conference on
   Computer Vision and Pattern Recognition (CVPR)}, \bibinfo{year}{2018}, pp.
   \bibinfo{pages}{7482--7491}. \DOIprefix\doi{10.1109/CVPR.2018.00781}.
+%Type = Article
+\bibitem[{Hochreiter and Schmidhuber(1997)}]{Hochreiter1997LSTM}
+\bibinfo{author}{S.~Hochreiter}, \bibinfo{author}{J.~Schmidhuber},
+\newblock \bibinfo{title}{Long short-term memory},
+\newblock \bibinfo{journal}{Neural Computation} \bibinfo{volume}{9}
+  (\bibinfo{year}{1997}) \bibinfo{pages}{1735--1780}.
+  \DOIprefix\doi{10.1162/neco.1997.9.8.1735}.
 %Type = Article
 \bibitem[{Hyndman and Koehler(2006)}]{Hyndman2006Accuracy}
 \bibinfo{author}{R.~J. Hyndman}, \bibinfo{author}{A.~B. Koehler},
