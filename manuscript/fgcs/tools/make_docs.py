@@ -45,7 +45,7 @@ COVER = [
           "should share one model. These decisions are usually made together. The manuscript separates them with a "
           "2×2 design (independent or shared models, own-resource or all-resource input) and evaluates CPU, "
           "throughput, memory and disk-write forecasting on TimeTrack development data, the Bitbrains fastStorage "
-          "and Rnd traces and three dependent Materna temporal blocks. A separately frozen extension repeats the "
+          "and Rnd traces and three dependent Materna temporal blocks. A second, separately frozen part repeats the "
           "design for LSTM, DLinear, PatchTST-style and iTransformer-style backbones and adds descriptive mechanism "
           "diagnostics."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
@@ -58,15 +58,13 @@ COVER = [
           "it did not remove the sharing cost. We believe the work fits FGCS's scope on distributed dynamic "
           "resource management, monitoring tools and cloud infrastructures, because it gives practitioners "
           "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
-    ("p", "The tier-1 experiment, the tier-2 extension and its loss-balancing amendment were each frozen before execution, and later sensitivity "
+    ("p", "The tier-1 experiment, tier 2 and its loss-balancing amendment were each frozen before execution, and later sensitivity "
           "controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived "
           "analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo "
           "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain "
           "available from their original archives. Generative AI use is disclosed in the manuscript as required by "
           "Elsevier's policy."),
-    ("p", "[AUTHOR TO CONFIRM BEFORE UPLOAD: This manuscript is not under consideration by any other journal. "
-          "State here any previous submission of this work to FGCS or to another journal (including the Journal "
-          "of Systems and Software) and its outcome, or delete this paragraph if there is none.]"),
+    ("p", "This manuscript is not under consideration by any other journal."),
     ("p", "All authors have approved the manuscript and agree with its submission. The authors declare no competing "
           "interests, and the research received no specific funding."),
     ("p", "Yours sincerely,"),

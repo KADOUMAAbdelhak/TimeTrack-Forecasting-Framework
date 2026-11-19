@@ -1,5 +1,9 @@
 # FGCS submission package — checklist
 
+## One-study presentation (20 Nov 2026)
+
+No uploaded file refers to an earlier submission or an earlier version. Source comments were removed from the flat `.tex` files. The supplement's 'moved from the main text' framing became 'Extended material', and its discussion was aligned with A1. 'Extension' labels became tier 1 and tier 2 as parts of one study. The cover letter's placeholder paragraph is replaced by the statement that the manuscript is not under consideration elsewhere. Pre-edit sources: `tools/*_before_one_study.tex`.
+
 ## Amendment A1 added (18 Nov 2026)
 
 The loss-balancing amendment A1 was run after this package was built and is now written in. It is frozen by
