@@ -1,0 +1,66 @@
+{
+  "amendment": "review_revision/fgcs_strengthening/residual_amendment_A2.md",
+  "author_decisions": {
+    "approval": "A2 approved by the authors as written on 2026-11-19, all four section 9 decisions as recommended",
+    "architecture": "derived package fgcs_strengthening_v04a2 (from tag fgcs-v04-a1-intervention) with its own namespace, runtime, seal and tag: the closed v0.4 and A1 journals accept no new fits (C6); tier-2 references and v1 persistence are read read-only",
+    "blinding": "v0.3 C6: no outer-test data before fit closure",
+    "canary": "3 modern structural certificates, then 70 inner fits: first cohort VM per block, fold 1, seed 0, every A2 cell of every backbone",
+    "freezing": "Git-based, as v0.4 (P9, D1): annotated tag fgcs-v04-a2-residual on the package commit, with this package digest and execution seal; no external registration",
+    "inputs": "byte-identical to the sealed v0.3/v0.4 inputs (Zenodo 10.5281/zenodo.24189108 plus tracked inputs)",
+    "predecessor": {
+      "commit": "7660bde98cb4f47d51226877b8f8c8235d1b9201",
+      "execution_seal": "ab38ce94677b49e96faae758afd9ddbacd3c33dd5e5ca18d1300fc5d7f88ed7a",
+      "package_sha256": "416c4bb6bd9fd824da39822340b057073dfa9a900bf240ecaae3d71a66919f04",
+      "tag": "fgcs-v04-a1-intervention"
+    },
+    "protocol": "v0.4 amendment A2: forecasts parameterised as the last observed value plus a learned change, for the tier-2 2x2 of all four backbones; post hoc, tier 2, descriptive, no confirmatory tests",
+    "retry_policy": "v0.3 C3: two infrastructure retries; code repairs only by chained seal amendment",
+    "training_workers": 6
+  },
+  "generated_files": {
+    "analysis_catalogue.json": "30f1bc1292435af1ffd3546f1d2db76a6686c851a3eeeb12dd9b7e0ce333e629",
+    "execution_seal.json": "4043876f76269707e6d0b40cad5e4cddc63d1e9f5f0e3ce3460e2b8bf404cacb",
+    "host_manifest.json": "b16ec3968bb28c04a75ee6eeb38c5a177a5b1840bed735dcb5ae79091f4130d4",
+    "schedule.json": "a8fc8afad128c5b5a87941dcd01dbe6a424abd9a72a72fb3eeda6cdeba5f5c2e"
+  },
+  "host": {
+    "conditions": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "device": "cpu",
+      "torch_interop_threads": 1,
+      "torch_intraop_threads": 1
+    },
+    "hardware_without_hostname": {
+      "cpu_model": "Apple M3",
+      "kernel": "Darwin Kernel Version 25.6.0: Fri Jul 31 19:18:29 PDT 2026; root:xnu-12377.161.14~5/RELEASE_ARM64_T8122",
+      "logical_cores": 8,
+      "os": "Darwin",
+      "physical_cores": 8,
+      "power_mode": "lowpowermode         0",
+      "ram_bytes": 25769803776
+    },
+    "software_versions": {
+      "numpy": "2.5.1",
+      "pandas": "3.0.5",
+      "python": "3.13.2",
+      "pytorch": "2.13.0",
+      "torch_blas": "accelerate"
+    }
+  },
+  "package": "fgcs-v04-a2 frozen package",
+  "package_sha256": "c97c1b6b1dcba19f5739831eca8a5e73c87b54036e3eb410c9ab5a6e78466d00",
+  "protocol": "review_revision/fgcs_strengthening/analysis_plan_v0.4.md",
+  "referenced_files": {
+    "fgcs_strengthening_v04a2/configs/historical_results_v03.json": "32d9dd3dda3e0e5af13870440520fa81f22d7f8fac74b9816e5956fee67e6a31",
+    "fgcs_strengthening_v04a2/configs/protocol_v04a2.json": "058ba29af1315fa22e6544333f0c56a0947aeb972e50a64bce10017c0c306894",
+    "review_revision/fgcs_strengthening/analysis_plan_v0.4.md": "f0f93d62da8fe904bf634977dc6781fe1f45712349a285ad6c5af3bd87dc4e11",
+    "review_revision/fgcs_strengthening/residual_amendment_A2.md": "6fdb73aa48f247a3ff4b0ca68faf50f063404c4e5867c92f9abd9dd343b05cc8"
+  },
+  "status": {
+    "a2_author_approval": "A2 approved as written by the authors (2026-11-19); freezing by Git tag",
+    "external_registration": "none for A2, A1 or v0.4 (D1)",
+    "scientific_execution": "none; the runtime journal is created by `launch start`"
+  }
+}

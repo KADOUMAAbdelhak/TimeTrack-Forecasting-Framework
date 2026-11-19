@@ -1,0 +1,1445 @@
+{
+  "budget": {
+    "core": [
+      3000,
+      3000
+    ],
+    "evaluations": 10500,
+    "fit_total": 21000,
+    "fits": [
+      10500,
+      10500
+    ],
+    "identity_total": 21000,
+    "modern": [
+      7500,
+      7500
+    ],
+    "modern_by_family": {
+      "DLinear": [
+        3000,
+        3000
+      ],
+      "PatchTST": [
+        3000,
+        3000
+      ],
+      "iTransformer": [
+        1500,
+        1500
+      ]
+    }
+  },
+  "canary": [
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "M0",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "fastStorage",
+      "entity": "697",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S1",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "S2",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "M0",
+      "hidden_size": 64,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "core",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "M1",
+      "hidden_size": 64,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "baseline"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "DLinear",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "own",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "PatchTST",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "THROUGHPUT"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "MEMORY"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "DISK_WRITE"
+      ],
+      "variant": "independent"
+    },
+    {
+      "arm": "modern",
+      "block": "Rnd",
+      "entity": "99",
+      "fold": 1,
+      "formulation": "iTransformer",
+      "hidden_size": null,
+      "input_scope": "all",
+      "namespace": "fgcs-strengthening-v04a2",
+      "phase": "inner",
+      "schema_version": 2,
+      "seed": 0,
+      "target_parameterisation": "change",
+      "tasks": [
+        "CPU",
+        "THROUGHPUT",
+        "MEMORY",
+        "DISK_WRITE"
+      ],
+      "variant": "shared"
+    }
+  ],
+  "cohort": {
+    "Rnd": [
+      "99",
+      "409",
+      "269",
+      "493",
+      "474",
+      "97",
+      "118",
+      "233",
+      "142",
+      "151"
+    ],
+    "fastStorage": [
+      "697",
+      "860",
+      "366",
+      "679",
+      "360",
+      "505",
+      "481",
+      "109",
+      "680",
+      "50"
+    ]
+  },
+  "execution": {
+    "basis": "sustained synthetic benchmark 2026-11-14/15 (protocol P9); A1 and A2 keep the v0.4 worker settings",
+    "device": "cpu",
+    "fit_workers": 6,
+    "threads_per_worker": 1
+  },
+  "identity_count": 21000,
+  "identity_list_sha256": "a83be98bef7e839cd685b11a728e711a0b78ba272d607279de42a1b0fc85df13",
+  "lineage": {
+    "a1_amendment": {
+      "id": "A1",
+      "path": "review_revision/fgcs_strengthening/intervention_amendment_A1.md",
+      "sha256": "5471552d31494b71c833fc9efa49eff20ba76f710fba2e271f0909192ce8d83c"
+    },
+    "a1_commit": "7660bde98cb4f47d51226877b8f8c8235d1b9201",
+    "a1_execution_seal": "ab38ce94677b49e96faae758afd9ddbacd3c33dd5e5ca18d1300fc5d7f88ed7a",
+    "a1_package_sha256": "416c4bb6bd9fd824da39822340b057073dfa9a900bf240ecaae3d71a66919f04",
+    "a1_tag": "fgcs-v04-a1-intervention",
+    "a1_tag_object": "1f24746e3ae62943c5bdefc9c0c6c3edc306c931",
+    "derived_from": "fgcs_strengthening_v04a1 at tag fgcs-v04-a1-intervention; v0.4 and A1 are read only",
+    "v04_commit": "7ef468c0cc21c1c8ca33bfd9db0ee919e0dee24a",
+    "v04_configuration_sha256": "ee861d18b55b5942ad574eae3129ac5c208bf3f19fb62e278323cc54333f9e91",
+    "v04_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac",
+    "v04_package_sha256": "cb3bd38719ca1a29d1e3dca063e1eeb4ad15a7720e60c7e3d6fa17364445e6a0",
+    "v04_runtime": "fgcs_strengthening_v04/runtime (closed journal; fits and evaluation gates closed)",
+    "v04_tag": "fgcs-v04-min-final-r2",
+    "v04_tag_object": "5ae544f85595ff59bad83f7ee2def3f5376d30fd"
+  },
+  "phases": {
+    "canary": 70,
+    "certify": 3,
+    "diagnostics": 0,
+    "evaluation": 10500,
+    "final": 10500,
+    "inner": 10430
+  },
+  "residual": {
+    "anchor_channel": "the task's own channel: index of the resource in four-channel inputs, 0 in one-channel inputs",
+    "backbones": [
+      "LSTM",
+      "DLinear",
+      "PatchTST",
+      "iTransformer"
+    ],
+    "canary": "first cohort VM per block, fold 1, seed 0, inner fits of every A2 cell (35 per block, 70 in all)",
+    "decision": {
+      "does_not_hold_at_most": 16,
+      "holds_at_least": 24,
+      "of": 32,
+      "precondition": {
+        "cell": "S2",
+        "of": 16,
+        "positive_skill_at_least": 8,
+        "resources": [
+          "CPU",
+          "THROUGHPUT"
+        ]
+      },
+      "restricted": {
+        "fraction_above_one": 0.75,
+        "min_cells": 8
+      }
+    },
+    "definition": "s_hat_k(t+h) = s_k(t) + f_k,h(x); s_k(t) is the scaled value of resource k in the last input row (same training-only scaler as the targets); applied by a forward hook after the output layer",
+    "hypothesis": "H-A2: with each forecast parameterised as the last observed value plus a learned change, shared models remain less accurate than independent models in typical cells (M1:S2, and M0:S1)",
+    "loss": "unchanged equal-mean scaled MSE (equals the MSE on the scaled change)",
+    "parameterisation": "change",
+    "references": {
+      "persistence": "v1 persistence MAE on the frozen outer-test support",
+      "tier2": "v0.4 level-parameterised core and modern cells, read only"
+    },
+    "resources": [
+      "CPU",
+      "THROUGHPUT",
+      "MEMORY",
+      "DISK_WRITE"
+    ],
+    "selection": "unchanged: equal-mean scaled validation MSE, final refit at the selected epoch",
+    "timing": "post hoc: motivated by the tier-2 persistence results and an external review; specified before any A2 fit"
+  },
+  "schedule_sha256": "fdff9d8d38d661c12c75a063b4a660c390f7853ec0627cc676e29a1d56256873",
+  "units": 31503
+}

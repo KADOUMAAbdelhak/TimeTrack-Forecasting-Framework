@@ -1,0 +1,44 @@
+{
+  "evaluation_identity_count": 10500,
+  "evaluation_identity_list_sha256": "b82a25917313b28ecf48ab55775a128cf29222bf7cc6af0a4ba86f715da225ba",
+  "format": "fgcs-v04-a2-analysis/1",
+  "plan": {
+    "baseline_rows": 32,
+    "bootstrap": {
+      "draw_matrices": [
+        "fastStorage",
+        "Rnd"
+      ],
+      "replicates": 10000,
+      "seed": 20261007
+    },
+    "contrast_rows": 104,
+    "decision": {
+      "does_not_hold_at_most": 16,
+      "holds_at_least": 24,
+      "of": 32,
+      "precondition": {
+        "cell": "S2",
+        "of": 16,
+        "positive_skill_at_least": 8,
+        "resources": [
+          "CPU",
+          "THROUGHPUT"
+        ]
+      },
+      "primary": "M1:S2 median ratio above 1",
+      "restricted": {
+        "fraction_above_one": 0.75,
+        "min_cells": 8
+      }
+    },
+    "parameterisation_rows": 112
+  },
+  "references": {
+    "cells": "tier-2 core and modern 2x2 (level parameterisation)",
+    "journal": "read only, closed",
+    "package": "fgcs_strengthening_v04",
+    "persistence": "v1 persistence on the frozen outer-test support",
+    "v04_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac"
+  }
+}
