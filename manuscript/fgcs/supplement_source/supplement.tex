@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{stix}
 \usepackage{booktabs,longtable}
+\usepackage{graphicx}
 \usepackage{seqsplit}
 \usepackage{amsmath,amssymb,array}
 \usepackage[numbers,sort&compress]{natbib}
@@ -25,7 +26,8 @@ The first two sections contain post-hoc diagnostic tables for the original
 frozen experiment (tier~1); they do not replace its primary estimates or
 prespecified classifications. The final sections report the separately
 frozen tier~2 and its audit; Section~S-F, at the end, reports the
-separately frozen loss-balancing amendment A1.
+separately frozen loss-balancing amendment A1, and Section~S-G shows the prespecified MacroMAE
+gains of every comparison as figures.
 All numeric inputs retain the existing result-file decimal strings in the
 LaTeX source; values are rounded to at most six decimal places for display.
 Positive gain means lower candidate MacroMAE. The tier-1 sections introduce
@@ -2642,6 +2644,35 @@ M1-UW & 8 & 0 & 0 & fastStorage passed, Rnd passed & supported \\
 M1-GN & 7 & 1 & 0 & fastStorage failed, Rnd passed & not supported \\
 \bottomrule
 \end{longtable}
+
+\clearpage
+\section*{S-G Prespecified MacroMAE gains}
+\label{sec:s-g}
+The main text leads with typical-machine statistics (matched-cell median ratios and win rates). The two figures
+below show the prespecified primary endpoint, the resource-overall MacroMAE gain, for every tier-1 and tier-2
+comparison. MacroMAE averages native-unit errors across machines without rescaling, so a single high-scale
+machine can set its magnitude (main-text Section on scale dominance). Both views are reported for every cell;
+neither replaces the other.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{FigureS_G1.pdf}
+\caption{Tier~1: prespecified resource-overall MacroMAE percentage gains for (a) S2 versus S1, (b) M1 versus S2
+and (c) M1 versus S1 across the evaluated blocks. Positive values indicate lower MacroMAE for the candidate.
+Colour uses a symmetric $\operatorname{asinh}$ mapping as a visual aid; no values are clipped and the printed
+percentages are authoritative. Materna T1--T3 are dependent temporal blocks.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{FigureS_G2.pdf}
+\caption{Tier~2: prespecified resource-overall MacroMAE percentage gains on the 20-VM Bitbrains cohort for (a)
+S2 versus S1, (b) M1 versus M0, (c) M0 versus S1 and (d) M1 versus S2, by backbone and block. Positive values
+favour the candidate. Letters give the consistency class with VM thresholds rescaled to ten VMs. Hatched cells
+are undefined by design. A black frame marks a cell where every defined backbone has a non-neutral class of the
+same sign. $\dagger$: scale-dominated by one VM. Colour is a symmetric $\operatorname{asinh}$ visual aid without
+clipping; printed values are authoritative.}
+\end{figure}
 
 \bibliographystyle{elsarticle-num-names}
 \bibliography{references}
