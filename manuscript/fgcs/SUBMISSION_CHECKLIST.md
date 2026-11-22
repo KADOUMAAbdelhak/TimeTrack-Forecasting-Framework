@@ -1,5 +1,12 @@
 # FGCS submission package — checklist
 
+## Fifth-review fixes (22 Nov 2026)
+
+- **Figures 2–3:** ratios print with enough decimals to show their side of 1 and of 1.01. For example, Materna T1 CPU M1:S2 reads 1.0104, and the text now quotes TimeTrack memory as 1.0099.
+- **Table S19 caption:** it now says the intervals indicate direction, not practical size, and that ten-cluster percentile intervals may be too narrow.
+- **Abstract:** restored the comma ("…blocks, and with…").
+- **Section 6.1:** one sentence on the PatchTST-style context result (4 of 8 S2:S1 intervals above 1, none for the LSTM), linked to Han et al.
+
 ## Fourth-review fixes (22 Nov 2026)
 
 - **Table 5 caption:** the leftover "of the separately tier 2" is repaired.

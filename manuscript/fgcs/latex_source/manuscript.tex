@@ -52,7 +52,7 @@ models with own-resource or all-resource input, and evaluate central
 processing unit (CPU), throughput, memory and disk-write forecasting with long
 short-term memory (LSTM) networks on TimeTrack development data, the
 Bitbrains fastStorage and Rnd environments and three dependent Materna
-blocks and with LSTM, DLinear, PatchTST-style and iTransformer-style
+blocks, and with LSTM, DLinear, PatchTST-style and iTransformer-style
 backbones on 20 Bitbrains virtual machines. Two findings emerge. First,
 contextual input helps selectively: across backbones, typical-cell error
 ratios against own-resource models stayed between 0.981 and 1.035, no context
@@ -894,7 +894,7 @@ Contextual input helped selectively. In tier~1
 (Figure~\ref{fig:primary-gains}(a)), memory showed the only recurring
 benefit: the all-input model S2 was more accurate than S1 in typical cells in
 all five external blocks (median ratios 0.975--0.986, win rates
-$65$--$70\%$), though not on TimeTrack (1.010). For the other resources the
+$65$--$70\%$), though not on TimeTrack (1.0099). For the other resources the
 median ratios stayed between 0.969 and 1.008. In MacroMAE terms, memory was
 broadly positive in fastStorage and Materna T2, conditionally positive in Rnd
 and T3, the sole positive resource on TimeTrack and slightly negative in T1
@@ -1350,7 +1350,12 @@ or causal resource coupling.
 Tier~2 extends the model-family dependence from Ridge to three further
 backbones. Context effects were small, and their direction depended on the
 backbone: memory improved for the LSTM and DLinear but not for PatchTST, and
-no context cell held across backbones. Contextual value is therefore a
+no context cell held across backbones. For the PatchTST-style backbone, adding
+the other resources made forecasts worse: in 4 of its 8 S2:S1 cells the
+median-ratio interval lay wholly above one under VM resampling, against none
+for the LSTM (Supplementary Table~S19). This matches the robustness that
+\citet{Han2024ChannelIndependent} report for channel-independent models.
+Contextual value is therefore a
 property of a resource, an environment and a model family together, not of
 the telemetry alone.
 
