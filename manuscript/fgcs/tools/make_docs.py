@@ -15,7 +15,7 @@ HIGHLIGHTS = [
     "Context helps selectively; no context effect holds for every backbone.",
     "Sharing costs accuracy in 30 of 32 typical cells, by over 1% in 6 of 8 LSTM cells.",
     "Balancing unequal LSTM task gradients narrows but does not remove that cost.",
-    "Shared LSTM and transformer-style models use about a quarter of the parameters.",
+    "Shared LSTM and transformer-style models use ~1/4 of independent models' parameters.",
 ]
 
 BIOS = [
