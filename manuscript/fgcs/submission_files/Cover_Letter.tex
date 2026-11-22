@@ -13,6 +13,8 @@ The main findings are that contextual input gives small, selective and model-dep
 
 The tier-1 experiment, tier 2 and its loss-balancing amendment were each frozen before execution, and later sensitivity controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo (doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain available from their original archives. Generative AI use is disclosed in the manuscript as required by Elsevier's policy.
 
+The manuscript states two limitations openly: on the 20 Bitbrains virtual machines no model beats persistence for CPU or throughput, and the modern backbones use fixed, untuned settings. To address the first, we have prepared a follow-up analysis in which every model forecasts the change from the last observed value, so that each model contains persistence as a special case. Its protocol, code and decision rule were fixed before any of its fits, and we can report its results during review.
+
 This manuscript is not under consideration by any other journal.
 
 All authors have approved the manuscript and agree with its submission. The authors declare no competing interests, and the research received no specific funding.
