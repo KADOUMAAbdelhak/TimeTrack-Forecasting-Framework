@@ -52,20 +52,21 @@ models with own-resource or all-resource input, and evaluate central
 processing unit (CPU), throughput, memory and disk-write forecasting with long
 short-term memory (LSTM) networks on TimeTrack development data, the
 Bitbrains fastStorage and Rnd environments and three dependent Materna
-blocks, and with LSTM, DLinear, PatchTST-style and iTransformer-style
+blocks and with LSTM, DLinear, PatchTST-style and iTransformer-style
 backbones on 20 Bitbrains virtual machines. Two findings emerge. First,
 contextual input helps selectively: across backbones, typical-cell error
 ratios against own-resource models stayed between 0.981 and 1.035, no context
 effect held for every backbone, and external memory benefited most
 consistently. Second, sharing carries a small but recurring cost: in typical
-cells the shared model was less accurate in all 24 LSTM comparisons across the six data blocks
-and in 30 of 32 backbone, resource and environment cells, while the largest
-aggregate penalties came from a few high-scale machines. In the shared LSTM,
+cells the shared model was less accurate in all 24 LSTM comparisons across six data blocks
+and in 30 of 32 backbone, resource and environment cells (13 by more than
+1\%, mostly for the LSTM), while the largest aggregate penalties came from a
+few high-scale machines. In the shared LSTM,
 this cost accompanied task gradients that were close to orthogonal but
 strongly unequal in magnitude; balancing the task losses, an intervention
 specified before any of its fits, narrowed the cost only slightly.
 Shared models needed about a quarter of the parameters for most backbones,
-so consolidation is a resource-specific accuracy trade-off. On the 20
+so consolidation is a resource-specific accuracy trade-off. On these 20
 Bitbrains VMs, no backbone beat persistence for CPU or throughput.
 \end{abstract}
 
@@ -132,9 +133,10 @@ depended on the resource, the environment and the model family, and no
 tier-2 context effect held for every backbone. \emph{Sharing carries a small
 but recurring cost:} in typical cells the shared model was less accurate in
 all 24 tier-1 LSTM M1:S2 comparisons and in 30 of 32 tier-2 backbone,
-resource and environment cells. Typical-cell ratios were often close to one,
-and larger aggregate penalties came from a few high-scale machines
-(Section~\ref{sec:results-rq2}). In the shared LSTM, the cost accompanied
+resource and environment cells. In tier~2 the cost was clear for the LSTM,
+whose ratio exceeded 1.01 in 6 of 8 cells, but mostly very small for the other
+backbones (7 of 24 cells above 1.01), and larger aggregate penalties came from
+a few high-scale machines (Section~\ref{sec:results-rq2}). In the shared LSTM, the cost accompanied
 unequal task-gradient magnitudes rather than gradient conflict: task gradients
 were close to orthogonal, whereas their magnitudes and loss shares were
 strongly unequal. Balancing the task losses (A1) made the shared
@@ -149,7 +151,8 @@ contributions:
     S2, that varies contextual input and representation sharing one at a
     time, applied to four backbone families.
   \item Evidence that contextual value is selective and model-dependent,
-    whereas the typical-cell cost of sharing recurs across backbones, with
+    whereas the typical-cell cost of sharing recurs in direction across
+    backbones and is clear in size for the LSTM, with
     resource-, environment- and tail-dependent magnitudes. In the shared LSTM
     the cost accompanies unequal task-gradient magnitudes rather than
     gradient conflict or cross-resource dependence, and balancing the task
@@ -625,7 +628,11 @@ versus M0 and M0 versus S1. Because native-unit cells receive equal weight
 without rescaling across entities, an entity whose resource is on a much
 larger native scale can dominate MacroMAE and hence $G$. Matched-cell median
 ratios, win rates and per-entity signs are unaffected by this scale
-weighting and are reported alongside.  Secondary diagnostics include
+weighting and are reported alongside. The Results lead with these
+typical-machine statistics because native-unit aggregation lets a single
+high-scale VM set a gain; this emphasis was chosen after the results were
+known, and the prespecified MacroMAE gains remain reported in full
+(Supplementary Section~S-G). Secondary diagnostics include
 pooled prediction-level gain, mean and median matched-cell relative gain, and
 the fractions or counts of positive VMs, folds, horizons, and seed aggregates.
 
@@ -930,7 +937,7 @@ backbone as well as on the resource and environment.
 
 Sharing cost accuracy in every tier-1 comparison for a typical machine. In
 all 24 M1:S2 block/resource summaries the median MAE ratio exceeded one
-(1.002--1.192) and the win rate was below $50\%$
+(1.002--1.192; above 1.01 in 22) and the win rate was below $50\%$
 (Figure~\ref{fig:primary-gains}(b); Supplementary Table~S1), including the
 small positive CPU MacroMAE exceptions. The size of that cost varied. Materna T1/T3 disk-write median
 ratios were approximately $1.0246/1.0347$, whereas their MacroMAE gains of
@@ -951,7 +958,14 @@ in 4/24 M1:S2 summaries (Supplementary Section~S-C2).
 Figure~\ref{fig:tier2-contrasts}(d) repeats the all-input sharing contrast
 for all four backbones. In typical cells, the shared model was less accurate
 in 30 of 32 backbone/resource/block cells: the matched-cell median M1/S2
-ratio exceeded one and the candidate win rate was below $50\%$. MacroMAE
+ratio exceeded one and the candidate win rate was below $50\%$. The size of
+the cost differed by backbone. For the LSTM it was clear: the ratio exceeded
+1.01 in 6 of 8 cells, and the post-hoc VM-cluster bootstrap interval of the
+median ratio lay above one in 7 of 8. For the other three backbones it was
+consistent in direction but mostly very small: 7 of 24 cells exceeded 1.01,
+and 9 of 24 intervals lay above one, none below (Supplementary Table~S19).
+The $1\%$ margin is descriptive and matches the gain threshold of the
+consistency classes. MacroMAE
 gains were negative in 29 of 32 cells, and all 16 Rnd cells were negative,
 from $-1.51\%$ to $-33.11\%$. The three non-negative cells were
 all fastStorage CPU (LSTM $+0.60\%$, PatchTST $+0.91\%$, iTransformer
@@ -1255,8 +1269,8 @@ identifiers, so their agreement is not independent replication.
     Materna: equal-temporal-block synthesis of T1--T3, consecutive dependent
     temporal blocks rather than independent replications. Comparisons are
     descriptive, without cross-source aggregation. The tier-2 row counts
-    backbone $\times$ resource $\times$ environment cells of the separately
-    tier~2 (Figure~\ref{fig:tier2-contrasts}); it is not a gain,
+    backbone $\times$ resource $\times$ environment cells of tier~2
+    (Figure~\ref{fig:tier2-contrasts}); it is not a gain,
     is not averaged with tier~1, and is not a replication of it. Tier~2 did
     not evaluate TimeTrack, Materna or M1 versus S1.}
 \end{table*}
@@ -1350,10 +1364,11 @@ across all six blocks, and direction need not imply uniform
 severity: Materna T1/T3 disk-write median ratios are about $1.025/1.035$,
 despite much larger tail-sensitive MacroMAE penalties.
 
-The adverse direction is not specific to the LSTM. In tier~2, all-input
-sharing (M1:S2) lowered MacroMAE accuracy in 29 of 32 backbone, resource and
-block cells, with typical-cell ratios above one in 30 of 32, across the
-LSTM, DLinear, PatchTST-style and iTransformer-style backbones. Its
+The adverse direction is not specific to the LSTM, although its size
+largely is. In tier~2, all-input sharing (M1:S2) lowered MacroMAE accuracy in
+29 of 32 backbone, resource and block cells, with typical-cell ratios above
+one in 30 of 32 across the four backbones; the ratio exceeded 1.01 in 6 of 8
+LSTM cells but in only 7 of 24 cells of the other backbones. Its
 magnitude, class and interaction with input scope did depend on the
 backbone, and only two cells, both own-input sharing on Rnd, met the strict
 cross-backbone rule. The recurring direction, rather than any single
@@ -1536,8 +1551,10 @@ tier-2 context effect held across backbones.
 
 Representation sharing carried a small but recurring accuracy cost. In
 typical cells, the shared model was less accurate in all 24 tier-1 LSTM
-comparisons and in 30 of 32 tier-2 backbone, resource and environment cells,
-with matched-cell median ratios often close to one. Tier-1 throughput, memory
+comparisons and in 30 of 32 tier-2 backbone, resource and environment cells.
+In tier~2 the cost exceeded $1\%$ in 6 of 8 LSTM cells but in only 7 of 24
+cells of the other backbones, so beyond the LSTM it is consistent in
+direction but mostly very small. Tier-1 throughput, memory
 and disk-write penalties remained in all six blocks under separate
 common-context and approximately capacity-matched controls, and own-resource
 sharing was adverse throughout Rnd. Aggregate MacroMAE penalties were larger

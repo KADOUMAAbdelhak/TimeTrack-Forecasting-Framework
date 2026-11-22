@@ -50,7 +50,7 @@ COVER = [
           "diagnostics."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
           "representation sharing carries a small but recurring accuracy cost: in typical cells the shared model was less "
-          "accurate in 30 of 32 backbone, resource and environment cells, while larger aggregate penalties came from a few "
+          "accurate in 30 of 32 backbone, resource and environment cells (13 by more than 1%, mostly for the LSTM), while larger aggregate penalties came from a few "
           "high-scale machines. We position the design against channel-independent versus channel-dependent forecasting, "
           "which changes input scope and sharing together. In the shared LSTM, task gradients were close to "
           "orthogonal without excess conflict but strongly unequal in magnitude. A separately frozen loss-balancing "

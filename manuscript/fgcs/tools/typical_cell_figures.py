@@ -92,7 +92,13 @@ def cell(ax, x, y, ratio, win):
     face = CMAP(NORM(max(-SATURATION, min(SATURATION, shade))))
     ax.add_patch(plt.Rectangle((x - .5, y - .5), 1, 1, facecolor=face, edgecolor="white", lw=0.8))
     dark = abs(shade) > 0.6 * SATURATION
-    ax.text(x, y - 0.12, f"{ratio:.3f}", ha="center", va="center", fontsize=6.6, color="white" if dark else "black")
+    # Print as many decimals as needed (up to six) for the printed value to show its side of 1.
+    digits = 3
+    while ratio != 1 and round(ratio, digits) == 1 and digits < 6:
+        digits += 1
+    text = f"{ratio:.{digits}f}"
+    ax.text(x, y - 0.12, text, ha="center", va="center", fontsize={3: 6.6, 4: 6.0}.get(digits, 5.4),
+            color="white" if dark else "black")
     ax.text(x, y + 0.24, f"{100 * win:.0f}%", ha="center", va="center", fontsize=5.4,
             color="white" if dark else "0.25")
 
