@@ -59,15 +59,15 @@ ratios against own-resource models stayed between 0.981 and 1.035, no context
 effect held for every backbone, and external memory benefited most
 consistently. Second, sharing carries a small but recurring cost: in typical
 cells the shared model was less accurate in all 24 LSTM comparisons across six data blocks
-and in 30 of 32 backbone, resource and environment cells (13 by more than
-1\%, mostly for the LSTM), while the largest aggregate penalties came from a
+and in 30 of 32 backbone, resource and environment cells (13 by over 1\%,
+6 of 8 for the LSTM), while the largest aggregate penalties came from a
 few high-scale machines. In the shared LSTM,
 this cost accompanied task gradients that were close to orthogonal but
 strongly unequal in magnitude; balancing the task losses, an intervention
 specified before any of its fits, narrowed the cost only slightly.
 Shared models needed about a quarter of the parameters for most backbones,
-so consolidation is a resource-specific accuracy trade-off. On these 20
-Bitbrains VMs, no backbone beat persistence for CPU or throughput.
+so consolidation is a resource-specific accuracy trade-off. On these
+VMs, no backbone beat persistence for CPU or throughput.
 \end{abstract}
 
 \begin{keyword}
@@ -1604,6 +1604,7 @@ providing these traces through the Grid Workloads Archive; their source pages
 specify acknowledgement and citation conditions rather than a standard
 open-data licence, and readers should obtain the raw data from these sources.
 
+All code is in the public repository \url{https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework}.
 Source code, protocols, derived analysis outputs and SHA-256 inventories for
 the tier-1 experiments, post-hoc controls and robustness diagnostics are at
 the

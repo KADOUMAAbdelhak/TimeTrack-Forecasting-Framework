@@ -1,5 +1,16 @@
 # FGCS submission package — checklist
 
+## Submission-file review fixes (22 Nov 2026)
+
+- **Repository URL:** visible in Data availability and in the cover letter, typeset with `\url`, with no overfull lines.
+- **Cover letter:** names the public A2 tag `fgcs-v04-a2-residual`, created before any A2 fit. "Tier" jargon is replaced ("six-block LSTM experiment, four-backbone experiment"). "usually made together" is softened to "Prior comparisons usually change both at once".
+- **"Mostly for the LSTM":** replaced with the exact count in the abstract and cover letter. The LSTM has 6 of the 13 cells above 1% (6 of 8 of its own cells).
+- **Highlights:**
+  - 1 now reads 2×2;
+  - 3 is "Sharing costs accuracy in 30 of 32 typical cells, by over 1% in 6 of 8 LSTM cells.";
+  - 5 is the consolidation result, "Shared LSTM and transformer-style models use about a quarter of the parameters.", in place of the persistence limitation.
+- **Abstract:** 249 words.
+
 ## Fifth-review fixes (22 Nov 2026)
 
 - **Figures 2–3:** ratios print with enough decimals to show their side of 1 and of 1.01. For example, Materna T1 CPU M1:S2 reads 1.0104, and the text now quotes TimeTrack memory as 1.0099.

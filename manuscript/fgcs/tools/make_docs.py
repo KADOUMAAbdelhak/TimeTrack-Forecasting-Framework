@@ -1,4 +1,5 @@
 """Write the FGCS submission documents (highlights, biographies, cover letter) as .txt/.docx/.tex."""
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -10,11 +11,11 @@ TITLE = ("Contextual Input versus Representation Sharing in Multi-Metric Runtime
          "Selective Gains and a Recurring Sharing Cost")
 
 HIGHLIGHTS = [
-    "A 2x2 design varies cross-resource input and model sharing one at a time.",
+    "A 2×2 design varies cross-resource input and model sharing one at a time.",
     "Context helps selectively; no context effect holds for every backbone.",
-    "Shared models are less accurate in typical cells in 30 of 32 comparisons.",
+    "Sharing costs accuracy in 30 of 32 typical cells, by over 1% in 6 of 8 LSTM cells.",
     "Balancing unequal LSTM task gradients narrows but does not remove that cost.",
-    "On 20 Bitbrains VMs, no backbone beats persistence for CPU or throughput.",
+    "Shared LSTM and transformer-style models use about a quarter of the parameters.",
 ]
 
 BIOS = [
@@ -42,7 +43,7 @@ COVER = [
           "Generation Computer Systems."),
     ("p", "Engineers who forecast runtime telemetry for cloud resource management must decide two things: whether a "
           "target's forecaster should receive other resources' telemetry, and whether several resource targets "
-          "should share one model. These decisions are usually made together. The manuscript separates them with a "
+          "should share one model. Prior comparisons usually change both at once. The manuscript separates them with a "
           "2×2 design (independent or shared models, own-resource or all-resource input) and evaluates CPU, "
           "throughput, memory and disk-write forecasting on TimeTrack development data, the Bitbrains fastStorage "
           "and Rnd traces and three dependent Materna temporal blocks. A second, separately frozen part repeats the "
@@ -50,7 +51,7 @@ COVER = [
           "diagnostics."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
           "representation sharing carries a small but recurring accuracy cost: in typical cells the shared model was less "
-          "accurate in 30 of 32 backbone, resource and environment cells (13 by more than 1%, mostly for the LSTM), while larger aggregate penalties came from a few "
+          "accurate in 30 of 32 backbone, resource and environment cells (13 by more than 1%, including 6 of the 8 LSTM cells), while larger aggregate penalties came from a few "
           "high-scale machines. We position the design against channel-independent versus channel-dependent forecasting, "
           "which changes input scope and sharing together. In the shared LSTM, task gradients were close to "
           "orthogonal without excess conflict but strongly unequal in magnitude. A separately frozen loss-balancing "
@@ -58,8 +59,8 @@ COVER = [
           "it did not remove the sharing cost. We believe the work fits FGCS's scope on distributed dynamic "
           "resource management, monitoring tools and cloud infrastructures, because it gives practitioners "
           "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
-    ("p", "The tier-1 experiment, tier 2 and its loss-balancing amendment were each frozen before execution, and later sensitivity "
-          "controls are labelled post hoc throughout. The code is public at a tagged commit, and the derived "
+    ("p", "The six-block LSTM experiment, the four-backbone experiment and the loss-balancing amendment were each frozen before execution, and later sensitivity "
+          "controls are labelled post hoc throughout. The code is public at https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework at tagged commits, and the derived "
           "analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo "
           "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain "
           "available from their original archives. Generative AI use is disclosed in the manuscript as required by "
@@ -68,7 +69,8 @@ COVER = [
           "persistence for CPU or throughput, and the modern backbones use fixed, untuned settings. To address the "
           "first, we have prepared a follow-up analysis in which every model forecasts the change from the last "
           "observed value, so that each model contains persistence as a special case. Its protocol, code and "
-          "decision rule were fixed before any of its fits, and we can report its results during review."),
+          "decision rule were fixed under the public Git tag fgcs-v04-a2-residual before any of its fits, and we can "
+          "report its results during review."),
     ("p", "This manuscript is not under consideration by any other journal."),
     ("p", "All authors have approved the manuscript and agree with its submission. The authors declare no competing "
           "interests, and the research received no specific funding."),
@@ -122,10 +124,13 @@ docx(OUT / "Author_Biographies.docx", bio_pars)
 
 docx(OUT / "Cover_Letter.docx", COVER)
 tex = [r"\documentclass[11pt,a4paper]{article}", r"\usepackage[margin=25mm]{geometry}",
-       r"\usepackage{newtxtext}", r"\setlength{\parskip}{6pt}\setlength{\parindent}{0pt}", r"\begin{document}"]
+       r"\usepackage{newtxtext}", r"\usepackage{url}", r"\setlength{\emergencystretch}{3em}",
+       r"\setlength{\parskip}{6pt}\setlength{\parindent}{0pt}",
+       r"\begin{document}"]
 for _, text in COVER:
     t = (text.replace("&", r"\&").replace("%", r"\%").replace("_", r"\_")
          .replace("“", "``").replace("”", "''").replace("×", r"$\times$").replace("—", "---"))
+    t = re.sub(r"(https?://[^\s,;]+)", r"\\url{\1}", t)
     if t.startswith("[AUTHOR TO CONFIRM"):
         t = r"\textbf{" + t + "}"
     tex.append(t + "\n")
