@@ -833,7 +833,8 @@ seeds. The $1\%$ margin used in the text is descriptive and
 matches the class gain threshold. A Git tag, package digest and seal make the
 frozen protocol, code and inputs verifiable, but, unlike a time-stamped
 registry entry, do not prove when they were frozen.
-Supplementary Table~S26 maps each main claim to its evidence and its limits.
+Table~\ref{tab:claim-evidence} maps each main claim to its evidence and its
+limits.
 
 \section{Results}
 
@@ -1312,7 +1313,9 @@ S2, the median matched-cell ratio is one. A tolerance that admits sharing for
 most machines would admit the cost as well.
 
 \emph{Selective grouping.} For the tier-2 LSTM, letting validation choose
-which resources share a model did better than all-or-nothing sharing. G-group
+which resources share a model did better than all-or-nothing sharing, and its
+largest typical-cell ratio was below that of every fixed grouping that shares
+a model (Figure~\ref{fig:a3-tradeoff}). G-group
 at $1\%$ used \AiiiGroupModels{} models per unit against \AiiiShareModelsLSTM{}
 for G-share and 4 for S2, keeping \AiiiGroupRetained\% of the model reduction
 and \AiiiGroupParamCut\% fewer parameters than S2, with no cost cell and a
@@ -1333,6 +1336,21 @@ cells (\AiiiFallbackBefore{} without it): the persistence boundary of
 Section~\ref{sec:results-persistence} is not a validation artefact.
 
 \input{a3_table}
+
+\begin{figure}[!b]
+\centering
+\includegraphics[width=\columnwidth]{Figure_5.pdf}
+\caption{Amendment A3, tier-2 LSTM: mean models per machine, fold and seed
+against the largest matched-cell median MAE ratio versus S2 over the eight
+resource $\times$ block cells. Grey: each of the 15 fixed groupings applied to
+every unit (Supplementary Table~S24); blue: validation-based policies
+(Table~\ref{tab:a3}); hollow: the outer-test oracle, an upper bound rather
+than a policy. A ratio near one partly reflects units kept on S2; aggregate
+costs are in Table~\ref{tab:a3}.}
+\label{fig:a3-tradeoff}
+\end{figure}
+
+\input{claim_evidence_table}
 
 \section{Discussion}
 \label{sec:discussion}

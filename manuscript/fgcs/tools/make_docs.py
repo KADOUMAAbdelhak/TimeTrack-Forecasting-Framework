@@ -55,7 +55,7 @@ COVER = [
           "repeats the design for LSTM, DLinear, PatchTST-style and iTransformer-style backbones and adds "
           "descriptive mechanism diagnostics. A dedicated validation-strategy section maps each threat (leakage, "
           "sample mismatch, selection freedom, capacity, model family, machine sampling, seed variation, scale "
-          "dominance and implementation error) to the mechanism that addresses it, and a supplementary table maps "
+          "dominance and implementation error) to the mechanism that addresses it, and a table maps "
           "every main claim to its evidence and its limits."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
           "representation sharing carries a recurring accuracy cost: for a typical machine the shared model was less "
