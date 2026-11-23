@@ -54,21 +54,22 @@ processing unit (CPU), throughput, memory and disk-write forecasting: with long
 short-term memory (LSTM) networks on six data blocks from TimeTrack, Bitbrains
 and Materna, and with LSTM, DLinear, PatchTST-style and iTransformer-style
 backbones on 20 Bitbrains virtual machines. Contextual input helped
-selectively: typical-cell error ratios stayed between 0.981 and 1.035, and no
-context effect held for every backbone. Sharing carried a recurring cost: for
+selectively: across backbones, typical-cell error ratios against own-input
+independent models stayed between 0.981 and 1.035, and no context effect held
+for every backbone. Sharing carried a recurring cost: for
 a typical machine the shared model was less accurate in all 24 LSTM
 comparisons and in 30 of 32 backbone cells (13 by over 1\%). This cost is
 visible before deployment. On inner validation the shared model was worse in
 \AiiiValWorseMin--\AiiiValWorseMax\% of machine--fold--seed units, and
 validation and test ratios were rank-correlated in \AiiiDetects{} of
-\AiiiFrames{} settings, so a gate that shares only when validation error rises
-by at most 1\% consolidated just \AiiiRetainedOne--\AiiiRetainedTwo\% of units.
+\AiiiFrames{} settings, so a gate sharing only when validation error rose
+by at most 1\% consolidated \AiiiRetainedOne--\AiiiRetainedTwo\% of units.
 Letting validation choose which resources share a model kept
 \AiiiGroupRetained\% of the LSTM's model reduction, with typical-cell ratios
 of at most \AiiiGroupMaxRatio{} against \AiiiMOneMaxRatio{} for full sharing,
-although aggregate costs remained in \AiiiGroupMacroBelow{} of 8 cells. The
-shared LSTM's task gradients were near orthogonal but unequal in magnitude,
-and loss balancing narrowed the cost only slightly. No backbone beat
+although aggregate costs remained in \AiiiGroupMacroBelow{} of 8 cells.
+Shared-LSTM task gradients were near orthogonal but unequal in magnitude;
+loss balancing narrowed the cost only slightly. No backbone beat
 persistence for CPU or throughput.
 \end{abstract}
 

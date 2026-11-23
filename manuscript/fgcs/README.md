@@ -10,7 +10,7 @@ A3 is a post-hoc amendment on the existing fits; no model was fitted.
   and Table 5 (`latex_source/a3_table.tex`) and Supplementary Tables S21–S25
   (`supplement_source/a3_supplement_tables.tex`) are tables. All three are produced by `tools/a3_numbers.py`,
   which hash-checks the output.
-- **Main text** (17 pages; abstract 248 words):
+- **Main text** (17 pages; abstract 249 words):
   - abstract, introduction (gap, findings, contribution 3) and conclusion rewritten around the A3 result;
   - RQ6 and Section 4.9 (A3 design);
   - Section 5.9 and Table 5 (A3 results);
