@@ -1,0 +1,65 @@
+\clearpage
+\section*{S-I Claim-to-evidence map}
+\label{sec:s-i}
+Table~\ref{tab:claim-evidence} maps each main claim to the evidence that supports it, the checks it survived and
+what it does not establish. Every number repeats a value reported in the main text or in this supplement.
+
+\begin{table*}[h]\footnotesize
+\centering
+\caption{Claim-to-evidence map. ``Ratio'' is the matched-cell median MAE ratio (shared/independent or
+all-input/own-input); a cost cell has a ratio above 1.01. Intervals are paired VM-cluster bootstrap intervals.}
+\label{tab:claim-evidence}
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.15\textwidth}
+  >{\raggedright\arraybackslash}p{0.27\textwidth}
+  >{\raggedright\arraybackslash}p{0.29\textwidth}
+  >{\raggedright\arraybackslash}p{0.25\textwidth}@{}}
+\toprule
+Claim & Primary evidence & Robustness checks & Not validated / scope \\
+\midrule
+Sharing costs the LSTM accuracy
+  & Tier~1: M1/S2 ratio above one in 24 of 24 block--resource cells, 22 cost cells (main Figure~2, Table~5).
+    Tier-2 LSTM: above one in 8 of 8, 6 cost cells, interval above one in 7 of 8 (Table~S19).
+  & Common-context S2 and approximately capacity-matched H129 M1 retain the throughput, memory and disk-write penalties in all
+    six blocks (main Table~3); 4 of 24 tier-1 M1:S2 summaries change sign across seeds (Table~S2); MacroMAE
+    classes (Section~S-G).
+  & No intervals for the tier-1 ratios; Bitbrains CPU and throughput forecasters are all below persistence;
+    aggregate magnitudes are set by a few high-scale machines. \\
+\addlinespace
+Its direction recurs across backbones
+  & Tier~2: ratio above one in 30 of 32 backbone--resource--block cells; for the three non-LSTM backbones,
+    7 of 24 cost cells and 9 of 24 intervals above one, none below (Table~S19).
+  & MacroMAE gains negative in 29 of 32 cells; only two sharing cells, both own-input on Rnd, meet the strict cross-backbone class rule.
+  & 20 VMs from one trace family; untuned backbones with LSTM-selected contexts; ten-cluster intervals indicate
+    direction, not precise size. \\
+\addlinespace
+Contextual input helps only selectively
+  & Tier-2 S2:S1 ratios between 0.981 and 1.035; no context effect holds for every backbone; external memory is
+    the most consistent benefit.
+  & Ridge AR/ARX as a second model family (main Section~4.5); PatchTST-style S2:S1 intervals above one in 4 of 8
+    cells, none for the LSTM (Table~S19); 9 of 24 tier-1 S2:S1 summaries change sign across seeds (Table~S2).
+  & Untuned backbones; no TimeTrack intervals; directions differ by resource, environment and model family. \\
+\addlinespace
+The LSTM cost accompanies unequal task gradients, not conflict
+  & In the shared LSTM encoder, median excess sign-conflict rate $-0.037$ and $-0.021$ and median absolute
+    cosine 0.171 and 0.134, against largest-to-smallest gradient-norm ratios of 10.8 and 89.2 (fastStorage, Rnd;
+    Table~S15).
+  & Amendment A1: uncertainty weighting passed its manipulation check and beat equal-loss M1 in 8 of 8 cells, by
+    at most 0.4\%, yet stayed above S2 in all 8 (main Table~4); GradNorm failed its check in one block.
+  & LSTM only; associations on 20 VMs in two blocks; A1's hypothesis was chosen after the diagnostics were seen. \\
+\addlinespace
+Consolidation is a resource-specific trade-off
+  & Tier-1 M1 uses about 74.5\% fewer parameters and 75\% fewer models than S2; tier-2 shared LSTM and
+    transformer-style models use about a quarter of their independent complements' parameters; DLinear M1 is not
+    smaller at contexts 4 and 9.
+  & Amendment A3: inner validation ranks the sharing cost in \AiiiDetects{} of \AiiiFrames{} settings; a 1\%
+    validation gate consolidates \AiiiRetainedOne\% (tier~1) and \AiiiRetainedTwo\% (tier~2) of units;
+    validation-chosen grouping keeps \AiiiGroupRetained\% of the LSTM model reduction at ratios of at most
+    \AiiiGroupMaxRatio{}, with \AiiiGroupMacroBelow{} of 8 MacroMAE intervals below zero (main Table~5;
+    Section~S-H).
+  & No production latency, energy or cost savings were measured; A3 is post hoc on components already seen;
+    grouping was tested for the LSTM only. \\
+\bottomrule
+\end{tabular}
+\end{table*}

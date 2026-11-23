@@ -446,41 +446,26 @@ Section~\ref{sec:decomposition}. Each is answered separately for the two
 tiers where both apply.
 
 \begin{description}
-  \item[RQ1:] How do the evaluated backbones compare in baseline accuracy?
-    Tier~2 tabulates each backbone's MacroMAE and persistence skill per cell,
-    resource and block on common units, to show whether the LSTM used in
-    tier~1 is competitive with DLinear, PatchTST-style and
-    iTransformer-style baselines.
-  \item[RQ2:] When does contextual input help? S2 is compared with S1 (both
-    tiers), changing the input from the target resource alone to all four
-    resource histories while retaining separate target models; tier~2 also
-    compares M1 with M0, the same change with sharing held fixed.
-  \item[RQ3:] When does representation sharing hurt? M1 is compared with S2
-    (both tiers), both receiving all-resource input but only M1 sharing
-    parameters across targets; tier~2 also compares M0 with S1, the same
-    change with own-resource input, and describes their interaction
-    (Equation~\ref{eq:interaction}). The complete joint change, M1 versus S1,
-    is reported with this question.
-  \item[RQ4:] Which training-side and outcome-side diagnostics accompany the
-    sharing penalty? Tier~2 relates the LSTM contrasts to cross-resource
-    dependence, gradient conflict and magnitude, loss shares and empirical
-    transfer (Section~\ref{sec:tier2-analysis}), as descriptive associations;
-    amendment A1 tests whether loss balancing reduces the LSTM penalty
-    (Section~\ref{sec:a1-design}).
-  \item[RQ5:] How stable are these effects across resources, environments,
-    temporal blocks, horizons and evaluation units, and what
-    accuracy--consolidation trade-offs arise? Stability is examined without
-    collapsing the resource-specific contrasts into heterogeneous native-unit
-    errors.
+  \item[RQ1:] How do the backbones compare in baseline accuracy (tier~2
+    MacroMAE and persistence skill on common units)?
+  \item[RQ2:] When does contextual input help? S2:S1 in both tiers, and M1:M0
+    with sharing held fixed in tier~2.
+  \item[RQ3:] When does representation sharing hurt? M1:S2 in both tiers, and
+    M0:S1 with own-resource input and their interaction
+    (Equation~\ref{eq:interaction}) in tier~2; the joint change M1:S1 is
+    reported here too.
+  \item[RQ4:] Which diagnostics accompany the sharing cost (dependence,
+    gradient conflict and magnitude, loss shares and transfer for the tier-2
+    LSTM), and does loss balancing reduce it (A1)?
+  \item[RQ5:] How stable are the effects across resources, environments,
+    temporal blocks and evaluation units, and what accuracy--consolidation
+    trade-offs arise?
   \item[RQ6:] Can the inner-validation errors available before deployment
-    decide consolidation? Amendment A3 applies validation-gated sharing and
-    task-grouping policies to the existing fits of both tiers and evaluates
-    their outer-test accuracy and model counts (Section~\ref{sec:a3-design}).
+    decide consolidation (A3)?
 \end{description}
 
-These specify estimands, not expected benefits; efficiency is assessed
-separately from accuracy. Supplementary Section~S-E maps them to the
-question numbering of the tier-1 protocol.
+These specify estimands, not expected benefits. Supplementary Section~S-E
+maps them to the tier-1 protocol's numbering.
 
 \subsection{Data, Targets and Leakage Control}
 \label{sec:datasets}
@@ -605,7 +590,7 @@ time, energy or deployment cost (Supplementary Section~S-B2).
 
 Primary evaluation uses native-unit MAE after inverse transformation and
 projection; native errors are never averaged across different resources, and
-RMSE, $R^2$ and native NMAE are secondary diagnostics. Persistence supplies a
+RMSE, $R^2$ and native NMAE were recorded but are not analysed here. Persistence supplies a
 separate absolute forecasting check:
 \begin{equation}
   \widehat{y}_{t+h}^{(r),\mathrm{pers}}=y_t^{(r)},
@@ -637,9 +622,8 @@ weighting and are reported alongside. The Results lead with these
 typical-machine statistics because native-unit aggregation lets a single
 high-scale VM set a gain; this emphasis was chosen after the results were
 known, and the prespecified MacroMAE gains remain reported in full
-(Supplementary Section~S-G). Secondary diagnostics include
-pooled prediction-level gain, mean and median matched-cell relative gain, and
-the fractions or counts of positive VMs, folds, horizons, and seed aggregates.
+(Supplementary Section~S-G). Secondary descriptives are the counts of
+positive VMs, folds, horizons and seed aggregates.
 
 Prespecified classes---\textsc{Broad Positive},
 \textsc{Conditionally Positive}, \textsc{Broad Negative} and
@@ -668,16 +652,13 @@ matching the 206,100-parameter S2 complement, with selection repeated afresh.
 \emph{Matched-context Ridge AR/ARX} compares own-lag and all-resource-lag
 Ridge models at the H64-M1 context, with $\alpha$ selected on inner
 native-unit validation MAE. Neither LSTM control equalises architecture or
-optimisation, the two are separate rather than a jointly matched
-intervention, and Ridge tests input scope in a second model family rather
+optimisation, and Ridge tests input scope in a second model family rather
 than isolating model family (procedures in Supplementary Section~S-B4).
 
-OpenAI ChatGPT and Codex were used under author supervision to assist with the
-development and review of selected post-hoc analysis and reproducibility code.
-All AI-assisted code was inspected, tested and validated by the authors against
-the frozen experimental artifacts and predefined analysis procedures before
-use. Generative AI was not used to generate or modify the underlying
-experimental observations or reported primary results.
+AI-assisted analysis code (see the declaration at the end) was inspected,
+tested and validated by the authors against the frozen artifacts before use;
+generative AI did not generate or modify experimental observations or reported
+results.
 
 \subsection{Tier-2 Design}
 \label{sec:tier2-design}
@@ -719,11 +700,9 @@ declared adaptations, not canonical implementations, and every new cell
 passed structural checks before any data fit. Full specifications are in
 Supplementary Section~S-B5.
 
-\paragraph{Freezing and execution} The tier-2 protocol, code and inputs
-were frozen by an annotated Git tag before any tier-2 run, and outer-test
-data were not read until all fits had finished. All 13{,}500 final fits and
-outer-test evaluations completed without retries, and no unit was missing
-(details in Supplementary Section~S-E).
+\paragraph{Execution} All 13{,}500 final fits and outer-test evaluations
+completed without retries, and no unit was missing (Supplementary
+Section~S-E).
 
 \subsection{Tier-2 Analysis and Diagnostics}
 \label{sec:tier2-analysis}
@@ -741,12 +720,10 @@ contrasts paired; none failed. Matched-cell median ratios, win rates,
 persistence skill and parameter counts are reported as descriptives.
 Backbones are compared on their common available units.
 
-\paragraph{Uncertainty and cross-backbone summary} The paired VM-cluster
-bootstrap of Section~\ref{sec:evaluation} is run within each block by
-resampling its ten VMs, with 10{,}000 replicates, percentile 95\% intervals
-and seed 20261007. One draw matrix per block, generated in the order
-fastStorage then Rnd, is reused for every interval in that block. Intervals
-never enter the classes. An effect \emph{generalises across backbones} only
+\paragraph{Uncertainty and cross-backbone summary} The bootstrap of
+Section~\ref{sec:evaluation} resamples each block's ten VMs, with one draw
+matrix per block, generated in the order fastStorage then Rnd, reused for
+every interval in that block. An effect \emph{generalises across backbones} only
 if every backbone for which the contrast is defined has a non-neutral class
 of the same sign; otherwise it is \emph{backbone-dependent}. No pooled
 cross-backbone statistic is computed.
@@ -766,12 +743,10 @@ leave-one-out resource subsets, from which D-6 derives directed transfer
 $F_i(j)$ and leave-one-out contribution $Q_{i,j}$ (positive values favour
 adding or retaining resource $j$); and D-7 is each task's share of the M1
 training loss. Definitions are in Supplementary Section~S-B6.
-The diagnostics are descriptive associations, not causal identification.
-Gradient conflict was not assumed to explain any sharing penalty, null or
-opposite-direction associations are reported as such, and no diagnostic
-changes another component's design or analysis. Apart from amendment A1
-below, no intervention, such as a robust loss, gradient surgery, loss
-balancing or task grouping, is evaluated.
+They are descriptive associations, reported whatever their direction, and
+change no other component. No intervention, such as a
+robust loss or gradient surgery, is fitted except loss balancing (A1); A3
+evaluates validation-selected grouping of already fitted models.
 
 \subsection{Loss-Balancing Amendment (A1)}
 \label{sec:a1-design}
@@ -825,17 +800,51 @@ model saving with at most half the M1:S2 cost cells (median ratio above
 ($\rho\geq0.3$, interval above zero), and whether grouping saves at least 0.25
 models per unit more than G-share (Supplementary Section~S-H).
 
+\subsection{Validation Strategy}
+\label{sec:validation-strategy}
+
+Each threat is met by a named mechanism; those added after results were known
+are labelled post hoc. \emph{Leakage:} chronological purged expanding folds, a purged inner
+validation split, and training-only scalers, contexts and epochs
+(Section~\ref{sec:datasets}); tier-2 outer-test data were not read until all
+fits had finished. \emph{Sample mismatch:} every formulation shares origins,
+targets, folds, horizons and seeds, and a failed fit would remove its unit
+from every cell of the backbone (Section~\ref{sec:tier2-analysis}).
+\emph{Selection freedom:} the tier-1 external criteria were prospective,
+and tier~2, A1 and A3 were each frozen by an annotated Git tag and package
+digest, with an execution seal where models were fitted, before any of their
+outcomes. \emph{Context and capacity:} the common-context S2 and
+capacity-matched H129 M1 controls; \emph{model family:} Ridge AR/ARX and four
+tier-2 backbones (Sections~\ref{sec:posthoc-controls}
+and~\ref{sec:tier2-design}). \emph{Scale dominance:} matched-cell median
+ratios and win rates beside MacroMAE (Section~\ref{sec:evaluation}).
+\emph{VM sampling:} paired VM-cluster bootstrap intervals. \emph{Seed
+variation:} three seeds, with sign changes reported. \emph{Implementation
+error:} structural checks of every new cell, one pipeline for all LSTM cells,
+byte-identical inputs, a read-only audit of the largest aggregate, and
+figures, tables and A3 numbers generated by scripts that verify the output
+digests. \emph{Absolute accuracy:} persistence skill. \emph{Mechanism and
+decision:} A1, with a manipulation check, and A3.
+
+Resampling VMs rather than observations keeps the serial and cross-horizon
+dependence within a machine inside each resample. No hypothesis tests are
+performed, so no multiplicity correction applies: effects are judged by
+prespecified classes that require consistency across horizons, VMs, folds and
+seeds. The $1\%$ margin used in the text is descriptive and
+matches the class gain threshold. A Git tag, package digest and seal make the
+frozen protocol, code and inputs verifiable, but, unlike a time-stamped
+registry entry, do not prove when they were frozen.
+Supplementary Table~S26 maps each main claim to its evidence and its limits.
+
 \section{Results}
 
 Each result is given first for a typical machine: the median, over matched
 entity $\times$ fold $\times$ horizon cells, of the candidate/reference MAE
 ratio with MAE averaged over seeds, and the candidate's win rate
 (Figures~\ref{fig:primary-gains} and~\ref{fig:tier2-contrasts}). The
-prespecified MacroMAE gains follow. They average native-unit errors across
-machines, so a single high-scale machine can set them; their full values,
-classes and intervals are in Supplementary Section~S-G and Table~S3.
-Post-hoc controls are in Table~\ref{tab:posthoc-controls} and Supplementary
-Tables~S1--S2, and tier-2 results are reported in separate paragraphs.
+prespecified MacroMAE gains follow (full values, classes and intervals:
+Supplementary Section~S-G and Table~S3); post-hoc controls are in
+Table~\ref{tab:posthoc-controls} and Supplementary Tables~S1--S2.
 
 \begin{figure*}[t]
 \centering
@@ -989,8 +998,7 @@ the cost differed by backbone. For the LSTM it was clear: the ratio exceeded
 median ratio lay above one in 7 of 8. For the other three backbones it was
 consistent in direction but mostly very small: 7 of 24 cells exceeded 1.01,
 and 9 of 24 intervals lay above one, none below (Supplementary Table~S19).
-The $1\%$ margin is descriptive and matches the gain threshold of the
-consistency classes. MacroMAE
+MacroMAE
 gains were negative in 29 of 32 cells, and all 16 Rnd cells were negative,
 from $-1.51\%$ to $-33.11\%$. The three non-negative cells were
 all fastStorage CPU (LSTM $+0.60\%$, PatchTST $+0.91\%$, iTransformer
@@ -1339,9 +1347,7 @@ Cross-family agreement for external memory, TimeTrack's reversal and T1's
 seed-variable estimate support selective contextual value, not a universal
 memory benefit, in line with MMRP's non-uniform contextual gains
 \citep{Tripathi2025MMRP} and the relevance of environment-specific evaluation
-\citep{Rossi2025CloudUncertainty}. TimeTrack correlations
-\citep{Meliani2025TimeTrack} motivate inputs, not conditional predictive value
-or causal resource coupling.
+\citep{Rossi2025CloudUncertainty}.
 Tier~2 extends the model-family dependence from Ridge to three further
 backbones. Context effects were small, and their direction depended on the
 backbone: memory improved for the LSTM and DLinear but not for PatchTST, and
@@ -1357,11 +1363,10 @@ the telemetry alone.
 \subsection{Shared Representation and Adverse Transfer}
 \label{sec:discussion-sharing}
 
-For a typical machine, sharing cost accuracy in almost every comparison, and
-the diagnostics point away from gradient conflict as its source. The separate
+For a typical machine, sharing cost accuracy in almost every comparison. The
 sensitivity controls retain adverse throughput, memory and disk-write points
-across all six blocks, and direction need not imply uniform
-severity: Materna T1/T3 disk-write median ratios are about $1.025/1.035$,
+across all six blocks, and direction need not imply uniform severity: Materna
+T1/T3 disk-write median ratios are about $1.025/1.035$,
 despite much larger tail-sensitive MacroMAE penalties.
 
 The adverse direction is not specific to the LSTM, although its size
@@ -1376,19 +1381,14 @@ single high-scale VM (Section~\ref{sec:results-rq2}).
 Useful task-dependent transfer is established
 \citep{Caruana1997Multitask,Standley2020TaskGrouping,Fifty2021TaskGroupings},
 including in forecasting \citep{Nikentari2022NARMAXLSTM,Nochumsohn2025MTLinear},
-so the question is which explanation fits here. The tier-2 diagnostics narrow
-the candidates for the LSTM (Section~\ref{sec:results-diagnostics}). Task
-gradients in the shared encoder were close to orthogonal and showed no
-excess sign conflict, so destructive gradient conflict of the kind gradient
-surgery targets \citep{Yu2020GradientSurgery} was not observed. Task-gradient
-magnitudes and training-loss shares were instead strongly unequal, and the
-gradient-magnitude imbalance was largest in Rnd, where the LSTM sharing
-penalty was broadest. This is consistent
-with one task's loss dominating the shared parameters despite equal nominal
-weights (Section~\ref{sec:m1}), the imbalance that loss-balancing methods
-address \citep{Chen2018GradNorm}. Cross-resource dependence was not
-consistently associated with the context or sharing effects, and no single resource was a consistently
-helpful or harmful partner in pairwise transfer.
+so the question is which explanation fits here. For the LSTM
+(Section~\ref{sec:results-diagnostics}), near-orthogonal task gradients rule
+out the destructive conflict that gradient surgery targets
+\citep{Yu2020GradientSurgery}, whereas strongly unequal gradient magnitudes
+and loss shares fit one task's loss dominating the shared parameters despite
+equal nominal weights (Section~\ref{sec:m1}), the imbalance that
+loss-balancing methods address \citep{Chen2018GradNorm}. Dependence and
+pairwise transfer were not consistently associated with the effects.
 
 Amendment A1 tested the imbalance account directly. Uncertainty weighting
 reduced the effective imbalance and improved the shared LSTM in every cell,
@@ -1420,14 +1420,11 @@ remained under grouping and still need checking.
 \subsection{Applicability and Generalisation Limits}
 \label{sec:discussion-applicability}
 
-The population and dependence limits in Sections~\ref{sec:population-restrictions}
-and~\ref{sec:threats-external} bound applicability. Cross-family reversals do not
-select a universal replacement. The tier-2 backbones were evaluated on 20
-Bitbrains VMs with fixed hyperparameters, so they show that the sharing
-direction recurs beyond the LSTM, not how tuned modern architectures would
-rank. Selective grouping was tested for the tier-2 LSTM only, and adaptive or
-hybrid sharing remains untested
-\citep{Yu2020GradientSurgery,Nochumsohn2025MTLinear}.
+Applicability is bounded by the limits in Section~\ref{sec:threats}, and
+cross-family reversals do not select a universal replacement. The tier-2
+backbones show that the sharing direction recurs beyond the LSTM, not how
+tuned modern architectures would rank, and adaptive or hybrid sharing remains
+untested \citep{Yu2020GradientSurgery,Nochumsohn2025MTLinear}.
 Global models remain outside this evaluation
 \citep{MonteroManso2021GlobalForecasting}.
 The same limit applies to foundation forecasters
@@ -1466,32 +1463,35 @@ iTransformer S1 and M0 are undefined, DLinear M0 ties one map across all four
 resources without resource-specific outputs, and DLinear M1's width-16
 bottleneck has lower rank than four S2 maps at context 4, so DLinear M1:S2
 partly reflects reduced capacity. The transformer-style backbones are declared
-adaptations. Tier-1 capacity and context differences are addressed
-separately, not jointly, by the post-hoc controls, and resource mappings are
-source-specific rather than perfectly equivalent. MacroMAE gains describe one
-error estimand; metric choice can alter rankings \citep{Hyndman2006Accuracy},
-and scaled-space training differs from native-unit evaluation. The study
-evaluates established backbones and losses rather than proposing a new
-architecture, and it measures forecast accuracy and model consolidation, not
-autoscaler, scheduler or SLA outcomes; the diagnostics describe associations
-and do not identify a unique sharing mechanism.
+adaptations, and resource mappings are source-specific rather than perfectly
+equivalent. MacroMAE gains describe one error estimand; metric choice can
+alter rankings \citep{Hyndman2006Accuracy}, and scaled-space training differs
+from native-unit evaluation. Results are reported per resource over all
+horizons: horizons enter only through the classes' horizon-consistency
+thresholds and the pooled matched cells, and no horizon-specific claim is
+made. The study evaluates established backbones and losses rather than
+proposing a new architecture, and its diagnostics describe associations, not
+a unique sharing mechanism. It measures forecast accuracy and model
+consolidation, not autoscaler, scheduler or SLA outcomes: forecast error is
+what the consolidation decision changes directly, whereas controller outcomes
+also depend on policy and platform \citep{Qu2018Autoscaling}.
 
 \subsection{Internal Validity}
 \label{sec:threats-internal}
 
-Chronology, purging and training-only preprocessing constrain leakage
-\citep{Cerqueira2020Evaluation,Hyndman2021Forecasting}, but matched support and
-provenance cannot exclude all implementation or data errors. Tier-1
-external criteria were prospective; the later controls are post-hoc, and the
-tier-2 protocol was frozen by a Git tag, package digest and execution seal
-before any tier-2 run, not by a time-stamped external preregistration. Only
-three neural seeds were recorded: 9/24 S2:S1 and 4/24 M1:S2 tier-1
-block/resource summaries change sign across them (Supplementary Table~S2).
-Tier~2 uses fixed, untuned hyperparameters and LSTM-selected H64-M1 contexts
-for every backbone, so the modern backbones may be under-tuned; the largest
-tier-2 aggregate was stable across seeds, with per-VM seed spreads outside
-VMs 233 and 269 of at most 0.046 native units. Gradient diagnostics cover
-only the LSTM at the selected epoch, D-2 reuses Ridge outcomes already
+The mechanisms of Section~\ref{sec:validation-strategy} constrain leakage and
+implementation error \citep{Cerqueira2020Evaluation,Hyndman2021Forecasting}
+but cannot exclude every implementation or data error. The tier-1 sensitivity
+controls are post hoc and address context and capacity separately, not
+jointly. Only three neural seeds were recorded: 9/24 S2:S1 and 4/24 M1:S2
+tier-1 block/resource summaries change sign across them (Supplementary
+Table~S2). Tier~2 fixes hyperparameters and uses the LSTM-selected H64-M1
+context for every backbone. This keeps each contrast within one fixed model
+and prevents tuning effort from differing between cells, but the modern
+backbones may be under-tuned and their absolute ranking is not established;
+the largest tier-2 aggregate was stable across seeds, with per-VM seed spreads
+outside VMs 233 and 269 of at most 0.046 native units. Gradient diagnostics
+cover only the LSTM at the selected epoch, D-2 reuses Ridge outcomes already
 observed, and Ridge uses a finite five-alpha grid at LSTM-selected contexts.
 
 \subsection{External Validity}
@@ -1499,13 +1499,12 @@ observed, and Ridge uses a finite five-alpha grid at LSTM-selected contexts.
 
 The sources represent particular runtime and cloud contexts, not probability
 samples of all VMs, and Materna's blocks are repeated-within-source evidence.
-Tier~2 covers 20 of the 70 Bitbrains VMs, with no Materna or TimeTrack data;
-tier~1 remains the full-cohort evidence. Canonical or tuned transformer
-forecasters, mixture-of-experts, adaptive sharing,
+Tier~2 covers 20 of the 70 Bitbrains VMs from one trace family, with no
+Materna or TimeTrack data; tier~1 remains the full-cohort evidence. Canonical
+or tuned transformer forecasters, mixture-of-experts, adaptive sharing,
 gradient surgery and foundation forecasters were not tested, loss balancing
-and selective grouping were tested for the LSTM only,
-and four resource semantics do not establish accuracy for application
-latency, QoS or downstream SLA outcomes.
+and selective grouping were tested for the LSTM only, and four resource
+semantics do not establish accuracy for application latency or QoS.
 
 \subsection{Conclusion Validity}
 \label{sec:threats-conclusion}
@@ -1513,30 +1512,39 @@ latency, QoS or downstream SLA outcomes.
 Because native errors are not rescaled across entities, one high-scale VM
 can set an aggregate: VM233 contributes $98.6\%$ of the DLinear Rnd CPU
 M0$-$S1 excess behind its $-139.61\%$ gain, so tier-2 magnitudes are read
-together with matched-cell medians, win rates and per-VM counts.
+together with matched-cell medians, win rates and per-VM counts. For
+Bitbrains CPU and throughput, the contrasts compare forecasters that are all
+less accurate than persistence (Section~\ref{sec:results-persistence}), so
+the sharing and context effects there describe relative behaviour among such
+forecasters, not usable accuracy; the limit does not apply where skill was
+positive, as for tier-2 memory and disk write and every Materna S2 aggregate.
 
-With ten VMs per block, tier-2 intervals are wide, and tier~2 makes no
-confirmatory claim. Its diagnostics are associations across at most ten VMs
-per block and two environments; the coincidence of larger gradient
-imbalance and broader sharing penalties in Rnd is one comparison of two
-blocks, not an estimated relationship. Amendment A1 was motivated by those
-diagnostics, so its hypothesis was chosen after they were seen, although it
-was frozen before any A1 fit. It covers one backbone, 20 VMs, three seeds
-and fixed balancing settings. Its verdict depends on a manipulation check,
-which GradNorm failed in one block. Amendment A3 was likewise specified after
-the component models' outer errors were known, although none of its policy
-outcomes had been computed when it was frozen. Its typical-cell cost counts
-are insensitive when a policy keeps most units on S2, so its savings and
-MacroMAE intervals carry the comparison. Its gates compare scaled validation
-MAE (tier~1) or MSE (tier~2) with native outer MAE, and its grouping result
-covers one backbone and 20 VMs.
+The VM-cluster intervals resample machines over seed-averaged errors, so they
+exclude seed variation, which is reported separately as sign changes. With
+ten VMs per block, tier-2 percentile intervals are wide and may under-cover:
+they indicate direction rather than precise size, and tier~2 makes no
+confirmatory claim. Intervals exist for the tier-1 MacroMAE gains and the
+tier-2 median ratios but not for the tier-1 median ratios, and TimeTrack has
+none. Counts of intervals that exclude one or zero are not family-wise
+corrected, so some exclusions are expected by chance. The intervals condition
+on the evaluated cohorts; overlapping folds, multiple horizons, repeated seeds
+and dependent Materna blocks are not IID replicates, and no global effect or
+meta-analysis is used.
 
-Paired VM-cluster bootstrap intervals condition on the evaluated cohorts and
-are not classical significance claims; overlapping folds, multiple horizons,
-repeated seeds and dependent Materna blocks are not IID replicates, and no
-global effect or meta-analysis is used to strengthen these conclusions.
-Supplementary Section~S-D keeps the full-length discussion and threats to
-validity.
+The tier-2 diagnostics are associations across at most ten VMs per block
+and two environments; the coincidence of larger gradient imbalance and
+broader sharing penalties in Rnd is one comparison of two blocks, not an
+estimated relationship. Amendment A1 was motivated by those diagnostics, so
+its hypothesis was chosen after they were seen, although it was frozen before
+any A1 fit; it covers one backbone, 20 VMs, three seeds and fixed balancing
+settings, and its verdict depends on a manipulation check, which GradNorm
+failed in one block. Amendment A3 was likewise specified after the component
+models' outer errors were known, although none of its policy outcomes had
+been computed when it was frozen. Its typical-cell cost counts are
+insensitive when a policy keeps most units on S2, so its savings and MacroMAE
+intervals carry the comparison, and its gates compare scaled validation MAE
+(tier~1) or MSE (tier~2) with native outer MAE (full threats: Supplementary
+Section~S-D).
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1557,10 +1565,8 @@ in all six blocks under separate common-context and approximately
 capacity-matched controls. Aggregate MacroMAE penalties were larger and less
 uniform, because a few high-scale machines dominate native-unit errors.
 
-The diagnostics did not find the explanation most often assumed: in the
-shared LSTM encoder, task gradients were close to orthogonal with no excess
-sign conflict, whereas their magnitudes and loss shares were strongly
-unequal. Balancing the task losses reduced the imbalance and made the shared
+In the shared LSTM encoder, task gradients were near orthogonal, not in
+conflict, but strongly unequal in magnitude and loss share. Balancing the task losses reduced the imbalance and made the shared
 LSTM slightly more accurate in every cell, but it stayed less accurate than
 the independent all-input models.
 

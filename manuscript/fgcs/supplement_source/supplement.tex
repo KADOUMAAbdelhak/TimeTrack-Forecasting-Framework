@@ -15,6 +15,7 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \setlength{\LTcapwidth}{\textwidth}
 \setlength{\tabcolsep}{4pt}
+\input{a3_numbers}
 \begin{document}
 \begin{center}
 {\Large Supplementary evidence}\par\medskip
@@ -1587,7 +1588,8 @@ where $q_r^{\mathrm{native}}$ is the native-unit outer-training IQR for resource
 $r$, distinct from the transformed training IQR $q_r$ in
 Equation~\ref{eq:robust-scaling}. Primary evaluation follows inverse
 transformation and the prescribed non-negativity projection. MAE and RMSE are
-reported in each resource's native units; $R^2$ and NMAE are unitless.  Native
+in each resource's native units; $R^2$ and NMAE are unitless. RMSE, $R^2$ and
+NMAE were recorded but are not analysed in this study.  Native
 errors are never averaged across different resources.
 
 Persistence supplies a separate absolute forecasting sanity check:
@@ -1626,9 +1628,8 @@ versus M0 and M0 versus S1. Because native-unit cells receive equal weight
 without rescaling across entities, an entity whose resource is on a much
 larger native scale can dominate MacroMAE and hence $G$. Matched-cell median
 ratios, win rates and per-entity signs are unaffected by this scale
-weighting and are reported alongside.  Secondary diagnostics include
-pooled prediction-level gain, mean and median matched-cell relative gain, and
-the fractions or counts of positive VMs, folds, horizons, and seed aggregates.
+weighting and are reported alongside.  Secondary descriptives are the counts
+of positive VMs, folds, horizons and seed aggregates.
 
 Prospectively frozen directional classifications combine overall gain
 magnitude with horizon, entity, fold and seed consistency. A positive
@@ -2344,8 +2345,9 @@ proximity is not architectural, task-capacity or optimisation equivalence.
 
 CPU, throughput, memory and disk-write mappings have source-specific
 definitions and native units, not perfect measurement equivalence.
-MacroMAE gains describe the specified error estimand; RMSE, $R^2$, native
-NMAE and persistence provide complementary diagnostics. Metric choice can
+MacroMAE gains describe the specified error estimand, and persistence skill
+provides a complementary absolute check; RMSE, $R^2$ and native NMAE were
+recorded but are not analysed. Metric choice can
 alter rankings \citep{Hyndman2006Accuracy}. Scaled-space training and selection
 objectives are distinct from native-unit evaluation
 (main-text Sections~4.3--4.4), and a relative
@@ -2932,6 +2934,8 @@ are then uninformative, and the savings and MacroMAE intervals carry the compari
 \input{a3_zero_note}
 
 \input{a3_supplement_tables}
+
+\input{claim_evidence_table}
 
 \bibliographystyle{elsarticle-num-names}
 \bibliography{references}
