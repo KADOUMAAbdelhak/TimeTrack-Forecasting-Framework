@@ -74,7 +74,7 @@ COVER = [
           "validation-gated consolidation on the existing fits) were each frozen before execution, and later "
           "sensitivity controls are labelled post hoc throughout. The code is public at "
           "https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework at tagged commits, including "
-          "fgcs-v04-a3-validation-gate, and the derived analysis outputs are deposited on Zenodo "
+          "fgcs-v04-a3-validation-gate-r2, and the derived analysis outputs are deposited on Zenodo "
           "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235) or held in the repository; third-party "
           "traces remain available from their original archives. Generative AI use is disclosed in the manuscript "
           "as required by Elsevier's policy."),
