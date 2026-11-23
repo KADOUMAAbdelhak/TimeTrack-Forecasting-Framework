@@ -28,10 +28,11 @@ A3 is a post-hoc amendment on the existing fits; no model was fitted.
 - **Post-hoc check of H-A3b:** in three frames, 3 units each have a zero S2 outer MAE at one horizon, and the frozen
   statistic ranks them instead of dropping them. Without them, rho moves by at most 0.032 and no verdict changes
   (`tools/a3_zero_reference_check.py`; generated note `supplement_source/a3_zero_note.tex` in Section S-H).
-- **Zenodo deposit:** prepared in `fgcs_strengthening_v04a3/runtime/zenodo_deposit_a3/`, which Git does not track;
+- **Zenodo deposit:** published as doi:10.5281/zenodo.24458960; the upload files are in `fgcs_strengthening_v04a3/runtime/zenodo_deposit_a3/`, which Git does not track;
   `ZENODO_NEW_VERSION_STEPS.md` there gives the upload steps.
 - **Before submission:**
-  - publish the Zenodo deposit and add its DOI to Data availability and the cover letter.
+  - nothing further for A3: the deposit is published as doi:10.5281/zenodo.24458960 (version v0.4-a3-outputs) and cited
+    in Data availability, supplement Section S-H and the cover letter.
 
 ## Submission-file review fixes (22 Nov 2026)
 

@@ -75,7 +75,7 @@ COVER = [
           "sensitivity controls are labelled post hoc throughout. The code is public at "
           "https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework at tagged commits, including "
           "fgcs-v04-a3-validation-gate-r2, and the derived analysis outputs are deposited on Zenodo "
-          "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235) or held in the repository; third-party "
+          "(doi:10.5281/zenodo.24339239, doi:10.5281/zenodo.24353235 and doi:10.5281/zenodo.24458960); third-party "
           "traces remain available from their original archives. Generative AI use is disclosed in the manuscript "
           "as required by Elsevier's policy."),
     ("p", "The manuscript states two limitations openly: on the 20 Bitbrains virtual machines no model beats "
