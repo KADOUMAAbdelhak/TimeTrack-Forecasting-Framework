@@ -59,15 +59,15 @@ machines. Protocols were frozen before execution, and effects were checked
 with sensitivity controls, machine-level bootstrap intervals and persistence
 skill. Sharing carried a recurring cost: for a typical machine the shared
 model was less accurate in all 24 LSTM comparisons and in 30 of 32 backbone
-cells (13 by over 1\%, 6 of 8 for the LSTM). Contextual input helped only
-selectively: typical-cell ratios against own-input models stayed between
-0.981 and 1.035, and no context effect held for every backbone. The cost is
+cells (13 by over 1\%, 6 of 8 for the LSTM). Contextual input helped
+selectively: on the 20 VMs, typical-cell ratios against own-input models
+stayed between 0.981 and 1.035, and no context effect held for every backbone. The cost is
 visible before deployment: the shared model validated worse in
-\AiiiValWorseMin--\AiiiValWorseMax\% of machine--fold--seed units, so a
+\AiiiValWorseMin--\AiiiValWorseMax\% of units, so a
 gate sharing only within 1\% consolidated \AiiiRetainedOne--\AiiiRetainedTwo\%
-of units, whereas validation-chosen grouping kept \AiiiGroupRetained\% of the
-LSTM's model reduction at typical-cell ratios of at most \AiiiGroupMaxRatio{},
-though aggregate costs remained in \AiiiGroupMacroBelow{} of 8 cells.
+of units, whereas validation-chosen grouping kept about half of the LSTM's
+model reduction at a typical-cell cost below 0.5\%, though some aggregate costs
+remained.
 Shared-LSTM task gradients were near orthogonal but unequal in magnitude;
 loss balancing narrowed the cost only slightly. No backbone beat persistence
 for CPU or throughput.
@@ -156,8 +156,8 @@ mechanism. We make four contributions:
     that passed its manipulation check improved the shared LSTM by at most
     0.4\% in median matched-cell error, a small part of the cost.
   \item \emph{Deciding consolidation from validation.} Under rules frozen
-    before any outcome was computed, inner validation detected the sharing
-    cost in \AiiiDetects{} of \AiiiFrames{} settings, a 1\% gate therefore
+    before any outcome was computed, inner validation ranked machines by their
+    sharing cost in \AiiiDetects{} of \AiiiFrames{} settings, a 1\% gate
     rarely consolidates, and validation-selected task grouping keeps about
     half of the LSTM's model reduction at a typical-cell cost below 0.5\%.
 \end{enumerate}
@@ -1292,7 +1292,7 @@ validation check would have prevented most of it but also most of the
 consolidation. Table~\ref{tab:a3} summarises A3; Supplementary Section~S-H
 has every cell.
 
-\emph{Detection.} The shared model's validation error exceeded S2's in
+\emph{Ranking.} The shared model's validation error exceeded S2's in
 \AiiiValWorseMin--\AiiiValWorseMax\% of machine--fold--seed units, more often
 than its outer-test error did (\AiiiOutWorseMin--\AiiiOutWorseMax\%).
 Validation and outer M1/S2 ratios were rank-correlated in \AiiiDetects{} of
@@ -1407,7 +1407,8 @@ remain untested.
 
 Forecasting supports adaptation
 \citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. The inner-validation
-errors computed during model selection detected the sharing cost before any
+errors computed during model selection ranked machines by their sharing cost
+before any
 test data were seen, so a forecasting service can gate consolidation per
 machine at no extra training cost. A strict gate mostly declines to share; a
 grouping gate keeps about half of the model reduction at a small typical-cell
@@ -1533,8 +1534,7 @@ broader sharing penalties in Rnd is one comparison of two blocks, not an
 estimated relationship. Amendment A1 was motivated by those diagnostics, so
 its hypothesis was chosen after they were seen, although it was frozen before
 any A1 fit; it covers one backbone, 20 VMs, three seeds and fixed balancing
-settings, and its verdict depends on a manipulation check, which GradNorm
-failed in one block. Amendment A3 was likewise specified after the component
+settings. Amendment A3 was likewise specified after the component
 models' outer errors were known, although none of its policy outcomes had
 been computed when it was frozen. Its typical-cell cost counts are
 insensitive when a policy keeps most units on S2, so its savings and MacroMAE
@@ -1562,7 +1562,7 @@ environments, and no tier-2 context effect held across backbones.
 In the shared LSTM, task gradients were near orthogonal, not in conflict, but
 strongly unequal in magnitude and loss share; balancing the losses made the
 shared LSTM slightly more accurate in every cell, but not as accurate as the
-independent all-input models. The cost is detectable before deployment:
+independent all-input models. The cost is visible before deployment:
 inner-validation errors ranked machines by their sharing cost in
 \AiiiDetects{} of \AiiiFrames{} settings, so a gate sharing only within 1\%
 consolidated \AiiiRetainedOne--\AiiiRetainedTwo\% of units, whereas
@@ -1634,6 +1634,8 @@ output (SHA-256
 and run record are in the repository and, with the tier-1 inputs it read,
 on Zenodo
 (\href{https://doi.org/10.5281/zenodo.24458960}{doi:\allowbreak 10.5281/\allowbreak zenodo.24458960}).
+Amendment A2 (change-from-last-value forecasting), frozen under tag
+\texttt{fgcs-v04-a2-residual}, has not been executed; no A2 result is reported.
 An OSF registration (\href{https://osf.io/kuwra}{kuwra}) of a superseded
 tier-2 protocol draft is retained.
 

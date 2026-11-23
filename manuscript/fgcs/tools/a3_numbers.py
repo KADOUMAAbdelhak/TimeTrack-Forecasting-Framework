@@ -158,14 +158,14 @@ def tables(d, main_out, supplement_out):
     main = [r"\begin{table}[t]", r"\centering",
             r"\caption{Amendment A3 on existing fits. (A) Consolidation gate G-share: share of machine $\times$ fold "
             r"$\times$ seed units consolidated into one shared model at tolerance $\tau$, typical-cell cost cells "
-            r"(policy:S2 median ratio above 1.01) and validation--test detection. (B) Tier-2 LSTM groupings at "
+            r"(policy:S2 median ratio above 1.01) and frames whose validation and test M1/S2 ratios are rank-correlated ($\rho\geq0.3$, interval above zero). (B) Tier-2 LSTM groupings at "
             r"$\tau=1\%$ and $2\%$: mean models and parameters per unit, cost cells and largest median ratio "
             r"(of 8 cells), and cells whose MacroMAE-gain interval lies below zero. The oracle uses the outer "
             r"test and is an upper bound, not a policy.}",
             r"\label{tab:a3}", r"\footnotesize", r"\setlength{\tabcolsep}{3pt}",
             r"\begin{tabular}{@{}lccccc@{}}", r"\toprule",
-            r"\multicolumn{6}{@{}l}{\emph{(A) G-share: units consolidated (\%), cost cells, detection}} \\",
-            r" & $\tau{=}0$ & $1\%$ & $2\%$ & Cost$_{1\%}$ (M1) & Detects \\", r"\midrule"]
+            r"\multicolumn{6}{@{}l}{\emph{(A) G-share: units consolidated (\%), cost cells, ranking}} \\",
+            r" & $\tau{=}0$ & $1\%$ & $2\%$ & Cost$_{1\%}$ (M1) & Ranks \\", r"\midrule"]
     for tier, label, frames in (("tier1", "Tier 1, LSTM", 6), ("tier2", "Tier 2, 4 backbones", 8)):
         det = [x for x in detection if x["tier"] == tier]
         main.append(f"{label} & {share(tier, '0%')} & {share(tier, '1%')} & {share(tier, '2%')} & "
