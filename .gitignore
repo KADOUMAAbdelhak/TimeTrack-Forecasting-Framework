@@ -106,3 +106,18 @@ fgcs_strengthening_v04a3/runtime/zenodo_deposit_a3/
 old_fgcs_rejected/
 manuscript/jss/
 review_revision/stage19f2a_submission_audit/STAGE19F2A_JSS_SUBMISSION_AUDIT.md
+
+# Manuscripts and submission documents stay local; never pushed to the public repository
+manuscript/
+*.tex
+*.bib
+*.bst
+*.cls
+*.sty
+*.docx
+review_revision/**/manuscript_*
+review_revision/**/before_*.tex
+review_revision/stage19h2a_evidence/source_change_*.diff
+review_revision/stage19h2b_housekeeping/housekeeping_source_*.diff
+review_revision/stage19h2b_housekeeping/build/
+review_revision/stage19f2a_submission_audit/official_requirements_ledger.md
