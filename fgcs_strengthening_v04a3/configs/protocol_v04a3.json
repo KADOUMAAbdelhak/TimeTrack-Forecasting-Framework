@@ -1,0 +1,168 @@
+{
+ "amendment": {
+  "id": "A3",
+  "title": "Validation-gated consolidation and task grouping",
+  "protocol": "review_revision/fgcs_strengthening/validation_gate_amendment_A3.md",
+  "timing": "post hoc: proposed after all tier-1, tier-2 and A1 results were known; specified and frozen before any gated, grouping, fallback, oracle or detection statistic was computed",
+  "fits": "none: reuses the stored inner-validation errors and outer-test errors of existing fits",
+  "status": "amendment on existing fits; descriptive, no p-values"
+ },
+ "lineage": {
+  "tier2_tag": "fgcs-v04-min-final-r2",
+  "tier2_execution_seal": "f52e07ff3ca3733ce5f6e57f4d6afba9fdddd039ae3534c65b24e3f41854cfac",
+  "tier2_analysis_sha256": "308841865ec87b04e10ecb64f20bc13ce2e671511a1574056028f7b5710dd17a",
+  "tier2_runtime": "fgcs_strengthening_v04/runtime (closed journal, read only)",
+  "a1_tag": "fgcs-v04-a1-intervention",
+  "a2_tag": "fgcs-v04-a2-residual",
+  "a2_commit": "553bafccdf18fc3d947823cba62b3789e484d67f",
+  "a2_protocol_sha256": "6fdb73aa48f247a3ff4b0ca68faf50f063404c4e5867c92f9abd9dd343b05cc8"
+ },
+ "resources": ["CPU", "THROUGHPUT", "MEMORY", "DISK_WRITE"],
+ "tier1": {
+  "backbone": "LSTM",
+  "cells": ["S1", "S2", "M1"],
+  "blocks": {
+   "TimeTrack": {
+    "root": "multiresource/04_lstm_factorial/outputs/scientific",
+    "entity_column": "machine",
+    "leads": [1, 2, 4, 8, 16, 32, 64, 128],
+    "entities": 7,
+    "sha256": {
+     "metrics.parquet": "3787d0026ee9cefcec64124e8686abb79d9b4dfc9554fd2312b808380bfff8b4",
+     "inner_run_registry.csv": "13601953140f788be23c731fd0011c759fdd56cca88785f8ed38e1e58db22ed2",
+     "selected_contexts.csv": "412e3da33b93b639b491ff2bf185e620709f0a5ccbb56e443975b280e853f7b8"
+    }
+   },
+   "fastStorage": {
+    "root": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/fastStorage",
+    "entity_column": "vm_id",
+    "leads": [1, 2, 4, 9, 18],
+    "entities": 35,
+    "sha256": {
+     "metrics.parquet": "3edbbe0d74a76b4a99ee110ef9f42919700cf4b88273b568924816e828a05309",
+     "inner_run_registry.csv": "4e4cf07bf308762f617850615ee19d839790e9da99f5718e36b9f57b95ab16f3",
+     "selected_contexts.csv": "fb1946585217a48d7038a3d58c3ce8791b6e83b3047805d06b785cdf0a97e6da"
+    }
+   },
+   "Rnd": {
+    "root": "independent_validation/05_bitbrains_factorial/outputs/scientific_v2/Rnd",
+    "entity_column": "vm_id",
+    "leads": [1, 2, 4, 9, 18],
+    "entities": 35,
+    "sha256": {
+     "metrics.parquet": "4072332fde01457e7d1fc89086d840a730844d8a25366c0abaaf6d69c472de4c",
+     "inner_run_registry.csv": "b2c6ce43d8764cef77a9e597e0dd258cda8ac25062b9ecd917e42e48ddfea150",
+     "selected_contexts.csv": "8d8ae87fb9053aee96f11538bca5a60eae2c6af919c3e9819224c914211f4403"
+    }
+   },
+   "Materna-T1": {
+    "root": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T1",
+    "entity_column": "vm_id",
+    "leads": [1, 2, 4, 9, 18],
+    "entities": 35,
+    "sha256": {
+     "metrics.parquet": "f4ed6252ce72c3bb0b05b78cd471331c86ac9701a72756968207088c7f36d370",
+     "inner_run_registry.csv": "24ee1986a19ab0edfccd2a0027ffb35b893d50d2bb79749cd458960bf1d7c52f",
+     "selected_contexts.csv": "1f67fbfed25e34b29d0f2e28a220a3f73e8cd795b746c0d8ef08a8794997cfea"
+    }
+   },
+   "Materna-T2": {
+    "root": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T2",
+    "entity_column": "vm_id",
+    "leads": [1, 2, 4, 9, 18],
+    "entities": 35,
+    "sha256": {
+     "metrics.parquet": "24b670e03c152018cccf9fc23a6d2b7fe1d9a693783d53b2290c167144b4720d",
+     "inner_run_registry.csv": "6ea968da2a898e7639aa6fbbcb8c12fa511900aee97ca73f0895eed640b1ec17",
+     "selected_contexts.csv": "caf446c19e319c47d3ad345fe3110f0e804a01b051473ec408819edeab422f06"
+    }
+   },
+   "Materna-T3": {
+    "root": "independent_validation/06_materna_replication/outputs/scientific_v1/Materna-T3",
+    "entity_column": "vm_id",
+    "leads": [1, 2, 4, 9, 18],
+    "entities": 35,
+    "sha256": {
+     "metrics.parquet": "50767c5f371a6dc5c528b6c5bd777a7660faa8176d7c1f8d2a7a443f18e8b843",
+     "inner_run_registry.csv": "053cf6980beed999030b9ca7f05b3734906e80371bd1c97fdcc75008d2af09fe",
+     "selected_contexts.csv": "dc2f5d1772e039f6a9a0748ad2ae428fb4592b349282512d1d09ea3b2aaf067d"
+    }
+   }
+  },
+  "validation_error": "inner-validation MAE in training-scaled units at the selected context L, mean over leads, per resource; seed-specific",
+  "published_cells": {
+   "path": "review_revision/stage18c1_evidence/matched_seed_mean_errors.csv",
+   "sha256": "0cc4488c8fbdbe9e8195db710a33932e9e287c99676ab2dcad2603a9c2db9ce9",
+   "relative_tolerance": 1e-6
+  }
+ },
+ "tier2": {
+  "backbones": ["LSTM", "DLinear", "PatchTST", "iTransformer"],
+  "validation_error": "inner-validation MSE in training-scaled units at the epoch selected for the final refit, pooled over the five horizons, per resource; seed-specific",
+  "persistence_validation_error": "the same MSE for the last scaled value of the resource's own input channel, on the same inner-validation windows (seed independent)",
+  "published_contrasts": "results.P4.contrasts of analysis_v04.json; fixed-policy median ratios must match exactly"
+ },
+ "tolerances": [0.0, 0.005, 0.01, 0.02],
+ "primary_tolerance": 0.01,
+ "policies": {
+  "fixed": "S1, S2, M0 (tier 2, where defined) and M1 applied to every unit",
+  "G-ctx": "per unit and resource, S2 if its validation error is strictly lower than S1's, else S1 (where S1 is defined)",
+  "G-share": "per unit, M1 if the mean over resources of the validation-error ratio M1/S2 is at most 1 + tolerance, else S2 (primary)",
+  "G-full": "per unit, independent baseline I = G-ctx (S2 where S1 is undefined); shared candidate = M1 or M0 (where defined) with the lower mean validation ratio against I; consolidate if that ratio is at most 1 + tolerance, else I",
+  "G-group": "tier-2 LSTM only: among the 15 partitions of the four resources into all-input models (singletons are S2, pairs and triples are the stored lattice models, the full set is M1), the feasible partitions have mean validation ratio against S2 at most 1 + tolerance; choose the one with fewest models, ties broken by the lower mean ratio and then by the fixed partition order",
+  "fallback": "tier 2 only: after S2, G-share or G-group at the primary tolerance, replace a resource's model by persistence where persistence's validation error is strictly lower; a persistence target uses no model",
+  "oracle": "descriptive upper bound, not a policy: per unit, the candidate of G-share (M1 or S2) or of G-group (one of the 15 partitions) with the lowest outer score, the mean over resources of the seed-specific horizon-mean outer MAE ratio against S2; never enters a verdict"
+ },
+ "unit": "block x entity x fold x seed; every policy decision uses only that unit's inner-validation errors",
+ "outcomes": {
+  "accuracy": "per policy x block x resource (x backbone): matched-cell median MAE ratio and win rate against S2 and against M1, over seed-averaged entity x fold x horizon cells; MacroMAE gain against S2",
+  "savings": "mean models per unit; savings retained R = (models(S2) - models(policy)) / (models(S2) - models(M1)), pooled over units; tier 2 also mean parameters relative to S2",
+  "intervals": "VM-cluster percentile 95% bootstrap, seed 20261007, 10,000 replicates; tier 2 reuses the frozen tier-2 draw matrices; tier 1 draws one matrix per block in the order TimeTrack, fastStorage, Rnd, Materna-T1, Materna-T2, Materna-T3 from one generator"
+ },
+ "decision": {
+  "H-A3a": {
+   "policy": "G-share at the primary tolerance",
+   "frames": "tier 1: six blocks x four resources (24 cells); tier 2: four backbones x two blocks x four resources (32 cells); judged per tier",
+   "cost_cell": "a cell whose policy:S2 matched-cell median ratio exceeds 1.01",
+   "reference_cost_cells": "the number of cells whose M1:S2 median ratio exceeds 1.01 (expected 22 in tier 1 and 13 in tier 2; recomputed and checked)",
+   "cost_ok": "cost cells at most floor(reference cost cells / 2)",
+   "verdicts": [
+    ["keeps most savings at reduced cost", "R >= 0.5 and cost_ok"],
+    ["rarely consolidates", "R < 0.25"],
+    ["keeps some savings at reduced cost", "0.25 <= R < 0.5 and cost_ok"],
+    ["does not avoid the cost", "R >= 0.25 and not cost_ok"]
+   ]
+  },
+  "H-A3b": {
+   "statistic": "Spearman rho, per frame (tier-1 block; tier-2 backbone x block), between the unit-level validation score (mean over resources of the validation ratio M1/S2) and the unit-level outer score (mean over resources and horizons of the seed-specific outer MAE ratio M1/S2), with a VM-cluster bootstrap interval",
+   "verdicts": [
+    ["detects", "rho >= 0.3 and interval lower bound > 0"],
+    ["weak", "interval lower bound > 0 and rho < 0.3"],
+    ["does not detect", "otherwise"]
+   ],
+   "also_reported": "balanced accuracy of the sign of the validation score for the sign of the outer score, per frame"
+  },
+  "H-A3c": {
+   "policy": "G-group against G-share, both at the primary tolerance, tier-2 LSTM (8 cells)",
+   "verdicts": [
+    ["grouping adds savings", "mean models(G-group) <= mean models(G-share) - 0.25 and cost cells(G-group) <= cost cells(G-share) + 1"],
+    ["no added savings", "mean models(G-group) > mean models(G-share) - 0.25"],
+    ["adds savings at a cost", "otherwise"]
+   ]
+  },
+  "fallback": {
+   "statistic": "persistence skill (paper definition) of S2 + fallback in the 16 tier-2 CPU and throughput cells (4 backbones x 2 resources x 2 blocks)",
+   "verdicts": [
+    ["fallback restores positive skill", "at least 8 of 16 cells have positive skill"],
+    ["fallback does not restore positive skill", "otherwise"]
+   ]
+  }
+ },
+ "reproduction_guards": [
+  "tier-1 fixed S2 and M1 seed means reproduce the published matched cells within the relative tolerance",
+  "tier-2 fixed-policy median ratios for S2:S1, M1:M0, M0:S1 and M1:S2 equal analysis_v04.json exactly",
+  "reference cost-cell counts equal 22 (tier 1) and 13 (tier 2)",
+  "every tier-2 final fit links to its inner fit, whose selected epoch has a validation error for every task; every tier-1 final run has seed-matched inner rows at its selected context",
+  "tier-2 persistence validation windows match the inner-validation split hash and scaler recorded by the inner fits"
+ ]
+}
