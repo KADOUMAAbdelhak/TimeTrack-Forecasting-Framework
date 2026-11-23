@@ -20,3 +20,12 @@
   - H-A3b: "detects" in 12 of 14 frames;
   - H-A3c: "grouping adds savings";
   - fallback: "fallback does not restore positive skill".
+- **Post-hoc note (23 Nov 2026):** `analysis_a3.time` records numpy divide-by-zero warnings from the H-A3b statistic
+  (`gate.py`, `detection`).
+  - **Cause:** in tier-1 Rnd, tier-2 LSTM Rnd and tier-2 PatchTST-style Rnd, 3 units each have an S2 outer MAE of exactly
+    zero at one horizon. Their outer scores are undefined, and the frozen statistic ranks them instead of dropping them.
+  - **Check:** `manuscript/fgcs/tools/a3_zero_reference_check.py` reproduces the frozen values, then drops those units.
+    Its output is `manuscript/fgcs/tools/derived/a3_zero_reference_check.json`, SHA-256 0250a457…0a44.
+  - **Effect:** rho changes by at most 0.032 and no verdict changes.
+  - **Scope:** no other A3 statistic is affected. The gates use validation errors only, and the accuracy statistics
+    exclude zero references. The frozen output is unchanged.
