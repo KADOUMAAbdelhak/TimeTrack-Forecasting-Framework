@@ -1,0 +1,22 @@
+/Users/fgtek002/TimeTrack/fgcs_strengthening_v04a3/gate.py:270: RuntimeWarning: divide by zero encountered in divide
+  y = (frame.outer["M1"] / frame.outer["S2"]).mean(axis=(-1, -2))
+/Users/fgtek002/TimeTrack/fgcs_strengthening_v04a3/gate.py:270: RuntimeWarning: invalid value encountered in divide
+  y = (frame.outer["M1"] / frame.outer["S2"]).mean(axis=(-1, -2))
+      146.85 real       129.97 user         7.16 sys
+          1351335936  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               97182  page reclaims
+                  51  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+              130050  voluntary context switches
+               10444  involuntary context switches
+       1782022657521  instructions retired
+        517586417463  cycles elapsed
+          1095403032  peak memory footprint
