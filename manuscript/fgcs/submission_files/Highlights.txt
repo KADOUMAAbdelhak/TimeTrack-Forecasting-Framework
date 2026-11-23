@@ -1,4 +1,4 @@
-- A 2×2 design varies cross-resource input and model sharing one at a time.
+- A frozen 2×2 design varies cross-resource input and model sharing one at a time.
 - Context helps selectively; sharing costs accuracy in 54 of 56 typical cells.
 - Inner validation shows the sharing cost, so a 1% validation gate rarely shares.
 - Validation-chosen LSTM task groups keep 53% of the model cut at ≤0.4% typical cost.

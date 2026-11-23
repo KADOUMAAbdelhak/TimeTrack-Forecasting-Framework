@@ -16,7 +16,7 @@ A3 = dict(re.findall(r"\\newcommand\{\\(\w+)\}\{([^}]*)\}",
 GROUP_COST = f"{100 * (float(A3['AiiiGroupMaxRatio']) - 1):.1f}"
 
 HIGHLIGHTS = [
-    "A 2×2 design varies cross-resource input and model sharing one at a time.",
+    "A frozen 2×2 design varies cross-resource input and model sharing one at a time.",
     "Context helps selectively; sharing costs accuracy in 54 of 56 typical cells.",
     f"Inner validation shows the sharing cost, so a 1% validation gate rarely shares.",
     f"Validation-chosen LSTM task groups keep {A3['AiiiGroupRetained']}% of the model cut at ≤{GROUP_COST}% typical cost.",
@@ -50,10 +50,13 @@ COVER = [
           "target's forecaster should receive other resources' telemetry, and whether several resource targets "
           "should share one model. Prior comparisons usually change both at once. The manuscript separates them with a "
           "2×2 design (independent or shared models, own-resource or all-resource input) and evaluates CPU, "
-          "throughput, memory and disk-write forecasting on TimeTrack development data, the Bitbrains fastStorage "
-          "and Rnd traces and three dependent Materna temporal blocks. A second, separately frozen part repeats the "
-          "design for LSTM, DLinear, PatchTST-style and iTransformer-style backbones and adds descriptive mechanism "
-          "diagnostics."),
+          "throughput, memory and disk-write forecasting on the Bitbrains fastStorage and Rnd traces and three "
+          "dependent Materna temporal blocks, with TimeTrack as development data. A second, separately frozen part "
+          "repeats the design for LSTM, DLinear, PatchTST-style and iTransformer-style backbones and adds "
+          "descriptive mechanism diagnostics. A dedicated validation-strategy section maps each threat (leakage, "
+          "sample mismatch, selection freedom, capacity, model family, machine sampling, seed variation, scale "
+          "dominance and implementation error) to the mechanism that addresses it, and a supplementary table maps "
+          "every main claim to its evidence and its limits."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
           "representation sharing carries a recurring accuracy cost: for a typical machine the shared model was less "
           "accurate in 54 of 56 comparisons across six data blocks and four backbones. We then ask whether this cost "

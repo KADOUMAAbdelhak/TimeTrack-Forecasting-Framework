@@ -45,32 +45,32 @@
   country={India}}
 
 \begin{abstract}
-Engineers who forecast cloud runtime telemetry decide separately whether a
-target's forecaster receives other resources' histories (contextual input)
-and whether several resource targets share one model (representation
-sharing). A $2\times2$ design of independent or shared models with
-own-resource or all-resource input isolates the two decisions for central
-processing unit (CPU), throughput, memory and disk-write forecasting: with long
-short-term memory (LSTM) networks on six data blocks from TimeTrack, Bitbrains
-and Materna, and with LSTM, DLinear, PatchTST-style and iTransformer-style
-backbones on 20 Bitbrains virtual machines. Contextual input helped
-selectively: across backbones, typical-cell error ratios against own-input
-independent models stayed between 0.981 and 1.035, and no context effect held
-for every backbone. Sharing carried a recurring cost: for
-a typical machine the shared model was less accurate in all 24 LSTM
-comparisons and in 30 of 32 backbone cells (13 by over 1\%). This cost is
-visible before deployment. On inner validation the shared model was worse in
-\AiiiValWorseMin--\AiiiValWorseMax\% of machine--fold--seed units, and
-validation and test ratios were rank-correlated in \AiiiDetects{} of
-\AiiiFrames{} settings, so a gate sharing only when validation error rose
-by at most 1\% consolidated \AiiiRetainedOne--\AiiiRetainedTwo\% of units.
-Letting validation choose which resources share a model kept
-\AiiiGroupRetained\% of the LSTM's model reduction, with typical-cell ratios
-of at most \AiiiGroupMaxRatio{} against \AiiiMOneMaxRatio{} for full sharing,
-although aggregate costs remained in \AiiiGroupMacroBelow{} of 8 cells.
+Cloud telemetry forecasting involves two separate choices:
+whether a target's model receives other resources' histories (contextual
+input) and whether several resource targets share one model (representation
+sharing). Channel-independent versus channel-dependent comparisons change
+both at once. A $2\times2$ design of independent or shared models with
+own-resource or all-resource input separates them for central processing unit
+(CPU), throughput, memory and disk-write forecasting: with long short-term
+memory (LSTM) networks on two Bitbrains environments and three dependent
+Materna blocks, with TimeTrack as development data, and with LSTM, DLinear,
+PatchTST-style and iTransformer-style backbones on 20 Bitbrains virtual
+machines. Protocols were frozen before execution, and effects were checked
+with sensitivity controls, machine-level bootstrap intervals and persistence
+skill. Sharing carried a recurring cost: for a typical machine the shared
+model was less accurate in all 24 LSTM comparisons and in 30 of 32 backbone
+cells (13 by over 1\%, 6 of 8 for the LSTM). Contextual input helped only
+selectively: typical-cell ratios against own-input models stayed between
+0.981 and 1.035, and no context effect held for every backbone. The cost is
+visible before deployment: the shared model validated worse in
+\AiiiValWorseMin--\AiiiValWorseMax\% of machine--fold--seed units, so a
+gate sharing only within 1\% consolidated \AiiiRetainedOne--\AiiiRetainedTwo\%
+of units, whereas validation-chosen grouping kept \AiiiGroupRetained\% of the
+LSTM's model reduction at typical-cell ratios of at most \AiiiGroupMaxRatio{},
+though aggregate costs remained in \AiiiGroupMacroBelow{} of 8 cells.
 Shared-LSTM task gradients were near orthogonal but unequal in magnitude;
-loss balancing narrowed the cost only slightly. No backbone beat
-persistence for CPU or throughput.
+loss balancing narrowed the cost only slightly. No backbone beat persistence
+for CPU or throughput.
 \end{abstract}
 
 \begin{keyword}
@@ -83,28 +83,30 @@ runtime forecasting \sep cloud telemetry \sep multi-metric forecasting \sep mult
 \section{Introduction}
 \label{sec:introduction}
 
-Cloud telemetry forecasting can inform adaptation and resource management
-\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware}. Engineers must decide
-whether a target's forecaster should include other resources' telemetry and
-whether several targets should share a predictive model. These choices change
-the input information and the model organisation, respectively.
-Consolidation reduces the number of models to manage but need not improve
-every resource's forecast.
+Engineers who forecast cloud runtime telemetry for resource management
+\citep{Taherizadeh2018Monitoring,Bauer2020SelfAware} decide two things:
+whether a target's forecaster should receive other resources' telemetry, and
+whether several targets should share one model. Comparisons of
+channel-independent and channel-dependent forecasters
+\citep{Han2024ChannelIndependent} change both at once, because a
+channel-independent model shares one set of weights across channels that it
+processes separately, whereas a channel-dependent model mixes channels inside
+one shared model; which decision costs accuracy therefore remains unknown.
+Separating them, we find that sharing, not contextual input, carries the
+recurring cost: for a typical machine the shared model was less accurate in
+all 24 LSTM block--resource comparisons, on Bitbrains, Materna and the
+TimeTrack development data, and in 30 of 32 cells of four backbones, whereas
+context effects were small and model-dependent. The cost is already visible in ordinary inner
+validation, so validation can decide which resources to share.
 
 Runtime-series benchmarking spans statistical, neural and foundation models
 \citep{DiMenna2026RuntimeForecasting}, and cloud studies combine multivariate
 resource inputs with joint multi-output prediction
-\citep{Ullah2023CloudBiLSTM,Tripathi2025MMRP}. In multivariate forecasting
-more broadly, the same question appears as channel-independent versus
-channel-dependent modelling \citep{Han2024ChannelIndependent}. Those
-comparisons, however, usually change two things at once: a
-channel-independent model shares one set of weights across channels that it
-processes separately, whereas a channel-dependent model mixes channels inside
-one shared model. Multi-task learning offers inductive transfer between
-related tasks \citep{Caruana1997Multitask}, but which tasks to share, and
-how, must be evaluated
-\citep{Standley2020TaskGrouping,Fifty2021TaskGroupings,Nochumsohn2025MTLinear}.
-Two practical questions follow and are rarely tested for telemetry: whether the
+\citep{Ullah2023CloudBiLSTM,Tripathi2025MMRP}. Multi-task learning offers
+inductive transfer between related tasks \citep{Caruana1997Multitask}, but
+which tasks to share, and how, must be evaluated
+\citep{Standley2020TaskGrouping,Fifty2021TaskGroupings,Nochumsohn2025MTLinear},
+and two practical questions are rarely tested for telemetry: whether the
 validation data available before deployment show when sharing will cost
 accuracy, and whether sharing only some resources keeps the savings without
 the cost.
@@ -119,48 +121,45 @@ independent all-input control S2 is what channel-independent versus
 channel-dependent comparisons lack. The targets are CPU utilisation,
 throughput, memory usage and disk-write activity.
 
-The evidence comes from two parts of this study, reported separately. The first
-part (tier~1) evaluates S1, S2 and M1 with an LSTM on TimeTrack development data,
+The first part of the study (tier~1) evaluates S1, S2 and M1 with an LSTM on
 the Bitbrains fastStorage and Rnd environments and three dependent Materna
-blocks, with post-hoc controls for context selection, capacity and model
-family (Section~\ref{sec:posthoc-controls}). The second part (tier~2), frozen separately, adds M0
-and repeats the $2\times2$ for DLinear, PatchTST-style and iTransformer-style
-backbones on 20 Bitbrains VMs, together with diagnostics of dependence,
-gradients, loss shares and transfer (Section~\ref{sec:tier2-design}). Two
-separately frozen amendments follow: A1 tests loss balancing in the shared
-LSTM (Section~\ref{sec:a1-design}), and A3 applies validation-gated
-consolidation and task grouping to the existing fits of both tiers
-(Section~\ref{sec:a3-design}). Six
-questions (Section~\ref{sec:research-questions}) cover baseline accuracy
-(RQ1), contextual input (RQ2), sharing (RQ3), what accompanies the sharing
-cost (RQ4), heterogeneity and consolidation (RQ5) and validation-based
-decisions (RQ6).
-
-Contextual input helped selectively, whereas sharing carried a recurring
-cost: for a typical machine the shared model was less accurate in all 24
-tier-1 LSTM comparisons and in 30 of 32 tier-2 cells, clearly so for the LSTM
-(6 of 8 cells above 1.01) and mostly very slightly for the other backbones (7
-of 24). Inner validation already showed the cost, so a 1\% validation gate
-consolidated only \AiiiRetainedOne\% of tier-1 and \AiiiRetainedTwo\% of
-tier-2 units, whereas choosing on validation which resources share a model
-kept \AiiiGroupRetained\% of the LSTM's model reduction
-(Section~\ref{sec:results-a3}). We make three contributions:
+blocks, with TimeTrack as development data and post-hoc controls for context
+selection, capacity and model family (Section~\ref{sec:posthoc-controls}). The
+second part (tier~2) adds M0 and repeats the $2\times2$ for DLinear,
+PatchTST-style and iTransformer-style backbones on 20 Bitbrains VMs, with
+diagnostics of dependence, gradients, loss shares and transfer
+(Section~\ref{sec:tier2-design}). Amendment A1 tests loss balancing in the
+shared LSTM (Section~\ref{sec:a1-design}), and A3 applies validation-gated
+consolidation and task grouping to the existing fits
+(Section~\ref{sec:a3-design}). Each part was frozen before its outcomes were
+computed, and Section~\ref{sec:validation-strategy} maps every threat to its
+mechanism. We make four contributions:
 
 \begin{enumerate}
-  \item A $2\times2$ decomposition, with the independent all-input control
-    S2, that varies contextual input and representation sharing one at a
-    time, applied to six data blocks and four backbone families.
-  \item Evidence that contextual value is selective and model-dependent,
-    whereas the typical-cell cost of sharing recurs in direction in 54 of
-    56 cells across both tiers. In the shared LSTM it accompanies unequal
-    task-gradient magnitudes without gradient conflict, so the premise of
-    conflict-removing remedies does not hold, and loss balancing narrows the
-    cost only slightly.
-  \item A test, on the existing fits, of deciding consolidation from inner
-    validation: validation detects the sharing cost in \AiiiDetects{} of
-    \AiiiFrames{} settings, a 1\% gate therefore rarely consolidates, and
-    validation-selected task grouping keeps about half of the LSTM's model
-    reduction at a typical-cell cost below 0.5\%.
+  \item \emph{An isolating design.} A $2\times2$ decomposition with the
+    independent all-input control S2 varies contextual input and
+    representation sharing one at a time on two Bitbrains environments,
+    three Materna blocks and four backbone families, under leakage control,
+    matched support and protocols frozen before execution.
+  \item \emph{A recurring sharing cost and selective context.} The
+    typical-cell cost of sharing recurs in direction in 54 of 56 cells across
+    both tiers. It is clear for the LSTM, whose median-ratio interval lies
+    above one in 7 of 8 tier-2 cells, and its tier-1 throughput, memory and
+    disk-write penalties survive common-context and approximately
+    capacity-matched controls. Context effects are selective: for the
+    PatchTST-style backbone added context lowered accuracy, with intervals
+    above one in 4 of 8 cells, as \citet{Han2024ChannelIndependent} lead one
+    to expect.
+  \item \emph{Imbalance rather than conflict.} In the shared LSTM the cost
+    accompanies near-orthogonal but strongly unequal task gradients, so the
+    premise of conflict-removing remedies does not hold; frozen loss balancing
+    that passed its manipulation check improved the shared LSTM by at most
+    0.4\% in median matched-cell error, a small part of the cost.
+  \item \emph{Deciding consolidation from validation.} Under rules frozen
+    before any outcome was computed, inner validation detected the sharing
+    cost in \AiiiDetects{} of \AiiiFrames{} settings, a 1\% gate therefore
+    rarely consolidates, and validation-selected task grouping keeps about
+    half of the LSTM's model reduction at a typical-cell cost below 0.5\%.
 \end{enumerate}
 
 \section{Related Work}
@@ -1265,8 +1264,7 @@ throughput and disk write.
 The tier-2 backbones share this Bitbrains boundary
 (Table~\ref{tab:tier2-baseline}B): on the 20-VM cohort, CPU and throughput
 skill was negative for every backbone and cell, and memory and disk-write
-skill positive. DLinear M0 had the lowest Rnd CPU skill ($-0.845$), driven
-by VM233 ($-6.7$) and VM269 ($-1.81$).
+skill positive.
 
 \subsection{Accuracy-Efficiency Trade-Off}
 \label{sec:results-efficiency}
@@ -1436,15 +1434,13 @@ loss balancing beyond the LSTM, which is the only backbone A1 covered.
 \label{sec:discussion-separability}
 
 The two decisions behaved differently, which changes how they should be
-tested. Adding other resources' histories produced small effects whose
-direction depended on the resource, the environment and the backbone, so a
-contextual input should be adopted only after a per-resource, per-model check
-against the own-resource model. Sharing parameters across targets produced a
-typical-cell cost whose direction held across backbones but whose size
-depended on the resource, the environment and a few high-scale machines, so
-consolidation should be justified by its savings and checked for adverse
-tails rather than assumed free; A3 shows that inner validation can make that
-check. The two can disagree for the same target:
+tested. Context effects were small and their direction depended on the
+resource, the environment and the backbone, so a contextual input should be
+adopted only after a per-resource, per-model check. Sharing had a
+typical-cell cost whose direction held across backbones, so consolidation
+should be justified by its savings and checked for adverse tails rather than
+assumed free; A3 shows that inner validation can make that check. The two can
+disagree for the same target:
 context helped LSTM Rnd memory while sharing still cost accuracy, and in Rnd
 the sharing cost appeared with own-resource input as well. A contextual
 benefit is not a reason to consolidate, and a consolidation saving is not
@@ -1549,39 +1545,35 @@ Section~S-D).
 \section{Conclusion}
 \label{sec:conclusion}
 
-Varying contextual input and representation sharing one at a time shows that
-their consequences differ. Contextual input gave small and selective
-benefits: memory in the external
-environments showed the most consistent favourable pattern, but directions
-depended on the resource, the environment and the model family, and no
-tier-2 context effect held across backbones.
+Varying contextual input and representation sharing one at a time, under
+frozen protocols and the checks of Section~\ref{sec:validation-strategy},
+shows that their consequences differ. Representation sharing carried a
+recurring accuracy cost: for a typical machine, the shared model was less
+accurate in all 24 tier-1 LSTM comparisons and in 30 of 32 tier-2 backbone,
+resource and environment cells. The cost exceeded $1\%$ in 6 of 8 tier-2 LSTM
+cells but in only 7 of 24 cells of the other backbones, and the tier-1
+throughput, memory and disk-write penalties remained in all six blocks under
+the common-context and approximately capacity-matched controls. Aggregate
+MacroMAE penalties were larger and less uniform, because a few high-scale
+machines dominate native-unit errors. Contextual input gave small and
+selective benefits, most consistently for memory in the external
+environments, and no tier-2 context effect held across backbones.
 
-Representation sharing carried a recurring accuracy cost. For a typical
-machine, the shared model was less accurate in all 24 tier-1 LSTM comparisons
-and in 30 of 32 tier-2 backbone, resource and environment cells; the cost
-exceeded $1\%$ in 6 of 8 tier-2 LSTM cells but in only 7 of 24 cells of the
-other backbones. Tier-1 throughput, memory and disk-write penalties remained
-in all six blocks under separate common-context and approximately
-capacity-matched controls. Aggregate MacroMAE penalties were larger and less
-uniform, because a few high-scale machines dominate native-unit errors.
-
-In the shared LSTM encoder, task gradients were near orthogonal, not in
-conflict, but strongly unequal in magnitude and loss share. Balancing the task losses reduced the imbalance and made the shared
-LSTM slightly more accurate in every cell, but it stayed less accurate than
-the independent all-input models.
-
-The cost is detectable before deployment. Inner-validation errors, computed
-during ordinary model selection, ranked machines by their sharing cost in
-\AiiiDetects{} of \AiiiFrames{} settings, so a gate that shares only within
-1\% of the independent models' validation error consolidated
-\AiiiRetainedOne--\AiiiRetainedTwo\% of units. Letting validation choose which
-resources share a model did better: for the LSTM it kept
-\AiiiGroupRetained\% of the model reduction at typical-cell ratios of at most
-\AiiiGroupMaxRatio{}, although some aggregate costs remained. For multi-metric
-telemetry, the practical question is therefore not whether to share a model
-but which resources to share, and the validation data needed to answer it
-already exist. A per-target persistence fallback did not remove the CPU and
-throughput persistence boundary.
+In the shared LSTM, task gradients were near orthogonal, not in conflict, but
+strongly unequal in magnitude and loss share; balancing the losses made the
+shared LSTM slightly more accurate in every cell, but not as accurate as the
+independent all-input models. The cost is detectable before deployment:
+inner-validation errors ranked machines by their sharing cost in
+\AiiiDetects{} of \AiiiFrames{} settings, so a gate sharing only within 1\%
+consolidated \AiiiRetainedOne--\AiiiRetainedTwo\% of units, whereas
+validation-chosen grouping kept \AiiiGroupRetained\% of the LSTM's model
+reduction at typical-cell ratios of at most \AiiiGroupMaxRatio{}, although
+some aggregate costs remained. For multi-metric telemetry, the practical
+question is therefore which resources to share rather than whether to share,
+and the validation data needed to answer it already exist. These conclusions
+hold for typical machines on the evaluated cohorts; on the 20 Bitbrains VMs no
+backbone beat persistence for CPU or throughput, and a validated fallback made
+only \AiiiFallbackPositive{} of \AiiiFallbackCells{} such cells positive.
 
 \section*{Data availability}
 
@@ -1641,11 +1633,9 @@ output (SHA-256
 \texttt{\seqsplit{33e11a858ea338b3c3ff25bec2f59527a3a2100a386658443def77956501cee0}})
 and run record are in the repository and, with the tier-1 inputs it read,
 on Zenodo
-(\href{https://doi.org/10.5281/zenodo.24458960}{doi:\allowbreak 10.5281/\allowbreak zenodo.24458960});
-a script verifying that digest generates its numbers and tables.
-The OSF registration (\href{https://osf.io/kuwra}{kuwra}) of an earlier draft
-of the tier-2 protocol, superseded before any tier-2 run, is retained as
-historical evidence.
+(\href{https://doi.org/10.5281/zenodo.24458960}{doi:\allowbreak 10.5281/\allowbreak zenodo.24458960}).
+An OSF registration (\href{https://osf.io/kuwra}{kuwra}) of a superseded
+tier-2 protocol draft is retained.
 
 \section*{CRediT authorship contribution statement}
 

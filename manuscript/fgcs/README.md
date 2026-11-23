@@ -1,5 +1,38 @@
 # FGCS submission package (not submitted, not committed)
 
+## Validation strategy and framing (23 Nov 2026)
+
+No new experiments, fits or statistics; every number already appeared in the manuscript or supplement.
+
+- **New Section 4.10, "Validation Strategy":**
+  - maps each threat to its mechanism: leakage, sample mismatch, selection freedom, context and capacity, model
+    family, scale dominance, VM sampling, seeds, implementation error, absolute accuracy, mechanism and decision;
+  - justifies cluster resampling, classes instead of tests, the 1% margin and freezing by tag and seal.
+- **New Supplementary Table S26** (Section S-I): a claim-to-evidence map for the five main claims.
+- **Threats to Validity** is restructured to state each validation gap once:
+  - the persistence boundary;
+  - untuned baselines, with a justification;
+  - no intervals for the tier-1 median ratios;
+  - no family-wise correction;
+  - intervals that exclude seed variation;
+  - horizon aggregation;
+  - ten-cluster intervals;
+  - no downstream validation, with a justification.
+- **Corrections:**
+  - RMSE, R² and NMAE are now "recorded but not analysed", in the main text and the supplement;
+  - the unreported secondary diagnostics were removed from the list;
+  - the task-grouping statement now agrees with A3.
+- **Framing:**
+  - the abstract leads with Bitbrains and Materna (TimeTrack as development data) and names the validation
+    checks;
+  - the introduction's first paragraph states the gap and the main finding;
+  - four contributions, each naming its result and its validation;
+  - the conclusion is rewritten;
+  - highlight 1 now says "frozen";
+  - the cover letter mentions the validation strategy and the claim map, and is now 2 pages.
+- **Length:** 17 pages (duplicated protocol text trimmed); abstract 249 words; supplement 58 pages.
+- **Pre-edit sources:** `tools/manuscript_before_validation.tex` and `tools/supplement_before_validation.tex`.
+
 ## Amendment A3: validation-gated consolidation and task grouping (23 Nov 2026)
 
 A3 is a post-hoc amendment on the existing fits; no model was fitted.
