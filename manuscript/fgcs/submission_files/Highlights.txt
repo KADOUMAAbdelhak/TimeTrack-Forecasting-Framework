@@ -1,5 +1,5 @@
 - A 2×2 design varies cross-resource input and model sharing one at a time.
-- Context helps selectively; no context effect holds for every backbone.
-- Sharing costs accuracy in 30 of 32 typical cells, by over 1% in 6 of 8 LSTM cells.
-- Balancing unequal LSTM task gradients narrows but does not remove that cost.
-- Shared LSTM and transformer-style models use ~1/4 of independent models' parameters.
+- Context helps selectively; sharing costs accuracy in 54 of 56 typical cells.
+- Inner validation shows the sharing cost, so a 1% validation gate rarely shares.
+- Validation-chosen LSTM task groups keep 53% of the model cut at ≤0.4% typical cost.
+- LSTM gradients are near orthogonal; loss balancing narrows the cost only slightly.

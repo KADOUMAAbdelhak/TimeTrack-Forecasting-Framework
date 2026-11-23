@@ -25,9 +25,9 @@ Forecasting: Selective Gains and a Recurring Sharing Cost
 The first two sections contain post-hoc diagnostic tables for the original
 frozen experiment (tier~1); they do not replace its primary estimates or
 prespecified classifications. The final sections report the separately
-frozen tier~2 and its audit; Section~S-F, at the end, reports the
-separately frozen loss-balancing amendment A1, and Section~S-G shows the prespecified MacroMAE
-gains of every comparison as figures.
+frozen tier~2 and its audit; Section~S-F reports the
+separately frozen loss-balancing amendment A1, Section~S-G shows the prespecified MacroMAE
+gains of every comparison, and Section~S-H reports the validation-gate amendment A3.
 All numeric inputs retain the existing result-file decimal strings in the
 LaTeX source; values are rounded to at most six decimal places for display.
 Positive gain means lower candidate MacroMAE. The tier-1 sections introduce
@@ -2807,6 +2807,127 @@ M1:M0 & PatchTST-style & fastStorage CPU & 1.033 & [1.005, 1.077] & 36 \\
 \bottomrule
 \end{longtable}
 \normalsize
+
+\begin{table*}[t]
+  \caption{Prespecified descriptive source summaries of primary overall MacroMAE
+  gain (\%).}
+  \label{tab:supp-synthesis}
+  \centering
+  \small
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l*{9}{r}@{}}
+    \toprule
+    & \multicolumn{3}{c}{S2 versus S1}
+      & \multicolumn{3}{c}{M1 versus S2}
+      & \multicolumn{3}{c}{M1 versus S1} \\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(l){8-10}
+    Resource & TimeTrack & Bitbrains & Materna
+      & TimeTrack & Bitbrains & Materna
+      & TimeTrack & Bitbrains & Materna \\
+    \midrule
+    CPU & $-3.31$ & $-0.89$ & $-0.97$
+      & $0.47$ & $-8.23$ & $-3.26$
+      & $-2.83$ & $-9.01$ & $-4.25$ \\
+    Throughput & $-0.24$ & $-3.60$ & $0.44$
+      & $-0.84$ & $-20.71$ & $-7.97$
+      & $-1.08$ & $-24.82$ & $-7.50$ \\
+    Memory & $0.86$ & $2.06$ & $2.34$
+      & $-18.48$ & $-6.89$ & $-10.40$
+      & $-17.46$ & $-4.70$ & $-7.85$ \\
+    Disk write & $-0.49$ & $1.42$ & $-1.97$
+      & $-0.80$ & $-4.81$ & $-35.55$
+      & $-1.29$ & $-3.33$ & $-37.71$ \\
+    \midrule
+    \multicolumn{10}{@{}l}{\emph{Tier~2 (Bitbrains, 20 VMs, every backbone
+      defining the contrast): cells with negative gain / defined cells}} \\
+    All resources & -- & 11/24 & -- & -- & 29/32 & -- & -- & -- & -- \\
+    \bottomrule
+  \end{tabular*}
+
+  \vspace{2pt}
+  \parbox{\textwidth}{\footnotesize
+    Positive values indicate lower MacroMAE for the candidate formulation;
+    negative values indicate higher MacroMAE. TimeTrack: development summary.
+    Bitbrains: equal-environment synthesis of fastStorage and Rnd.
+    Materna: equal-temporal-block synthesis of T1--T3, consecutive dependent
+    temporal blocks rather than independent replications. Comparisons are
+    descriptive, without cross-source aggregation. The tier-2 row counts
+    backbone $\times$ resource $\times$ environment cells of tier~2
+    (main-text Figure~3); it is not a gain,
+    is not averaged with tier~1, and is not a replication of it. Tier~2 did
+    not evaluate TimeTrack, Materna or M1 versus S1.}
+\end{table*}
+
+\clearpage
+\section*{S-H Amendment A3: validation-gated consolidation and task grouping}
+\label{sec:s-h}
+Amendment A3 fits no model. It applies decision policies to the stored inner-validation and outer-test errors of
+the tier-1 LSTM (six blocks) and the tier-2 backbones (20 Bitbrains VMs). It was frozen by the annotated tag
+\texttt{fgcs-v04-a3-validation-gate} before any policy outcome was computed. The protocol is
+\texttt{review\_revision/fgcs\_strengthening/validation\_gate\_amendment\_A3.md}; where the two differ, the
+configuration \texttt{fgcs\_strengthening\_v04a3/configs/protocol\_v04a3.json} governs.
+
+\emph{Unit and validation error.} A unit is a block $\times$ machine $\times$ fold $\times$ seed.
+\begin{itemize}
+  \item Tier~1 uses each fit's inner-validation MAE in training-scaled units at the selected context, averaged
+    over leads.
+  \item Tier~2 uses each inner fit's per-task scaled validation MSE at the epoch selected for the final refit.
+\end{itemize}
+A policy sees only its own unit's validation errors.
+
+\emph{Policies.}
+\begin{itemize}
+  \item \emph{Fixed:} S1, S2, M0 (tier~2) and M1.
+  \item \emph{G-ctx:} for each resource, S2 if it validates strictly better than S1.
+  \item \emph{G-share($\tau$):} M1 if the mean over resources of the validation ratio M1/S2 is at most
+    $1+\tau$, otherwise S2.
+  \item \emph{G-full($\tau$):} the same, using the better-validating of M1 and M0 against the G-ctx baseline.
+  \item \emph{G-group($\tau$), tier-2 LSTM:} the 15 partitions of the four resources into all-input models use
+    S2 for singletons, the D-5 pair and triple models, and M1 for the full set. A partition is feasible if its
+    mean validation ratio against S2 is at most $1+\tau$. The feasible partition with the fewest models is chosen;
+    ties are broken by the lower ratio, then by a fixed order.
+  \item \emph{Fallback, tier~2:} a target goes to persistence where persistence's validation MSE is strictly
+    lower. The persistence MSE is computed on the same inner-validation windows, rebuilt and checked against their
+    recorded hashes.
+  \item \emph{Oracle, descriptive:} the candidate with the lowest outer score. It uses the outer test and is not a
+    policy.
+\end{itemize}
+The tolerances are $\tau\in\{0,0.5,1,2\}\%$; $1\%$ is primary.
+
+\emph{Outcomes.} Accuracy uses the main-text typical-cell statistics and the MacroMAE gains against S2, with
+VM-cluster percentile intervals (seed 20261007, 10{,}000 replicates; tier~2 reuses its frozen draw matrices).
+Savings retained is $R=(4-\text{models})/3$.
+
+\emph{Decision rules.}
+\begin{itemize}
+  \item \emph{H-A3a:} ``keeps most savings at reduced cost'' if $R\ge0.5$ and the cost cells (median ratio above
+    1.01) number at most half the M1:S2 count (22 in tier~1, 13 in tier~2); ``rarely consolidates'' if $R<0.25$.
+  \item \emph{H-A3b:} ``detects'' if Spearman $\rho\ge0.3$ between the unit-level validation and outer M1/S2
+    scores and its interval lies above zero.
+  \item \emph{H-A3c:} ``grouping adds savings'' if G-group uses at least 0.25 fewer models per unit than G-share,
+    with at most one more cost cell.
+  \item \emph{Fallback:} ``restores positive skill'' if at least 8 of 16 CPU and throughput cells beat persistence.
+\end{itemize}
+
+\emph{Run and integrity.} The run took 147~s on one CPU thread from the tagged commit. Its output has SHA-256
+\texttt{\seqsplit{33e11a858ea338b3c3ff25bec2f59527a3a2100a386658443def77956501cee0}}. Before the freeze, only the
+input readers and the reproduction guards were run:
+\begin{itemize}
+  \item tier-1 seed means matched the published matched cells within a relative $3\times10^{-13}$;
+  \item all 104 tier-2 fixed contrasts matched the frozen tier-2 output exactly;
+  \item the persistence windows matched the recorded splits.
+\end{itemize}
+The verdicts were:
+\begin{itemize}
+  \item H-A3a: ``rarely consolidates'', in both tiers;
+  \item H-A3b: ``detects'' in 12 of 14 frames;
+  \item H-A3c: ``grouping adds savings'';
+  \item fallback: ``does not restore positive skill''.
+\end{itemize}
+When a policy keeps most units on S2, the median matched-cell ratio is one by construction. The cost-cell counts
+are then uninformative, and the savings and MacroMAE intervals carry the comparison.
+
+\input{a3_supplement_tables}
 
 \bibliographystyle{elsarticle-num-names}
 \bibliography{references}

@@ -1,5 +1,10 @@
 # FGCS submission package — checklist
 
+
+## Amendment A3 (23 Nov 2026)
+
+See `README.md` for the full list of changes. Main text: 17 pages, Tables 1–5 (Table 5 is A3), Figures 1–4. Supplement: 56 pages, Tables S1–S25. The LaTeX source zip now holds nine flat files, adding the generated `a3_numbers.tex` and `a3_table.tex`. The supplement zip now holds six, adding `a3_supplement_tables.tex`. Both zips compile without undefined references, and the manuscript zip build is identical in text to `Manuscript.pdf`.
+
 ## Submission-file review fixes (22 Nov 2026)
 
 - **Repository URL:** visible in Data availability and in the cover letter, typeset with `\url`, with no overfull lines.

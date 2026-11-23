@@ -10,12 +10,17 @@ OUT = Path(sys.argv[1])
 TITLE = ("Contextual Input versus Representation Sharing in Multi-Metric Runtime Forecasting: "
          "Selective Gains and a Recurring Sharing Cost")
 
+# Amendment-A3 numbers come from the generated macros (manuscript/fgcs/tools/a3_numbers.py), never by hand.
+A3 = dict(re.findall(r"\\newcommand\{\\(\w+)\}\{([^}]*)\}",
+                     (Path(__file__).resolve().parents[1] / "latex_source/a3_numbers.tex").read_text()))
+GROUP_COST = f"{100 * (float(A3['AiiiGroupMaxRatio']) - 1):.1f}"
+
 HIGHLIGHTS = [
     "A 2×2 design varies cross-resource input and model sharing one at a time.",
-    "Context helps selectively; no context effect holds for every backbone.",
-    "Sharing costs accuracy in 30 of 32 typical cells, by over 1% in 6 of 8 LSTM cells.",
-    "Balancing unequal LSTM task gradients narrows but does not remove that cost.",
-    "Shared LSTM and transformer-style models use ~1/4 of independent models' parameters.",
+    "Context helps selectively; sharing costs accuracy in 54 of 56 typical cells.",
+    f"Inner validation shows the sharing cost, so a 1% validation gate rarely shares.",
+    f"Validation-chosen LSTM task groups keep {A3['AiiiGroupRetained']}% of the model cut at ≤{GROUP_COST}% typical cost.",
+    "LSTM gradients are near orthogonal; loss balancing narrows the cost only slightly.",
 ]
 
 BIOS = [
@@ -50,27 +55,35 @@ COVER = [
           "design for LSTM, DLinear, PatchTST-style and iTransformer-style backbones and adds descriptive mechanism "
           "diagnostics."),
     ("p", "The main findings are that contextual input gives small, selective and model-dependent benefits, whereas "
-          "representation sharing carries a small but recurring accuracy cost: in typical cells the shared model was less "
-          "accurate in 30 of 32 backbone, resource and environment cells (13 by more than 1%, including 6 of the 8 LSTM cells), while larger aggregate penalties came from a few "
-          "high-scale machines. We position the design against channel-independent versus channel-dependent forecasting, "
-          "which changes input scope and sharing together. In the shared LSTM, task gradients were close to "
-          "orthogonal without excess conflict but strongly unequal in magnitude. A separately frozen loss-balancing "
-          "amendment then made the shared LSTM slightly more accurate in every resource and environment cell, but "
-          "it did not remove the sharing cost. We believe the work fits FGCS's scope on distributed dynamic "
-          "resource management, monitoring tools and cloud infrastructures, because it gives practitioners "
-          "evidence-based guidance on input selection and model consolidation for multi-resource forecasting."),
-    ("p", "The six-block LSTM experiment, the four-backbone experiment and the loss-balancing amendment were each frozen before execution, and later sensitivity "
-          "controls are labelled post hoc throughout. The code is public at https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework at tagged commits, and the derived "
-          "analysis outputs, including those of the loss-balancing amendment, are deposited on Zenodo "
-          "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235); third-party traces remain "
-          "available from their original archives. Generative AI use is disclosed in the manuscript as required by "
-          "Elsevier's policy."),
+          "representation sharing carries a recurring accuracy cost: for a typical machine the shared model was less "
+          "accurate in 54 of 56 comparisons across six data blocks and four backbones. We then ask whether this cost "
+          "can be managed with data that engineers already have. The inner-validation errors computed during "
+          f"ordinary model selection already show it: the shared model was worse on validation in {A3['AiiiValWorseMin']}–"
+          f"{A3['AiiiValWorseMax']}% of machine–fold–seed units, and validation and test ratios were rank-correlated "
+          f"in {A3['AiiiDetects']} of {A3['AiiiFrames']} settings. A gate that shares only within 1% of the independent "
+          f"models' validation error therefore consolidated just {A3['AiiiRetainedOne']}–{A3['AiiiRetainedTwo']}% of "
+          "units, whereas letting validation choose which resources share a model kept "
+          f"{A3['AiiiGroupRetained']}% of the LSTM's model reduction at a typical-cell cost of at most {GROUP_COST}%. "
+          "In the shared LSTM, task gradients were close to orthogonal but strongly unequal in magnitude, and a "
+          "loss-balancing intervention narrowed the cost only slightly. Prior comparisons of channel-independent and "
+          "channel-dependent forecasting change input scope and sharing together; the design separates them. We "
+          "believe the work fits FGCS's scope on distributed dynamic resource management, monitoring tools and cloud "
+          "infrastructures, because it gives practitioners a tested way to decide input selection and model "
+          "consolidation for multi-resource forecasting."),
+    ("p", "The six-block LSTM experiment, the four-backbone experiment and the two amendments (loss balancing, and "
+          "validation-gated consolidation on the existing fits) were each frozen before execution, and later "
+          "sensitivity controls are labelled post hoc throughout. The code is public at "
+          "https://github.com/KADOUMAAbdelhak/TimeTrack-Forecasting-Framework at tagged commits, including "
+          "fgcs-v04-a3-validation-gate, and the derived analysis outputs are deposited on Zenodo "
+          "(doi:10.5281/zenodo.24339239 and doi:10.5281/zenodo.24353235) or held in the repository; third-party "
+          "traces remain available from their original archives. Generative AI use is disclosed in the manuscript "
+          "as required by Elsevier's policy."),
     ("p", "The manuscript states two limitations openly: on the 20 Bitbrains virtual machines no model beats "
-          "persistence for CPU or throughput, and the modern backbones use fixed, untuned settings. To address the "
-          "first, we have prepared a follow-up analysis in which every model forecasts the change from the last "
-          "observed value, so that each model contains persistence as a special case. Its protocol, code and "
-          "decision rule were fixed under the public Git tag fgcs-v04-a2-residual before any of its fits, and we can "
-          "report its results during review."),
+          "persistence for CPU or throughput, even with a validation-selected persistence fallback, and the modern "
+          "backbones use fixed, untuned settings. To address the first, we have prepared a follow-up analysis in "
+          "which every model forecasts the change from the last observed value, so that each model contains "
+          "persistence as a special case. Its protocol, code and decision rule were fixed under the public Git tag "
+          "fgcs-v04-a2-residual before any of its fits, and we can report its results during review."),
     ("p", "This manuscript is not under consideration by any other journal."),
     ("p", "All authors have approved the manuscript and agree with its submission. The authors declare no competing "
           "interests, and the research received no specific funding."),
